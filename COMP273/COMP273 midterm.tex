@@ -1,0 +1,517 @@
+\documentclass[12 pt]{article}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage{mathtools,float}
+\usepackage{tikz}
+\usepackage[margin=1 in]{geometry}
+\allowdisplaybreaks
+%\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
+\hypersetup{
+	%colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=black,  %choose some color if you want links to stand out
+}
+\usepackage{graphicx}
+\graphicspath{{Images/}}
+\author{Julian Lore}
+\date{Last updated: \today}
+\title{COMP 273: Intro to Computer Systems Review}
+\pagestyle{fancy}
+\lhead{COMP 273}
+\chead{\leftmark}
+\rhead{Julian Lore}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\begin{document}
+	\onehalfspacing
+	\maketitle
+	Adapted from Joseph Vybihal's Winter 2017 COMP273 slides.
+	\\ Some things taken from \href{https://www.allanwang.ca/}{Allan Wang's website}.
+	\tableofcontents
+	\newpage
+	{\Large Pre-midterm Material}
+	\section{Basics}
+	\subsection{Bytes}
+	A \textbf{byte} consists of 8 bits, 8 inputs and outputs. The main thing we will be working with in this course.
+	\\ 5v signifies T/1, whereas 2v signifies F/0.
+	\includegraphics[scale=0.1]{byte.png}
+	\\ Bytes consist solely of 3 gates (AND, OR, NOT), other gates can be made from these. \includegraphics[scale=0.3]{gates.png}
+	\subsection{Electricity Flow}
+	Electricity flows like water on a flat surface, will go in all directions. In order to control electricity flow, we will use \textbf{gates}.
+	\\ If electricity flows the opposite way it's supposed to (in where it's out), the computer will freeze.
+	\section{System Board}
+	\includegraphics[scale=0.5]{sb.png}
+	The system board consists of data paths, such that everything is connected.
+	%
+	\\ Many definitions on Lecture 1, are they needed?
+	%
+	\subsection{Bus}
+	The \textbf{bus} links everything together on the system board. A conduit for bytes to travel from one location to another location (pathway). On the classical CPUs, there is only 1 bus, so only 1 thing can use the bus at once.
+	\\ \includegraphics[scale=0.6]{bus}
+	\\ Here's an optimized schematic that uses the bus less. It provides several direct/private data lines:
+	\begin{itemize}
+		\item From the CPU to the cache (cache can operate at CPU clock speed)
+		\item Cache to RAM
+		\item CPU to PCI
+		\item All of these make things faster
+		\item Great use of speediness of CPU
+	\end{itemize} %from the CPU to the cache (for lots of speed) and a line from 
+	\includegraphics[scale=0.5]{sbo.png}
+	\\ Can multi-thread with multiple buses, but multiplies the cost of the computer
+	\subsection{Pathways}
+	There are many other \textbf{pathways}, such as system buses (ISA, PCI), data bus, CPU bus, wires. These pathways are to \textbf{interconnect} components. Pathways are composed of multiple parallel wires (to be executed independently), one wire per bit. One byte goes through a bus per tick. 
+	\paragraph{Shorthand for multiple wires}8 wires
+	\begin{tikzpicture}[scale=0.3]
+		\draw (0,0)--(5,0);
+		\node (8) at (4,2){8};
+		\draw (2,-1)--(8);
+	\end{tikzpicture}
+	\subsection{RAM}
+	Volatile (live data) general purpose main memory bank, large \& slow, \textbf{RAM} consists of addresses, storage space and the zero page, which connects to slots. Comparable to an array.
+	\includegraphics[scale=0.3]{rm.png}
+	In comparison to cache, RAM costs pennies and cache costs dollars. Cache is much faster, but RAM is used as an illusion to make the computer work as if all the memory was cache.
+	\\ RAM separated into 2 sections, addresses and data. RAM is actually mostly addresses. \textbf{Data} is typically 8 bits, whereas the size of addresses varies. Typically 32 or 64 bit right now, soon to be 128. Once RAM is built with some size, you can't change it (so you must decide wisely). Need 1 wire per bit (i.e. 8 wires going to data part and however many for addresses). In order to r/w to RAM, we need a few things. \textbf{Address register} to select address/row, mode register for r/w and data register. For large values/things, like strings, store in consecutive memory areas.
+	\paragraph{Video and RAM}
+	1:1 correspondence with RAM and pixels. Pixels represented by integer numbers. 
+	\includegraphics[scale=0.3]{rrr.png}
+	\subsection{Clock}
+	There are always at least 2 \textbf{clocks}. One for the bus (much slower) and one for the CPU (much faster). The bus clock is 1 or 2 orders of magnitude slower than the CPU clock.
+	\paragraph{Bus Clock}
+	\begin{itemize}
+		\item Mainly for gating access to bus.
+		\item Also regulates data movement on system board.
+	\end{itemize}
+	\paragraph{CPU Clock}
+	\begin{itemize}
+		\item Responsible for instruction execution inside CPU.
+		\item Moves data using CPU bus or moves code from IP $\to$ sequencer
+		\item Doesn't affect things outside CPU.
+		\item The clock will determine order of instruction execution (they have to take turns).
+	\end{itemize}
+	\subsection{PCI \& ISA}
+	Connect outside of the computer, to other peripherals like monitors. PCI can run at higher clock speeds than ISA.
+	\subsection{Addressing}
+	All components of system board have a unique integer number identifying them. Needed, so that we can block electricity from going to certain peripherals.
+	\subsection{CPU}
+	Central Processing Unit, used for math, logic, data, movement \& loops.
+	The \textbf{CPU} is pretty simple/basic, even though it's the ``brain" of the computer. It's main capabilities consist of adding, subtracting, multiplying, knows about the 3 gates.
+	\paragraph{Classical CPU Scheme Without Cache} ~
+	\\\includegraphics[scale=0.5]{cpu.png}
+	Here, RAM reads the address from the address register, writes to the data register and the mode register differentiates read/write. The sequencer opens and closes gates.
+	\paragraph{Registers}
+	Like temp variables for the CPU. Store single value.
+	\paragraph{ALU: Arithmetic Logic Unit}
+	The ALU takes 2 inputs, L and R to get it's output, A-Out. The Status register takes input (for type of operation) and output to report errors, like overflow, dividing by zero.
+	\\ ALU consists of a bunch of adders, 2s complement circuit for L and for R (need something that inverts bits and then use an adder to increment by 1).
+	\paragraph{IP(Instruction Pointer) or IC (Instruction Counter)}
+	\begin{itemize}
+		\item Next instruction/address to execute
+		\item Address Register points to it when needed
+	\end{itemize}
+	\paragraph{IR (Instruction Register)}
+	\begin{itemize}
+		\item Current instruction being executed
+		\item From data register
+		\item First part is op-code, goes to control unit
+		\item Parts after are arguments
+		\item Usually 3 args, $3^{rd}$ is usually optional?
+	\end{itemize}
+	\subparagraph{Example Instructions}
+	\begin{itemize}
+		\item lw \$2, (\$3) (indirect)
+		\begin{itemize}
+			\item Loads word into reg 2 from address in reg 3
+		\end{itemize}
+		\item lw \$2, \#1A2F
+		\begin{itemize}
+			\item Goes directly to address, no need to check register (direct)
+		\end{itemize}
+		\end{itemize}
+	\includegraphics[scale=0.5]{ir.png}
+	\begin{itemize}
+		\item L $\to$ L register
+		\item R $\to$ R register
+		\item A-Out $\to$ Dest
+		\item OP-Code is used by sequencer to trigger circuit that will do this action.
+	\end{itemize}
+	We can't distinguish variables, addresses and operations.
+	\paragraph{RAM Access Register System}
+	\begin{itemize}
+		\item Communicates CPU $\leftrightarrow$ RAM
+		\item Address register (r/w this address)
+		\item Data register (data received or sending)
+		\item Mode register (r/w)
+	\end{itemize}
+	\paragraph{CPU Boundary Register} Keeps track of addresses used, addresses requested shouldn't pass boundary address.
+	\paragraph{Sequencer/Decoder}
+	\begin{itemize}
+		\item Table, codes with circuits
+		\item Circuits have gated triggers, allowing data to go in a specific order
+		\item Sequencer and ROM have circuitry to react to machine lang, allow computer to execute instr. Sequencer: built-in instr. ROM: extended instr.
+	\end{itemize}
+	\paragraph{CPU Clock}
+	See 2.4.
+	\paragraph{CPU Loop (Execution)}
+	\begin{enumerate}
+		\item Get instruction: IR $\gets$ RAM (or cache), slow bus
+		\item Sequencer $\gets$ IR[op-code]
+		\item Selected gates open
+		\item Clock ticks (if this is outside CPU, have to respect other clocks too)
+		\item All gates close
+		\item Increment  $\to$ next instruction (fast). Back to step 1.
+	\end{enumerate}
+	Shorthand: 
+	\begin{enumerate}
+		\item AR $\gets$ PC
+		\item PC $\gets$ PC+1
+		\item DR $\gets$ RAM[AR]
+		\item IR $\gets$ DR
+		\item Re-loop
+	\end{enumerate}
+	Constant switch from slow to fast clock means we are never really fast, which is why we need things like a cache.
+	\paragraph{Memory}
+	Different types of memory. See specific sections for more info.
+	\begin{itemize}
+		\item RAM (primary storage). DRAM: Dynamic, must refresh. SRAM: Static, no refresh.
+		\item ROM, read only memory (advanced instructions). ROM is hardwired. PROM programmable once (fuses). EPROM, erasable by heat. EEPROM electrically erasable. PAL, PLA.
+		\item Cache. Very fast memory, usually on CPU. Store frequently accessed info. Doesn't use system bus. 1 direction, cache1 $\to$ CPU and CPU $\to$ cache2.
+		\item Pipeline. Use assembly line to process instructions. Partially parallel. Series of instruction registers.
+	\end{itemize}
+	\section{Data/Data Encoding}
+	\textbf{Data} is information stored in RAM or secondary storage. Can be instructions or information. There are built-in types CPU can understand (int, real, char), since there are circuits made to interpret them. Language types must be simulated. The \textbf{bit} is the fundamental unit of the computer. Using bits and gates, we will group things in order to store data.
+	\paragraph{Bit Grouping}
+	Two forms: numerical binary representation and tabulated binary encoding (ASCII, UNICODE, instructions, etc.). Can count, add, subtract, multiply and divide with binary numbers. \includegraphics[scale=0.4]{asc.png} \includegraphics[scale=0.5]{bsg}\\
+	How to represent data? How many bits do we need? What medium to use? (lights, sound, signals) Lightbulbs originally used, either on or off. \begin{tabular}{|c|c|}
+		\hline Nibble & 4 bits \\ \hline Byte & 8 bits \\ \hline Word & 16 bits \\ \hline Long Word/Word & 32 bits \\ \hline Quad Word/Word & 64 bits \\ \hline
+	\end{tabular} There are standards for data types/storage established by IEEE and ISO. 3 basic things to encode: chars, numbers and instructions. For \textbf{characters}, we use a predetermined table (ASCII, unicode), \textbf{numbers} use binary arithmetic and \textbf{instructions} use a table, gate sequence code-number.
+	\paragraph{Word}
+	Word is the common size of a register of CPU(best for design of CPU). CPUs often have multiple register sizes. Word sizes differ between CPUs. Nowadays, register size is usually the same as address size.
+	\subsection{Data Types \& Encoding}
+	How does the machine know that a byte is a character? The ROM (Read Only Memory), has predefined instructions to deal with it. Compiler will look at ASCII table and display the respective character, etc. \includegraphics[scale=0.3]{btree} You need the ROM for tabular encodings, but not for binary numbers.
+	\subsubsection{Number Representations}
+	\paragraph{Binary} 
+	\begin{itemize}
+		\item Used for flags, numbers, strings, encodings
+		\item Longhand addition in binary is the same as elementary grade addition with decimals
+		\begin{itemize}
+			\item But we have a fixed size
+			\item If we carry past size $\to$ \textbf{Arithmetic Overflow}
+			\item Signed overflow expected for 2's complement subtraction
+		\end{itemize}
+	\end{itemize}
+	\paragraph{Hexadecimal} Easier to read for humans, better correspondence with binary. Base 16, with 10-15 being A, B, C, D, E, F. Decimal to Binary conversion is slow. Computers often convert binary to hex for errors to make it easier to read.
+	\paragraph{Octal}
+	\begin{itemize}
+		\item Barely used anymore
+		\item Except for Unix permissions and C, Perl escape codes
+	\end{itemize}
+	\subsubsection{Conversion}
+	\paragraph{Decimal $\to$ Binary} Keep dividing by 2 until you get 0, read the remainders from bottom to top $\to$ left to right. \includegraphics[scale=0.5]{dbc}
+	\paragraph{Decimal $\to$ Hex} Divide by 16 until 0, read remainders in same way.\\ \includegraphics[scale=0.5]{dhc}
+	\paragraph{Binary $\to$ Decimal} Depending on position of number, multiply value by $2^{\text{n}^{th} \text{position}}$
+	\begin{equation*}
+	1011_2=N_{10}=11_{10}=1\times 2^3 + 0 \times 2^2 + 1 \times 2^1 + 1 \times 2^0
+	\end{equation*}
+	\paragraph{Hex $\to$ Decimal} Same principle with base 16. 
+	\begin{equation*}
+	1AB_{16}=N_{10}=427_{10}=1\times 16^2 + A \times 16^1 + B \times 16^0
+	\end{equation*}
+	\paragraph{Binary $\leftrightarrow$ Hex} 1 nibble = 1 hex digit
+	\begin{equation*}
+	\underbracket{1111}_{F}\underbracket{0011}_{3}\underbracket{0001}_{1}{\underbracket{0000}_{0}}=F310_{16}
+	\end{equation*}
+	\paragraph{Binary $\leftrightarrow$ Octal} 3 bits = 1 octal, same as Hex strategy.
+	\subsubsection{Binary Encodings}
+	\paragraph{ASCII} $2^7$ values, but wasn't enough for special characters like accents.\\ \includegraphics[scale=0.7]{basc}
+	\subsubsection{Data Representation}
+	Representing data consists of a choice, that comes at a cost. Pros/cons to each choice. Specify the base when writing numbers in this class. 3 representations:
+	\begin{itemize}
+		\item Logical description (how it truly looks \& behaves)
+		\item Physical construction
+		\item Circuit
+	\end{itemize}
+	We need legal operators, abstraction of what is being recorded (chars don't exist) and want to know how we want to represent information in binary (size, addressing).
+	\paragraph{Integers} Usually 16,32 or 64 bits. How do we differentiate sign? We can have a \textbf{signed} bit (use most significant bit as sign) or use ``2's complement". With signed bits, there exists a negative 0, but with 2's comp, only one 0 and most significant bit is still a sign bit. We don't need a null at the end of an int, it's matched with x bit instructions made for its size. 
+	\subparagraph{Two's Complement} Easier to build computers if they subtract using: 
+	\begin{equation*}
+		X-Y=X+(-Y)=X+(\text{2's complement of Y})
+	\end{equation*}
+	How to convert? \begin{itemize}
+		\item Take Y
+		\item Flip bits
+		\item Add 1
+		\end{itemize} 
+		Uses a signed overflow in order to get expected result.
+	\subparagraph{Example}
+	\includegraphics[scale=0.5]{22} \includegraphics[scale=0.5]{22a} \includegraphics[scale=0.5]{22b}
+	\subparagraph{Base 10 Two's Complement}
+	\begin{align*}
+		&-N = Base^{size}-N \\
+		&-12_{10}=10^2-12=88_{10} \\
+		&15-12=15+88=103 \implies \text{Drop carry, get }3
+	\end{align*}
+	\subparagraph{Signed vs 2's Comp}
+	\begin{itemize}
+		\item Signed \begin{itemize}
+			\item Easy to read
+			\item No conversion
+		\end{itemize}
+		\item 2's
+		\begin{itemize}
+			\item Unique 0
+			\item Auto subtracts when adding
+		\end{itemize} 
+		\end{itemize}
+	\paragraph{Characters} Encoded using ASCII or UNICODE or something similar (standard). Type not stored in computer, there are no types.
+	\paragraph{Strings} Each char stored in 1 byte in RAM (consecutive). Either a null at the end signifying the end of the String, or the most significant bit describes length.
+	\paragraph{Floating Point/Real Numbers} Scientific notation approximation, store decimal and exponent.
+	\includegraphics[scale=0.5]{fp} \includegraphics[scale=0.6]{fp32}
+	\subparagraph{IEEE format} Uses bias for exponent, i.e. for 32 bit, 127=0, 126=-1, 128=1. This way we don't need a signed bit.
+	\includegraphics[scale=0.5]{ieeefp}
+	\\ Mantissa stores a fraction(raw digits after decimal) for approximation. Normalize your fraction such that you get 1.something and ignore the 1. \subparagraph{Example}
+	\begin{align*}
+		& -0.75_{10}=-3/4_{10}=-3/2^2_{10} \\
+		& \implies -11_2/2^2_{10}=-0.11_2=-0.11_2 \times 2^0=-1.1_2 \times 2^{-1}
+		\\& \implies (-1)^1 \times (\underbrace{1}_{ignored}+ .100 \ldots 00_2) \times 2^{126-217}
+	\end{align*}
+	\includegraphics[scale=0.7]{exfpm}
+	Notice that the leading 1 before the decimal is ignored. The $22^{nd}$ bit is $2^{-1}$, the $23^{rd}$ is $2^{-2}$, etc. Since we had $1.1_2$, we look at the numbers after the decimal and just copy those.
+	\paragraph{Logical}
+	Single bit, 0=false, 1=true
+	\paragraph{Packed Decimal}
+	One nibble per digit of a number in base 10. Can be used to store decimal numbers. Addition is strange. Add 2 nibbles together, if you get over 10, subtract 10 and carry and add 1 over to next nibble. (i.e, if you do 3+9, you'll get 12 (5 bits), subtract 10 and represent 2 in binary)
+	\begin{equation*}
+		5372_{10}=0101 \: 0011 \: 0111 \: 0010
+	\end{equation*}
+	Very user friendly, but wastes space and complicates hardware.
+	\subsection{Mathematical Operation Algorithms for Floating Points}
+	\paragraph{Addition}
+	\begin{itemize}
+		\item Normalize (floating point)
+		\item Round if required
+		\item Put numbers to same exponent (shift smaller to right until it's the same as larger)
+		\item Add significands
+		\item Normalize (check for over/underflow)
+		\item Round
+		\item Sign?
+		\end{itemize}
+	\subparagraph{Ex} Add $0.5_{10}$ and $-0.4375_{10}$
+	\\
+	\includegraphics[scale=0.8]{exfa}\\
+	\includegraphics[scale=0.8]{exfaa}
+	\paragraph{Multiplication}
+	\begin{itemize}
+		\item Remove exponent bias
+		\item Match exp
+		\item Multiply significands
+		\item Normalize \& round
+		\item Sign
+	\end{itemize}
+	\paragraph{Ex} Multiply $0.5_{10}$ and $-0.4375_{10}$\\
+	\includegraphics[scale=0.8]{fpm}
+	\\ \includegraphics[scale=0.8]{fpma}
+	\section{Logic \& Gates}
+	\begin{itemize}
+		\item 
+		Circle $\implies$ not
+		\item Extra line $\implies$ exclusive
+	\end{itemize}
+	\begin{figure}[H]
+		\caption{Taken from \href{https://www.allanwang.ca/notes/mcgill/comp273/0.php}{Allan Wang's website}}
+		\begin{center}
+			\includegraphics{gatess}
+		\end{center}
+\end{figure}
+		Wire crosses, i.e. when are two wires connected: \includegraphics{wc}
+		\paragraph{Low-level Construction}
+		\includegraphics[scale=0.7]{aog}
+		\\ \includegraphics[scale=0.7]{lc}
+	\subsection{Basic Flip Flop Circuits}
+	\textbf{Flip Flops} are bits!
+	\begin{figure}[H]
+		\caption{RS Flip Flops, \href{https://www.allanwang.ca/notes/mcgill/comp273/0.php}{Allan Wang}}
+		\begin{center}
+			\includegraphics{rsf}
+		\end{center}
+		Sending 1 to reset(R) and set(S) is an invalid input. They must be opposites, or both 0. Sending a 1 through set, sets the bit's output, Q to 1, and it's complement Q' to 0. Sending 1 through reset does the opposite. If both are 0, keep current value (clocked).
+		\\ Can test \textbf{steady state} of the circuit. Give a 1 to R and follow the circuit, realize nothing conflicts. The flip flops don't actually store anything, they just have data going through them $\to$ live data, lost when unplugged.
+	\end{figure}
+	Clocked RS: \includegraphics{clksr}
+	Like an RS Flip-Flop, except only let's things through when clock ticks.
+	\begin{figure}[H]
+		\caption{JK Flip Flop, \href{https://www.allanwang.ca/notes/mcgill/comp273/0.php}{Allan Wang}}
+		\begin{center}
+			\includegraphics{jkc}
+		\end{center}
+		2 SR flip flops, adds a delay.
+	\end{figure}
+	\begin{figure}[H]
+		\caption{D Flip Flop/D Latch, \href{https://www.allanwang.ca/notes/mcgill/comp273/0.php}{Allan Wang}}
+		\begin{center}
+			\includegraphics{dffl}
+		\end{center}
+		Used for registers/data.
+	\end{figure}
+	Chaining flip flops and their clock input stretches out inputs even more, how we use counters. \includegraphics[scale=0.5]{bc}
+	\subsection{Adders} How do we do grade school addition in binary at the hardware level? When adding 2 numbers together, we need a half adder for least significant bit (no carry) and full adders for all the other bits. Be careful of overflows and signed bits!
+	\paragraph{Half-Adder} 2 bits in, sum \& carry out
+		\begin{figure}[H]
+			\caption{Half Adder, \href{https://www.allanwang.ca/notes/mcgill/comp273/0.php}{Allan Wang}}
+			\begin{center}
+				\includegraphics{ha}
+			\end{center}
+		\end{figure}
+		If A \& B are both 1, then we will give 1 to carry and negate adding to sum.
+	\paragraph{Full Adder} 3 bits in ($3^{rd}$ is carry), sum \& carry out
+	\begin{figure}[H]
+		\caption{Full Adder, \href{https://www.allanwang.ca/notes/mcgill/comp273/0.php}{Allan Wang}}
+		\begin{center}
+			\includegraphics{fa}
+		\end{center}
+		Above is the more optimized version. Can just have 2 half adders and an or. Include simpler version with half-adders?
+	\end{figure}
+	\subsection{Combinatorial Networks} Premade circuits for specific purposes, readily available.
+	\paragraph{Multiplexers} $2^a \to 1$ mux, $2^a$ inputs $x_0,\ldots,x_{n-1}$ and a single output z. Selector address a, with input signals $y_0,\ldots,y_{a-1}$, selects which $x_i$ to pass through z. Useful for when you have multiple signals but can only let one through at a time. Addressing, but with 1 output, z. \\\includegraphics[scale=0.5]{multi}
+	\paragraph{Decoders} $a \to 2^a$ decoder, gives out one of its $2^a$ outputs. Once again, like addressing, but selecting which you want to turn on. Like controlling switches. CPU sequencer is a decoder. \includegraphics[scale=0.5]{decd}
+	\paragraph{Encoders} Outputs a-bit binary number, $y_i$ equal to index of single 1 signal on among $2^a$ inputs $x_0,\ldots,x_{a-1}$. All of the xs are connected to an or gate, so if they're all off but $x_0$ is on, will show $0$.
+	\paragraph{Programmable Combinatorial Parts} VIA Fuses that can be blown (disconnected) from enough current or VIA anti-fuses that are set(connected) from enough current. \\
+	\includegraphics[scale=0.7]{fu}
+	\subparagraph{PROM} Programmable read only memory, has anti-fuses that can be set, linked to decoder.
+	\subparagraph{PAL} Programmable Array Logic, input wires are programmable, but output isn't.
+	\includegraphics[scale=0.7]{pal}
+	\subparagraph{PLA} Programmable Logic Array, input \& output programmable. 
+	\includegraphics[scale=0.7]{pla}
+	\section{In-Depth Classical CPU Analysis}
+	\paragraph{Von Neumann Machine}
+	\includegraphics[scale=0.5]{vnm}
+	\paragraph{Classical CPU Design}
+	\includegraphics[scale=0.5]{ccpud} 
+	PC = Program Counter or Instruction Pointer.
+	\textbf{MAR}, memory address register, downloads instructions from PC, sends to AR. AR and MAR work a lot together, both address registers.
+	\textbf{MBR}, memory buffer register, can contain many things (reason why it's called a buffer), like address, data from data registers. AR, DR and MAR, MBR work well together. INC is incrementer (override data in address), CU is control unit. Can add onto this diagram by adding peripherals on bus.
+	\\ CPU does one instruction at a time in however x ticks it takes, then increments to next address to do next operation. Making things parallel \& local to avoid ticks and make it faster.
+	\subsection{Instructions}
+	Group of assembler instructions CPU supports. Standard size is usually the word size. Command that is formatted string of binary. Stored in RAM. Makes programs/algorithms.
+	\paragraph{Program running (Classical CPU)}
+	\begin{itemize}
+		\item OS sleeps (no multithreading)
+		\item 1. MAR $\gets$ PC
+		\item PC $\gets$ PC+1
+		\item 2. AR $\gets$ MAR
+		\item DR $\gets$ RAM[AR]
+		\item 3. MBR $\gets$ DR
+		\item IR $\gets$ MBR
+		\item CU $\gets$ IR(OP-CODE)
+		\end{itemize}
+	See instruction register for more info.
+	\paragraph{Register vs RAM}
+	Can give type to instructions, such that it goes through CPU registers or RAM. Through IR it does addition in 1 tick, but with RAM it has to go through several things, AR, MBR, IR in order to get what's at the RAM.
+	\\ When program is done running, it tells the OS it can wake up now and stops program.
+	\subsection{CPU Execution Cycle}
+	\paragraph{Fetch}
+	\begin{enumerate}
+		\item PC $\to$ MAR, PC++
+		\item MAR $\to$ RAM AR
+		\item Read signal
+		\item RAM DR $\to$ MBR $\to$ IR (or other register)
+	\end{enumerate}
+	\paragraph{Decode}
+		\begin{enumerate}
+			\item Do we need operands?
+			\begin{enumerate}
+				\item Get operands, using address in instruction to fetch each parameter, but last step goes to CPU register instead of IR and no incrementing of PC++
+			\end{enumerate}
+			\item OP-CODE $\to$ CU
+		\end{enumerate}
+		\paragraph{Execute}
+		CU triggers gates to perform instruction
+		\paragraph{Store}
+		\begin{enumerate}
+			\item Register with address $\to$ MAR
+			\item Register with data $\to$ MBR
+			\item Write signal sent to RAM AR and DR
+		\end{enumerate}
+		\subsection{Micro Instructions}
+		Express operation of CPU, step by step. Syntax to follow.
+		\\ CHANGE\_STATE $\gets $ OPERATION
+		\begin{itemize}
+			\item MACHINE(addr)
+		\end{itemize}
+		\includegraphics[scale=0.7]{mi1}
+		\\\includegraphics[scale=0.7]{mi2}
+		\\\includegraphics[scale=0.7]{mi3}
+		\\ \includegraphics[scale=0.7]{mi4}
+		\\ \includegraphics[scale=0.7]{mi5}
+	\section{Pipeline CPU Structure}
+	When we look at the classical CPU architecture, we see that it is easy to build/cheaper and the bus allows flexibility of data movement. But, there are unused circuits and everyone has to share the same clock tick.
+	\\ What about the pipeline CPU? The CPU \textbf{is} the bus. Only goes in one direction. Each instruction does a separate part at once, so you can have multiple instructions flowing through the pipeline at once (not executing simultaneously, more like doing different steps simultaneously). Pipeline instead of CPU loop.\\ \includegraphics[scale=0.7]{ppl}
+	While fetching next instruction, can load current instruction. Can do 4 instructions at different phases at the ``same time". Need a lot of instruction registers, one at each stage (4). Two caches. Code/Load prediction has dumb(blind dump of code) vs smart(look ahead for goto/jump).
+	\paragraph{Effects on IR and CU}
+	\begin{itemize}
+		\item No longer 1:1 IR and PC
+		\item Either one long CU or many small CUs
+		\item 1 IR for every silo (data lock/gates)
+		\item Pipeline has to be gated
+		\end{itemize}
+		\paragraph{Fetch} \includegraphics[scale=0.4]{fetch}
+		\paragraph{Load \& ALU} \includegraphics[scale=0.3]{load}
+		\paragraph{Delayed Branching ALU} \includegraphics[scale=0.3]{dalu}
+	\subsection{Summary Layouts} 
+	\includegraphics[scale=0.3]{slp}
+	\section{Assembler}
+	\begin{itemize}
+		\item Comments indicated by \#
+		\item .text indicates code is after this
+		\item .globl something $\to$ where is main program
+		\item syscall calls system to temporarily wake up to do something, like print
+		\item data indicates things stored and whatnot
+		\end{itemize}
+	\section{Examples}
+	\paragraph{An example of Copying from RAM to a Slot}
+	\includegraphics[scale=0.5]{rmstr.png}
+	In this example, we'd like to copy 10 letters from RAM to an arbitrary slot on a traditional system board. We must loop through as follows:
+	\begin{enumerate}
+		\item Open gate 0 \& 1, close all other gates.
+		\item Wait for tick.
+		\item 1 character passes.
+		\item Go back to step 2.
+		\item Once all 10 characters are written, ``supervisor" (later, central unit?) closes all gates and the operation is done.
+		\end{enumerate}
+		\paragraph{Can a single byte in RAM and a single CPU instruction in RAM both exit RAM at once?}
+		~\\ No, not possible with traditional system board. You can do each one very quickly, but not simultaneously.
+		\paragraph{What does the circuit of a full 2-byte r/w memory look like?}
+		Size of RAM is 2-byte, need 16 flip flops. Need a r/w register, data register and some sort of addressing system (many gates, only opening access to 1 bit at a time). Clock controls it all.
+		\paragraph{ALU Questions}
+		\subparagraph{What do we need to assume about our data to build an ALU}
+		Size of inputs \& outputs.
+		\subparagraph{How would the assumptions impact the design of the ALU?} Limit capacity to do arithmetic, depending on size of data.
+		\subparagraph{4-bit integer ALU with addition and subtraction?} 2 Half-adders.
+		\subparagraph{Upgrading size?} Add more half adders, bigger output.
+		\paragraph{Binary Code Decimal}
+		7 segments (calculator LED), depending on which bits are on, display that number. Uses addressing.
+		\paragraph{Given 2 bit binary number, use PLA to send out single bit value for each binary value.} (Like a decoder) \\
+		\includegraphics[scale=0.8]{pladd}
+		\paragraph{Temperature stored in a register as a binary number, set off alarm when temp is $\geq$ 500} Do all the situations 5+, then put them all into an or.
+		\section{Exercises}
+		\subsection{Circuits}
+		\begin{itemize}
+			\item Make a circuit with a truth table
+			\item Simple 3 bit increment with 1 circuit, no adder
+			\item 2's complement circuit
+			\item Circuit picking 1 bit out of 2 bits, given a 1 bit number
+			\end{itemize}
+	\section{Readings}
+	\paragraph{Computer Organization \& Design Textbook}
+	Readings correspond to the \textbf{$4^{th}$} edition of the textbook, not the $5^{th}$.
+	\begin{itemize}
+		\item Chapter 1
+		\item Chapter 2.4
+		\item Appendix C1 to C11
+		\item Chapter 4
+		\item Appendix D
+	\end{itemize}
+\end{document}
