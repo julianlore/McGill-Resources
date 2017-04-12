@@ -44,11 +44,8 @@
 	Electricity flows like water on a flat surface, will go in all directions. In order to control electricity flow, we will use \textbf{gates}.
 	\\ If electricity flows the opposite way it's supposed to (in where it's out), the computer will freeze.
 	\section{System Board}
-	\includegraphics[scale=0.5]{sb.png}
+	\includegraphics[scale=0.5]{sb.png}\\
 	The system board consists of data paths, such that everything is connected.
-	%
-	\\ Many definitions on Lecture 1, are they needed?
-	%
 	\subsection{Bus}
 	The \textbf{bus} links everything together on the system board. A conduit for bytes to travel from one location to another location (pathway). On the classical CPUs, there is only 1 bus, so only 1 thing can use the bus at once.
 	\\ \includegraphics[scale=0.6]{bus}
@@ -815,13 +812,15 @@ OS treats each core as a unique processor. OS schedules processes and threads to
 	\paragraph{R-Type Load}~\\ \includegraphics[scale=0.7]{rtl}
 	\paragraph{R-Type ALU}~\\ \includegraphics[scale=0.7]{ralu}
 	\paragraph{R-Type Store}~\\ \includegraphics[scale=0.7]{rstr}
+	\paragraph{Instruction Table (given on final)}
+	~\\ \includegraphics[scale=0.3]{instr}
 	\subsection{Assembler Code}
 	\paragraph{Scope} All peripherals and system components accessible by instructions. Can access hardware through RAM (zero page), but you need to know address, binary format, command, status \& data registers. Access to hardware requires privileged instructions.
 	\begin{itemize}
 	\item Privileged mode allows all registers protecting OS to be accessible (like boundary registers)
 	\item Non-privileged is the opposite, used in this class
 \end{itemize}
-\paragraph{Compiling High Level Languages} Code $\to$ Compiler$\to$ Assembler $\to$ linker (with library and loader) $\to$ executable
+\subsection{Compiling High Level Languages} Code $\to$ Compiler$\to$ Assembler $\to$ linker (with library and loader) $\to$ executable
 \begin{itemize}
 \item Compiler checks syntax, coverts to assembly
 \item Assembler checks for syntax, converts to machine code
@@ -841,7 +840,7 @@ OS treats each core as a unique processor. OS schedules processes and threads to
 \end{itemize}
 We need the outputs and versions to match each other for the program to execute/work.
 \\ Assembly program consists of the above, without a compiler, going directly from source code to assembler
-\paragraph{Assembler} Converts assembler text file into .o file, has instructions and directives
+\subsection{Assembler} Converts assembler text file into .o file, has instructions and directives
 \paragraph{Directives}
 \begin{itemize}
 		\item Comments indicated by \#
@@ -851,6 +850,18 @@ We need the outputs and versions to match each other for the program to execute/
 		\item .data indicates things stored and whatnot
 		\item LABELS: define label's location, LABEL references its location
 		\end{itemize}
+\paragraph{Data Directives}
+\begin{lstlisting}
+.align n		# Aligns data on specified size, 0=byte, 1=half, 2=word, 3=double
+.ascii str 	  	# Ascii String without '\0', put in quotes
+.asciiz str 	  	# Null terminating ascii String
+.space n	  	# Reserve n Bytes
+.byte b1,b2,..,bn	# Specify contents of a Byte (8 bits)
+.half h1,..., hn  	# 16 bits
+.word w1,...,wn		# 32 bits
+.float f1,...,fn	# 32
+.double d1,...,dn	# 64
+\end{lstlisting}
 \paragraph{Two-Pass Assembly}
 Building to linker:
 \begin{itemize}
@@ -884,6 +895,80 @@ LABEL&OFFSET
 \item Assign SP to next free stack position, IP to first instr
 \item Clear registers
 \end{itemize}
+\paragraph{Assembler Functionality}
+Assembler has functionality for:
+\begin{itemize}
+\item Math and Logic
+\item Data movement
+\item Pointer
+\item Branching
+\item Goto and subroutines
+\end{itemize}
+But does not have
+\begin{itemize}
+\item Functions (can be simulated)
+\item Objects (can be sim)
+\item Arrays or data structures (can be sim)
+\item Variables or constants in the normal way
+\end{itemize}
+Advanced things assembler can do:
+\begin{itemize}
+\item Access internal OS routines
+\item Access control ROMS of every peripheral
+\end{itemize}
+Assembler keeps it simple and modular, need to know how to use registers and stack.
+\subsection{Virtual Memory} Mips has $2^{30}$ memory words, accessed by data transfer instructions
+\begin{itemize}
+\item Words are $4$ Bytes
+\item Uses byte addresses
+\item Memory has data structures, arrays, saved registers, instructions, variables and constants
+\end{itemize}
+\includegraphics[scale=0.7]{vms}
+\\ Heap is for things like allocating memory, stack is for local vars of functions, stack heap collisions happen if we have infinite recursion or ask for too much memory.
+\paragraph{MIPS Registers}~\\ \includegraphics[scale=0.7]{mps}
+\paragraph{Addressing Modes}
+\begin{itemize}
+\item Register addressing, operand is a register, add \$s1, \$s2, \$s3
+\item Base or displacement addressing, operand is memory location, register$+$ offset, lw \$s1, 100(\$s2)
+\item Immediate Addressing, operand is constant (16 bit), addi \$s1, \$s2, 100
+\item PC-Relative Addressing mem loc=PC$+$offset, j 2500
+\item Pseudo-Direct Addressing, mem loc = top 6 bits of PC with 26 bit offset, jal 2500 
+\end{itemize}
+There are limitations to how far you can jump because of the size of an instruction.
+\\ \includegraphics[scale=0.3]{am}
+\subsection{Code Format}
+\begin{lstlisting}
+	.text
+	.globl main
+main:	la $a0, MESG	# Loads address of String into $a0
+	li $vo, 4	# Load 4 into $v0 for a syscall to print
+	syscall		# Prints String pointed to by $a0
+	
+	li $vo, 10	# Code to exit
+	syscall		# Exits
+
+	.data
+MESG:	.asciiz"Hello world!\n"
+\end{lstlisting}
+\subsection{Calling Subroutines}
+\paragraph{Systems Programming/Register Convention}
+Pass parameters through \$a0-\$a3, return with \$v0, \$v1
+\paragraph{ANSI C Standard} Use the runtime stack, more work, get local vars
+\\ Return using either the stack of \$v0, \$v1, pass params through stack and push local vars to stack. Backup at beginning of functional call and restore register at the end.
+\\ Stack pointer goes ``down", subtract to advance it
+\paragraph{Pushing \& Popping}
+\begin{lstlisting}
+# Pushing
+subi $sp,$sp,8	# Subtract 8 bytes from sp to reserve 8 bytes of space
+sw   $s0, 4($sp)# Save $s0 at an offset of 4 from sp 
+sw   $s1, ($sp)	# Save $s1 at sp 
+
+# Popping
+lw $s0, 4($sp)	# Restores $s0
+lw $s1, ($sp)	
+addi $sp,$sp,8	# Pseudo deletion of stack vars, still "there"
+\end{lstlisting}
+
 \section{Examples}
 	\paragraph{An example of Copying from RAM to a Slot}
 	\includegraphics[scale=0.5]{rmstr.png}
