@@ -917,6 +917,13 @@ Advanced things assembler can do:
 \item Access control ROMS of every peripheral
 \end{itemize}
 Assembler keeps it simple and modular, need to know how to use registers and stack.
+\paragraph{Processors \& RAM}
+\begin{itemize}
+\item Co-0 for exceptions and interrupts
+\item Co-1 for floating point ops
+\item 0xffff0000 to 0xffff000c for I/O ports (like keyboard and display)
+\item Syscall $1$ to $10$ for OS API
+\end{itemize}
 \subsection{Virtual Memory} Mips has $2^{30}$ memory words, accessed by data transfer instructions
 \begin{itemize}
 \item Words are $4$ Bytes
@@ -937,6 +944,16 @@ Assembler keeps it simple and modular, need to know how to use registers and sta
 \end{itemize}
 There are limitations to how far you can jump because of the size of an instruction.
 \\ \includegraphics[scale=0.3]{am}
+\paragraph{Buffer} Temporary location for for data during a move, could be in RAM.
+\begin{itemize}
+\item Using a buffer?
+\item Allocate space using syscall 9 or in .data
+\item Load the address of the label
+\item Store things
+\end{itemize}
+\paragraph{Accessing OS Memory}
+Using syscalls for controlled access. Put the system call code in \$v0 and then execute a syscall for the following:
+\\ \includegraphics[scale=0.3]{sys}
 \subsection{Code Format}
 \begin{lstlisting}
 	.text
@@ -997,6 +1014,7 @@ addi $sp,$sp,8	# Pseudo deletion of stack vars, still "there"
 \end{itemize}
 \paragraph{Stack pointer and frame pointer}Frame pointer stores upper bound of runtime stack, where you were before you decrement stack pointer. Move \$sp to \$fp before you decrement. Instead of adding to stack pointer to pop everything, can just move \$fp into \$sp. Don't let things past \$fp or \$sp
 \\ \includegraphics[scale=0.7]{fpsp}
+\paragraph{Global Pointer} \$gp points to first byte of block of memory in .data/beginning of heap 
 \paragraph{Recursion}
 \begin{itemize}
 \item Problematic, multiple calls
@@ -1006,6 +1024,12 @@ addi $sp,$sp,8	# Pseudo deletion of stack vars, still "there"
 \end{itemize}
 \paragraph{Oversized variables}
 What do we do when data does not fit into a register? (Arrays, Structures, Objects) Use pointers.
+\subsection{Floating Point}
+Floating point instructions are different, uses co processor.
+\\ \includegraphics[scale=0.3]{fpi}
+\\ \$f0 and \$f1 for returning
+\paragraph{Extra Instructions} ~\\ \includegraphics[scale=0.7]{fpii}
+\paragraph{Different Types} How to deal with different ``types" \\ \includegraphics[scale=0.7]{typ}
 \section{Examples}
 	\paragraph{An example of Copying from RAM to a Slot}
 	\includegraphics[scale=0.5]{rmstr.png}
