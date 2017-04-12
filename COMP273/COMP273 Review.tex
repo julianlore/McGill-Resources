@@ -7,6 +7,7 @@
 \usepackage{lastpage}
 \usepackage{mathtools,float}
 \usepackage{tikz}
+\usepackage{listings}
 \usepackage[margin=1 in]{geometry}
 \allowdisplaybreaks
 %\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
@@ -625,7 +626,7 @@ What does the CPU system consist of?
 \paragraph{Supporting CPU Registers}
 Running 2 programs on a computer, shouldn't interfere with each other.
 \begin{itemize}
-\item Process Boundary Register: has upper bound and lower bound for jump/branch statements compare PC with illegal situations. OS' job to load registers.
+\item Process Boundary Register: has upper bound and lower bound for jump/branch statements compare PC with illegal situations. Protect processes, OS and zero page. OS' job to load registers.
 \\ \includegraphics[scale=0.7]{pbd}
 \end{itemize}
 Some don't have upper and lower boundary registers, have OS boundary register instead, prevents processes from addressing into OS space, programs can damage each other, but not OS. For special instructions, we can use assembler instructions (like syscall).
@@ -815,13 +816,53 @@ OS treats each core as a unique processor. OS schedules processes and threads to
 	\paragraph{R-Type ALU}~\\ \includegraphics[scale=0.7]{ralu}
 	\paragraph{R-Type Store}~\\ \includegraphics[scale=0.7]{rstr}
 	\subsection{Assembler Code}
+	\paragraph{Scope} All peripherals and system components accessible by instructions. Can access hardware through RAM (zero page), but you need to know address, binary format, command, status \& data registers. Access to hardware requires privileged instructions.
 	\begin{itemize}
+	\item Privileged mode allows all registers protecting OS to be accessible (like boundary registers)
+	\item Non-privileged is the opposite, used in this class
+\end{itemize}
+\paragraph{Compiling High Level Languages} Code $\to$ Compiler$\to$ Assembler $\to$ linker (with library and loader) $\to$ executable
+\begin{itemize}
+\item Compiler checks syntax, coverts to assembly
+\item Assembler checks for syntax, converts to machine code
+\item Linker verifies library calls exist, merges library into program, adds special OS functions 
+\end{itemize}
+We need the outputs and versions to match each other for the program to execute/work.
+\\ Assembly program consists of the above, without a compiler, going directly from source code to assembler
+\paragraph{Assembler} Converts assembler text file into .o file, has instructions and directives
+\paragraph{Directives}
+\begin{itemize}
 		\item Comments indicated by \#
 		\item .text indicates code is after this
-		\item .globl something $\to$ where is main program
-		\item syscall calls system to temporarily wake up to do something, like print
-		\item data indicates things stored and whatnot
+		\item .globl name of LABEL $\to$ where is main program
+		%\item syscall calls system to temporarily wake up to do something, like print
+		\item .data indicates things stored and whatnot
+		\item LABELS: define label's location, LABEL references its location
 		\end{itemize}
+\paragraph{Two-Pass Assembly}
+Building to linker:
+\begin{itemize}
+\item Pass 1: builds symbol table, indentifies labels, determines offset addresses of identifiers
+\begin{itemize}
+\item Scans source, top to bottom
+\item Count number of bytes in instructions passed to see how many bytes long the program is
+\item Find a label, add to symbol table with offset from beginning of program
+\item First instruction/label receives a base address in the symbol table, all others are just offsets from that address
+\\
+\begin{tabular}{|c|c|}
+LABEL&OFFSET
+\\ \hline main & x
+\\ int a & +3 (offset from x)
+\end{tabular}
+
+\end{itemize}
+\item Pass 2: builds machine language program, 1-to-1 map
+\begin{itemize}
+\item Scan source, top to bot again
+\item One line of assembly is one line of machine, convert op-code \& args
+\item Assembly Template, just like Symbol Table, but has addresses (with offsets) and instructions in binary
+\end{itemize}
+\end{itemize}
 	\section{Examples}
 	\paragraph{An example of Copying from RAM to a Slot}
 	\includegraphics[scale=0.5]{rmstr.png}
