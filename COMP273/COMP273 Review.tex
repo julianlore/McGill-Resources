@@ -924,6 +924,7 @@ Assembler keeps it simple and modular, need to know how to use registers and sta
 \item Memory has data structures, arrays, saved registers, instructions, variables and constants
 \end{itemize}
 \includegraphics[scale=0.7]{vms}
+\\ \includegraphics[scale=0.7]{mlv}
 \\ Heap is for things like allocating memory, stack is for local vars of functions, stack heap collisions happen if we have infinite recursion or ask for too much memory.
 \paragraph{MIPS Registers}~\\ \includegraphics[scale=0.7]{mps}
 \paragraph{Addressing Modes}
@@ -952,10 +953,19 @@ MESG:	.asciiz"Hello world!\n"
 \end{lstlisting}
 \subsection{Calling Subroutines}
 \paragraph{Systems Programming/Register Convention}
-Pass parameters through \$a0-\$a3, return with \$v0, \$v1
+Pass parameters through \$a0-\$a3, return with \$v0, \$v1.
+\begin{itemize}
+\item Benefits: fast and easy to code.
+\item Drawback: limited number of registers, no local vars.
+\end{itemize}
+
 \paragraph{ANSI C Standard} Use the runtime stack, more work, get local vars
 \\ Return using either the stack of \$v0, \$v1, pass params through stack and push local vars to stack. Backup at beginning of functional call and restore register at the end.
 \\ Stack pointer goes ``down", subtract to advance it
+\begin{itemize}
+\item Benefits: stack very large, simulates local vars
+\item Drawback: slows down program, extra lines of code and moves
+\end{itemize}
 \paragraph{Pushing \& Popping}
 \begin{lstlisting}
 # Pushing
@@ -968,7 +978,34 @@ lw $s0, 4($sp)	# Restores $s0
 lw $s1, ($sp)	
 addi $sp,$sp,8	# Pseudo deletion of stack vars, still "there"
 \end{lstlisting}
-
+\paragraph{Functions}
+\begin{itemize}
+\item Calling: JAL, pass params, stack or use \$a registers
+\item Protecting: Stack registers to protect calling env
+\begin{itemize}
+\item We usually don't protect \$t registers, but we do protect \$s registers, others optional
+\end{itemize}
+\item Returning: restore calling env, return value by register, pointer or stack and jr \$ra
+\end{itemize}
+\paragraph{Memory}
+\begin{itemize}
+\item Protection
+\item Register, subroutine only uses register (CPU registers are considered temporary)
+\item Global, RAM and instructions lw, sw for subroutine memory
+\item Local, use the stack for memory
+\item Combination of above
+\end{itemize}
+\paragraph{Stack pointer and frame pointer}Frame pointer stores upper bound of runtime stack, where you were before you decrement stack pointer. Move \$sp to \$fp before you decrement. Instead of adding to stack pointer to pop everything, can just move \$fp into \$sp. Don't let things past \$fp or \$sp
+\\ \includegraphics[scale=0.7]{fpsp}
+\paragraph{Recursion}
+\begin{itemize}
+\item Problematic, multiple calls
+\item Parameters for each call
+\item Local vars
+\item Only on \$ra register
+\end{itemize}
+\paragraph{Oversized variables}
+What do we do when data does not fit into a register? (Arrays, Structures, Objects) Use pointers.
 \section{Examples}
 	\paragraph{An example of Copying from RAM to a Slot}
 	\includegraphics[scale=0.5]{rmstr.png}
@@ -1010,6 +1047,17 @@ addi $sp,$sp,8	# Pseudo deletion of stack vars, still "there"
 			\item 2's complement circuit
 			\item Circuit picking 1 bit out of 2 bits, given a 1 bit number
 			\end{itemize}
+		\subsection{Assembler}
+		How to create and use the following:
+		\begin{itemize}
+		\item Literals
+		\item Static Variables
+		\item Local variable
+		\item Static data structures
+		\item Local data structures
+		\item Dynamic Memory
+		\item Call by value vs call by reference
+\end{itemize}
 	% \section{Readings}
 	% \paragraph{Computer Organization \& Design Textbook}
 	% Readings correspond to the \textbf{$4^{th}$} edition of the textbook, not the $5^{th}$.
