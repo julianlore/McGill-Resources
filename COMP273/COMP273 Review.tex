@@ -704,7 +704,7 @@ Really just need to AND everything, $1\times 1=1, 0\times 1=0$. Floating point n
 \end{itemize}
 \end{itemize}
 \end{itemize}
-For multi-core, threads run in parallel, once for each core. Can have hyperthreading and have queues in each core. Fork a program to split across multiple cores. The more cores, the more the advantages get smaller since they all need to communicate with each other.
+For multi-core, threads run in parallel, once for each core. Can have hyperthreading and have queues in each core. Fork a program to split across multiple cores. The more cores, the more the advantages get smaller since they all need to communicate with each other. Multicore because we can't make things go faster than speed of light, so we need more of them.
 \paragraph{OS Core Management}
 OS treats each core as a unique processor. OS schedules processes and threads to diff cores
 \begin{itemize}
@@ -723,6 +723,84 @@ OS treats each core as a unique processor. OS schedules processes and threads to
 \item Need to share data, put on a core that can share
 \item Hardware for data access conflicts
 \end{itemize}
+\end{itemize}
+\paragraph{Problem}
+\begin{itemize}
+\item Uniqueness of threads
+\begin{itemize}
+\item 1 thread per program? Programs all execute at the same time
+\item N threads per program? (like a browser with multiple windows)
+\begin{itemize}
+\item They have to coordinate with each other, overhead to manage
+\item $N>6$, overhead starts to be more than speed improvement
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\paragraph{Parallelism}
+\begin{itemize}
+\item Single core, instruction level parallelism $\to$ pipeline
+\item Thread-level parallelism (TLP), multi-core
+\begin{itemize}
+\item Each core gets a part of program to execute
+\item Single cores cannot take advantage of TLP, future will involve multi-cores exploiting TLP
+\end{itemize}
+\includegraphics[scale=0.7]{mct}
+\end{itemize}
+\paragraph{Single Instruction Multiple Data (SIMD)}
+\begin{itemize}
+\item Ex. Modern GPU
+\item Matrix of data
+\item 1 instruction executed on all cells at same time
+\item One cell is a core
+\end{itemize}
+\paragraph{Multiple Instruction Multiple Data (MIMD)}
+\begin{itemize}
+\item Multi pipeline CPU
+\item 1 pipeline per core
+\item Shared RAM
+\item Each core has own caches
+\item Core itself is SIMD
+\item Chip as a whole is MIMD
+\end{itemize}
+\paragraph{Simulataneous multi-threading (SMT)}
+\begin{itemize}
+\item Multiple independent threads executing at same time on same core
+\item Can do integer operation on one thread and floating point on another (2 ALUs)
+\item Not really parallel, $30\%$ threading, virtual processor, does not have resources for each core like Multi-core
+\item Can have multi-cores with SMT
+\item Intel calls SMT hyper-threads
+\end{itemize}
+\paragraph{Memory Types}
+\begin{itemize}
+\item Shared memory, shared between all processors
+\item Distributed memory, each processor has own memory
+\item Lots of computers have both
+\includegraphics[scale=0.3]{mts}
+\end{itemize}
+\paragraph{Private vs Shared Cache}
+\begin{itemize}
+\item Private is closer to core, faster access, less contention
+\item Shared, different cores can access the same thing, more space for big stuff
+\end{itemize}
+\paragraph{Problems}
+\begin{itemize}
+\item  Contention: More than one core needs access to same cache, one has to wait, need circuitry to handle
+\item Cache coherence: Private caches, need data to be consistent, each core should perceive memory as shared
+\begin{itemize}
+\item Core 1 changes a value, core 2 reads the old value
+\item Solution: Inter-core bus, looks at MAR, addresses being used, issues faults (invalidation + snooping)
+\begin{itemize}
+\item Core writes to cache, then all other copies $\to$ invalid
+\item All cores snoop the bus connecting cores for write ops
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\paragraph{Memory Hierarchy}
+\begin{itemize}
+\item Not shared: Pipeline, L1 private
+\item Shared: L2 (sometimes private), L3, RAM
+\item Special: SMT, all caches shared
 \end{itemize}
 	\section{MIPS}
 	\subsection{Instructions}
