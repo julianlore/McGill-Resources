@@ -825,7 +825,19 @@ OS treats each core as a unique processor. OS schedules processes and threads to
 \begin{itemize}
 \item Compiler checks syntax, coverts to assembly
 \item Assembler checks for syntax, converts to machine code
-\item Linker verifies library calls exist, merges library into program, adds special OS functions 
+\item Linker verifies library calls exist, merges library into program, adds special OS functions , determines memory locations that code will occupy, resolves references, ensures no undefined labels
+\item Loader \& Loading
+\begin{itemize}
+\item Loading: Puts program into RAM, notifies OS
+\item OS responsible to pass CPU to program later
+\item Loader: subroutine, knows how to put program into RAM and notify OS
+\begin{itemize}
+\item Three types of OS
+\item Loader function to be inserted as first instruction of program, done by linker
+\item Built-in function, require program to call it
+\item Require data record for parameters and do the whole process internally, no loader
+\end{itemize}
+\end{itemize}
 \end{itemize}
 We need the outputs and versions to match each other for the program to execute/work.
 \\ Assembly program consists of the above, without a compiler, going directly from source code to assembler
@@ -863,7 +875,16 @@ LABEL&OFFSET
 \item Assembly Template, just like Symbol Table, but has addresses (with offsets) and instructions in binary
 \end{itemize}
 \end{itemize}
-	\section{Examples}
+\paragraph{Unix Loading Algorithm}
+\begin{itemize}
+\item Read file header, determine CODE and DATA size req
+\item Find space in RAM for prog, set BASE addr
+\item Copy instructions and data into RAM
+\item Copy args onto run-time stack
+\item Assign SP to next free stack position, IP to first instr
+\item Clear registers
+\end{itemize}
+\section{Examples}
 	\paragraph{An example of Copying from RAM to a Slot}
 	\includegraphics[scale=0.5]{rmstr.png}
 	In this example, we'd like to copy 10 letters from RAM to an arbitrary slot on a traditional system board. We must loop through as follows:
