@@ -609,6 +609,10 @@ Assembler implementations
 \item Jump to code in user program to handle it
 \end{itemize}
 What ends up happening: Exception handling hardware built into CPU, has default PC address locations (hardwired) to interrupt. Error happens, PC stored into EPC, PC gets default address relating to type of error. OS or programmer has code at that address to handle.
+\subsection{Performance Impacts}
+\paragraph{Amdahl's Law} Speedup in performance proportional to new component and fraction of work it carries out
+$$ s= \frac{1}{(1-f)+f/k}$$
+where s is speedup, f is fraction of work, k is advertised speedup 
 \section{CPU \& Chipsets}
 \subsection{CPU}
 What does the CPU system consist of?
@@ -1053,6 +1057,10 @@ Devices usually have their own data registers, status registers, command registe
 \subsection{I/O}
 \begin{itemize}
 \item Polling: keep checking status register until ready, inefficient
+\begin{itemize}
+\item Busy loop, keeps checking until done
+\item Internitent loop, polls on a timer, good if constantly taking input at a regular interval
+\end{itemize}
 \item Interrupt: Do something else, let peripheral tell you when it's done. Requires special hardware. Sleeps current program, wakes up another until interrupted, then sleeps and wakes up, overhead is bigger.
 \begin{itemize}
 \item Address register for address of the program so CPU knows where to go once the device is done
@@ -1061,6 +1069,7 @@ Devices usually have their own data registers, status registers, command registe
 \item Interrupt signal, event triggered by process to reroute CPU
 \item Interrupt trap, event triggered by device to reroute CPU
 \item Interrupt checks cause register to see what caused it and then deal with that case
+\item Don't want to lose data (internet), use internet to send network card into a busy loop and let it interrupt you
 \end{itemize}
 \item Direct Memory Interfacing (DMI/DMA), private bus, direct interface between program and RAM
 \end{itemize}
@@ -1073,6 +1082,27 @@ Polling should be used when waiting for data that is required for the rest of th
 \subsection{MIPS I/O}
 \includegraphics[scale=0.7]{mpsi}
 \\ Polling, use andi with 1 to get if ready.
+\section{Cache}
+RAM clock is slow, can't fit RAM inside CPU. So we have a cache in the CPU, similar to RAM. We map RAM to cache, by using modulo. Naturally use the last few bits of the address and map to the cache. Problem: things start fighting in cache, overwriting each other. Cache is efficient if probability of collisions is low. Cache has different levels, primary, secondary and tertiary (usually RAM), getting bigger and slower as we distance from primary. $256$ kb is a good block size.
+\\ \includegraphics[scale=0.7]{cac}
+\paragraph{Locality}
+\begin{itemize}
+\item Temporal locality, item will be referenced again soon, library and Functions
+\item Spatial locality, item will probably be executed next, loops and functions
+\end{itemize}
+Cache takes advantage of locality, places code that will be repeatedly executed in part of cache. Can put two program's for loops, one at the top of cache, the other at the bottom. But they will sometimes crash, how do we deal with that?
+\\ Speed vs amount of storage, work against each other in cost
+\paragraph{Issues} What do we load? Hit to miss ratio:
+\begin{itemize}
+\item Hit $\to$ finds instruction in cache
+\item Miss $\to$ need to go to RAM. Check if beginning of address (unique tag) is same as tag in cache, else miss
+\begin{itemize}
+\item After a miss, need to access RAM, read, put data in cache, restart instruction from cache
+\item miss penalty $=$ cycles to upload data to cache
+\item cost of miss $=$ miss frequency $\times$ miss penalty
+\item program speed $=n+m\times$penalty, $n$ and $n$ are number of instructions
+\end{itemize}
+\end{itemize}
 \section{Examples}
 	\paragraph{An example of Copying from RAM to a Slot}
 	\includegraphics[scale=0.5]{rmstr.png}
