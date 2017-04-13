@@ -1030,6 +1030,49 @@ Floating point instructions are different, uses co processor.
 \\ \$f0 and \$f1 for returning
 \paragraph{Extra Instructions} ~\\ \includegraphics[scale=0.7]{fpii}
 \paragraph{Different Types} How to deal with different ``types" \\ \includegraphics[scale=0.7]{typ}
+\section{I/O \& Peripherals}
+\paragraph{Peripherals} A peripheral is a device external to the system board. Used for sending and receiving data.
+Devices usually have their own data registers, status registers, command registers and rom, sometimes even a CLK or RAM. Usually accessed via zero page.
+2 types of controllers:
+\begin{itemize}
+\item On board, registers integrated with system board
+\item External, registers part of a card plugged into slot
+\end{itemize}
+\paragraph{Keyboard Registers}
+\begin{itemize}
+\item Status:
+\begin{itemize}
+\item 0: Key is being pressed
+\item 1: Buffer empty
+\item 2: Has power
+\item 3: Shift being pressed
+\item 4: Control being pressed
+\end{itemize}
+\item Keyboard Data register stores ASCII of key pressed
+\end{itemize}
+\subsection{I/O}
+\begin{itemize}
+\item Polling: keep checking status register until ready, inefficient
+\item Interrupt: Do something else, let peripheral tell you when it's done. Requires special hardware. Sleeps current program, wakes up another until interrupted, then sleeps and wakes up, overhead is bigger.
+\begin{itemize}
+\item Address register for address of the program so CPU knows where to go once the device is done
+\item OS address interrupt register
+\item Bus interrupt signal wire
+\item Interrupt signal, event triggered by process to reroute CPU
+\item Interrupt trap, event triggered by device to reroute CPU
+\item Interrupt checks cause register to see what caused it and then deal with that case
+\end{itemize}
+\item Direct Memory Interfacing (DMI/DMA), private bus, direct interface between program and RAM
+\end{itemize}
+Polling should be used when waiting for data that is required for the rest of the execution, or if there is only 1 process.
+\begin{itemize}
+\item Synchronous I/O, CPU monitors device, sends/reads 1 byte at a time (polling)
+\item Asynchronous I/O, CPU loads register with start address, another with limit, commands device to download or upload, does something else until device sends an interrup saying done
+\end{itemize}
+\includegraphics[scale=0.7]{sdc}
+\subsection{MIPS I/O}
+\includegraphics[scale=0.7]{mpsi}
+\\ Polling, use andi with 1 to get if ready.
 \section{Examples}
 	\paragraph{An example of Copying from RAM to a Slot}
 	\includegraphics[scale=0.5]{rmstr.png}
