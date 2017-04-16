@@ -1,0 +1,386 @@
+\documentclass[12 pt]{article}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage[margin=1 in]{geometry}
+\allowdisplaybreaks
+\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=black,  %choose some color if you want links to stand out
+}
+\usepackage{graphicx}
+\graphicspath{{Images/}}
+\usepackage{amsthm}
+\newtheorem{thm}{Theorem}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\usepackage[makeroom]{cancel}
+\newcommand{\mybox}{%
+	\collectbox{%
+		\setlength{\fboxsep}{3pt}%
+		\fbox{\BOXCONTENT}%
+	}%
+}
+
+\author{Julian Lore}
+\date{Last updated: \today}
+\title{COMP 250: Intro to Comp Sci}
+\pagestyle{fancy}
+\lhead{COMP250}
+\chead{\leftmark}
+\rhead{Julian Lore}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\begin{document}
+	\onehalfspacing
+	\maketitle
+	\tableofcontents
+	\section{Interfaces 03/14/17}
+	Java interface is similar to a class, but only has method signitures. Does not actually implement anything, just lists methods and what they return. Can implement with a class. Cannot be instantiated. Can have a generic interface, with $<$T$>$ where T is the type of object stored.
+	\paragraph{Implementing an interface}
+	Class implements interface by providing code for each method of the interface. Can have extra methods too. Can also have generic class with $<$T$>$.
+	\\class ArrayList$<$T$>$ implements List\{\}
+	\\ Can instantiate by: ArrayList$<$String$>$ myList = new ArrayList$<$String$>$();
+	\paragraph{The Java Collections} Lots of interfaces in Java, with hierarchies, some interfaces exttending other more generic ones and then some classes implementing these.
+	\subparagraph{Iterator interface} Used to traverse a collection of objects, hasNext and next method.
+	\subparagraph{Comparable interface} Can compare with inequalities/equality.
+        \section{Graphs 03/16/17} Will be talking about graphs for the next 3 or 4 lectures. Kind of like a generalization of the data structures we've seen.
+        \paragraph{Graphs} Pair $(V,E)$ with $V$ being the set of nodes called \textbf{vertices} and $E$ is a collection of pairs of verties, called \textbf{edges}.
+        \paragraph{Edge Types}
+        \begin{itemize}
+        \item \textbf{Directed edge} ordered pair of vertices $(u,v)$. First vertex $u$ is origin, second, $v$ is destination.
+        \item \textbf{Undirected edge} unordered pair of vertices $(u,v)$.
+        \item \textbf{Directed graph} all edges directed.
+        \item \textbf{Weighted edge} has real number associated to it (like distance).
+          \item \textbf{Weighted graph} all edges have weights.
+        \end{itemize}
+        \paragraph{Labeled graphs} Vertices have identifiers (names), geometric layout doesn't matter, only connections.
+        \paragraph{Unlabelled graph} Vertices have no identifiers.
+
+\paragraph{Terminology}
+\begin{itemize}
+\item \textbf{Endpoints of an edge} The 2 vertices at the end of an edge.
+\item \textbf{Edges incident on a vertex} Edges that have that vertex as an endpoint.
+\item \textbf{Adjacent vertices} Connected by an edge.
+\item \textbf{Degree of a vertex} Number of incident edges.
+\item \textbf{Parallel edges} Edges that have the same endpoints, multi edge graph that counts both for degree.
+\item \textbf{Self-loop} Edge from a vertex to itself.
+\item \textbf{Path} Sequence of adjacent vertices.
+\item \textbf{Simple path} Path such that all vertices distinct
+\item Graph is \textbf{connected} $\iff \forall$ pairs of vertices $u$ and $v$, $\exists$ path between $u$ and $v$. If there are directions, have to take that into account, might be able to go one way but not another way.
+\item \textbf{Cycle} path that starts and ends at same vertex.
+\item \textbf{Simple cycle} Cycle where each vertex is distinct.
+\item A tree is a \textbf{connected acyclic} graph.
+\end{itemize}
+\paragraph{Degree}
+\begin{enumerate}
+\item $$\sum_{v}\in v deg(v)=2|E|$$ (for undirected graphs) each edge contributes to degree of 2 nodes.
+\item In an undirected graph with no self-loops and no multiple edges
+  $$|E|\leq |V|(|V|-1)/2$$
+\end{enumerate}
+\paragraph{Data structures for graphs}
+Graph can be stored as
+\begin{itemize}
+\item Dictionary of pairs (key,info) with key=vertex identifier, info contains list called adj of adjacent vertices
+\end{itemize}
+Implementation as linked-list is redundant, accounts for each edge twice, as each vertex specifies which vertices it is adjacent to. For searching, need to search for the vertex in linked list and then search through contents of vertex.
+\\ Implementation as adjacency matrix, good at everything linked list implementation is bad at and bad at what it was good at.
+\\ Graph with $n$ vertices is stored as
+\begin{itemize}
+\item $n \times n$ array $M$ of boolean with
+  \item $M[i][j]=
+    \begin{cases}
+      1 & \text{if there is an edge between ith and jth vertices}
+        \\ 0 & \text{otherwise}
+    \end{cases}
+    $
+    \item Still redundant, matrix is symmetrical, unless directed.
+    \item Diagonal is arbitrary, if we put a $1$ it would imply vertices have a self-loop, but we assume nodes are incident to themselves.
+    \item Not good for graph with parallel edges, but good for weighted graphs, can change $1$ to weight.
+    \item Another drawback is that matrix can become very large. A million by a million, too large to fit. Would have to use adjacency list as those only use memory for vertices that are incident to each other.
+\end{itemize}
+\section{Review April 7th, 2017}
+\begin{itemize}
+\item Final Exam April 18 at 2 pm
+\item Multiple choice
+\item Covers entire semester
+\item Double-sided crib sheet
+\item No calculators
+\item 50\%
+\item 29 questions
+\item Blanchette won't be there during the exam
+\item If there is a problematic question, answer it as best as you can. If it's invalid, will be cancelled later.
+\item Slight emphasis on 2nd half of the semester, but barely
+\end{itemize}
+Going over the first half of the semester today.
+\begin{itemize}
+\item Material for prep
+\item Lecture notes
+\item Assignment solutions
+\item Previous exams
+\end{itemize}
+\begin{itemize}
+\item There will be Java questions like on midterm
+\item What happens when I call something
+\item Will be asked to ``write algorithms'' in Java through multiple choice
+  \item Closely related to assignments
+\end{itemize}
+\paragraph{Iterative sorting algorithms}
+\begin{itemize}
+\item Selection sort
+\item Insertion Sort
+\item Bubble Sort
+\item Their running times and why
+\end{itemize}
+\paragraph{Recursion}
+\begin{itemize}
+\item Designing recursive algorithms
+  \begin{itemize}
+  \item Breaking problems into smaller sub problems
+  \item Solve sub problems recursively
+  \item Combine solutions
+  \item Base case!
+  \end{itemize}
+\item Dividing original problem into roughly equal size subproblems for (usually) better running times
+  \begin{itemize}
+  \item Power
+  \item mergeSort
+  \item quickSort (good pivot vs bad pivot)
+  \item integer multiplication
+  \end{itemize}
+\item Tracing recursion (like hw4)
+\item Trees: recursion usually easier
+\item Analysis of run time of recursive algorithms
+  \begin{itemize}
+  \item Write recurrences for $T(n)$
+  \item Solve recurrences with substitution
+  \item Prove using induction
+  \end{itemize}
+\item What gets printed from a recursive statement?
+\item Using a stack to model recursion
+\item Coming up with recursive formula given algo
+\end{itemize}
+\paragraph{Proofs by induction \& loop invariants}
+\begin{itemize}
+\item Proofs by induction
+  \begin{itemize}
+  \item Logic
+  \item Base case
+  \item Inductive step
+  \end{itemize}
+\item Loop invariants, prove correctness of program
+  \begin{itemize}
+  \item Property that holds at every loop
+  \item Use property to show correctness
+  \end{itemize}
+\end{itemize}
+\paragraph{Running time \& big-Oh}
+\begin{itemize}
+\item Running time
+  \begin{itemize}
+  \item Counting primitive operations
+  \item Dealing with loops, summation
+  \item Worst vs average vs best case
+  \end{itemize}
+\item Big-Oh
+  \begin{itemize}
+  \item Mathematical definition
+  \item Proving relationships
+    \begin{itemize}
+    \item Using definition
+    \item Simplification rules
+    \item Limit of ratio
+      \item Big-Oh hierarchy
+      \end{itemize}
+    \item Relevant only for large inputs
+      \begin{itemize}
+      \item Can be irrelevant for small (integer mult)
+      \end{itemize}
+    \end{itemize}
+  \item Big-Theta(what we usually mean when we say big-Oh of an algo), Big-Omega
+  \item Unless mentioned otherwise, big-Oh running time is for worst-case
+    \item Know and understand big-Oh and running time of all algos seen in class
+\end{itemize}
+\paragraph{Data structures}
+\begin{itemize}
+\item Array
+  \begin{itemize}
+  \item Run times for ops
+  \end{itemize}
+\item Single-linked list
+  \begin{itemize}
+    \item Can assume they know their size of exam
+  \item Better than arrays:
+    \begin{itemize}
+    \item Insertion, deletion
+      \item Don't need to know size beforehand
+      \end{itemize}
+    \item Worse than arrays
+      \begin{itemize}
+      \item Finding n-th element (binarySearch is hard)
+      \item More memory (for ``next'' member)
+      \end{itemize}
+    \end{itemize}
+  \item Doubly-linked list
+    \begin{itemize}
+    \item Can move backward
+    \item Can delete easier
+    \end{itemize}
+  \item Stacks and Queues
+    \begin{itemize}
+    \item Understand applications we saw
+    \item How do they work
+    \end{itemize}
+\end{itemize}
+\section{Review April 11th, 2017}
+\paragraph{QuickSort}
+\begin{itemize}
+\item How does partition work?
+\item Worst case $O(n^2)$, when? Already sorted
+\item Average case: $O(n \log n)$
+  \item Randomized choice of pivot average case: $O(n \log n)$
+  \end{itemize}
+  \paragraph{Tree}
+  \begin{itemize}
+  \item treeNode representation
+  \item node, leaf, root, parent, sibling, descendants, ancestors, subtree rooted at x, internal and external nodes, ordered, binary, proper binary
+  \item depth(distance from root), height (distance to furthest leaf, height of tree is height of root), computations
+  \item Tree traversal, pre-order, in-order, post-order
+  \end{itemize}
+  \paragraph{Dictionary ADT}
+  \begin{itemize}
+  \item Stores pairs, keys with info
+  \item Operations: find(key), insert(key,info), remove(key)
+  \item Cases where array implementation is bad
+  \item Cases where linked-list implementation is bad
+  \end{itemize}
+  \paragraph{Binary Search Tree (Dictionary)}
+  \begin{itemize}
+  \item Keys in left subtree have keys smaller than or equal
+  \item Keys in right subtree have keys greater or equal to
+  \item Algorithm to find key is $O(h)=O(\log n)$ if tree is balanced
+  \item Inserting a new key, running time $O(h)$.
+  \item Removing a key
+  \item Might need to execute algorithms by hand
+  \end{itemize}
+  \paragraph{Hash tables (Dictionary)}
+  \begin{itemize}
+  \item Map keys to buckets
+  \item Each bucket is a dictionary
+  \item Hash functions: minimize collisions and easy to compute
+  \item Best case, keys distributed uniformly
+  \item Worst case, all keys end up in same bucket
+  \end{itemize}
+  \paragraph{Priority Queues, Heap}
+  \begin{itemize}
+  \item key(x) smaller or equal to keys of children of x
+  \item All levels except last are full, last level nodes are packed to left
+  \item findMin(0 $O(1)$
+  \item insert(key) bubbling up, $O(\log n)$
+  \item removeMin() bubbling down $O(\log n)$
+    \item HeapSort, insert keys one by one, removeMin() one by one
+    \end{itemize}
+    \paragraph{Java Collections}
+    \begin{itemize}
+    \item Interface
+      \begin{itemize}
+      \item List methods to be provided, doesn't implement them
+      \item Java way to describe ADT
+      \item Important interfaces, iterator, comparable (has compare method)
+      \item Implementing interface
+        \begin{itemize}
+        \item class ArrayList<T> implements List
+        \end{itemize}
+        \item Using existing collections
+      \end{itemize}
+    \end{itemize}
+    \paragraph{Binary}
+    \begin{itemize}
+    \item Conversion to and from decimal
+      \item Number of bits required to store an integer $\lfloor \log_2{N} +1 \rfloor$ 
+      \end{itemize}
+      \paragraph{Greedy and Dynamic Progrmaming Algorithms}
+      \begin{itemize}
+      \item Greedy, always make choice that seems best in short term. Most of the time non-optimal. For some problems, optimal and fast.
+        \item Dynamic, bottom-up version of a recursive algorithm. Start by oslving small problems, saves results to solve larger. Longest increasing subsequence problem, like making change.
+        \end{itemize}
+        \paragraph{Graphs}
+        \begin{itemize}
+        \item Terminology
+        \item Data structures
+          \begin{itemize}
+          \item Adjacency-list
+          \item Adjacency-matrix
+          \item Running time of operations
+          \end{itemize}
+        \item Graph traversal
+          \begin{itemize}
+          \item Depth-first search, recursive or iterative using a stack
+          \item Breadth-first search, iterative using a queue
+          \end{itemize}
+          \item *Important: applications of DFS and BFS
+          \item Search engine algorithm
+          \item Graph problems
+            \begin{itemize}
+            \item Shortest path
+            \item Cycles
+            \item Graph coloring
+            \item Cliques and independent-sets
+              \item Matching
+              \end{itemize}
+          \end{itemize}
+          \paragraph{Game strategy}
+          \begin{itemize}
+          \item Single-player
+            \begin{itemize}
+            \item Backtracking
+            \item 8-queens, add one by one and backtrack when invalid position is reached
+            \end{itemize}
+          \item Multi-player
+            \begin{itemize}
+            \item Game tree
+            \item Winning and losing positions
+            \item Minimax principle
+            \end{itemize}
+          \end{itemize}
+          \paragraph{Cryptography}
+          \begin{itemize}
+          \item Secret-key schemes and problems
+          \item RSA public-key cryptography
+          \item Bob keeps private key to self
+          \item Alice gets Bob's public key, uses it to encode
+            \item No one knows how to decode in polynomial time without private key
+            \end{itemize}
+            \paragraph{Heuristics}
+            \begin{itemize}
+            \item Useful when don't have fast exact algos
+            \item Greedy
+            \item Fastest descent with randomization, genetic
+            \item Applications to Traveling Salesperson
+            \end{itemize}
+            \paragraph{Ray-tracing algorithm}
+            \begin{itemize}
+            \item Problem addressed by ray-tracing
+              \begin{itemize}
+              \item Computer graphics
+              \item Compute 2D images from 3D objects
+              \end{itemize}
+              \item Ray tracing algorithm and recursive ray-tracing
+              \item Quad-tree data structure
+                \begin{itemize}
+                \item Subdivide space in quadrants
+                \item Keep subdividing until regions have at most one object
+                  \item Allows to quickly indentify intersection of ray and objects
+                \end{itemize}
+            \end{itemize}
+      \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
