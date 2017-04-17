@@ -495,6 +495,33 @@ As above: $$\iint_{D}f(x,y)\ dA = \iint_R F(x,y)\ dA \stackrel{\text{Fubini's Th
     $$ \iint_D f(x,y)\ dA = \iint_{D_1}f(x,y)\ dA + \iint_{D_2}f(x,y)\ dA $$
   \end{enumerate}
 \end{thm}
+\subsection{Polar Coordinates \& Double Integrals}
+A point $P$ can be represented as $(x,y)$ in \textbf{rectangular coordinates}.
+\\ $P$ can also be represented by \textbf{polar coordinates} as $(r,\theta)$.
+\\ $|r|$ is the distance from $P$ to the origin.
+\\ $\theta$ is the angle between the positive part of the $x$-Axis and the line between origin and $f$ if $r>0$, else, $\theta$ is the angle between the negative part of the $x$-Axis and the line between $P$ and the origin if $r<0$.
+\\ One can changed between polar and rectangular coordinates using the following equations:
+\begin{align*}
+  x=r \cos \theta \hspace{50 pt}& r=\sqrt{x^2+y^2}
+  \\y=r\sin \theta \hspace{50 pt}& \tan \theta = \frac{y}{x}
+\end{align*}
+\begin{defn}
+  We say a region $R$ in $\mathbb{R}^2$ is a \textbf{polar rectangle} if
+  $$ R=\left\{(r,\theta)|0\leq r \leq b, \alpha \leq \theta \leq \beta \right\}$$
+\end{defn}
+\begin{thm}
+  Let $f$ be a continuous function.
+  \begin{align*}
+    \iint_{R}f(x,y)\ dA & = \lim_{m,n\to \infty}\sum_{i=1}^{m}\sum_{j=1}^nf(r_i^* \cos \theta_j^*,r_i^* \sin\theta_j^*)\Delta A
+    \\&=\lim_{m,n\to \infty}\sum_{i=1}^{m}\sum_{j=1}^n \underbrace{f(r_i^* \cos \theta_j^*,r_i^* \sin \theta_j^*)r_i^*}_{g(r_i^*,\theta_j^*)} \Delta r \ \Delta \theta
+    \\&= \int_{\alpha}^{\beta}\int_{a}^{b}\underbrace{g(r,\theta)}_{=f(r\cos \theta,r\sin \theta)\cdot r}\ dr \ d\theta
+    \\&=\int_{\alpha}^{\beta}\int_a^b f(r \cos \theta,r \sin \theta)\underbrace{r}_{!!}\ dr \ d\theta
+  \end{align*}
+\end{thm}
+\begin{thm}
+  If $f$ is continuous on $R=\{(r,\theta)|\alpha\leq \theta \leq \beta,h_1(\theta)\leq r \leq h_2(\theta)\}$, then
+  $$\iint_R f(x,y)\ dA = \int_{\alpha}^{\beta}\int_{h_1(\theta)}^{h_2(\theta)}f(r \cos \theta, r \sin \theta)r \ dr \ d\theta$$
+\end{thm}
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
