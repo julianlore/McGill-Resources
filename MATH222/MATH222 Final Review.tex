@@ -350,6 +350,25 @@ Note that, with $\partial$ notation, we derive from right to left, but with $f_x
 \begin{thm}
 	If $f_x$,$f_y$ exist near $(a,b)$ and are continuous at $(a,b)$, then $f$ is differentiable at $(a,b)$.
 \end{thm}
+\subsection{The Chain Rule}
+\begin{thm}
+  Suppose $z=f(x,y)$ is a differentiable function and $x=x(t)$, $y=y(t)$ are differentiable. Then $z$ is a diffentiable function of $t$ and
+  $$\frac{dz}{dt}=\frac{\partial f}{\partial x}\frac{dx}{dt}+\frac{\partial f}{\partial y}\frac{dy}{dt}$$
+\end{thm}
+\begin{thm}
+  Suppose $u$ is a differentiable function of $t_1,\ldots,t_m$. Then
+  $$ \frac{\partial u}{\partial t_i}=\frac{\partial u}{\partial x_1}\frac{\partial x_1}{\partial t_i}+\frac{\partial u}{\partial x_2} \frac{\partial x_2}{\partial t_i}+\ldots + \frac{\partial u}{\partial x_n}\frac{\partial x_n}{\partial t_i}$$ for each $i=1,\ldots, m$ 
+\end{thm}
+\subsection{Direction Derivatives}
+\begin{defn}
+  Let $z=f(x,y)$ be the surface $s$. Let $p=f(x_0,y_0,z_0)$ be a point on $s$, and let $\underline{u}=\langle a, b \rangle $ be any unit vector. The \mathbf{directional derivative} of $f$ in direction $\underline{u}$ at $(x_0,y_0)$ is
+  $$D_{\underline{u}}f(x_0,y_0)=\lim_{h \to 0}\frac{f(x_0+ha,y_0+hb)-f(x_0,y_0)}{h}$$ if it exists.
+
+\end{defn}
+\begin{thm}
+  If $f$ is a differentiable function of $x$ and $y$, then $f$ has a directional derivative in any direction and
+  $$ D_{\underline{u}}f(x,y)=f_x(x,y)a+f_y(x,y)b$$
+\end{thm}
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
@@ -399,6 +418,8 @@ Note that, with $\partial$ notation, we derive from right to left, but with $f_x
 	\item p.882-883: 4-7, 9, 15-25, 27
 	\item p.922: 2, 3, 5, 6, 8, 9, 10, 11, 12, 13, 17, 19, 22
 	\item Section 14.2: 9, 11, 15, 21, 29-38
+        \item Section 15.7 (Cylindrical coordinates): 15-26, 29-30
+        \item Section 15.8 (Spherical coordinates): 9-30, 41-43, 48
 \end{itemize}
 \section{Misc}
 \begin{align}
