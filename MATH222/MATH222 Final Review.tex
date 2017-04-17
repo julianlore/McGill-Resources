@@ -522,6 +522,38 @@ A point $P$ can be represented as $(x,y)$ in \textbf{rectangular coordinates}.
   If $f$ is continuous on $R=\{(r,\theta)|\alpha\leq \theta \leq \beta,h_1(\theta)\leq r \leq h_2(\theta)\}$, then
   $$\iint_R f(x,y)\ dA = \int_{\alpha}^{\beta}\int_{h_1(\theta)}^{h_2(\theta)}f(r \cos \theta, r \sin \theta)r \ dr \ d\theta$$
 \end{thm}
+\subsection{Applications of Double Integrals}
+\paragraph{Center of Mass} Find the point $(\overline{x},\overline{y})$ at which a thin plate or lamina ($D$) balances horizontally.
+\\ The lamina has density $p(x,y)$ at point $(x,y)$, where $p(x,y)$ is a continuous function, which means
+$$ p(x,y)=\lim_{\Delta x, \Delta y \to 0} \frac{\Delta m}{\Delta A}$$ where $\Delta m$ and $\Delta A = \Delta x \Delta y$ are the mass and area of a small rectangle containing $(x,y)$.
+\begin{enumerate}[i)]
+\item Finding the total mass of $D$: Fidn a rectangle $R$ containing $D$, choose sample points for each $R_{ij}$. Then
+  $$ m = \lim_{k,l \to \infty} \sum_{i=1}^{k}\sum_{j=1}^{l}P(x_{ij}^*,y_{ij}^*)\Delta A=\iint_D P(x,y)\ dA$$
+\item Finding the \textbf{moments} of the lamina. The \textbf{moment} of a particle about an axis is its mass times the directed distance from that axis.
+  \begin{defn}
+    The \textbf{moment} of $D$ about \textbf{the x-axis} is
+    $$M_x = \iint_D y P(x,y)\ dA$$
+  \end{defn}
+  \begin{defn}
+    The \textbf{moment} of $D$ about \textbf{the y-axis} is
+    $$ M_y = \iint_D x P(x,y)\ dA$$
+  \end{defn}
+  \begin{defn}
+    The \textbf{center of mass} $(\overline{x},\overline{y})=\left(\frac{M_y}{m},\frac{M_x}{m}\right)$
+  \end{defn}
+\end{enumerate}
+\paragraph{Probability} We can determine the probability that a continuous random variable $X$ takes on certain values using its \textbf{probability density function} $f(x)$ (i.e. $f(x)\geq 0 \ \forall x, \ \int_{-\infty}^{\infty}f(x)\ dx=1$).
+$$p(a\leq x \leq b)=\int_{a}^{b}f(x)\ dx$$
+\begin{defn}
+  The \textbf{joint density function} of $X, Y$ is $f(x,y)$ (i.e. $f(x,y)\geq 0 \ \forall (x,y)\in \mathbb{R}^2, \iint_{\mathbb{R}^2}f(x,y)\ dA=1$).
+  $$p((x,y)\in D)=\iint_D f(x,y)\ dA$$
+  $$p(a \leq X \leq b, c \leq Y \leq d)=\int_a^b\int_c^d f(x,y)\ dy \ dx$$
+\end{defn}
+\begin{defn}
+  The \textbf{expected values} of random variables $X$ and $Y$ are:
+  $$(\text{x-mean}) \mu_1 = \iint_{\mathbb{R}^2}xf(x,y)\ dA $$
+  $$(\text{y-mean}) \mu_2 = \iint_{\mathbb{R}^2}yf(x,y)\ dA $$
+\end{defn}
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
@@ -571,6 +603,7 @@ A point $P$ can be represented as $(x,y)$ in \textbf{rectangular coordinates}.
 	\item p.882-883: 4-7, 9, 15-25, 27
 	\item p.922: 2, 3, 5, 6, 8, 9, 10, 11, 12, 13, 17, 19, 22
 	\item Section 14.2: 9, 11, 15, 21, 29-38
+        \item True-False Questions in review sections of chapters 11, 12, 13, 14, 15
         \item Section 15.7 (Cylindrical coordinates): 15-26, 29-30
         \item Section 15.8 (Spherical coordinates): 9-30, 41-43, 48
 \end{itemize}
