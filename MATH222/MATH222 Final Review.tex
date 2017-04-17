@@ -462,7 +462,39 @@ To find the maximum and minimum values of $f(x,y,z)$ subject to $g(x,y,z)=k$ (as
    If $f$ is continuous on $R=[a,b]\times [c,d]$, then
    $$ \iint_{R}f(x,y)dA =\int_{a}^{b}\int_{c}^{d}f(x,y)\ dy \ dx = \int_{c}^d \int_{a}^{b}f(x,y) \ dx \ dy $$
  \end{thm}
-
+\subsection{Double Integrals over General Regions}
+\begin{defn}
+  Suppose we want to integrate $f(x,y)$ over $D$. Let $R$ be a rectangle containing $D$.
+  $$ F(x,y)=
+  \begin{cases}
+    f(x,y): & (x,y) \text{ in }D
+    \\0: & (x,y) \text{ not in $D$ (but in $R$)}
+  \end{cases}$$
+  If $f(x,y)$ is integrable over $D$ we define
+  $$ \iint_{D}f(x,y) \ dA = \iint_{R}F(x,y)\ dA$$ as the \textbf{double integral} of \textbf{$f$ over $D$}.
+\end{defn}
+Remark: If $f$ is continuous, it is integrable. If $f$ is \textbf{bounded} on $D$ and $f$ is continuous on $D$ except possibly on finite number of smooth curves, then $f$ is integrable.
+\begin{defn}[Type I Regions]
+  A region $D$ is \textbf{type I} if it is bounded by the graphs of continuous functions $g_1(x),g_2(x)$.
+  $$ D=\{(x,y): a\leq x \leq b, g_1(x)\leq y \leq g_2(x)\}$$
+  Let $R=[a,b] \times [c,d]$ (rectangle containing $D$). Assume $f$ is integrable. Then: $$\iint_{D}f(x,y)\ dA = \iint_R F(x,y)\ dA \stackrel{\text{Fubini's Thm}}{=}\int_{a}^{b}\int_{c}^{d}F(x,y)\ dy \ dx = \int_{a}^{b}\int_{g_1(x)}^{g_2(x)}f(x,y)\ dy \ dx $$
+\end{defn}
+\begin{defn}[Type II Regions]
+  A region $D$ is \textbf{type II} if it is bounded by the graphs of continuous functions $h_1(y),h_2(y)$.
+  $$ D=\{(x,y): a\leq x \leq b, g_1(x)\leq y \leq g_2(x)\}$$
+As above: $$\iint_{D}f(x,y)\ dA = \iint_R F(x,y)\ dA \stackrel{\text{Fubini's Thm}}{=}\int_{c}^{d}\int_{a}^{b}F(x,y)\ dx \ dy = \int_{c}^{d}\int_{h_1(y)}^{h_2(y)}f(x,y)\ dx \ dy $$
+\end{defn}
+\begin{thm}[Properties of Integrals]
+  Assume the following integrals exist:
+  \begin{enumerate}[i)]
+  \item $$\iint_{D}(f(x,y)+g(x,y))\ dA = \iint_D f(x,y)\ dA + \iint_D g(x,y)\ dA$$
+  \item $$ \iint_D cF(x,y)\ dA = c \iint_D F(x,y)\ dA, \hspace{10 pt} c \text{ is any cosntant}$$
+  \item If $g(x,y)\leq f(x,y)$ for any $(x,y)$ in $D$, then
+    $$ \iint_D g(x,y)\ dA \leq f(x,y)\ dA $$
+  \item If $D=D_1 \cup D_2$ where $D_1$ and $D_2$ may only overlap on their boudnaries, then
+    $$ \iint_D f(x,y)\ dA = \iint_{D_1}f(x,y)\ dA + \iint_{D_2}f(x,y)\ dA $$
+  \end{enumerate}
+\end{thm}
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
