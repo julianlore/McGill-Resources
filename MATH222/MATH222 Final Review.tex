@@ -434,6 +434,35 @@ To find the maximum and minimum values of $f(x,y,z)$ subject to $g(x,y,z)=k$ (as
   \end{enumerate}
   For $2$ variables:
   \\ For $f(x,y),g(x,y)=k$, find $x,y,\lambda$, satisfying $\nabla f(x,y)=\lambda \nabla g(x,y)$ and $g(x,y)=k$ and so on.
+  \section{Multivariable Integration}
+  \subsection{Integration over Rectangles} We have $n$ approximating rectangles for the sum, and each rectangle has width $\Delta x$ and height $f(x_i^*)$. The $X_i^*$ are sample points.
+  $$ \int_{a}^{b}f(x)\ dx \approx \sum_{i=1}^n f(x_i^*)\Delta x$$
+  The following limit makes rectangles infinitely narrow:
+  $$ \int_{a}^{b}f(x)\ dx = \lim_{n\to \infty}\sum_{i=1}^n f(x_i^*)\Delta x$$
+  We would like to integrate $f(x,y)$ over $$R=\underbrace{[a,b]}_x \times \underbrace{[c,d]}_y = \{(x,y): \mathbb{R}^2:a\leq x \leq b, c\leq y \leq d\}$$
+  \\ To calculate volume, we'll further split up $a \& b$, getting:
+  $$ \text{Volume of $S$}\approx \sum_{i=1}^{n}\sum_{j=1}^n f(x_i^*,y_j^*)\Delta A$$
+  We then have:
+  \begin{defn}
+   $$ \textbf{Volume of S} = \lim_{m,n\to \infty} \sum_{i=1}^m \sum_{j=1}^n f(x_i^*,y_j^*)\Delta A$$ 
+ \end{defn}
+ \begin{defn}
+   Given $f(x,y)$ we define the \textbf{double integral} of $f$ over rectangle $R$ to be:
+   $$\iint_{R} f(x,y)\ dA = \lim_{m,n\to \infty} \underbrace{\sum_{i=1}^{m}\sum_{j=1}^n f(x_i^*,y_j^*) \Delta A}_{\text{Double Riemann Sum}}$$ if it exists. If it exists, we say $f$ is integrable.
+ \end{defn}
+ \paragraph{Midpoint Rule} is as follows:
+ $$ \iint_{R}f(x,y)\ dA \approx \sum_{i=1}^m \sum_{j=1}^n f(\overline{x_i},\overline{y_j}) \Delta A$$, where $\overline{x_i}$ is the midpoint of $[x_{i-1},x_i]$ and $\overline{y_j}$ is the midpoint of $[y_{j-1},y_j]$.
+ \subsection{Iterated Integrals} Evaluate integrals without using the definition.
+ \begin{defn}
+   Suppose $f(x,y)$ is integrable on $R=[a,b]\times [c,d]$. The expression $\int_{a}^{b}f(x,y)\ dx$ means we integrate $f(x,y)$ with respect to $x$ and fix $y$. The expression $\int_{c}^{a}f(x,y)\ dy$ means we integrate $f(x,y)$ with respect to $y$ and fix $x$. We therefore have:
+   $$ \int_{a}^{b}\int_{c}^d f(x,y) \ dy \ dx = \int_{a}^b \left(\int_{c}^d f(x,y)\ dy\right) dx $$
+   $$ \int_{c}^{d}\int_{a}^b f(x,y) \ dx \ dy = \int_{c}^d \left(\int_{a}^b f(x,y)\ dx\right) dy $$
+ \end{defn}
+ \begin{thm}[Fubini's Theorem]
+   If $f$ is continuous on $R=[a,b]\times [c,d]$, then
+   $$ \iint_{R}f(x,y)dA =\int_{a}^{b}\int_{c}^{d}f(x,y)\ dy \ dx = \int_{c}^d \int_{a}^{b}f(x,y) \ dx \ dy $$
+ \end{thm}
+
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
@@ -491,6 +520,8 @@ To find the maximum and minimum values of $f(x,y,z)$ subject to $g(x,y,z)=k$ (as
 	& \lim_{n\to \infty}arctan(n)=\frac{\pi}{2}
 	\\&\frac{d}{dx}\left(a^x\right)=a^x log(a)
 \end{align}
+\paragraph{Integration by Parts}
+$$ \int u \ dv = uv - \int v \ du $$
 \end{document}
 %%% Local Variables:
 %%% mode: latex
