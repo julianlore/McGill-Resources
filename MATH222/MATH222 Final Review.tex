@@ -376,6 +376,48 @@ Note that, with $\partial$ notation, we derive from right to left, but with $f_x
 \begin{thm}
   Suppose $f$ is a differentiable function of two or three variables. Then the maximum value of $D_{\underline{u}}(\underline{x})$ is $|\nabla f(\underline{x})|$ and it occurs when $\underline{u}$ has the same direction as $\nabla f(\underline{x})$.
 \end{thm}
+\subsection{Extreme Values}
+\begin{defn}
+  A function $f(x,y)$ has a \textbf{local maximum} at $(a,b)$ if $f(x,y)\leq f(a,b)$ when $(x,y)$ is \textbf{near} $(a,b)$ (i.e. $f(x,y)\leq f(a,b)$ for any $(x,y)$ inside some disk with center $(a,b)$). We call $f(a,b)$ a \textbf{local maximum value} of $f$.
+\end{defn}
+\begin{defn}
+  If $f(x,y) \geq f(a,b)$ when $(x,y)$ is near $(a,b)$ then $f$ has a \textbf{local minimum value}.
+\end{defn}
+\begin{defn}
+  If $f(x,y)\leq f(a,b)$ for all $(x,y)$ in the domain of $f$, we say $f$ has an \textbf{absolute maximum} at $(a,b)$.
+\end{defn}
+\begin{thm}
+  If $f$ has a local maximum or a local minimum at $(a,b)$, then $f_x(a,b)=0$ and $f_y(a,b)=0$. In other words, the tangent planes at those points $(a,b,f(a,b))$ are horizontal $z=f(a,b)$ and $\nabla f(a,b)=\underline{0}$
+\end{thm}
+\begin{defn}
+  A point $(a,b)$ is a \textbf{critical point} of $f$ if $f_x(a,b)=0$ and $f_y(a,b)=0$, or one of the partial derivatives does not exist.
+\end{defn}
+\paragraph{Second Derivative Test}
+\begin{thm}
+  Suppose the second partial derivatives of $f$ are continuous on a disk centered at $(a,b)$ and suppose that $f_x(a,b)=0,,f_y(a,b)=0$. Let
+  $$ D=D(a,b)=
+  \left|\begin{matrix}
+      f_{xx}(a,b) & f_{xy}(a,b)
+      \\f_{yx}(a,b) & f_{yy}(a,b)
+  \end{matrix}\right|=f_{xx}(a,b)f_{yy}(a,b)-\underbrace{(f_{xy}(a,b))^2}_{\text{Using Clairaut's thm}}$$
+\begin{enumerate}[a)]
+\item If $D>0$ and $f_{xx}(a,b)>0$, then $f(a,b)$ is a local minimum value.
+\item If $D>0$ and $f_{xx}(a,b)<0$, then $f(a,b)$ is a local maximum value.
+\item If $D<0$, then $f(a,b)$ is neither (it's a saddle point).
+  \item If $D=0$, the test is inconclusive.
+\end{enumerate}
+\end{thm}
+\paragraph{Absolute Maxima and Minima} Recall that if $f(x)$ is continuous on $[a,b]$, then $f(x)$ has an absolute maximum and an absolute minimum. The analog of $[a,b]$ for $f(x,y)$ are closed and bounded subsets of $\mathbb{R}^2$.
+\begin{defn}
+  A subset of $\mathbb{R}^2$ is \textbf{closed} if it contains all of its \textbf{boundary points} (i.e. A boundary point of a subset $D\subseteq \mathbb{R}^2$ is a point $(a,b)$ such that every disk with center $(a,b)$ contains points in $D$ \textbf{and} also from outside $D$).
+\end{defn}
+\begin{defn}
+  A \textbf{bounded} subset of $\mathbb{R}^2$ is one that is contained in some disk of finite radius.
+\end{defn}
+\paragraph{Extreme Value Theorem}
+\begin{thm}
+  If $f$ is continuous on a closed bounded set $D\subseteq \mathbb{R}^2$, then $f$ attains an absolute maximum value $f(x_1,y_1)$ and an absolute minimum value $f(x_2,y_2)$ for some points $(x_1,y_1),(x_2,y_2)\in D$.
+\end{thm}
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
