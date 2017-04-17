@@ -418,6 +418,22 @@ Note that, with $\partial$ notation, we derive from right to left, but with $f_x
 \begin{thm}
   If $f$ is continuous on a closed bounded set $D\subseteq \mathbb{R}^2$, then $f$ attains an absolute maximum value $f(x_1,y_1)$ and an absolute minimum value $f(x_2,y_2)$ for some points $(x_1,y_1),(x_2,y_2)\in D$.
 \end{thm}
+\paragraph{Techniques for finding extreme values of continuous functions on closed, bounded sets}
+\begin{enumerate}
+\item Find the values of $f$ at its critical points that are \textbf{in} $D$.
+\item Find the extreme values of $f$ on the \textbf{boundary} of $D$.
+  \item The \textbf{largest} and \textbf{smallest} of these values of $f$ are its extreme values on $D$.
+\end{enumerate}
+\subsection{Lagrange Multipliers}
+\paragraph{Method of Lagrange Multipliers}
+To find the maximum and minimum values of $f(x,y,z)$ subject to $g(x,y,z)=k$ (assuming these extreme values exist and $\nabla g \neq 0$ on $g(x,y,z)=k$):
+\begin{enumerate}[a)]
+\item Find all values $x,y,z,\lambda$ where
+  $$ \nabla f(x,y,z)=\lambda \nabla g(x,y,z) \text{ and }g(x,y,z)=k$$
+  \item Evaluate $f$ at all these points $(x,y,z)$. The largest and smallest are the maximum and minimum values of $f$.
+  \end{enumerate}
+  For $2$ variables:
+  \\ For $f(x,y),g(x,y)=k$, find $x,y,\lambda$, satisfying $\nabla f(x,y)=\lambda \nabla g(x,y)$ and $g(x,y)=k$ and so on.
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
