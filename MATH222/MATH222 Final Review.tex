@@ -361,13 +361,20 @@ Note that, with $\partial$ notation, we derive from right to left, but with $f_x
 \end{thm}
 \subsection{Direction Derivatives}
 \begin{defn}
-  Let $z=f(x,y)$ be the surface $s$. Let $p=f(x_0,y_0,z_0)$ be a point on $s$, and let $\underline{u}=\langle a, b \rangle $ be any unit vector. The \mathbf{directional derivative} of $f$ in direction $\underline{u}$ at $(x_0,y_0)$ is
+  Let $z=f(x,y)$ be the surface $s$. Let $p=f(x_0,y_0,z_0)$ be a point on $s$, and let $\underline{u}=\langle a, b \rangle $ be any unit vector. The \textbf{directional derivative} of $f$ in direction $\underline{u}$ at $(x_0,y_0)$ is
   $$D_{\underline{u}}f(x_0,y_0)=\lim_{h \to 0}\frac{f(x_0+ha,y_0+hb)-f(x_0,y_0)}{h}$$ if it exists.
 
 \end{defn}
 \begin{thm}
   If $f$ is a differentiable function of $x$ and $y$, then $f$ has a directional derivative in any direction and
   $$ D_{\underline{u}}f(x,y)=f_x(x,y)a+f_y(x,y)b$$
+\end{thm}
+\subsection{Gradient Vectors}
+\begin{thm}
+  If ${f(x,y)}$ ($f(x,y,z)$) is a differentiable function of $x$ and $y$, then $f$ has a directional derivative in the direction of \textbf{any unit vector} $\underline{u}=\langle a, b \rangle$ and $D_{\underline{u}}f(x,y)=f_x(x,y)a+f_y(x,y)b=\nabla f \cdot \underline{u}$ ($\underline{u}=\langle a, b, c \rangle$ and $D_{\underline{u}}f(x,y,z)=f_x(x,y,z)a+f_y(x,y,z)b+f_z(x,y,z)c = \nabla f \cdot \underline{u}$)
+\end{thm}
+\begin{thm}
+  Suppose $f$ is a differentiable function of two or three variables. Then the maximum value of $D_{\underline{u}}(\underline{x})$ is $|\nabla f(\underline{x})|$ and it occurs when $\underline{u}$ has the same direction as $\nabla f(\underline{x})$.
 \end{thm}
 \section{How to Solve Problems}
 \subsection{Series}
