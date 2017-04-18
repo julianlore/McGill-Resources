@@ -621,8 +621,22 @@ $$r^2=x^2+y^2,\tan\theta=\frac{y}{x},z=z$$
   \iiint_{E}f(x,y,z)\ dV &= \iint_{D}\left(\int_{u_1(x,y)}^{u_2(x,y)}f(x,y,z)\ dz\right)\ dA
                            \\&=\int_{\alpha}^{\beta}\int_{h_1(\theta)}^{h_2(\theta)}\int_{u_1(r\cos\theta,r\sin\theta)}^{u_2(r\cos\theta,r\sin\theta)}f(r\cos\theta,r\sin\theta,z)r\ dz \ dr \ d\theta
 \end{align*}
-\subsection{Spherical Coordinates} Represent a point $P$ by $(\rho,\theta,\phi)$. $\rho$ is the distance from $P$ to origin ($\rho \geq 0$). $\phi$ is the angle between positive $z$ axis and the line from origin to $P$, $0\leq \phi \leq \pi$
-
+\subsection{Spherical Coordinates} Represent a point $P$ by $(\rho,\theta,\phi)$. $\rho$ is the distance from $P$ to origin ($\rho \geq 0$).
+\\$\phi$ is the angle between positive $z$ axis and the line from origin to $P$, $0\leq \phi \leq \pi$.
+\\$\theta$ is the angle between positive $x-axis$ and the line $r$. No restrictions.
+\\ Spherical$\to$Cylindrical
+$$z=\rho \cos \phi, r=\rho \sin \phi$$
+Spherical$\to$Rectangular
+$$x=\rho \sin\phi \cos\theta,y=\rho\sin\phi\sin\theta,z=\rho\cos\phi$$
+Rectangular$\to$Spherical
+$$\rho^2=x^2+y^2+z^2$$
+\paragraph{Integration with Spherical Coordinates}
+Let $E=\{(\rho,\theta,\phi):a\leq\rho\leq b, \alpha \leq \theta \leq \beta, c \leq \phi \leq d\}, a\geq 0, \beta-\alpha \leq 2\pi, d-c \leq \pi$
+\begin{align*}
+  \iiint_{E}f(x,y,z)\ dV &= \lim_{l,m,n\to \infty}\sum_{i=1}^l \sum_{j=1}^m \sum_{k=1}^n f(x_{ijk},y_{ijk},z_{ijk})\Delta V_{ijk}
+  \\&=\lim_{l,m,n\to \infty}\sum_{i=1}^{l}\sum_{j=1}^m \sum_{k=1}^n f(\widetilde{\rho_i}\sin\widetilde{\phi_k}cos\widetilde{\theta_j},\rho_i\sin\widetilde{\phi_k}\sin\widetilde{\theta_j},\rho_i\cos\widetilde{\theta_k})\rho_i^2 \sin \phi \Delta\rho \ \Delta \theta \ \Delta\phi
+      \\&=\int_c^d\int_\alpha^{\beta}\int_a^b f(\rho \sin \phi \cos \theta,\rho \sin\phi \sin \theta,\rho \cos \phi)\rho^2 \sin \phi \ d\phi \ d\theta \ dz
+\end{align*}
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
