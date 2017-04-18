@@ -554,6 +554,60 @@ $$p(a\leq x \leq b)=\int_{a}^{b}f(x)\ dx$$
   $$(\text{x-mean}) \mu_1 = \iint_{\mathbb{R}^2}xf(x,y)\ dA $$
   $$(\text{y-mean}) \mu_2 = \iint_{\mathbb{R}^2}yf(x,y)\ dA $$
 \end{defn}
+\subsection{Surface Area}
+\begin{defn}
+  The area of a surface $S$ is as follows:
+  $$A(S)=\lim_{m,n\to \infty}\sum_{i=1}^{m}\sum_{j=1}^n \Delta T_{ij}$$
+  Let $\Delta T_{ij}=|\underline{a}\times \underline{b}|$, we then get:
+  $$A(s)=\iint_D \sqrt{f_x^2+f_y^2+1}\ dA$$
+\end{defn}
+\subsection{Triple Integrals}
+\begin{defn}
+  The \textbf{triple integral} of $f(x,y,z)$ over a box $B$ is
+  $$\iiint_{B}f(x,y,z)\ dV = \lim_{l,m,n \to \infty} \underbrace{\sum_{i=1}^l \sum_{j=1}^m \sum_{k=1}^nf(x_{ijk}^*,y_{ijk}^*,z_{ijk}^*)}_{\text{Triple Riemann Sum}}$$ if the limit exists.
+  \\ The limit exists if $f$ is continuous.
+  \\ When $f(x,y,z)\geq 0$, the triple integral is the ``hypervolume" of a 4-dimensional solid.
+\end{defn}
+\begin{thm}[Fubini's Theorem]
+  If $f$ is continuous on a box $B=[a,b]\times [c,d]\times [r,s]$, then
+  $$\iiint_{B} f(x,y,z)\ dV = \int_{r}^{s}\int_{c}^{d}\int_{a}^{b}f(x,y,z)\ dx \ dy \ dz$$
+\end{thm}
+\begin{defn}
+  As with double integrals, we define the triple integral of $f(x,y,z)$ over a general region $E \subseteq \mathbb{R}^3$ by
+  $$ \iiint_{E}f(x,y,z)\ dV = \iiint_{B}F(x,y,z)\ dV$$
+  where $B$ is a box containing $E$ and
+  $$F(x,y,z)=
+  \begin{cases}
+    f(x,y,z): & (x,y,z)\in E
+    \\0: & \text{otherwise}
+  \end{cases}$$
+\end{defn}
+\paragraph{Common Regions $E$}
+\begin{defn}[Type I]
+  $$E=\{(x,y,z):(x,y)\in D, u_1(x,y)\leq z \leq u_2(x,y)\}$$
+  $D$ is the projection of $F$ onto xy-plane. We have:
+  $$ \iiint_E f(x,y,z)\ dV = \iint_D \left(\int_{u_1(x,y)}^{u_2(x,y)}f(x,y,z)\ dz\right)\ dA$$
+  If $D$ is a type I region:
+  $$\iiint_E f(x,y,z)\ dV = \int_a^b\int_{g_1(x)}^{g_2(x)}\int_{u_1(x,y)}^{u_2(x,y)}f(x,y,z)\ dz \ dy \ dx $$
+  If $D$ is a type II region:
+  $$\iiint_E f(x,y,z)\ dV = \int_c^d\int_{h_1(y)}^{h_2(y)}\int_{u_1(x,y)}^{u_2(x,y)}f(x,y,z)\ dz \ dx \ dy $$
+\end{defn}
+\begin{defn}[Type II]
+  $$E=\{(x,y,z):(y,z)\in D, u_1(y,z)\leq x \leq u_2(y,z)\}$$
+  $D$ is the projection of $F$ onto yz-plane. We have:
+  $$ \iiint_E f(x,y,z)\ dV = \iint_D \left(\int_{u_1(y,z)}^{u_2(y,z)}f(x,y,z)\ dx\right)\ dA$$
+  
+\end{defn}
+\begin{defn}[Type III]
+  
+  $$E=\{(x,y,z):(x,z)\in D, u_1(x,z)\leq y \leq u_2(x,z)\}$$
+  $D$ is the projection of $F$ onto xy-plane. We have:
+  $$ \iiint_E f(x,y,z)\ dV = \iint_D \left(\int_{u_1(x,z)}^{u_2(x,z)}f(x,y,z)\ dy\right)\ dA$$
+\end{defn}
+\begin{defn}
+  If $f(x,y,z)=1$, then
+  $$ \text{Volume of }E=\iiint_{E}\ dV$$
+\end{defn}
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
@@ -604,6 +658,8 @@ $$p(a\leq x \leq b)=\int_{a}^{b}f(x)\ dx$$
 	\item p.922: 2, 3, 5, 6, 8, 9, 10, 11, 12, 13, 17, 19, 22
 	\item Section 14.2: 9, 11, 15, 21, 29-38
         \item True-False Questions in review sections of chapters 11, 12, 13, 14, 15
+        \item Chapter 14 Review 13-17, 18-29, 33-63
+        \item Chapter 15 Review 17-56
         \item Section 15.7 (Cylindrical coordinates): 15-26, 29-30
         \item Section 15.8 (Spherical coordinates): 9-30, 41-43, 48
 \end{itemize}
