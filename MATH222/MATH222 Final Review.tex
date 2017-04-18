@@ -608,6 +608,21 @@ $$p(a\leq x \leq b)=\int_{a}^{b}f(x)\ dx$$
   If $f(x,y,z)=1$, then
   $$ \text{Volume of }E=\iiint_{E}\ dV$$
 \end{defn}
+\subsection{Cylindrical Coordinates}
+$r,\theta,z$ to represent a point $P$
+\\
+Cylindrical$\to$Rectangular
+$$x=r\cos \theta,y=r\sin\theta,z=z$$
+Rectangular$\to$Cylindrical
+$$r^2=x^2+y^2,\tan\theta=\frac{y}{x},z=z$$
+\paragraph{Integration using Cylindrical Coordinates}
+~\\Suppose $E=\{(x,y,z):(x,y)\in D,u_1(x,y)\leq z \leq u_2(x,y)\}$ and $D$ is the polar region in $xy$-plane. \\$D=\{(r,\theta):\alpha \leq \theta \leq \beta, h_1(\theta)\leq r \leq h_2(\theta)\}$.
+\begin{align*}
+  \iiint_{E}f(x,y,z)\ dV &= \iint_{D}\left(\int_{u_1(x,y)}^{u_2(x,y)}f(x,y,z)\ dz\right)\ dA
+                           \\&=\int_{\alpha}^{\beta}\int_{h_1(\theta)}^{h_2(\theta)}\int_{u_1(r\cos\theta,r\sin\theta)}^{u_2(r\cos\theta,r\sin\theta)}f(r\cos\theta,r\sin\theta,z)r\ dz \ dr \ d\theta
+\end{align*}
+\subsection{Spherical Coordinates} Represent a point $P$ by $(\rho,\theta,\phi)$. $\rho$ is the distance from $P$ to origin ($\rho \geq 0$). $\phi$ is the angle between positive $z$ axis and the line from origin to $P$, $0\leq \phi \leq \pi$
+
 \section{How to Solve Problems}
 \subsection{Series}
 \paragraph{Representing a Function as a Power Series} Look for a familiar function that has a power series representation, plug it in and simplify. Integrate and differentiate as required.
