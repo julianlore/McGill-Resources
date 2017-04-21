@@ -1,0 +1,24 @@
+~\\ \color{BurntOrange}
+13. Generics
+\\ Finding first String s in a String[] requires .equals(), but first int x in a int[] requires == (also, can't write a method for both, as 2 diff types of array and 2 diff types searching for)
+\\ Can add 1 or more generic type specs in defining class
+\\ public class DynamicArray<T> \{private T[] data; public T get(int i)\{..\}\}
+\\ T can be replaced by any class, creating an obj of gen type, specify class
+\\ DynamicArray<String> foo = new DynamicArray<String>();
+\\ But, \colorbox{Red}{cannot} use with primitive types!
+\\ Sol'n: \colorbox{Green}{Wrapper class}: make a new type, ex. IntReference that consists of just the prim type, but now refers to that
+\\ Integer is a default wrapper in java.lang (no import)
+\\ Integer fiveAsInteger = new Integer(5); | int fiveAsInt=fiveAsInteger.intValue();
+\\ As of Java 1.5, automatic boxing and unboxing, can use int and Integer interchangeably | Integer i = 3;
+\\ Strings immutable, constantly adding (summing) to String has to regenerate the String each time, slow
+\\ Adding 1000 stars: 500 pairs, (1+1000), (2+999), .., 1001*500=500500 $\frac{n(n+1)}{2}$ with $n=1000$ amount of 
+\\ Alternatively, char array of 1000, only 1000 steps to assign 1000 stars
+\\ Can then make a new type StringBuilder, like DynamicArray but for char arrays | can use toString() to conv char[] | Java already has StringBuilder
+\\ \colorbox{Green}{ArrayList}
+\\ Need to \colorbox{Yellow}{import} java.utils.Array;
+\\ Java's vers of DynamicArray, resizable array for any type
+\\ new ArrayList<obj\_type>(); | ex. ArrayList<String> words=new ArrayList<String>(); words.add(''Word``); words.get(0);
+\\ E$\rightarrow$ type | add(E e); | add(int index, E elm); | clear(); removes all ele from list | get(int index); | indexOf(obj O); | remove(int index);| remove(Obj o); | size(); | contains(obj);
+\\ ArrayList is ref type, stores links to obj, using .get(); gives you another link, potential aliasing prob
+\\ Getting a ref val of ArrayList, then calling a method that changes prop of that obj will change it for the ArrayList too!
+\\ Don't need to worry about this with ArrayList of String, immutable

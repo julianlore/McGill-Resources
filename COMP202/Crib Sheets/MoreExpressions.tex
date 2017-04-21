@@ -1,0 +1,37 @@
+~\\ \color{RawSienna}
+4.Expressions
+Can come in several ways:
+\\ 1) Literal 10, "hello", true, 3.0
+\\ 2) Variables someVariable
+\\ 3) Returned val of non-void methods Math.sqrt(8);
+\\ 4) Combine expressions
+\\ \colorbox{Green}{Evaluating expressions}
+\\ Literals evaluate to type of literal
+\\ Type of var is what it was \colorbox{yellow}{when you declared it}
+\\ \colorbox{Green}{Operations}
+\\ Evaluating multiples expression + with each other, go from less inclsv to more inclusive, widening conv rather than narrowing conv, no data lost
+\\ int+int$\rightarrow$int, double+double$\rightarrow$double, int+double$\rightarrow$double, String+String$\rightarrow$String, String+int$\rightarrow$String
+\\ Want narrowing conv, need to cast
+\\ int x = (int) 7.5; $\rightarrow$ x is 7 (truncates)
+\\ Casting temp, only changes for expression it is in
+\\ double y= 3.5, int x = (int) y, y is still a double
+\\ double x = (double)1/2 $\rightarrow$ 1.0/2 $\rightarrow$ .5
+\\ double x = (double)(1/2)$\rightarrow$(double)0$\rightarrow$0 
+\\ \colorbox{Green}{Order of Operations} Like math
+\\ parenthesis$\rightarrow$Mult,div,modulo$\rightarrow$Addition, subtraction$\rightarrow$Assignments
+\\ \colorbox{Yellow}{Goes from left to right!}
+\\ ``Your number is``+1+2$\rightarrow$ ``Your number is12``
+\\ ``Your number is``+(1+2)$\rightarrow$``Your number is3``
+\\ 1+2+``is your number``$\rightarrow$ ``3is your number``
+\\int x = 10; \ldots x=x+1; $\rightarrow$ x=11
+\\ 1/2+1/2 $\rightarrow$ 0 because of trunc
+\\ double x = 1/2 $\rightarrow$ 0, because int divide before assignment
+\\ rather: double x = 1.0/2.0 or 1.0/2 or 1/2.0 or 0.5
+\\ \colorbox{Green}{Other operators} -,*,/, \% (mod)
+\\ Some operators not defined on certain outputs, String*String $\rightarrow$ Error
+\\ \colorbox{Yellow}{INT DIVISION TRUNCATES}
+\\ 9/2 $\rightarrow$ 4 (decimals cut off! no rounding!)
+\\ 1/0$\rightarrow$ error
+\\ Constants: holds on val for entire existence
+\\ final double PI = 3.14;
+\\ Assign a val to PI again or decl same final again, compiler error

@@ -1,0 +1,22 @@
+~\\\color{Orange}
+5. Creating new methods
+\\ 2 types of methods, methods someone else wrote (library methods) or methods you wrote
+\\ Writing own allows to group many cmds into 1
+\\Inside a class
+\\ \colorbox{Cyan}{Method header} is where you give names and stuff for a method like so:
+\\ public static \colorbox{Blue}{int} \colorbox{Red}{anotherMethod}(\colorbox{OliveGreen}{double a})
+\\ \textcolor{Blue}{int rep output/return type, void if none, var type otherwise. If not void, return blabla; will return to method that called method with value of blabla}
+\\ return statement has to be reached, only have 1 return in an if, compiler error, because a return has to be able to be reached!
+\\ 2 ifs, 1 return in each, not compile! 1 if, 1 else, 1 return in each, will compile, cuz return reached no matter what
+\\ Only 1 return statement will be reached during an exec of a method, because method is left once it hits $1^{st}$ return
+\\ \textcolor{Red}{method name}
+\\ \textcolor{OliveGreen}{Input type, name it will rep inside this meth}
+\\ New meth defs new cmd can use in program
+\\ Some just do things: robot.move();
+\\ Others give values: double x = Math.sqrt(40);
+\\ if meth belongs to same class as meth calling, don't need to write class, as opposed to lib methods
+\\ Loc of meth (before or after current meth), does not matter, will scan through whole prog
+\\ \colorbox{Red}{Remember} declaring a var in a meth and trying to use in a diff method $\rightarrow$ compiler error!
+\\ Advantages: code reusability, reduce code dupe, easier debug, problems decomposed, hides tricky logic, easier to read and understand
+\\ Disadvantage: a little overhead to set up in beginning (not really)
+\\ Modifying given values in another meth will not affect the vals of the meth calling it (unless return modified value and assign it)

@@ -1,0 +1,29 @@
+~\\ \color{Goldenrod}
+7. boolean
+\\ Evaluate to either true or false
+\\ boolean expression is either: 1)true or false 2) variable with type boolean 3) call to method that return boolean 4) operator which returns boolean (==,!=,<,>,<=,>=. \&\&, etc.)
+\\ \colorbox{Green}{operators}
+\\ == and != work with any type, inequalities only work with numeric types (or char)
+\\ if ops have diff types, lower precision gets promoted, i.e double==int $\rightarrow$ double==double
+\\ and \&\&, or ||, not ! are boolean operators, take booleans, return booleans
+\\ Can combine these together
+\\ if(3<x<10) will \colorbox{Red}{not} compile, comp can only do 1 thing at once (3<x)<10$\rightarrow$ (tr/fls)<10 $\rightarrow$ ???error
+\\ Fix: if(3<x \&\& x<10)
+\\ \colorbox{Green}{Comparing chars}
+\\ Chars have numerical values, unicode number compared
+\\ Note: 26 lowercase letters in a row, also 26 uppercase letters all in a row, so 'a'<'c', 'A'<'C'
+\\ \colorbox{Cyan}{\textquotedblleft short-circuit \textquotedblright evaluation}
+\\ Left of \&\& false, remaining operands not looked at
+\\ If left of || true, remaining not looked at
+\\ Good for speed
+\\ if(bool==true) useless, if already checks if true, so: if(boolean)
+\\ \colorbox{Red}{Remember} x=5 is \colorbox{Red}{not} a boolean! That's an assignment, need ==
+\\ \colorbox{Green}{Comparing floating pts}
+\\ Shouldn't use equality operator for float/double
+\\ Might think they're close enough, but not exactly equal
+\\ .1+.1+.1==.3 $\rightarrow$ false
+\\ Alternatively: get abs val of difference between 2 doubles, say they must be less than some small decimal
+\\ \colorbox{Green}{Comparing reference types}
+\\ To compare two ref types, do not use == or !=, as that will compare address! Use a.equals(b);
+\\ If you use a==b, you'll get false, if adrs are diff (if both point to 1,2,3, but in diff parts of memory)
+\\ i.e. int[] x=\{1,2\}; int[]y=x; x==y$\rightarrow$ true but int[] x=\{1,2\}; int[] y=\{1,2\}; x==y$\rightarrow$ false
