@@ -646,7 +646,7 @@ You \textbf{CANNOT} overload functions in C, counts as conflicting signatures (f
 	\\\hline fprintf(ptr, description, vars) &&
 	\\\hline fscanf(ptr, description, \&vars) &&
 	\\\hline feof(ptr) && 0, 1 if end of file
-	\\\hline fclose(ptr) &&
+	\\\hline fclose(ptr) && closes file read/write, adds EOF char(write)
 	\\\hline fflush(ptr) && empties buffer without writing
 	\\\hline
 \end{tabularx}
@@ -659,7 +659,7 @@ scanf anomaly: Does not process carriage returns properly, viewed as string or c
 	\item EXIT\_FAILURE 1
 	\item EXIT\_SUCCESS 0
 	\item rand(void), 0 to RAND\_MAX
-	\item system(string), sends command to system, command-line
+	\item system(string), sends command to system, command-line (launches a new shell), returns int, exit code (can check if BASH had an error)
 	\item atof(string), ascii to float
 	\item atoi(string), ascii to integer
 	\item abs(int), abs val
@@ -801,5 +801,81 @@ If we don't terminate a String by a null, it will keep going until it hits a nul
 \item Primitive types are passed by value. You get a local copy of the variable for the function.
 \item Arrays are passed by reference, affects the whole program if you change them in a function (same for pointers).
 \item Passing a parameter with the unary (\&) operator makes it pass as a pointer, which is how scanf works.
+\item You cannot make a function that swaps primitives \textbf{unless} you use pointers to the primitives.
 \end{itemize}
+\subsection{Switch Statement}
+Check variable for equality against a list, check for each switch case.
+\begin{lstlisting}[language=c]
+switch(expr){
+    case const-expr:
+        printf("hi");
+        break; // optional
+
+    case 2:
+        printf("It's a 2!");
+        break;
+
+    default: //optional
+        printf("None");
+}
+\end{lstlisting}
+\subsection{Reading/Writing to a File}
+\lstinputlisting{C/fileio.c}
+\paragraph{Named Space}
+Location where data is stored, these locations have names.
+\subsection{Pre-processor}
+The pre-processor takes care of things like directives. Takes the source.c file and makes it into a source.i file, which is then fed into the compiler.
+\paragraph{2 types of include}
+\begin{lstlisting}[language=c]
+#include<stdio.h> // <> -> in library folder
+#include "path/textfile" // ""->path
+\end{lstlisting}
+What include does is basically insert source file at that location.
+\paragraph{Define}
+\begin{lstlisting}[language=c]
+#define NAME EXPRESSION //format
+#define MACRO EXPRESSION //format
+\end{lstlisting}
+EXPRESSION consists of any legal C expression. MACRO follows: NAME(PARAMETERS), with params being a comma separated list. Convention is to name something defined in all caps so we know it was defined using \#define. Notice that FILE is written all in caps, was defined in fileio.h. 
+\begin{lstlisting}[language=c]
+#define LIMIT 10
+int array[LIMIT]; // Allows something like this -> array[10]
+#define BOOLEAN int
+#define TRUE 1
+#define FALSE 0
+// Macros
+#define INC(x) x++
+#define MAX(A,B) (A<B)?B:A
+// becomes B if true: A if false
+\end{lstlisting}
+\paragraph{Define vs const} const int a = 5; can be typechecked(safer) by compiler, but uses extra memory.
+\paragraph{Ifdef} Check if something is/isn't defined. Must end by \#endif. Good to protect against defining same thing twice. Can also include stuff like function prototypes/code. Can put these in the middle of your code. Useful for writing a multilingual program. ifdef the language everywhere and print corresponding language's output. If the program defines that language in the beginning, you'll get the program in the language.
+\begin{lstlisting}[language=c]
+#ifndef AGE // If age isn't already defined (possibly from include)
+#define AGE 20
+#else // optional
+#endif
+\end{lstlisting}
+\paragraph{Using the Pre-processor for Collaboration} Multiple programmers on one team, all working on the same project.
+\paragraph{Single Source File Programming} Have all the .c files in the same directory, include them all in main.c, single source because only one .i file results from this. Everything except local variables are global (no named spaces), all compiled in same place.
+\paragraph{Modular Programming} Everyone has their own (hidden) named space. To use a variable from another file/source, write extern type varname; at the top of source code (can put in header file to know which vars are supposed to be global). Make a .c source file, a .h header file, which includes function prototypes for functions that you allow others to use in their source. .h files included in sources that need functions from those parts (main should have .h for each file).
+\begin{lstlisting}[language=bash]
+gcc -c f1.c # Gives resultant f1.o from preproc
+\end{lstlisting}
+.o files are semi private, have to reverse binary/assembler to see. To compile the final project:
+\begin{lstlisting}[language=bash]
+gcc main.c f1.o f2.o
+\end{lstlisting}
+Lots of .o files to include. Can make a BASH script ot do this. Another way of fixing stuff is using a \textbf{makefile}.
+\begin{lstlisting}[language=bash]
+myProg: main.o f1.o f2.0 # If these exist, exec line below
+    gcc -o myProg main.o f1.o f2.o
+main.o: main.c f1.h f2.h
+    gcc -c main.c
+\end{lstlisting}
+Makefile reads from bottom to top. Also checks date. If source code is newer than compiled file, will recompile that section, i.e. main.c newer than main.o, recompile main.o.
 \end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
