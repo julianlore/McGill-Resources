@@ -1,0 +1,52 @@
+~\\ \color{NavyBlue}
+12. User defined types
+\\public class NameOfClass\{
+\\ \phantom{abc}modifier1 type1 name1;
+\\ \phantom{abc}modifier2 type2 name2
+\\ \phantom{abc}... \}
+\\ \colorbox{Green}{private vs public}
+\\ public meth or prop $\rightarrow$ any meth or prop can be accessed directly from any class
+\\ private $\rightarrow$ meth or prop only accessed directly from class defined in
+\\ try to access from a diff class $\rightarrow$ compiler err
+\\ Private properties gives more flexibility over time
+\\ Should usually have private attributes
+\\public class Cat \{
+\\\phantom{abc}private String name;
+\\\phantom{abc}private int age;
+\\\phantom{abc} private boolean isGiantCat; \}
+\\ Can make 1 prop an array, other props an array entry, make things easier to loop through
+\\ Use getters and setter methods
+\\ public String getName()\{return this.name;\} | public void setName(String newName)\{this.name=newName;\}
+\\ To use new type, create a $2^{\text{nd}}$ class in same folder, can mk var of new type inside that class
+\\ Ref types, use \colorbox{Yellow}{new operator}
+\\ Cat garfield = new Cat(); garfield refs to obj w/ 3 vals
+\\ If attributes were public, could directly modify garfield.name=``Garfield'';
+\\ Static vs not static: Math.PI; $\rightarrow$ Math is name of class, static | String s=``foo''; s.length() $\rightarrow$ length non-static, needs name of string
+\\ \colorbox{Yellow}{Attributes} for new obj \colorbox{Yellow}{non static}
+\\ Can make new methods for object: public void talk()\{..\} $\rightarrow$ garfield.talk;
+\\ Inside non static meth, keyword \colorbox{Green}{this} access obj meth called on
+\\ public void talk() \{if (this.isGiantCat)\{Stuff\}
+\\ else\{..\}\} (can also omit this in a non-static but bad syntax)
+\\ \colorbox{Red}{But} if omitted this makes it the same as another var, will not conv to this.varname!
+\\ \colorbox{Red}{Cannot} call this in a static meth
+\\ \colorbox{Green}{constructor}
+\\ By default, sets all props null, can define your own
+\\ No return type, must have same name as class
+\\ public Cat(){this.age=10;} | public Cat(int initialAge)\{this.age=initialAge;\}
+\\ Default constructor is gone once you make your own
+\\ Can also make a private constructor, like Math, if don't want anyone to make one
+\\ Writing own constructor can help avoid bugs, like getting a prop before you set it
+\\ \colorbox{Green}{mutable vs immutable}
+\\ mutable object $\rightarrow$ obj can change | array mutable, can change entries | string immutable, cannot change certain chars, can change string, but makes a new string at diff adrs
+\\ If return an address of mutable (ex. Array), can be changed in other meth!
+\\ Unnecessary setters: setting a prob in your constructor and having a setter? Bad $\rightarrow$ 2-1 alias issue
+\\ If method has nothing to change contents of existing obj (only has constructor), don't need to worry about aliasing $\rightarrow$ like String
+\\ Can chain props d1.times.length;
+\\ Example of a new type
+\\ \colorbox{Green}{DynamicArray}
+\\ Want to create a new object that's an array whose size doesn't need to be specified
+\\ Have String[] array and int numElements prop | Constructor gives array fixed size, say 100, numEl 0 | size method to return numEl | get(int i) to return data at that point | add(String s) to assign numElements to s and ++numEl, use an if to check if numEl==length of data, if it is, make bigger array and recopy everything back | Should also simulate array errors, like ArrayIndexOutOfBounds | equals(DynamicArray array) | remove(index) | remove(String) | indexOf(String) | contains(String)
+\\ Use \colorbox{Yellow}{Generics} to generalize to any type
+\\ Every new obj extends obj, has pre-defined methods for obj (Like println, toString())
+\\ By default, contains uses ==
+\\ Can override these methods by making new one

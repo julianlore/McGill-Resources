@@ -1,0 +1,30 @@
+~\\ \color{Fuchsia}
+10. Exceptions
+\\ Impossible to exec $\rightarrow$ exception or runtime error
+\\ Info from exceptions: 
+\\ Exception in thread \textquotedblleft main\textquotedblright \colorbox{Cyan}{java.util.InputMismatchException}
+\\ \phantom{abc}\textcolor{Orange}{at java.util.Scanner.throwFor (\colorbox{Brown}{Scanner.java:819})}
+\\ \textcolor{Cyan}{Type of exception}
+\\ \textcolor{Orange}{Stack trace, which methods called method that crashed prog}
+\\ \textcolor{Brown}{Line number and file that exception occured in}
+\\ \colorbox{Green}{Array exceptions}
+\\ ArrayIndexOutOfBounds $\rightarrow$ try to access invalid index, exception gives index number that caused it
+\\NullPointerException (access properties of null var)
+\\ \colorbox{Green}{Throwing} Some commands can't be executed given certain input, instead of using ifs and whatnot to make output null, should throw, problem will become hard to find if not
+\\ Immediately generate an error by using throw, rather than hide
+\\ if(stuff==null || \ldots)\{throw new IllegalArgumentException(\textquotedblleft Invalid input \textquotedblright)\}
+\\ Other kinds of exceptions: DivideByZero, NumberFormatException (String to number, etc.)
+\\With throw, method will give value or error
+\\ If you want to process the job, use try/catch
+\\ try{ some stuff;} catch(IllegalArgumentException e)\{Happens if that type of exception happens, if no error, skip this, if different type of exception, pass to caller\}
+\\ Diff types of Exceptions, hierarchy 
+\\ Can use catch(Exception e)\{ To catch all exceptions\} | \colorbox{Red}{Dangerous though!} Can hide all bugs
+\\ Can put multiple catch blocks after, first one that matches will be executed
+\\ Each method in method chain can catch exception: main()$\rightarrow$a()$\rightarrow$b()$\rightarrow$c()
+\\ If c gens exception, can try/catch in b. If not, can try/catch in a, if not, then main. If none catch, then prog crashes
+\\ Can also use try/catch/finally, finally will occur no matter what, good for: removing dupe code, clean up before crash/return
+\\ Can even do try/finally
+\\ \colorbox{Green}{3 types of errors} Compile time, run time, bug(incld infinite loop) $\rightarrow$ compile gives most info, run a bit, bug none
+\\ Throw used to give runtime error rather than bug
+\\ Exception is an object, catch(Exception e) declares var e of type Exception
+\\ Can create one via new Exception(\textquotedblleft info \textquotedblright), make own exception type for particular kind of prob in your code

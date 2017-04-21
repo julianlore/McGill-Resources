@@ -1,0 +1,25 @@
+~\\ \color{YellowGreen}
+9. Arrays
+\\ Array container object, holds fixed \# of vals of 1 type, length fixed \& established at creation
+\\ Many vals of same type into 1 array (1 \textquotedblleft object \textquotedblright)
+\\ Creating: type[] arrayName = new type[int of size]
+\\ Reserves mem, n places for size n, all in a row, all assigned an index or explicitly declare array entries: type[] arrayName = \{1,2,3\}
+\\ \colorbox{Yellow}{String[] args} in main method is an array!
+\\ Access entries: arrayName[0], arrayName[1],\ldots
+\\ Set values of entries: arrayName[0]=1;
+\\ arrayName.length $\rightarrow$ int giving \# of elements
+\\ \colorbox{Green}{Arrays of Arrays}
+\\ arrayName[array number][number within array] i.e. a[1][5] gives $6^{th}$ element of $2^{nd}$ Array
+\\ multidimArray.length $\rightarrow$ \# of arrays in array
+\\ Want \# of elem in an array, multidimArray[index of array wanted].length
+\\ Declare multidim array: int[][] arr = \{\{1,2,3\},\{1,4\}\};
+\\ or: type[][] name = new type[size 1][size 2]; (makes rectangular array, all same size)
+\\ Can also make jagged arrays: type[][] name = new type[5][]; Can put diff size arrays in this
+\\ Can have more arrays in arrays type[][][][][][]\ldots
+\\ \colorbox{Green}{Printing an Array}
+\\ System.out.println(array); prints address in mem
+\\ \colorbox{Green}{Packages}
+\\ Can import libraries from packages! Need import java.util.Arrays; in preamble, before class
+\\ Packages contain 1+ classes, class contain 1+ methods, methods have 1+ commands
+\\ Look up class, gives you package name. If package $\neq$ java.lang, need to import
+\\ Arrays.toString(int[] x) $\rightarrow$ \{1,2\} or whatever its contents are, then print this

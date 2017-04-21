@@ -1,0 +1,18 @@
+~\\ \color{cyan}
+6. if
+\\ Block of code, only execs if condition is true
+\\ if($\underbrace{\textnormal{condition}}_{\textnormal{boolean}}$)\{
+Block, conditional code\}
+\\ Want something to happen if true, something else if false. Can use 2 if statements (not efficient/clear/good and both or neither can happen). Instead use \colorbox{Green}{if/else}
+\\ if(condition)\{code happens if true\}
+\\ else\{ code happens if false\}
+\\ Multiple options: if/   else if   /else
+\\ Instead of nesting ifs inside of elses, use \colorbox{Green}{else if}
+\\if(condition 1)\{if true\} else if(condition 2)\{if 1 false and 2 true\} else if(condition 3)\{if 1,2 false, 3 true\} \ldots else\{all false\}
+\\
+\\ Don't need to end with else for else if
+\\ Big difference if we change order of else if
+\\ If cond 2 only true if cond 1 true, cond 2 will never be reached
+\\ If braces omitted for if statements, compiler assumes braces around $1^{\text{st}}$ statement after condition
+\\ Indentation ignored, only for readability 
+\\ ; after if condition $\rightarrow$ if does nothing i.e. if(x<0); \{happens no matter what\}
