@@ -1,0 +1,45 @@
+~\\ \color{RoyalPurple}
+3. Types
+\\ All data manipulated has type, esp. vars
+\\ \colorbox{Green}{Primitive types} These don't ref address!
+\\ \colorbox{Yellow}{\underline{int}}: Store integers (32-bit/4 bytes)
+%\\ (int overflow) 2147483647+1 gives -2147483648, where -2 gives \ldots 47
+\\ \underline{byte}: Int from -128 to 127 (8-bit)
+\\ \underline{short}: Int -32,768 to 32767 (16-bit)
+\\ \colorbox{Yellow}{\underline{long}}: Int from $-2^{63}$ to $2^{63}-1$ (64-bit)
+\\ denoted by L after val (literal), i.e. 3L
+%\\ long l=3 does not compile, long l=3L does
+\\ \colorbox{Yellow}{\underline{double}}: Store frac/decim, not inf precision, limited decim
+%\\ Write .0 after int, get double | i.e. int x = 3 or double x = 3.0 or double x = 3 (gets evaluated to 3.0)
+\\ To store dbl, comp stores 2 ints, int base $*$ $2^{\text{int pow}}$
+\\ Rounding issues, limited space
+\\ \# finite in base10 may be inf in base-2 i.e. $\frac{1}{10}$
+\\ \underline{float}: Smaller double (32 bit instead of 64 bit)
+\\ denoted by f, i.e. 3f is float
+\\ flt f = 3.0 doesnt compile, flt f=3.0f does
+\\ \colorbox{Yellow}{\underline{boolean}}: Store true/false
+\\ boolean aceExam = true; 
+\\ Logic ops for bools: \&\&$\rightarrow$ and, ||$\rightarrow$ inclusive or, !$\rightarrow$ not
+\\ \colorbox{Yellow}{\underline{char}}: Store 1 symb (rep by \#)
+\\ Litral chars denoted by '', i.e 'M' To store ', write '$\backslash$''
+\\ \colorbox{Green}{Reference vs primitive types}
+\\ \colorbox{Yellow}{\underline{Primitive:}} int x=10; $\rightarrow$ 1) mk space in mem to store int, 2) if we use x, want what is there, 3) store 10 in that mem loc
+\\ \colorbox{Yellow}{\underline{Reference:}} int[]x = \{1,2\} $\rightarrow$ 1) mk space in mem to store adrs of array, 2)use x, want to acss space in mem (adrs), 3)Mks array elsewhere in mem that stores 1,2 w/ length 2, must be elsewhere, has adrs a, 4) set val of x to a (adrs)
+\\ int[] x = \{1,2\}; int[]y=x; y[0]=2; (x[0]) Will b 2 cuz x \& y pt to same, changing inside what y pts to will change for x too
+\\ \colorbox{Green}{Swapping}
+\\ Swap prim in other meth, doesnt change in meth that called
+\\ Swap ref in another, same thing (cannot change adrs in other meth)
+\\ \colorbox{Red}{But} if you change vals pted @ in othr meth, will change vals pted @ in meth
+\\ \ldots swap(int[] a, int[] b)\{int temp = a[0]; a[0]=b[0]; b[0]=temp\} Swaps $1^{\text{st}}$ el of both orig arrays but a=b doesnt change anything in meth
+\\ \colorbox{Yellow}{\underline{String}}: store multiple symbols
+\\ Lit strings store in '' '', '' '' is empty string
+\\ Can combine strings with ""+""
+\\ New line w/ "Bla $\backslash$ n lower bla"
+\\ name.length(); for length (diff from arrays, has ())
+\\ .charAt(int i);$\rightarrow$ $i^{th}$ symb of String (count from 0)
+\\ .substring(a,b)$\rightarrow$gets String from a up to (not incld) b, also .substring(a)$\rightarrow$ a to end
+\\ .compareTo(otherStng); $\rightarrow$ Tell which larger
+\\ .indexOf(char c);$\rightarrow$ Gives index of $1^{\text{st}}$ c
+\\ .toLowerCase();$\rightarrow$ mks new string that is lowercase vers (assn to something)
+\\ Can def ur own type!
+\\ Store type X in thing of type Y, compiler error

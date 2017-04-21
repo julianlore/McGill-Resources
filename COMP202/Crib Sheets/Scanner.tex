@@ -1,0 +1,21 @@
+~\\ \color{Brown}
+11. Scanner
+\\ Need to \colorbox{Yellow}{import library}, import java.util.Scanner;
+\\ Object, ref type (like array \& exception)
+\\ Declare new: Scanner reader = new Scanner(System.in); System.in to get input from user
+\\ Read vals from user: scannerName.nextInt(); .nextDouble(); .next(); (until space) .nextBoolean();
+\\ \colorbox{Green}{Reading from file} 
+\\ Scanner fileRdr = new Scanner(new File(''foo.txt'')); foo in same folder as .class file | need to \colorbox{Yellow}{import} java.io
+\\ Need to deal with exception from this! Need to \colorbox{Yellow}{import} java.io.IOException;
+\\ try\{... new File..\} catch(IOException e)\{..\}
+\\ Can \colorbox{Yellow}{just import java.io.*}
+\\ \colorbox{Green}{Mandatory Exception Handling}
+\\ FileNoteFoundException is a ''checked exception``, mandatory to catch or add to method header: public Scanner(File f) throws FileNotFoundException\{\}
+\\ Unchecked exceptions are the usual, like ArrayIndexOutOfBoundsException, etc.
+\\ To write to a file, use FileWriter and BufferedWriter: (Buffered to write temp to RAM, faster but not necessary)
+\\ Put this inside try/catch or throw in header
+\\ FileWriter fw= new FileWriter(''file.txt``); if file.txt exists, will overwrite. If not, creates
+\\ BufferedWriter bw = new BufferedWriter(fw);
+\\ bw.write(StringName); bw.newLine(); bw.write(3+'' ``);
+\\ bw.close(); close it, will get written to fw
+\\ fw.close(); always close at end
