@@ -1,0 +1,10 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 63.31     63.07    63.07        1    63.07    99.32  bubbleSort
+ 36.39     99.32    36.25 2498010236     0.00     0.00  swap
+  1.02    100.34     1.02        2     0.51     0.51  printArr
+  0.01    100.35     0.01        1     0.01     0.01  genArray
+

@@ -740,8 +740,6 @@ $0=$ false, anything else is true. Greatly affects if statements, as your condit
 \\ int const a = 1; or const int a = 2;
 \\ Variables declared at either top of file (global variable) or in a function (local variable). Global variables are positionally global, accessible to everything below it. Only one copy of a global variable exists. Global variables should be avoided if not needed, hard to debug and not considered clean.
 \\ Variable preference: block vars $\to$ local vars $\to$ global $\to$ extern $\to$ error/compiler error
-\subparagraph{typedef Declaration} Can make your own type, i.e.
-\\ typedef int boolean;
 \subsection{Pointers} Special unsigned integer storing an address. Can reference anything really. Mainly used to point to a variable or location in RAM. Note that a pointer is not the same thing as a reference, a reference is a Java concept.
 \paragraph{Pointer Operations}
 \begin{itemize}
@@ -770,8 +768,7 @@ Giving type to your pointer means it can only point to that type. void * can poi
 char* x,y,z; // all vars are char*
 char x, *y, z; // only y is char*
 \end{lstlisting}
-Files/text, displayed in 2D but actually 1D structure, like an array. The Disk actually consists of the FAT (File Allocation Table), a bunch of name of files and pointers.
-\\ Pointers are not constant, can change (since they're variables), unless you declare explicitly, like a String (then it's static/literals).
+Pointers are not constant, can change (since they're variables), unless you declare explicitly, like a String (then it's static/literals).
 \begin{lstlisting}[language=c]
 char *string = "bob"; // Literal / static
 char array[10]; // Variables / dynamic
@@ -820,6 +817,14 @@ switch(expr){
 }
 \end{lstlisting}
 \subsection{Reading/Writing to a File}
+Files/text, displayed in 2D but actually 1D structure, like an array. The Disk actually consists of the FAT (File Allocation Table), a bunch of name of files and pointers. To read/write to a file, need to get a pointer to disk.
+\\ Modes for opening files (fopen):
+\begin{itemize}
+\item r: opens file in read mode
+\item w: write mode (if none, creates. If existing, deletes)
+\item a: append mode (if none, creates)
+\item r+w: read and write (not destructive)
+\end{itemize}
 \lstinputlisting{C/fileio.c}
 \paragraph{Named Space}
 Location where data is stored, these locations have names.
@@ -858,7 +863,19 @@ int array[LIMIT]; // Allows something like this -> array[10]
 \end{lstlisting}
 \paragraph{Using the Pre-processor for Collaboration} Multiple programmers on one team, all working on the same project.
 \paragraph{Single Source File Programming} Have all the .c files in the same directory, include them all in main.c, single source because only one .i file results from this. Everything except local variables are global (no named spaces), all compiled in same place.
-\paragraph{Modular Programming} Everyone has their own (hidden) named space. To use a variable from another file/source, write extern type varname; at the top of source code (can put in header file to know which vars are supposed to be global). Make a .c source file, a .h header file, which includes function prototypes for functions that you allow others to use in their source. .h files included in sources that need functions from those parts (main should have .h for each file).
+\paragraph{Header Files}C code is separated into source (.c) files and header (.h) files. They contain:
+\begin{itemize}
+\item Pre-processor commands
+\item Global variable declarations (extern)
+\item Function prototypes
+\end{itemize}
+\paragraph{Extern Modifier} To use a variable from another file/source, write extern type varname; at the top of source code (can put in header file to know which vars are supposed to be global). The extern modifier lets a named-space access data in another named-space (compiler will look in other source files, can only have one other declaration of this variable in all yoru source files). Assumed on functions.
+\begin{lstlisting}[language=c]
+// Math.h would look something like:
+extern double PI;
+int factorial(int n);
+\end{lstlisting}
+\paragraph{Modular Programming} Everyone has their own (hidden) named space. Make a .c source file, a .h header file, which includes function prototypes for functions that you allow others to use in their source. .h files included in sources that need functions from those parts (main should have .h for each file).
 \begin{lstlisting}[language=bash]
 gcc -c f1.c # Gives resultant f1.o from preproc
 \end{lstlisting}
@@ -867,13 +884,308 @@ gcc -c f1.c # Gives resultant f1.o from preproc
 gcc main.c f1.o f2.o
 \end{lstlisting}
 Lots of .o files to include. Can make a BASH script ot do this. Another way of fixing stuff is using a \textbf{makefile}.
+
+\subsection{GNU Tools}
+\paragraph{Make} An automated build utility. Determines which pieces need to be recompiled and issues corresponding commands. Make can be used with any language. Can use variables like in BASH.
+\\ Advantages: Allows us to define multiple ways to compile, has scripting ability. Greatly speeds up compile time with selective compilation. 
 \begin{lstlisting}[language=bash]
 myProg: main.o f1.o f2.0 # If these exist, exec line below
     gcc -o myProg main.o f1.o f2.o
+    # Indents mandatory, can put multiple commands
 main.o: main.c f1.h f2.h
     gcc -c main.c
+misctag: #i.e. make misctag, make clean to remove compiled files
 \end{lstlisting}
-Makefile reads from bottom to top. Also checks date. If source code is newer than compiled file, will recompile that section, i.e. main.c newer than main.o, recompile main.o.
+Makefile reads from bottom to top. Also checks date. If source code is newer than compiled file, will recompile that section, i.e. main.c newer than main.o, recompile main.o. Make has an implicit rule where it will update .o file from corresponding .c file (i.e. you don't need to write the .c file in the conditions if it has the same name), but it's better not to use the implicit rule.
+\paragraph{Terminology}
+\begin{itemize}
+\item 
+\textbf{Unit}: collection of files compiled into a single .o file. (.c and .h)
+\item 
+\textbf{Project}: collection of units linked into a single executable file. (collection of .o files)
+\item \textbf{make}: GNU program that compiles projects
+\item \textbf{makefile}: text file containing script
+\end{itemize}
+In order to use make, have makefile in the source directory and run ``make''.
+\paragraph{Repository} Database that stores all versions of files you've been working on. Lets you revert to previous versions and branch out and experiment with different ways of developing files. Repositories store any kind of files. Also lets you merge a source file if 2 people edited it at the same time and can password lock source files.
+\\ Repository Tools:
+\begin{itemize}
+\item RCS (root based)
+\item CVS (root based)
+\item SVN
+\item GIT (peer based)
+\end{itemize}
+\paragraph{Root-Based Code Repositories} Code is shared online, users have access to it.
+\paragraph{Peer-Based Code Repositories} Everyone has their personal part, which is staged (git add <files>) which gets committed to the local repository (git commit) and pushed to the remote repository (git push)
+\paragraph{Using Git}
+root(1.1)$\to$trunk(1.2)$\to$branch(1.2.1)$\to$tip(1.2.2) or trunk(1.2)$\to$tip(1.3), tip is the most recent version, trunk is intermediate, root is original and branch is a separate version/direction.
+\begin{lstlisting}[language=bash]
+# Move to directory with code to manage with git
+cd /project/ass1/source
+git init #Initializes repository
+# For remote repo download:
+git clone git@github.com:repo.git
+# Pick files (Stage)
+git add f1.c f2.c
+git commit # Checks in
+\end{lstlisting}
+Basic Git Commands:
+\begin{tabularx}{1.0\linewidth}{|X|X|}
+  \hline
+  \textbf{Command} & \textbf{Info}
+  \\\hline git init  & setup repo
+  \\ \hline git add & add files for next commit
+  \\ \hline git commit & commit queued files
+  \\ \hline git commit -m ``Message'' & Add message to commit
+  \\ \hline git push & push commit(s) to remote repo
+  \\ \hline git pull & fetch changes from remote
+  \\ \hline git clone & clone repo into local dir
+  \\ \hline git status & show uncommited changes
+  \\ \hline git rm & remove file from repo
+  \\ \hline git mv & move file within repo
+  \\ \hline git diff & differences between multiple commits
+  \\ \hline git log & log of commits
+  \\ \hline
+\end{tabularx}
+Add files to .gitignore to ignore specific files.
+\\ Branching
+\begin{tabularx}{1.0\linewidth}{|X|X|}
+  \hline \textbf{Command} & \textbf{Info}
+  \\ \hline git branch new\_branch & create new branch
+  \\ \hline git branch -b new\_branch & create and switch to new branch
+  \\ \hline checkout master & switch back to master
+  \\ \hline git merge branch2 & merge work, all commits from branch2 to one commit in current
+  \\ \hline git rebase branch2 & rebase your current branch off updated branch2, incase unrelated things updated in branch2. Good to rebase before merging, to see if anything breaks before merging.
+  \\ \hline git branch -d branch2 & delete branch
+  \\ \hline
+\end{tabularx}
+Tagging (adding releases)
+\begin{tabularx}{1.0\linewidth}{|X|X|}
+\hline \textbf{Command} & \textbf{Info}
+  \\ \hline git tag -a name& Add tag with this name
+  \\ \hline git tag -l & Lists tags
+  \\ \hline git push --tags & Push tags to remote
+  \\ \hline
+\end{tabularx}
+Modifications:
+\begin{tabularx}{1.0\linewidth}{|X|X|}
+  \hline \textbf{Command}& \textbf{Info}
+  \\ \hline git commit --amend & Change last commit
+  \\ \hline git reset HEAD file\_name & Unstage staged file
+  \\ \hline git checkout --file\_name & Unmodify modified file
+  \\ \hline
+\end{tabularx}
+\paragraph{GNU Debug (GDB)}
+A software bug is an error/flaw/mistake/failure/fault in program preventing it from working as intended. Bugs can exist at design level or source code level. Side-effects: incorrect answer, crash application, loss of data, loss of money, loss of life.
+\\ \textbf{Debugging} = finding the source of a bug \& fixing it. Hardest part is finding the problem (becomes increasingly difficult when source is large). Analyzing code sometimes won't cut it. You might need to run the program. Debuggers help the debugging process. Allows programmer to run program in different mode. Many new features available to programmer. Can see what line causes a program crash, analyze application line by line, consult content of memory. Most languages have a debugger. printf is useful, but can't do everything that a debugger can (pause program, list source code, print data, jump to a line of code).
+\\ GDB is part of the GNU OS, can be used for C, C++, Objective-C, Fortran, Java and Assembly programs.
+\\ To use GDB, compile executable with the -g flag. Compiles the program with extra info, like source code and symbol table. 
+\begin{lstlisting}[language=bash]
+gcc -g -o HelloWorld HelloWorld.c
+# Then call gdb on the executable
+gdb HelloWorld
+# You will now be in "gdb" mode
+(gdb) help # Gets list of available commands
+# Can also get help on specific command
+(gdb) help breakpoints
+\end{lstlisting}
+To look at Source code, use the list command. Takes either a filename and line bumer or function name or just line number.
+\begin{lstlisting}[language=c]
+(gdb) list main.c:10
+set listsize # Changes size of a list
+(gdb) run # Runs code until crash
+# Can also run line by line
+(gdb) step
+(gdb) next 
+\end{lstlisting}
+Step \& next both do the same thing, but step will step into a function call, next will execute the function call, but not step through.
+\\ More GDB commands
+\begin{tabularx}{1.0\linewidth}{|X|X|}
+  \hline \textbf{Command}&\textbf{Info}
+  \\ \hline quit & end gdb
+  \\ \hline list & shows 10 lines (default)
+  \\ \hline list n,m & show lines n to m
+  \\ \hline list function & show function
+  \\ \hline run & runs program
+  \\ \hline ctrl-c (during run) & interrupt program
+  \\ \hline run -b <in> out & redir in \& out to prog
+  \\ \hline backtrace & see run-time stack
+  \\ \hline whatis x & show x's declaration
+  \\ \hline print x & show value of x
+  \\ \hline print fn(y) & execute fn with y
+  \\ \hline print a @ n & print n elements of array a
+  \\ \hline break n & puts a breakpoint at line n, stops there during run
+  \\ \hline break n if EXPR & break at line n if true (i.e $i=99$ for loop), can do same for fn
+  \\ \hline break fn & interrupt program at function call
+  \\ \hline break filename:lineno & break at line number of source file
+  \\ \hline continue & continue after break
+  \\ \hline watch EXPR & stop program when expr is true
+  \\ \hline set variable NAME = VALUE & change contents of variable
+  \\ \hline ptype NAME & pretty print of NAME (as struct)
+  \\ \hline call fn(y) & execute fn with y
+  \\ \hline info breakpoints & gives info about breakpoints
+  \\ \hline delete n & deletes breakpoint n
+  \\ \hline delete & deletes all break points
+  \\ \hline clear n & clear break or watch on line n
+  \\ \hline disable n & disables break on line n
+  \\ \hline enable n & enables break on line n
+  \\ \hline enable once n & turn on once
+  \\ \hline where & produce backtrace
+  \\ \hline
+\end{tabularx}
+\paragraph{DDD}A graphical front-end for command-line debuggers like GDB, DBX, JDB, Python debugger, etc. Can do four things:
+\begin{itemize}
+\item Start program
+\item Make program stop on conditions
+\item Examine what happened
+\item Change things in program
+\end{itemize}
+\paragraph{Lint} Lint originally flagged suspicious/non-portable constructs/bugs in C. Now the name signifies any tool reporting suspicious behavior like:
+\begin{itemize}
+\item Variables being used before set
+\item Conditions that are always true/false
+\item Calculations whose result is likely to be out of range of values representable by type used
+\end{itemize}
+\paragraph{GProf} Program can be unacceptably slow, takes longer to complete operation than desired. Program needs to be optimized, so it can accomplish same tasks with less resources. Behavior of program should be unchanged. We need to be able to identify portion that is slow.
+\paragraph{Definitions of Slow}
+\begin{itemize}
+\item \textbf{Big-Oh} Logical speed of algorithm. Pro: Independent of hardware. Con: Long to do on large pieces of code.
+\item \textbf{Clock Time} Actual speed corresponding to hardware (MHz, RAM, devices). Pro: Can be automated. Con: Hardware dependent.
+\end{itemize}
+\paragraph{Profilers}Dynamic performance analysis tools. Lint are static analysis tools. Profilers record data as application executes. Usually tells you what part is slow/uses a lot of memory.
+\paragraph{Using GProf}
+\begin{lstlisting}[language=bash]
+gcc -pg file.c #Compile file with timechecks
+\end{lstlisting}
+After running the program, a gmon.out binary file will be created.
+\begin{lstlisting}[language=bash]
+gprof -b a.out gmon.out > statsfile # Read results
+\end{lstlisting}
+The output will be messy/long, so better to redirect to a text file.
+\\ Options:
+\begin{itemize}
+\item -b note verbose
+\item -s merge all gmon files
+\item -z table of functions never called
+\item -a don't print statically declared (private) functions
+\item -e funcname, don't print info about this function
+\item -E funcname, like -e, but time spent in function won't be printed
+\item -f funcname, only print specified function and children
+\item -F funcname, only time spent
+\end{itemize}
+\paragraph{Flat Files} Here's a GProf flat file sample, running bubble sort on 100,000 numbers on a relatively slow computer.
+\lstinputlisting{C/gprofsample1.txt}
+\begin{tabularx}{1.0\linewidth}{|X|X|}
+ \hline \textbf{Column}&\textbf{Info}
+  \\ \hline \% time & Percentage of time program spent in this function, should add to 100.
+  \\ \hline cumulative seconds & Total number of seconds spent executing this function plus time spent in functions above this one.
+  \\ \hline self seconds & Number of seconds(or milliseconds) form this function itself. Flat profile sorted by this number.
+  \\ \hline calls & Number of times the function was called, blank means none.
+  \\ \hline self s/call & Average number of seconds (or ms) spent in the function per call
+  \\ \hline total s/call & Average number of seconds spent in this function and its descendants per call.
+  \\ \hline name & Name of function. Sorts this alphabetically after self seconds is sorted.
+  \\ \hline
+\end{tabularx}
+\paragraph{Call Graphs}
+\lstinputlisting{C/gprofsample.txt}
+Primary Line: Describes function
+\begin{tabularx}{1.0\linewidth}{|X|X|}
+  \hline \textbf{Column}&\textbf{Info}
+  \\ \hline index & Entries numbered with integers.
+  \\ \hline \% time & Percentage of total time spent in function (includes time spent in subroutines called by function, main should be 100).
+  \\ \hline self & Total amount of time spent in function, sohuld be indetical to number in seconds field of flat profile.
+  \\ \hline children & Total amount of time spent in calls made by function.
+  \\ \hline called & \# times function was called/\# of non-recursive calls form all callers
+  \\ \hline
+\end{tabularx}
+Function's Callers: Function has a line for each function it was called by.
+\subsection{Invoking Programs}Already saw that we can call a new shell with the system command. But we can also use int fork();, need \#include<unistd.h>. Fork will make child process, duplicates current program and runs from after the line that forks, with concurrent execution of parent and child processes. Returns PID of child for parent, 0 for child. If parent dies before child, child may terminate prematurely. Need to use wait function with \#include<sys/wait.h>.
+\paragraph{Main Program (Driver)} Creates \& manages children, but they do all the work. Fork copies all variables except return val of fork, so you can use if statements to check if child or parent. Since previous variables are maintained, parents can speak to children, but not the other way around (unless you use something like a textfile to communicate).
+\paragraph{Waiting for Children}
+\begin{lstlisting}[language=c]
+int status=0;
+int pid = fork();
+if(pid == 0){ // Child
+    //Do stuff
+}
+else if(pid<0){ //For failed
+    status =-1;
+}
+else{//Parent
+    while(waitpid(pid,&status,0)==0); // Loop until done
+}
+\end{lstlisting}
+\subsection{C Data Structures}
+struct, creates a type. Kind of like a class without functions (unless you implement pointers to functions).
+\begin{lstlisting}[language=c]
+struct STUDENT{
+    // Fields
+    char name[30];
+    int age;
+    double gpa;
+}x; // Variable name is optional, will create one if specified
+// Semi-colon is mandatory though
+\end{lstlisting}
+We can then use the dot operator.
+\begin{lstlisting}[language=c]
+x.age=19;
+\end{lstlisting}
+To declare a struct, we can use a pointer or a literal.
+\begin{lstlisting}[language=c]
+struct STUDENT z; 
+struct STUDENT x[30]; //For 30 students
+z.age=20;
+// or, using pointers:
+struct STUDENT *p;
+// Allocates memory the size of STUDENT structure
+p = (struct STUDENT*)malloc(sizeof(struct STUDENT));
+// Cannot use dot operator here
+p->age=20; // Assign age of struct to 20
+printf("%d",p->age); // Print age of struct
+\end{lstlisting}
+We can also nest structures, defining another struct inside the definition of a struct.
+\paragraph{Unions}
+For polymorphic things, where we represent the same data as multiple types. All data is stored in the same spot (whereas for structs, everything has its own memory). Useful when you want to store something that can be multiple types. Merges variables into a single variable. Can declare unions and structs inside of a function too.
+\begin{lstlisting}[language=c]
+union NUMBER{
+    short int a;
+    int b;
+    float c;
+    double d;
+}number;
+\end{lstlisting}
+In this case,
+\begin{lstlisting}[language=c]
+number.a=5;
+number.b=6;
+\end{lstlisting}
+will both overwrite the same memory (you should not be modifying multiple parameters of a union, only using the respective one for that case).
+\\ We can put unions in structs and structs in unions and whatnot.
+\paragraph{typedef Declaration} Can make your own type, i.e.
+\\ typedef int boolean;
+\\ It can also be used with structs so you don't need to specify structs.
+\begin{lstlisting}[language=c]
+typedef struct COURSE{
+    ...
+}nameOfVar;
+// Then when creating a COURSE
+nameOfVar c206; 
+\end{lstlisting}
+\paragraph{Enumerated Types}
+Contains a list of constants that we can refer to as integers.
+\begin{lstlisting}[language=c]
+enum days {mon, tue, wed, thu, fri, sat, sun};
+\end{lstlisting}
+mon has value $0$, tue has value $1$ and so on... Can change to your own values.
+\begin{lstlisting}[language=c]
+enum days{mon = 1, tue, wed, ...}
+// or
+enum days{mon = 10, tue = 20, ...}
+// then
+int x = mon+tue; // x = 30;
+\end{lstlisting}
+\subsection{Memory}
+\includegraphics[scale=0.3]{proc}
 \end{document}
 %%% Local Variables:
 %%% mode: latex
