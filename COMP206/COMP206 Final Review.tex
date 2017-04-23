@@ -1388,6 +1388,11 @@ import cgi
 form = cgi.FieldStorage()
 if form.has_key('x'):
     thevalue = form["x"]
+
+import urllib
+urllib.quote(s) # "~e" -> "%7e"
+urllib.unquote(s) # "%7e" -> "~e"
+urllib.urlencode(dict) # dict -> query string
 \end{lstlisting}
 \paragraph{Conditionals and Loops}
 \begin{lstlisting}[language=python]
@@ -1433,6 +1438,41 @@ No case statements, have to use if and elif.
 # Note, Python 2.x print statements
 print "%s me %s" %(x,y) # Vars x and y go in %s
 \end{lstlisting}
+Operations:
+\begin{itemize}
+\item Concatenation with $+$
+\item Repetition with $*$
+\item Indexing:
+\begin{lstlisting}[language=python]
+"abc"[1] # "b"
+\end{lstlisting}
+\item Slicing (substrings)
+\begin{lstlisting}[language=python]
+"abcdef"[0:2] # String from 0 to 2-1, "ab"
+"abcdef"[1:] # String from 1 to end
+\end{lstlisting}
+\item len()
+\item
+\begin{lstlisting}[language=python]
+"bc" in "abc" #True
+"bc" not in "abc" #False
+\end{lstlisting}
+\item center, returns string surrounded by spaces to make it $n$ characters long.
+\begin{lstlisting}[language=python]
+a.center(n)
+\end{lstlisting}
+\item count, how many times item is in string
+\begin{lstlisting}[language=python]
+a.count("abc")
+\end{lstlisting}
+\item a.ljust(n), left justifies a in width n
+\item a.rjust(n), right justifies
+\item a.upper(), returns a in uppercase
+\item a.lower(), lowercase
+\item a.index(``abc'') returns index of first occurence of abc in a, error if not
+\item a.find(``abc'') returns index of first occurence of abc in a, $-1$ if not found
+\item a.replace(old,new) replaces all old by new
+\end{itemize}
 \paragraph{Types}
 \begin{itemize}
 \item Dictionary: like an array, but names instead of indicides. $\{idx1:val1,\ldots,idxn:valn\}$
@@ -1440,6 +1480,15 @@ print "%s me %s" %(x,y) # Vars x and y go in %s
 \begin{lstlisting}[language=python]
 d = {"a":"b", "c":"d"}
 d['a'] # Gives you b
+
+d.keys() # Returns dict_keys obj
+d.values() # Returns dict_values
+d.items() # Returns tag+obj, dict_items
+d.get("a") # Gives you b
+d.get("f","a") # Gives val ass with f, a otherwise
+"a" in d # key in d, true
+"a" not in d # false
+
 # Can auto add / replace stuff
 d['a'] = "new"
 d["e"] = "f"
@@ -1510,7 +1559,9 @@ REF.tell() # returns offset in bytes
 REF.seek(BYTES,MODE) # 0=absolute, 1=relative, 2=eof relative
 REF.read(BYTES)
 REF.readline()
+REF.readline(n) # Read first n chars of line
 REF.readlines() # List with each cell being a line
+REF.readlines(n) # n lines
 REF.write("stuff")
 REF.close()
 REF.closed # Boolean
@@ -1535,6 +1586,10 @@ print argv[1]+argv[2]
 x = "53"
 y = int(x)
 z = y+3 # 56
+
+ord('a') # char to int -> 97
+chr(104) # int to char -> h
+str(10) # int to str
 \end{lstlisting}
 \paragraph{Objects}Everything in Python is an object, even functions.
 \\ Defining your own objects:
