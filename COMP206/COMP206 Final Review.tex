@@ -1185,7 +1185,394 @@ enum days{mon = 10, tue = 20, ...}
 int x = mon+tue; // x = 30;
 \end{lstlisting}
 \subsection{Memory}
-\includegraphics[scale=0.3]{proc}
+\includegraphics[scale=0.3]{proc} A visual representation of a process. The heap contains dynamic memory, used by malloc and calloc. The run-time stack consists of local variables \& functions.
+\paragraph{Dynamic Memory Allocation}
+\begin{lstlisting}[language=c]
+#include <stdlib.h>
+void *malloc(int numberOfBytes);
+void *calloc(int repeat, int numberOfBytes);
+void *realloc(void *ptr, int numberOfBytes)' 
+\end{lstlisting}
+calloc initializes all blocks to $0$. Malloc and calloc return a void pointer, so you must cast it before you can use it for a specific type of pointer.
+\begin{lstlisting}[language=c]
+int *a = (int *)malloc(sizeof(int)*40);
+int *a = (int *) calloc(40,sizeof(int));
+\end{lstlisting}
+sizeof() calculates the size of the data type.
+\paragraph{Deallocating}
+Use the free() function to release memory.
+\begin{lstlisting}[language=c]
+void free(void *ptr);
+\end{lstlisting}
+If you do not release memory after being done with it, you may cause a memory leak (no garbage collector).
+\paragraph{Dereference Operator}-> for accessing pointer fields (see structs)
+\section{Web}Designed to follow client-server model. The client consists of a device with a browser, loaded with html, CGI and the like. Has input/output. Linked to a web server that accepts packets and launches commands given those packets. Server deals with STDIN and STDOUT. 
+\subsection{HTML} The default HTML page in a directory is index.html. When you go to that folder on the web, it will redirect you to index.html. Not all browsers interpret HTML the same way. Test HTML in different browsers.
+\paragraph{HTTP} Is a protocol to transfer HTML pages. Over port $80$ for normal HTTP, port $443$ for SSL HTTP. Response codes upon requesting a document:
+\begin{itemize}
+\item 200: OK
+\item 401: Unauthorized
+\item 403: Foribdden
+\item 404: Not Found
+\item 500: Internal Server Error
+\end{itemize}
+Not that a URL (Universal Resource Locator) is equivalent to a Unix path. You can reference relative paths on your site.
+\paragraph{Internet} All computers around the world connected together using IP.
+\paragraph{The Web}Subset of the Internet which is only the public folders.
+\paragraph{Basic HTML} Consists of tags. Two types of tags:
+\begin{itemize}
+\item Those with text in between <tag> Hi </tag>
+\item Those that just have attributes <tag attribute=``value''/>
+\end{itemize}
+Both tags can have attributes, although only the opening tag can have attributes. Attributes can be single or double quoted. 
+\begin{lstlisting}[language=html]
+<html>
+<!-- Comment, <html> tells the browser this is a html document -->
+    <head> <!-- Definition info -->
+        <title> Name of window/tab </title>
+    </head>
+
+    <body bgcolor="yellow"> <!-- body/the doc, bg color attrib -->
+        <center><h1>6 levels of headers, 1 being biggest</h1></center>
+        <p> A paragraph </p>
+        <u> Underline </u>
+        <b> Bold </b>
+        <i> italic </i>
+        <big> Big </big>
+        <small> small </small>
+        <em> Emphasized </em>
+        <strong> Usually bold </strong>
+        <blockquote> Indents quote </blockquote>
+        <q> Short quote in italic</q>
+        <cite> Citation, small and indented </cite>
+        <ul> <!-- Unordered list -->
+            <li> List item </li>
+            <li> Another </li>
+        </ul>
+        <ol> <!-- ordered list with numbers -->
+            <li> Item #1 </li>
+            <li> Item #2 </li>
+            <ul>
+                <li> Nested list </li>
+            </ul>
+        </ol>
+        <br> Line break, can be put as a tag with text as well.
+        <img width="100" height="100" border="0" alt="ERROR LOADING"
+            src="http://google.ca/bob.png">
+        <a href="link">Click here to go to link</a>
+        We can also use anchors to jump to a part of the page.
+        <a name="label"> Named anchor is invisible,
+            this text isn't</a>
+        <a href="mypage.html#label">Jumps directly to label</a>
+    </body>
+</html>
+\end{lstlisting}
+\paragraph{Tables}
+\begin{itemize}
+\item <table> defines the table
+\item <tr> row
+\item <td> column
+\item <th> table heading
+\end{itemize}
+Attributes:
+\begin{itemize}
+\item width = width of column (attribute of td or th)
+\item border = width of border around table
+\item cellpadding = padding space in cells
+\item cellspacing = spacing between each cell
+\end{itemize}
+\begin{lstlisting}[language=html]
+<table border="1">
+    <tr>
+        <th> Heading</th>
+        <th>Heading 2</th>
+    </tr>
+    <tr>
+        <td><center> Hi </center></td>
+        <td> Hello </td>
+    </tr>
+</table>
+\end{lstlisting}
+\paragraph{Forms}
+\begin{lstlisting}[language=html]
+<form action="cgiscript.py" method="post">
+    <input type="text" name="user">
+    <input type="password" name="pass">
+    <input type="submit" value="click">
+    <input type="hidden" name="test">
+    <input type="radio" name="student" value="ugrad">
+    <input type="radio" name="student" value="grad">
+    <input type="checkbox" name="graduating">
+</form>
+\end{lstlisting}
+Submitting a form by clicking submit button (which displays submit by default, otherwise whatever value you give it) will call the cgi script/the form's action (which should be a URL) and send it the parameters, either via GET or POST. Get changes the URL (all args in URL, less secure), POST sends to stdin. Submit sends all inputs with what you've written/selected. Text inputs generate a textbox that you can write in. Password is the same, except you cannot see the letters typed. Hidden will not display, but sends it's values. You can only select one radio box (like multiple choice). Value of checkbox only sent if clicked.
+\paragraph{Displaying Special Characters}
+~\\\includegraphics[scale=0.4]{hte}
+\paragraph{Colors} Defined using hexadecimal notation for combination of RGB. \#FFFFFF $ = 255,255,255$. Pairs of two digits per color $(XX,XX,XX)\to(R,G,B)$
+\begin{lstlisting}[language=html]
+<tag color="red"> Hi </tag>
+<tag color="#00FF00"> Hi </tag>
+\end{lstlisting}
+\subsection{CGI}Common Gateway Interface.
+\paragraph{REST}REpresentational State Transfer. Server waits, packet arrives with request and info about caller. Server validates request, performs action if allowed. Returns answer to user with info about server. Forgets transaction and repeats.
+\\stdin consists of inbound packet, stdout consists of outbound packet and the shell memory is the state information.
+\paragraph{GET} Data is transferred inside query string. http://google.ca/search?q=test\&ie=utf-8
+\\ Things after question mark indicate the data sent, parameters separated by \&. Allows for easy use of back buttons, easy to debug, but less secure than post(text shown in query, logged by server). Data is placed into shell memory.
+\paragraph{Interfacing C and GET}
+\begin{lstlisting}[language=c]
+#include <stdlib.h>
+char *data = getenv("QUERY_STRING"); //?thing=value&...
+\end{lstlisting}
+\paragraph{POST} Data transferred as part of query packet. More secure. Doesn't always work with back buttons. Harder to debug (need software to read). Data is placed into stdin.
+\paragraph{Interfacing with C and POST}
+\begin{lstlisting}[language=c]
+#include <stdlib.h>
+int n = atoi(getenv("CONTENT_LENGTH")); // Length of input
+char string[n];
+fgets(string,n+1,stdin);
+\end{lstlisting}
+\paragraph{Output to Browser}Must begin with:
+\begin{lstlisting}[language=c]
+printf("Content-Type: text/html\n\n");
+printf("Content-Type: text/plain\n\n"); //Just the raw text, no html
+\end{lstlisting}
+If printing html, you then have to print the respective tags and all. Programs should be in the cgi-bin folder in public\_html (to work with our system). Bash scripts end in .sh, Python end in .py and compiled C programs end in .cgi
+\section{Python}
+Python is an interpreted language, not compiled. To run a Python script:
+\begin{lstlisting}[language=bash]
+python script.py
+\end{lstlisting}
+or, if you put the shabang at the top and make the script executable:
+\begin{lstlisting}[language=bash]
+./script.py
+\end{lstlisting}
+An interpreter takes the source code, interpretes it in someway to send it to the CPU. A compiler takes the source code and converts it into machine language, which it then sends to the CPU.
+\\ There are no braces for functions and the like in Python, scope is defined by indentation.
+\paragraph{Comments}~
+\begin{lstlisting}[language=python]
+# Comment
+"""Multi-line comment
+Line 2"""
+\end{lstlisting}
+\paragraph{Function}~
+\begin{lstlisting}[language=python]
+def funcname(params):
+    """Stuff"""
+    return 0
+# Function is an object
+funcname.__doc__ # Gives you comment "Stuff"
+funcname.__name__ # Gives you funcname
+\end{lstlisting}
+Functions must be defined before use. There is no main function. To simulate a main:
+\begin{lstlisting}[language=python]
+if __name__=="main":
+    do stuff
+# or
+def main():
+    do stuff
+main()
+\end{lstlisting}
+\paragraph{Importing}~
+\begin{lstlisting}[language=python]
+import FILE # Imports the whole file
+from FILE import OBJECT # Only part of it
+\end{lstlisting}
+Some libraries to know:
+\begin{lstlisting}[language=python]
+import os
+x = os.listdir("PATH")
+if os.path.isfile("FILENAME")
+if os.path.isdir("DIRNAME")
+
+import cgi
+form = cgi.FieldStorage()
+if form.has_key('x'):
+    thevalue = form["x"]
+\end{lstlisting}
+\paragraph{Conditionals and Loops}
+\begin{lstlisting}[language=python]
+if n>1 :
+    do stuff
+elif n=0:
+    other thing
+else :
+    something else
+
+if 0<n<9000 # Nice
+if x <> y # x not in y
+if not true
+if true and false
+if true or false
+
+for x in y:
+    do stuff
+
+for i in range(x,y) # x to y-1
+# You can leave out 2nd arg for range, will just do 0 to arg
+
+while something:
+    do stuff
+\end{lstlisting}
+No case statements, have to use if and elif.
+\paragraph{Booleans}
+\begin{itemize}
+\item $0$ is false, all other numbers are true.
+\item ``'' is false, all other strings true.
+\item $[]$ false, all other lists true
+\item () false, all other tuples true
+  \item \{\} false, all other dictionaries true
+\end{itemize}
+\paragraph{Strings}
+\begin{itemize}
+\item Single quotes: literal, un-processed.
+\item Double quotes: processed, can use \% operators like in C
+  \item Triple quotes: multi-line Strings or ocmments
+\item Can concatenate Strings with $+$ like in Java
+\end{itemize}
+\begin{lstlisting}[language=python]
+# Note, Python 2.x print statements
+print "%s me %s" %(x,y) # Vars x and y go in %s
+\end{lstlisting}
+\paragraph{Types}
+\begin{itemize}
+\item Dictionary: like an array, but names instead of indicides. $\{idx1:val1,\ldots,idxn:valn\}$
+  \\ To get the value of an index:
+\begin{lstlisting}[language=python]
+d = {"a":"b", "c":"d"}
+d['a'] # Gives you b
+# Can auto add / replace stuff
+d['a'] = "new"
+d["e"] = "f"
+del d['a']
+d.clear()
+\end{lstlisting}
+\item List: $[val1,\ldots,valn]$
+\begin{lstlisting}[language=python]
+l = ["a","b","c","d"]
+d[0] # "a"
+d[-1] # "d", wraps around
+d[1:3] # From 1 to 3, excluding 3
+# ["a","b"]
+# 2 methods of appending
+d = d+["e"]
+d+= ["e"]
+x = [1,2]*3 # gives you list 3 times
+# [1,2,1,2,1,2]
+x.append(3)
+x.insert(2,"a") # inserts a at position 2, shifts rest
+x.extend([3,4]) # Same as append?
+x.index(3)
+x.remove(3)
+x.pop()
+x.push()
+len(x) # Length of x
+"3" in x # False since removed
+\end{lstlisting}
+\item Tuple: $(val1,\ldots,valn)$, a \textbf{constant} list.
+  \\ Same indexing options as lists, with len function. Most other functions are not allowed (tuple can't be modified).
+\end{itemize}
+\paragraph{Declaring Variables} No syntax, just set var = value. 
+\paragraph{Mapping}~
+\begin{lstlisting}[language=python]
+li = [1, 9, 8, 4]
+li2 = [x*2 for x in li] # li2 = [2, 18, 16, 8]
+\end{lstlisting}
+\paragraph{Joining and Splitting}~
+\begin{lstlisting}[language=python]
+params = {"one":"1","two":"2"}
+y=["%s=%s"%(k,v) for k,v in params.items()]
+# y = ["one=1","two=2"]
+w = ";".join(y)
+# w = "one=1;two=2"
+z = w.split(";")
+# z = ["one=1","two=2"]
+a = params.items();
+# a = [(one,1), (two,2)]
+\end{lstlisting}
+\paragraph{Files}~
+\begin{lstlisting}[language=python]
+try:
+    REF = open("file","type")#type=r,rb,w,wb,a,ab
+except IOError:
+    #deal with error
+except:
+    # catches all errors
+else: 
+    # No error
+finally:
+    # cleanup
+\end{lstlisting}
+Can have multiple excepts like catches in Java.
+\begin{lstlisting}[language=python]
+REF.mode # returns mode
+REF.name # returns filename
+REF.tell() # returns offset in bytes
+REF.seek(BYTES,MODE) # 0=absolute, 1=relative, 2=eof relative
+REF.read(BYTES)
+REF.readline()
+REF.readlines() # List with each cell being a line
+REF.write("stuff")
+REF.close()
+REF.closed # Boolean
+\end{lstlisting}
+\paragraph{I/O}
+Getting input from a user:
+\begin{lstlisting}[language=python]
+# Note raw_input() is input() in python 3.x
+userInput = raw_input("This is printed and then waits until CR")
+# or
+import sys
+sys.stdout.write("Give me input\n")
+value = sys.stdin.readline()
+\end{lstlisting}
+\paragraph{Command Line Args}~
+\begin{lstlisting}[language=python]
+len(sys.argv)
+print argv[1]+argv[2]
+\end{lstlisting}
+\paragraph{Casting}~
+\begin{lstlisting}[language=python]
+x = "53"
+y = int(x)
+z = y+3 # 56
+\end{lstlisting}
+\paragraph{Objects}Everything in Python is an object, even functions.
+\\ Defining your own objects:
+\begin{lstlisting}[language=python]
+class NAME(PARENTLIST): # parentlist optional, comma sep, like extends
+    def __init__(self, paramlist): #Constructor, self is like this
+        self.thing = 5 # public
+        self.__thing2 = 4 # private
+\end{lstlisting}
+Instantiating an object:
+\begin{lstlisting}[language=python]
+ref = NAME(paramlist) # no self
+ref = none # Like null, python has garbage collector
+\end{lstlisting}
+\paragraph{Inheritance}
+\begin{lstlisting}[language=python]
+class InterestAccount(BankAccount):
+    def deposit(self, amount):
+        BankAccount.deposity(self,amount)
+        self.balance = self.balance * 1.03
+\end{lstlisting}
+Inherits parents functions, can replace/modify them and add more.
+\paragraph{Misc}
+Complex numbers in python:
+\begin{lstlisting}[language=python]
+m = (2+4j) #j is imaginary part
+\end{lstlisting}
+Sets:
+\begin{lstlisting}[language=python]
+import sets
+emptySet = sets.Set()
+B = sets.Set([1,2,3])
+C = sets.Set([3,4,5])
+D = B.union(C)
+E = B.intersection(C)
+B.issuperset(C)
+B.issubset(C)
+\end{lstlisting}
 \end{document}
 %%% Local Variables:
 %%% mode: latex
