@@ -1,0 +1,34 @@
+<html>
+  <header> <title> CGI </title></header>
+  <body>
+    <!-- Large Title-->
+    <h1> Order Your Food Here </h1>
+    <!-- Form that calls ProcessOrder.py -->
+    <form action="ProcessOrder.py" method="POST">
+      <input type="checkbox" name="Hotdog" value="1">
+      Hotdog
+      <br>
+      <input type="checkbox" name="Hamburger" value="1">
+      Hamburger
+      <br>
+      <input type="checkbox" name="Side Order" value="1">
+      Side Order
+      <input type="radio" name="Side" value="1">
+      Fries
+      <input type="radio" name="Side" value="2">
+      Onion Rings
+      <br>
+      <input type="checkbox" name="Drink" value="1">
+      Drink
+      <select name="Dr">
+      <option value="1"> Coke </option>
+      <option value="2"> Diet Pepsi</option>
+      <option value="3">7UP</option>
+      <option value="4">Orange</option>
+      <option value="5">Water</option>
+      </select>
+      <br>
+      <input type="submit" value="SUBMIT">
+    </form>
+  </body>
+</html>
