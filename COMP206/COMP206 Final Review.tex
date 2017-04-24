@@ -989,7 +989,7 @@ gdb HelloWorld
 # Can also get help on specific command
 (gdb) help breakpoints
 \end{lstlisting}
-To look at Source code, use the list command. Takes either a filename and line bumer or function name or just line number.
+To look at Source code, use the list command. Takes either a filename and line number or function name or just line number.
 \begin{lstlisting}[language=c]
 (gdb) list main.c:10
 set listsize # Changes size of a list
@@ -1026,9 +1026,9 @@ Step \& next both do the same thing, but step will step into a function call, ne
   \\ \hline info breakpoints & gives info about breakpoints
   \\ \hline delete n & deletes breakpoint n
   \\ \hline delete & deletes all break points
-  \\ \hline clear n & clear break or watch on line n
-  \\ \hline disable n & disables break on line n
-  \\ \hline enable n & enables break on line n
+  \\ \hline clear n & clear break or watch n
+  \\ \hline disable n & disables break n
+  \\ \hline enable n & enables break n
   \\ \hline enable once n & turn on once
   \\ \hline where & produce backtrace
   \\ \hline
