@@ -174,7 +174,7 @@
 	\paragraph{Environment Session Memory} Has stuff like user name, home, shell, etc.
 	\\ When you start the shell, OS sets up environment, a collection of variables which can be accessed from any application launched from that environment. env \& set show you current environment variables. setenv and set are not used in bash to change an environment variable in Bash, just write var=value. Echo can give you specific env variables, like echo \$var.
 	\section{Bash/Command-line} 
-	\paragraph{Command-line Prompt}Basically a while look that keeps reading the input you give it until you logout or exit.
+	\paragraph{Command-line Prompt}Basically a while loop that keeps reading the input you give it until you logout or exit.
 	\paragraph{Syntax} Program -switches arguments
 	\\ Program is any command or executable. Switches are parameters that modify program's execution, arguments are fed to program. 
 	\subsection{Good Commands to Know}
@@ -634,14 +634,14 @@ You \textbf{CANNOT} overload functions in C, counts as conflicting signatures (f
 	\hline \textbf{function} & \textbf{example(s)} & \textbf{use}
 	\\\hline printf(\textquotedbl stuff\textquotedbl) & printf(\textquotedbl Hello World\textquotedbl); printf(\textquotedbl \%d \textquotedbl, 25); & Prints to screen
 	\\\hline scanf(a) & scanf(\textquotedbl \%d \%d \textquotedbl, \&age1, \&age2); & scans variables from user
-	\\\hline int getchar(void) & & gets on char from STDIN
+	\\\hline int getchar(void) & & gets one char from STDIN
 	\\\hline int putchar(int) && displays one char to STDOUT
 	\\\hline gets(array) && reads string into array
 	\\\hline fgets(char array, int size, *stream) && reads string of certain size from file into array
 	\\\hline int getc(any stream)/getchar(STDIN only); && read one char
 	\\\hline int puts(*string) && place char
 	\\\hline remove (*file) &&
-	\\\hline rename(*file1, *file2) &&
+	\\\hline rename(*file1, *file2) & rename(``text1'',``text2'')& Files are Strings
 	\\\hline fopen (filename, mode [rt,wt,at]) & fopen (text.txt, \textquotedbl wt \textquotedbl); & opens file ptr
 	\\\hline fprintf(ptr, description, vars) &&
 	\\\hline fscanf(ptr, description, \&vars) &&
@@ -704,10 +704,10 @@ GCC is the GNU C Compiler.
 \\ gcc -o executablename sourcefilenames
 \\ Variations include:
 \begin{itemize}
-	\item gcc -E main.c, also make main.i
-	\item gcc -S main.c, also make assembler code
-	\item gcc -c main.c, also make object code
-	\item gcc main.c, make a.out
+	\item gcc -E main.c, makes .i file
+	\item gcc -S main.c, makes assembler(.s) code
+	\item gcc -c main.c, makes object(.o) code
+	\item gcc main.c, makes a.out
 	\item Extra switches:
 	\begin{itemize}
 		\item -o filename, specify name of output
@@ -841,7 +841,7 @@ What include does is basically insert source file at that location.
 #define NAME EXPRESSION //format
 #define MACRO EXPRESSION //format
 \end{lstlisting}
-EXPRESSION consists of any legal C expression. MACRO follows: NAME(PARAMETERS), with params being a comma separated list. Convention is to name something defined in all caps so we know it was defined using \#define. Notice that FILE is written all in caps, was defined in fileio.h. 
+EXPRESSION consists of any legal C expression. MACRO follows: NAME(PARAMETERS), with params being a comma separated list. Convention is to name something defined in all caps so we know it was defined using \#define. Notice that FILE is written all in caps, was defined in stdio.h. 
 \begin{lstlisting}[language=c]
 #define LIMIT 10
 int array[LIMIT]; // Allows something like this -> array[10]
@@ -883,7 +883,7 @@ gcc -c f1.c # Gives resultant f1.o from preproc
 \begin{lstlisting}[language=bash]
 gcc main.c f1.o f2.o
 \end{lstlisting}
-Lots of .o files to include. Can make a BASH script ot do this. Another way of fixing stuff is using a \textbf{makefile}.
+Lots of .o files to include. Can make a BASH script to do this. Another way of fixing stuff is using a \textbf{makefile}.
 
 \subsection{GNU Tools}
 \paragraph{Make} An automated build utility. Determines which pieces need to be recompiled and issues corresponding commands. Make can be used with any language. Can use variables like in BASH.
@@ -907,7 +907,7 @@ Makefile reads from bottom to top. Also checks date. If source code is newer tha
 \item \textbf{makefile}: text file containing script
 \end{itemize}
 In order to use make, have makefile in the source directory and run ``make''.
-\paragraph{Repository} Database that stores all versions of files you've been working on. Lets you revert to previous versions and branch out and experiment with different ways of developing files. Repositories store any kind of files. Also lets you merge a source file if 2 people edited it at the same time and can password lock source files.
+\paragraph{Repository} Database that stores all versions of files you've been working on. Lets you revert to previous versions and branch out and experiment with different ways of developing files. Repositories store any kind of file. Also lets you merge a source file if 2 people edited it at the same time and can password lock source files.
 \\ Repository Tools:
 \begin{itemize}
 \item RCS (root based)
@@ -1064,7 +1064,7 @@ gprof -b a.out gmon.out > statsfile # Read results
 The output will be messy/long, so better to redirect to a text file.
 \\ Options:
 \begin{itemize}
-\item -b note verbose
+\item -b not verbose
 \item -s merge all gmon files
 \item -z table of functions never called
 \item -a don't print statically declared (private) functions
