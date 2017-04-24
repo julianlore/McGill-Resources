@@ -1,0 +1,103 @@
+\documentclass[12 pt]{article}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage{mathtools,float}
+\usepackage{tabularx}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[margin=1 in]{geometry}
+\allowdisplaybreaks
+\usepackage{graphicx}
+\pagestyle{fancy}
+\lhead{COMP 206}
+\chead{\leftmark}
+\rhead{Julian Lore}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\begin{document}
+\onehalfspacing
+Time taken (before correction and edits): $1:13$
+\paragraph{Question 1}	
+\begin{enumerate}
+\item Learning how to use different software and then combine them all together to make a software system, where they all work towards a common cause.
+  \\ \textcolor{Red}{To create an application distributed across multiple languages \& runtime environments.}
+\item The client is who sends out the packet to the server for what document/program they want to use. The client side is weaker, runs the requested program. All users are clients.
+  \\ \textcolor{Red}{The programs running on the user's browser}
+\item The back end is all the code that supports the web server that is not seen visually, for example, scripts, CGI and anything parsing input from the webpage. It is the opposite of the front end which consists of the visual things like HTML.
+  \\ \textcolor{Red}{The programs running on the server.}
+\item A packet consists of a sender address (who sent the packet), a receiving address (where is the packet being sent) and an instruction.
+  \\ \textcolor{Red}{Data structure with from/to address \& data. Used to communicate a message over a network.}
+\item A web server consists of a server that is deployed to the web, making its contents viewable. Hosts webpages and their content?
+  \\ \textcolor{Red}{Program that waits for request from client, executes request and returns answer to client.}
+\item A session consists of when one person logs in (to a Unix OS), including when they're executing commands and goes all the way up to when they logout.
+  \\ \textcolor{Red}{Period of time at server between request arrival \& returned reply.}
+\item An interpreter takes source code and interpretes in a way such that it can give direct instructions to the CPU, without having to translate all of the program first.
+  \\ \textcolor{Red}{Program that executes a script without compilation.}
+  \\ An example would be Python. \textcolor{Red}{Bash, Python}
+\item A compiler converts source code into machine language (binary), so that the CPU can understand and process the instructions.
+  \\ \textcolor{Red}{Converts a source file into a binary file, directly executable by machine.}
+  \\ The GNU C Compiler, GCC is an example. \textcolor{Red}{C, Java}
+\end{enumerate}
+\paragraph{Question 2: CGI}~
+\lstinputlisting[language=html]{Q2.html}
+\paragraph{Question 3: GNU Makefile} The makefile targets don't work as makefiles don't have the same conditional notation as BASH.
+\lstinputlisting[language=bash]{makefile}
+\paragraph{Question 4: C Programming}~
+\lstinputlisting[language=c]{Q4.c}
+\paragraph{Question 5: C Programming}~
+\lstinputlisting[language=c]{Q5.c}
+\paragraph{Question 6: Python}
+\begin{enumerate}[a)]
+\item ~
+\begin{lstlisting}[language=python]
+file = open("super_villains.txt") # opens file for reading
+# missing "r" mode?
+
+name_list = [] # Makes an empty list
+for line in file: # Loops through lines of file
+    line = line.strip() # Gets rid of CR
+    name_list.append(line) # Appends line to list
+
+file.close() # Closes file
+
+i = 0 # counter
+# Loops until counter is the length of list or find Morgiana
+# Linear search
+while i < len(name_list) and name_list[i] != "Morgiana the Shrew":
+    i += 1 # Increment counter
+if i == len(name_list): # If out of loop and reached end
+    print( "No." ) # Did not find Morgiana
+else: 
+    print( "Yes = ",i) # Otherwise, found Morgiana
+
+element = "Joker"; # Set element to joker
+low = 0 # Lower bound of list to search
+up = len(name_list)-1 # Higher bound, end of list
+ff = False # Boolean of whether we found Joker
+# Binary search until low>up or we find Joker
+while low <= up and ff == False:
+    pos = (low + up) / 2 # Mid point
+    if name_list[pos] < element: #Mid point less than Joker
+        low = pos + 1 # Search upper half
+    elif name_list[pos] > element: #Mid point more than Joker
+        up = pos - 1 # Search lower half
+    else:
+        ff = True #Mid point is Joker, true
+
+if ff: # If found Joker
+    print(pos) # Print where we found Joker
+\end{lstlisting}
+\item Makes a list of all super villains from the provided text file. Checks if Morgiana the Shrew is in the list using a linear search (then prints its position) and then uses binary search (assuming the list is sorted alphabetically) to look for Joker and then prints its position if found.
+\item No. 1.
+  \\List should look like: C J L M P R
+\end{enumerate}
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
