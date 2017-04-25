@@ -1,0 +1,38 @@
+<html>
+  <header><title>Login</title></header>
+  <body bgcolor="blue"> <!--Background color-->
+    <p> <font face="Times New Roman" size="23"> WELCOME </font></p>
+    <table>
+      <tr> <!-- Row 1 -->
+	<th><h2>LOGIN</h2></th>
+	<th><h2><font color="red">REGISTER</font></h2></th>
+      </tr>
+      <tr> <!-- Row 2 -->
+	<td><form action="login.exe" method="POST">
+	    USER NAME: <input type="text" name="un">
+	    <br>
+	    PASSWORD: <input type="password" name="pw">
+	    <br>
+	    <input type="submit" value="LOGIN">
+	</td>
+	<td><form action="register.py" method="POST">
+	    REAL NAME: <input type="text" name="rn">
+	    <br>
+	    USER NAME: <input type="text" name="un">
+	    <br>
+	    PASSWORD: <input type="password" name="pw">
+	    <br>
+	    EMAIL: <input type="text" name="em">
+	    <br>
+	    MALE: <input type="radio" name="gend" value="M">
+	    FEMALE: <input type="radio" name="gend" value="F">
+	    <br>
+	    <input type="submit" value="REGISTER">
+	  </form>
+	</td>
+      </tr>
+    </table>
+    <p><center><font face="Ariel"><a href="help.htm">
+	  Click Here For Help</a></font><center></p>
+  </body>
+</html>

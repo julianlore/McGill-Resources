@@ -1,0 +1,119 @@
+\documentclass[12 pt]{article}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage{mathtools,float}
+\usepackage{tabularx}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[margin=1 in]{geometry}
+\allowdisplaybreaks
+\usepackage{graphicx}
+\pagestyle{fancy}
+\lhead{COMP 206}
+\chead{\leftmark}
+\rhead{Julian Lore}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\begin{document}
+\onehalfspacing
+Time taken (before correction and edits): $1:09$
+\paragraph{Question 1: HTML and CGI}~
+\lstinputlisting[language=html]{Q1.html}
+\paragraph{Question 2: GNU}
+\begin{enumerate}[(A)]
+\item ~
+  \begin{enumerate}[(a)]
+  \item ~
+\begin{lstlisting}[language=bash]
+CC = gcc # Sets a variable to gcc, for compiler
+CFLAGS = -g -Wall # Var for compiler flags
+
+count: countwords.o counter.o scanner.o
+# If the 3 o files exist, make the count file
+# Or if one of the o files is newer than the count file
+    $(CC) $(CFLAGS) -o count countwords.o counter.o scanner.o
+    # Compiles all the o files as count, with all the warnings
+    # and inserts timestops for GProf
+
+countwords.o: countwords.c scanner.h counter.h
+# Make countwords.o if source and corresponding headers
+# are present
+    $(CC) $(CFLAGS) -c countwords.c
+    # Makes countwords.o, displays all errors, GProf
+
+counter.o: counter.c counter.h
+# Make counter.o if source and headers are there
+    $(CC) $(CFLAGS) -c counter.c
+    # counter.o, same as above
+
+scanner.o: scanner.c scanner.h
+    $(CC) $(CFLAGS) -c scanner.c
+    # Same as counter.o
+
+clean:
+    $(RM) count *.o *~
+    # Removes count and all .o files and files ending in ~
+\end{lstlisting}
+  \item Scanner.o depends on scanner.h and scanner.c, counter.o depends on counter.h and counter.c, countwords.o depends on countwords.c scanner.h counter.h and count depends on all .o files.
+    \item Huge box that is just the count program. Within it are smaller rectangles, one for countwords.o, one for counter.o and one for scanner.o
+  \end{enumerate}
+\item ~
+\begin{lstlisting}[language=bash]
+(gdb) break main
+(gdb) run
+(gdb) step
+(gdb) step
+(gdb) ... # Until in makeit()
+(gdb) step
+(gdb) step
+(gdb) ... # Eventually program will crash
+(gdb) where # Find out where you are when it crashed
+(gdb) backtrace
+\end{lstlisting}
+\end{enumerate}
+\paragraph{Question 3: C Programming}~
+\begin{lstlisting}[language=c]
+// Function header, returns int, takes int pointer
+int foo(int *pn)
+{
+    int c, s; // Makes 2 ints
+    // Loops while user inputs a space, CR or tab
+    while ((c=getch() == ' ' || c == '\n' || c == '\t'));
+
+    s = 1; 
+    if (c == '+' || c == '-') // c is + or -
+    {
+    // If c is +, s=1, else s=-1
+    s = (c=='+') ? 1 : -1;
+    c = getch(); // Get a char again
+    }
+
+    // Make contents of pointer 0
+    // Loop while c is inbetween 0 and 9 (ASCII)
+    // Get character at end of each loop
+    for(*pn=0; c >= '0' && c <= '9'; c=getch())
+        // 10 times pointers val + # that c stores
+        *pn = 10 * *pn + c – '0';
+    
+    *pn *= s; // Make pn the same sign as s
+    if (c != EOF) ungetch(c); // If not end of file
+    return c; // return 2nd to last char obtained
+}
+\end{lstlisting}
+This program gets a sign from the user, then keeps getting numbers from the user,
+summing them up and multiplying by 10 everytime a new number comes along. This will be available to the user since it's a pointer,
+but the actual function returns the 2nd to last obtained char.
+\paragraph{Question 4: C Programming}~
+\lstinputlisting[language=c]{Q4.c}
+\paragraph{Question 5: Python Programming}~
+\lstinputlisting[language=python]{Q5.py}
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
