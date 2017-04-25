@@ -14,7 +14,8 @@ int main(int argc, char* argv[]){
   // Malloc for n students
   p = (struct STUDENT *)malloc(n*(sizeof(struct STUDENT)));
   int j = 0; // Counter for how many entries csv has
-
+  int off = sizeof(struct STUDENT); // offset
+  
   FILE* in = fopen("GPA.CSV","rt"); // Open file
   if(in==NULL){ //File doesn't exist
     printf("GPA.CSV does not exist! \n");
@@ -23,14 +24,31 @@ int main(int argc, char* argv[]){
     // For storing values
     char name[50];
     double gpa;
+    int k = 0; // counter for length of String
+    char c = fgetc(in); // Char to store each
+    while(c!=',' && c!=EOF){ // Loop until comma 
+      name[k] = c;
+      k++;
+      c = fgetc(in);
+    }
+    name[k+1] = '\0'; // End with null
     // Scan until EOF
-    while(scanf("%s,%lf",name,&gpa)!=EOF){
+    while(scanf("%lf",&gpa)!=EOF){
       j++; // Increment amount of entries
       if(j<n){ // Did not hit max yet
 	// p+j-1 since j is one bigger than index
-	strcpy((p+j-1)->name,name); // copy name
+	strcpy((p+(j*off)-off)->name,name); // copy name
 	(p+j-1)->gpa = gpa; // Copy gpa
       }
+      scanf("%c",&c); // Scan the CR
+      // Get the next String
+      k = 0; // reset counter
+      while(c!=',' && c!=EOF){
+	name[k] = c;
+	k++;
+	c = fgetc(in);
+      }
+      name[k+1] = '\0';
     }
     fclose(in); // Close input
   }
