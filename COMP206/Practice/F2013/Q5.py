@@ -26,11 +26,12 @@ else:
     print("<th> Min to Purchase</th>")
     for i in range(lines): # Loop through lines
         data = file.readline()
-        # Tokenize?
-        code = ""
-        quantity = ""
-        min = ""
-        unit = ""
+        # Tokenize
+        data = data.split(",")
+        code = data[0]
+        quantity = data[1]
+        min = data[2]
+        unit = data[3]
         min2 = min-quantity
         if quantity<min:
             print("<tr>")
