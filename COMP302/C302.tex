@@ -1,0 +1,1272 @@
+% Created 2017-09-29 Fri 12:29
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 25.3.1 (Org mode 9.1.1)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Lecture 1 \textit{<2017-09-12 Tue>}}
+\label{sec:org4b20796}
+This course is an introduction to the foundations and paradigms of programming languages.
+\begin{itemize}
+\item 5 assignments, 5\% each
+\item 10\% midterm
+\item 65\% final
+\item You have two late days for the semester (cumulative)
+\end{itemize}
+\subsection{Four main goals of COMP 302}
+\label{sec:org581ea5b}
+\begin{enumerate}
+\item Provide thorough introduction to fundamental concepts in programming languages
+\begin{itemize}
+\item Higher-order functions
+\item State-full vs state-free computation (most languages like Java we've seen are state-full)
+\item Modeling objects and closures
+\item Exceptions to defer control
+\item Continuations to defer control
+\item Polymorphism
+\item Partial evaluation
+\item Lazy programming
+\item Modules
+\item Etc.
+\item Want to explore these concepts so you can recognize them in another language you study at some point
+\end{itemize}
+\item Show different ways to reason about programs
+\begin{itemize}
+\item Type checking
+\begin{itemize}
+\item One of the best inventions
+\item Checks what it expects and will actually tell you where it expects something
+\item Program is more likely to be correct now
+\end{itemize}
+\item Induction
+\begin{itemize}
+\item Proving a program/transformation correct
+\end{itemize}
+\item Operational semantics
+\begin{itemize}
+\item How a program is executed
+\end{itemize}
+\item QuickCheck
+\end{itemize}
+\item Introduce fundamental principles in programming language design
+\begin{itemize}
+\item Grammars
+\item Parsing
+\item Operational semantics and interpreters
+\item Type checking
+\item Polymorphism
+\item Subtyping
+\end{itemize}
+\item Expose students to a different way of thinking about problems
+\begin{itemize}
+\item It's like going to the gym; it's good for you!
+\end{itemize}
+\end{enumerate}
+\subsubsection{How we achieve these goals}
+\label{sec:org9225c82}
+\begin{itemize}
+\item Functional programming in OCaml
+\begin{itemize}
+\item Equal playing field
+\begin{itemize}
+\item No one in the class really knows it, not affected by performance in previous classes like 250
+\end{itemize}
+\item Allows us to explain and model object-oriented and imperative programming
+\begin{itemize}
+\item Isolates lots of the concepts individually
+\end{itemize}
+\item Isolates concepts such as state-full vs state-free, modules and functions, etc.
+\item Statically typed language enforces disciplined programming
+\begin{itemize}
+\item Also demonstrates that types are an important maintenance tool
+\end{itemize}
+\item Easy to reason about runtime behavior and cost
+\end{itemize}
+\end{itemize}
+\subsubsection{Guiding Principles}
+\label{sec:org05af3fa}
+\begin{itemize}
+\item No point in learning a programming language unless it changes how you view programming
+\item Simple and elegant solutions are more effective, but harder to find than the complicated ones, take more time.
+\begin{itemize}
+\item You spend very little time testing OCaml code and more time compiling it
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Why do I need to know this}
+\label{sec:org69192ad}
+\begin{itemize}
+\item Science and craft of programming
+\item Skills you learn will help you become a better programmer
+\begin{itemize}
+\item More productive
+\item Code easier to maintain and read
+\item Etc.
+\end{itemize}
+\item Will be needed in some upper level courses
+\begin{itemize}
+\item Like compilers, etc.
+\end{itemize}
+\item It is cool and fun!
+\item You might even get a job!
+\end{itemize}
+
+\subsection{Assignments}
+\label{sec:orgf7ee14a}
+\begin{itemize}
+\item Can do assignments in groups of 2
+\end{itemize}
+
+\subsection{Misc}
+\label{sec:orga02b658}
+\begin{itemize}
+\item Lectures won't be recorded.
+\item Slides may or may not be posted, but there are lecture notes on MyCourses (most essential reading)
+\end{itemize}
+\section{Lecture 2 \textit{<2017-09-14 Thu>}}
+\label{sec:orgb84db7b}
+\subsection{What is OCaml}
+\label{sec:org3201012}
+\begin{itemize}
+\item Statically typed functional programming language
+\end{itemize}
+\subsubsection{Statically typed}
+\label{sec:org5cfb4fc}
+\begin{itemize}
+\item Types approximate runtime behavior
+\item Analyze programs before executing them
+\item Find a fix bugs before testing
+\item Tries to rule out bad scenarios
+\item Very efficient, very good error messages, very good maintenance tool
+\end{itemize}
+\subsubsection{Functional}
+\label{sec:org41adf44}
+\begin{itemize}
+\item Primary expressions are functions!
+\item Functions are first-class!
+\begin{itemize}
+\item Not only can we return base types like ints, we can return functions and pass them as arguments too
+\item One of the key features of functional languages
+\end{itemize}
+\item Pure vs Not Pure languages
+\begin{itemize}
+\item Haskell is Pure
+\begin{itemize}
+\item Doesn't give you ways to allocate memory or directly modify memory
+\end{itemize}
+\item OCaml is impure
+\begin{itemize}
+\item Has arrays and consequences and stuff
+\end{itemize}
+\end{itemize}
+\item Call-By-Value vs Lazy
+\begin{itemize}
+\item OCaml is call by value
+\end{itemize}
+\end{itemize}
+\subsubsection{Concepts for Today}
+\label{sec:orgdbc8bf3}
+\begin{itemize}
+\item Writing and executing basic expressions
+\item Learn how to read error messages
+\item Names
+\end{itemize}
+\subsubsection{OCaml demo in class}
+\label{sec:org0a06f3f}
+\begin{itemize}
+\item Always have to finish a line with 2 semi colons ;;
+\item Can use interpreter by launching OCaml in shell
+\item Functional good for parallel computing
+\item Good to reason about these programs
+\item int: 
+\begin{itemize}
+\item 1 ;;
+\item 1+3;;
+\end{itemize}
+\item Strings: 
+\begin{itemize}
+\item "Hello";;
+\end{itemize}
+\item Floats:
+\begin{itemize}
+\item 3.14;;
+\end{itemize}
+\item Booleans:
+\begin{itemize}
+\item true;;
+\end{itemize}
+\item if
+\begin{itemize}
+\item if 0=0 then 1.4 else 2.1 ;;
+\end{itemize}
+\end{itemize}
+\begin{enumerate}
+\item Operators
+\label{sec:org1f5794d}
+\begin{itemize}
+\item +, -, /, *
+\begin{itemize}
+\item Take as input 2 int, return int
+\end{itemize}
+\item 3.14 + 1 ;; \(\to\) error
+\item To specify for floating point operators, follow by a dot. Only works with floating points, no ints
+\begin{itemize}
+\item 3.14 +. 2.4 ;;
+\end{itemize}
+\end{itemize}
+\item Types
+\label{sec:orgd3c2932}
+\begin{itemize}
+\item Approximate the runtime behaviour
+\item Types classify expressions according to the value they will compute
+\item Won't execute right away, will think of types you are returning to see if it's valid
+\item if 0=0 then 1.4 else 3 ;; 
+\begin{itemize}
+\item Error, after reading 1.4 expects 3 to be float
+\end{itemize}
+\item if bool then T else T
+\begin{itemize}
+\item Both Ts have to be the same type
+\end{itemize}
+\item Type checker will allow 1/0;; to run, but will have a runtime exception
+\begin{itemize}
+\item int/int is not enough info to know that your dividing by 0
+\end{itemize}
+\end{itemize}
+\item Vars
+\label{sec:orgb668adb}
+\begin{itemize}
+\item let pi = 3.14 ;;
+\item let (pi : float) = 3.14 ;;
+\item let m = 3 in
+\begin{itemize}
+\item let n=m * m in
+\item let k=m*m in
+\item k*n ;;
+\end{itemize}
+\end{itemize}
+\item Binding
+\label{sec:org6774a82}
+\begin{itemize}
+\item let m = 3 ;; puts it on the stack
+\item let m = 3 in \ldots{}
+\begin{itemize}
+\item m is a local variable now (temporary binding), once you hit ;;, won't have m anymore
+\item Garbage collector
+\end{itemize}
+\item let x (name of a variable) = exp in \uline{exp} (x is bound to this expression)
+\item variables are bind to values, not assigned values
+\begin{itemize}
+\item they look in the past!
+\end{itemize}
+\end{itemize}
+
+\item Functions
+\label{sec:orgac2cdb9}
+\begin{itemize}
+\item let area = function r -> pi *. r * .r;;
+\begin{itemize}
+\item Syntax error
+\end{itemize}
+\item let area = function r -> pi *. r *. r ;;
+\item let area r = pi *. r *. r ;;
+\item let a4 = area (2.0);;
+\item If you redefine pi, like let pi = 6.0 ;;
+\item area(2.0) will still give you the same thing
+\item The function looks up in the past
+
+\item Stack:
+\end{itemize}
+\begin{center}
+\begin{tabular}{lr}
+ & \\
+\hline
+pi & 6.0\\
+area & function r -> p *. r *. r\\
+k & 5\\
+k & 4\\
+pi & 3.14\\
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+\item Can redefine the function though
+\end{itemize}
+\end{enumerate}
+\section{Lecture 3 \textit{<2017-09-15 Fri>}}
+\label{sec:org0203cd6}
+\subsection{Functions}
+\label{sec:orga15f7fe}
+\begin{itemize}
+\item Functions are values
+\item Function names establish a binding of the function name to its body
+\begin{itemize}
+\item let area (r:float)=pi*. r *. r ;;
+\end{itemize}
+\end{itemize}
+\subsubsection{Recursive functions}
+\label{sec:org3a91f8c}
+Recursive functions are declared using the keyword \uline{let rec}
+\begin{itemize}
+\item let rec fact n =
+\begin{itemize}
+\item if m = 0 them 1
+\begin{itemize}
+\item else n*face(n-1)
+\end{itemize}
+\end{itemize}
+\item fact 2 needs to be stored on the stack
+\item fact 2 -> 2* fact 1
+\item fact 1 -> 1* fact 0 stored on stack
+\item fact 0 = 1
+\item Need to remember computation when you come back out of recursion, so need to store on the stack
+\begin{itemize}
+\item What's the solution to this? How is functional programming efficient?
+\end{itemize}
+\end{itemize}
+\begin{enumerate}
+\item Tail-recursive functions
+\label{sec:orgb96453a}
+A function is said to be "tail-recursive", if there is nothing to do except return the final value. Since the execution of the function is done, saving its stack frame (i.e. where we remember the work we still in general need to do), is redundant
+\begin{itemize}
+\item Write efficient code
+\item All recursive functions can be translated into tail-recursive form
+\end{itemize}
+\item Ex. Rewrite Factorial
+\label{sec:org862d40e}
+\begin{itemize}
+\item let rec fact\_tr n =
+\begin{itemize}
+\item let rec f(n,m) -
+\begin{itemize}
+\item if n=0 then
+\begin{itemize}
+\item m
+\end{itemize}
+\item else f(n-1,n*m)
+\end{itemize}
+\item in
+\begin{itemize}
+\item f(n,1)
+\end{itemize}
+\end{itemize}
+
+\item Second parameter to accumulate the results in the base case we simply return its result
+
+\item Avoids having to return a value from the recursive call and subsequently doing further computation
+
+\item Avoids building up a runtime stack to memorize what needs to be done once the recursive call returns a value
+
+\item f(2,1) -> fact(1, 2*1) -> fact(0,2)-> 2
+
+\item Whoever uses the function does not need to know how the function works, so you can use this more efficient way in the background
+
+\item What is the type of fact\_tr? fact\_tr: int(input) \(\to\) int(output)
+
+\item Type of f? f: int * int (tuple input) \(\to\) int
+
+\begin{itemize}
+\item n-tuples don't need to be of the same type, can have 3 different types, like int*bool*string
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\subsubsection{Passing arguments}
+\label{sec:org15f2c3b}
+\begin{itemize}
+\item ' means any type, i.e. 'a
+\item All args at same time
+\begin{itemize}
+\item 'a*'b -> 'c
+\end{itemize}
+\item One argument at a time
+\begin{itemize}
+\item 'a -> 'b -> 'c
+\item May not have a and b at the same time. Once it has both it will get c.
+\end{itemize}
+\item We can translate any function from one to the other type, called currying (going from one at a time to all at once) and uncurrying (opposite).
+\begin{itemize}
+\item Will see in 2 weeks
+\end{itemize}
+\end{itemize}
+\subsection{Data Types and Pattern Matching}
+\label{sec:orgcb3a67b}
+\subsubsection{Playing cards}
+\label{sec:org4d138ee}
+\begin{itemize}
+\item How can we model a collection of cards?
+\item Declare a new type together with its elements
+\item type suit = Clubs | Spades | Hearts | Diamonds
+\begin{itemize}
+\item Called a user-defined (non-recursive) data type
+\item Order of declaration does not matter
+\begin{itemize}
+\item Like a set
+\end{itemize}
+\item We call clubs, spades, hearts, diamonds constructors (or constants), also called elements of this type
+\begin{itemize}
+\item \uline{Constructors} must begin with a \uline{capital letter} in OCaml
+\end{itemize}
+\end{itemize}
+\item Use \uline{pattern matching} to analyze elements of a given type.
+\item match <expression> with
+\begin{center}
+\begin{tabular}{l}
+<pattern> -> <expression>\\
+<pattern> -> <expression>\\
+\end{tabular}
+\end{center}
+\ldots{}
+\begin{center}
+\begin{tabular}{l}
+<pattern> -> <expression>\\
+\end{tabular}
+\end{center}
+\end{itemize}
+A pattern is either a variable or a \ldots{}
+\begin{itemize}
+\item Statements checked in order
+\end{itemize}
+\begin{enumerate}
+\item Comparing suits
+\label{sec:org32c9e9a}
+Write a function dom of type suit*suit -> bool
+\begin{itemize}
+\item dom(s1,s2) = true iff suit s1 beats or is equal to suit s2 relative to the ordering Spades > Hearts > Diamonds > Clubs
+\item (Spades, \_) means Spades and anything
+\item (s1, s2) -> s1=s2 will return the result of s1=s2
+\item Compiler gives you warning if it's not exhaustive and tells you some that aren't matched
+\end{itemize}
+\end{enumerate}
+\section{Lecture 4 \textit{<2017-09-19 Tue>}}
+\label{sec:org643511f}
+\subsection{Data Types and Pattern Matching Continued}
+\label{sec:org3573350}
+\begin{itemize}
+\item Type is unordered
+\item type suit = Clubs | Spades | Hearts | Diamonds
+\begin{itemize}
+\item Order doesn't matter here, but they must start with capitals
+\end{itemize}
+\item type rank = Two | Three | \ldots{}
+\item type card = rank * suit
+\end{itemize}
+What is a hand? A hand is either empty or if c is a card and h is a hand then Hand(c,h). Nothing else is a hand. Hand is a constructor. hand is a type. (capitalization mattersA)
+\begin{itemize}
+\item Recursive user defined data type
+\item Inductive or recursive definition of a hand
+\begin{itemize}
+\item Add a card to something that is a hand, still a hand
+\end{itemize}
+\end{itemize}
+\subsubsection{Recursive data type}
+\label{sec:orgcaca0e9}
+\begin{itemize}
+\item type hand = Empty | Hand of card * hand
+\end{itemize}
+\begin{enumerate}
+\item Typing into interpreter
+\label{sec:org2dc38f8}
+\begin{itemize}
+\item Empty;;
+\begin{itemize}
+\item hand = Empty
+\end{itemize}
+\item let h1 = Hand ((Ace, Spades),Empty);;
+\begin{itemize}
+\item Want only 1 card, so include empty
+\item Recursive data type, so it needs another hand in it
+\end{itemize}
+\item let h2 = Hand ((Queen, Hearts), Hand((Ace,Spades), Empty);;
+\begin{itemize}
+\item Recursive
+\end{itemize}
+\item let h3 = Hand ((Joker, Hearts), h2) ;;
+\begin{itemize}
+\item Error, Joker not defined
+\end{itemize}
+\item type 'a list = Nil | Cons of 'a * 'a list
+\item Hand ((Queen, Hearts), (King, Spades), (Three, Diamonds));;
+\begin{itemize}
+\item Hand has type? card * card * card
+\item Get an error, because constructor Hand expects 2 arguments (card+hand)
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\subsubsection{Extract Example}
+\label{sec:org84d2915}
+\begin{itemize}
+\item Given a hand, extract all cards of a certain suit
+\item extract: suit -> hand -> hand
+\end{itemize}
+
+\begin{verbatim}
+let rec extract (s:suit) (h:hand) = match h with
+  | Empty -> Empty (* We are constructing results, not destructing given hand *)
+  (* Want to extract suit from first card *)
+  | Hand ( (r0.s0) ,h) -> 
+     (*Make a hand with first card and remaining results of recursive ext*)
+     if s0 = s then Hand( (r0, s0), extract s h0)
+     else extract s h0
+\end{verbatim}
+Hand is "destroyed" through this method, but old hand stays the same, it is not modified.
+\begin{itemize}
+\item Running extract Spades hand5;; will give a new hand with only spades
+\item Good exercise, write a function that counts how many cards in the hand
+\item Can we make this thing tail recursive?
+\end{itemize}
+
+\begin{verbatim}
+let rec extract' (s:suit) (h:hand) acc = match h with
+  | Empty -> acc (* Accumulator *)
+  (* Want to extract suit from first card *)
+  | Hand ( (r0.s0) ,h) -> 
+     (*Make a hand with first card and remaining results of recursive ext*)
+     if s0 = s then extract' s h0 (Hand( (r0, s0), acc))
+     else extract' s h0 acc
+\end{verbatim}
+
+\begin{itemize}
+\item extract' Spades hand5 Empty ;;
+\item Gives same cards but in the reverse order of extract
+\item extract Spades hand5 = extract' Spades hand5 Empty ;;
+\begin{itemize}
+\item False
+\end{itemize}
+
+\item Write a function find which when given a rank and a hand, finds the first card in hand of the specified rank and returns its corresponding suit.
+\end{itemize}
+What if no card exists?
+\begin{itemize}
+\item Optional Data Type (predefined)
+\item type 'a option = None | Some of 'a
+\end{itemize}
+\section{Lecture 5 \textit{<2017-09-21 Thu>}}
+\label{sec:org4cba905}
+\begin{verbatim}
+(* type mylist = Nil | Cons of ? * list;; *)
+(* Polymorphic lists:  *)
+(* type 'a mylist = Nil | Cons of 'a * 'a my list *)
+[] ;;
+1 :: [] ;;
+1 :: 2 :: 3 :: [] ;;
+[1;2;3;4];;
+
+(* These are only homogenous lists though, what if we want floats and ints? *)
+(* type if_list = Nil | ICons of int * if_list | FCons of float * if_list *)
+(* But here we can't use List libraries *)
+
+(* So make an element that can be either *)
+type elem = I of int | F of float;;
+
+let rec append l1 l2 = match l1 with
+  | [] -> l2
+  | x::xs -> x :: append xs l2;;
+(* Program execution *)
+(* append 1::(2::[]) -> 1 :: append (2::[])             *)
+let head l = match l with
+  | [] -> None
+  | x :: xs -> Some x;;
+
+(* Write a function rev given a list l of type 'a list returns it's reverse  *)
+
+(* Silly way of doing this             *)
+let rec rev (l : 'a list) = match l with
+  | [] -> []
+  | hd :: tail -> rev (tail) @ [hd];;
+(* Could we have written rev(tail) :: hd? No. Why? *)
+(* a' : 'a list, left side has to be one element, right side  to be a list *)
+(* 'a list @ 'alist *)
+
+(* What is the type of rev? Is it 'a list? -No *)
+(* It is 'a list -> 'a list *)
+
+(* Is this a good program? Long running time, use tail recursion  *)
+
+
+let rev_2 (l : 'a list) =  
+  let rec rev_tr l acc = match l with
+    | [] -> acc
+    | h::t -> rev_tr t (h::acc)
+  in
+  rev_tr l [];;
+
+(* Exercises:
+ * Write a function merge: 'a list -> 'a list -> 'a list
+which given ordered lists l1 and l2, both of type 'a list,
+it returns the sorted combination of both lists 
+ * Write a function split: 'a list -> 'a list * 'a list 
+which given a list l it splits into two sublists, 
+(every odd element, every even element)*)
+\end{verbatim}
+\subsection{Lists}
+\label{sec:org9c4c1f1}
+What are lists?
+\begin{itemize}
+\item Nil([]) is a list
+\item Given an element x and a list l x::l is a list
+\item Nothing else is a list
+\item\relax [] is an \('\alpha\) list
+\begin{itemize}
+\item Given an element x of type \('\alpha\) and l of type \('\alpha\) list
+\item[{x}] l is an \('\alpha\) list (i.e. a list containing elements of type \('\alpha\))
+\end{itemize}
+\item ; are syntactical sugar to separate elements of a list
+\end{itemize}
+\subsection{Execution}
+\label{sec:org71ce1b0}
+Understand how a program is executed
+\begin{itemize}
+\item \textbf{Operational Semantics}
+\end{itemize}
+\section{Lecture 6 \textit{<2017-09-22 Fri>}}
+\label{sec:org4d7e802}
+\subsection{Proofs}
+\label{sec:org5653f01}
+\subsubsection{Demo: lookup \& insert}
+\label{sec:org67a2be1}
+\begin{verbatim}
+(* Warm up *)
+(* Write a function lookup: 'a -> ('a * 'b) list -> 'b option. 
+Given a key k of type 'a and a list l of key-value pairs, 
+return the corresponding value v in l (if it exists). *)
+(* lookup : 'a -> ('a * 'b) list -> 'b option  *)
+let rec lookup k l = match l with
+  | [] -> None
+  | (k',v')::t -> if k=k' then Some v' (* If it is the right key, return val*)
+		  else lookup k t;;
+
+(* Write a function insert which
+given a key k and a value v and an ordered list l of type ('a * 'b) list
+it inserts the key-value pair (k,v) into the list l 
+preserving the order (ascending keys). *)
+(* insert : ('a * 'b) -> ('a * 'b) list -> ('a * 'b) list 
+ insert (k,v) l = l'
+
+ Precondition: l is ordered.
+
+Postcondition: l' is also ordered and we inserted (k,v) at the right position in l*)
+
+(* let rec insert (k,v) l = match l with
+ *   | [] -> [(k,v)]
+ *         (\* k = k' or k < k' or k' < k *\)
+ *   | ((k',v') as h) :: t ->
+ *      if k = k' then (k,v) :: l
+ *      else
+ *        if k' < k then (k,v) :: l
+ *        else h :: insert (k,v) t;;
+ * 
+ * let l = [(1,"anne") ; (7,"di")];;
+ * l;;
+ * let l0 = insert (3,"bob") l;;
+ * insert (3,"tom") l0 ;;
+ * (\* But now we'll have 2 entries with the same key *\) *)
+(* Undesirable, better to replace the value if its a dictionary*)
+
+let rec insert (k,v) l = match l with
+  | [] -> [(k,v)]
+	(* k = k' or k < k' or k' < k *)
+  | ((k',v') as h) :: t ->
+     if k = k' then (k,v) :: t (* Replace *)
+     else
+       if k' < k then (k,v) :: l
+       else h :: insert (k,v) t;;
+
+(* Personal tail recursive attempt *)
+let insert_t (k,v) l =
+  let rec insert_acc (k,v) l acc = match l with
+    | [] -> acc @ [(k,v)]
+    | ((k',v') as h) :: t ->
+       if k = k' then (k,v) :: t
+       else
+	 if k' < k then (k,v) :: l
+	 else insert_acc (k,v) t (acc @ [h])
+\end{verbatim}
+\begin{itemize}
+\item What is the relationship between lookup and insert?
+\end{itemize}
+\subsubsection{How to prove it?}
+\label{sec:org2b37d5e}
+\begin{enumerate}
+\item Step 1
+\label{sec:org0c1ebf5}
+We need to understand how programs are executed (operational semantics)
+\begin{itemize}
+\item \(e \Downarrow v\) expression \(e\) evaluates in multiple steps to the value \(v\). (\textbf{Big-Step})
+\item \(e \Rightarrow e'\) expression \(ee\) evaluates in one steps to expression \(e'\). (\textbf{Small-Step (single)})
+\item \(e \implies * e'\) expression \(e\) evaluates in multiple steps to expression \(e'\) (\textbf{Small-Step (multiple)})
+\end{itemize}
+
+For all l, v, k, lookup k (insert k v l) \(\implies *\) Some v
+Induction on what?
+\item Step 2
+\label{sec:org56297ea}
+\(P(l) = lookup k\) (insert\((k,v) l\)) \(\Downarrow\) Some \(v\)
+\begin{itemize}
+\item How to reason inductively about lists?
+\begin{itemize}
+\item Analyze their structure!
+\item The recipe \ldots{}
+\item To prove a property \(P(l)\) holds about a list \(l\)
+\begin{itemize}
+\item Base Case: \(l = []\)
+\begin{itemize}
+\item Show \(P([])\) holds
+\end{itemize}
+\item Step Case: \(l=x::xs\)
+\begin{itemize}
+\item IH \(P(xs)\) (Assume the property \(P\) holds for lists smaller than \(l\))
+\end{itemize}
+\item Show \(P(x::xs)\) holds (Show the property \(P\) holds for the original list \(l\))
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\item Theorem
+\label{sec:org8637c68}
+For all \(l, v, k\), lookup \(k\) (insert \((k,v) l\)) \(\implies *\) Some \(v\)
+\item Proof
+\label{sec:org0ccdca6}
+Proof by structural inductional on the list \(l\)
+\begin{itemize}
+\item Case: \(l = []\)
+\begin{itemize}
+\item lookup k (insert(k,v)[])
+\item \(\stackrel{\text{By insert program}}{\implies}\) lookup k [(k,v)] (same as (k,v)::[]) \(\stackrel{\text{By lookup}}{\implies}\) Some \(v\)
+\begin{itemize}
+\item Would not hold if we didn't put the k=k case
+\end{itemize}
+\end{itemize}
+\item Case: \(l=h::t\) where \(h=(k',v')\)
+\begin{itemize}
+\item IH: For \(k,v\) lookup \(k\) (insert (k,v) t) \(\Downarrow\) Some \(v\)
+\item To show: lookup k (insert (k,v)) \(\underbrace{(k',v')::t}_l \Downarrow\) Some \(v\)
+\item Subcase: \(k=k'\)
+\begin{itemize}
+\item lookup k (insert (k,v) ((k', v')::t))
+\item \(\stackrel{\text{By insert}}{\implies}\) lookup k ((k,v)::t)
+\item \(\stackrel{\text{By lookup}}{\implies}\) Some v (good)
+\end{itemize}
+\item Subcase: \(k<k'\)
+\begin{itemize}
+\item lookup k (insert(k,v) ((k',v'):: t))
+\item \(\stackrel{\text{By insert}}{\implies}\) lookup k ((k,v)::l)
+\item \(\stackrel{\text{By lookup}}{\implies}\) Some v (good)
+\end{itemize}
+\item Subcase: \(k>k'\)
+\begin{itemize}
+\item lookup k (insert(k,v) ((k',v')::t))
+\item \(\stackrel{\text{By insert}}{\implies}\) lookup k ((k', v')::insert (k,v) t)
+\item \(\stackrel{\text{By lookup}}{\implies}\) lookup k (insert (k,v) t)
+\item \(\stackrel{\text{By IH}}{\implies}\) Some \(v\)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\item Lesson to take away
+\label{sec:orgcec0943}
+\begin{itemize}
+\item State what you are doing induction on
+\begin{itemize}
+\item Proof by structural induction in the list l
+\end{itemize}
+\item Consider the different cases!
+\item For lists, there are two cases- either l =[] or l = h::t
+\item State your induction hypothesis
+\begin{itemize}
+\item IH: For all v,k, lookup insert (k,v) t \(\Downarrow\) Some \(v\)
+\end{itemize}
+\item Justify your evaluation / reasoning steps by
+\begin{itemize}
+\item Referring to evaluation of a given program
+\item The induction hypothesis
+\item Lemmas/ Properties (such as associativity, commutativity)
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\section{Lecture 7 \textit{<2017-09-26 Tue>}}
+\label{sec:orgadb9105}
+\subsection{Structural Induction}
+\label{sec:orgf88db59}
+\begin{itemize}
+\item How do I prove that all slices of cake are tasty using structural induction?
+\begin{itemize}
+\item Define a cake slice recursively
+\item Prove that a single piece of cake is tasty
+\item Use recursive definition of the set to prove that all slices are tasty
+\item Conclude all are tasty
+\end{itemize}
+\end{itemize}
+\subsubsection{Example with rev}
+\label{sec:orgdd9241e}
+
+\begin{verbatim}
+(* naive *)
+(* rev: 'a list -> 'a list *)
+let rec rev l = match l with
+| [] -> []
+| x::l -> (rev l) @ [x];;
+
+(* tail recursive *)
+(* rev': 'a list -> 'a list *)
+let rev' l =
+(* rev_tr: 'a list -> 'a list -> 'a list *)
+let rec rev_tr l acc = match l with
+| [] -> acc
+| h::t -> rev_tr t (h::acc)
+in
+rev_tr 1 [];;
+
+(* Define length *)
+let rec length l = match l with
+| [] -> 0
+| h::t -> 1+length t  
+\end{verbatim}
+\begin{enumerate}
+\item Theorem:
+\label{sec:orgdf47dd5}
+For all lists l, rev l = rev' l.
+
+What is the relationship between l, acc and rev\_tr l acc?
+
+\begin{itemize}
+\item Invariant of rev
+\begin{itemize}
+\item length l = length (rev l)
+\end{itemize}
+\item Invariant rev\_tr
+\begin{itemize}
+\item length l + length acc = length(rev\_tr l acc)
+\end{itemize}
+\item How are these related?
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+\begin{itemize}
+\item rev l \(\Downarrow\)
+\item rev\_tr l acc \(\Downarrow\) v
+\item Not quite because:
+\begin{itemize}
+\item rev [] \(\Downarrow\) []
+\item rev\_tr [] acc \(\Downarrow\) acc
+\item Not returning the same thing given empty list
+\end{itemize}
+\item Slightly modified so it's right:
+\begin{itemize}
+\item rev l @ acc \(\Downarrow\) v
+\item rev\_tr l acc \(\Downarrow\) v
+\end{itemize}
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+
+For all l, acc, (rev l) @ acc \(\Downarrow\) v and rev\_tr l acc\(\Downarrow\) v
+By induction on the list l.
+\begin{itemize}
+\item Case l=[]
+\begin{itemize}
+\item rev [] @ acc
+\item \(\stackrel{\text{prog rev}}{\rightarrow}\) [] @ acc \(\rightarrow\) acc
+\item rev\_tr [] acc
+\item \(\stackrel{\text{by prog rev\_tr}}{\rightarrow}\) acc
+\end{itemize}
+\item Case \(l=h::t\)
+\begin{itemize}
+\item \textbf{IH: For all acc rev t @ acc \(\Downarrow\) v and rev\_tr t acc \(\Downarrow\) v}
+\item rev (h::t) @ acc \(\stackrel{\text{by rev}}{\rightarrow}\) (rev t @ [h])@acc
+\begin{itemize}
+\item \(\stackrel{\text{By associativity of @}}{\rightarrow}\) rev t @ ([h] @ acc)
+\item \(\stackrel{\text{@}}{\rightarrow}\) rev t @ (h::acc)
+\end{itemize}
+\item rev\_tr (h::t) acc \(\rightarrow\) rev\_tr t (h::acc)
+\item By the IH rev t @ (h::acc) \(\Downarrow\) v and rev\_tr t (h::acc) \(\Downarrow\) v
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\subsection{Trees}
+\label{sec:orgfda4600}
+\begin{verbatim}
+type 'a tree = Empty | Node of 'a = 'a tree * 'a tree;;
+let t0 = Node (5, Node (3, Empty, Empty), Empty);;
+(* 5 is at the head, has 3 as left child, all other children are empty *)
+
+let rec size t = match t with
+  | Empty -> 0
+  | Node (v, l, r) -> 1 + size l + size r
+
+				     size t0;;
+(* Since Ocaml is a stack, 
+  if you modify the tree type after declaring t0,
+  then t0 will be the old type, 
+  so when you try to use size you'll get an error 
+  as it's not the same type *)
+
+type 'a forest = Forest of ('a many_trees) list
+and 'a many_trees = Empty | MoreTrees of 'a many_trees
+
+(* Mutually recursive *)
+
+let rec size_forest f = match f with
+  | Forest trees -> match trees with
+		    | [] -> 0
+		    | h::t -> size_many_trees h + size_forest (Forest t) 
+
+and size_many_trees t = match t with
+  | NoTree -> 0
+  | MoreTrees f -> 1 + size_forest f
+\end{verbatim}
+\section{Lecture 8 \textit{<2017-09-28 Thu>}}
+\label{sec:org3ea3d93}
+\subsection{Binary Tree (Inductive definition)}
+\label{sec:org88a1db6}
+\begin{itemize}
+\item The empty binary tree empty is a binary tree
+\item If l and r are binary trees and v is a value of type 'a then Node(v, l, r) is a binary tree
+\item Nothing else is a binary tree
+\end{itemize}
+
+How to define a recursive data type for trees in OCaml?
+
+\begin{verbatim}
+type 'a tree =
+Empty
+| Node of 'a * 'a tree * 'a tree |
+\end{verbatim}
+\subsection{Insert}
+\label{sec:org12e5be3}
+Want to make a function insert
+\begin{itemize}
+\item Given as input (x,dx), where x is key and dx is data and a binary search tree t
+\begin{itemize}
+\item Return a binary search tree with (x,dx) inserted
+\item What is insert's type?
+\begin{itemize}
+\item (a' * b') \(\to\) ('a \(\times\) 'b)tree \(\to\) ('a \(\times\) 'b) tree
+\end{itemize}
+\end{itemize}
+\item Good exercise: write a function to check if a tree is a binary search tree or not
+\begin{itemize}
+\item Good exam question
+\end{itemize}
+\end{itemize}
+
+\begin{verbatim}
+(* Data Types: Trees *)
+
+type 'a tree = Empty | Node of 'a * 'a tree * 'a tree
+
+let rec size t = match t with
+  | Empty -> 0
+  | Node (v, l, r) -> 1 + size l + size r 
+let rec insert ((x,dx) as e) t = match t with
+  (* Tree is empty, root is now e *)
+  | Empty -> Node (e, Empty, Empty)
+  | Node ( (y,dy), l, r) ->
+     (* Replace val that has same key *)
+     (* No destructive updates, need to keep elements and remake tree *)
+     if x = y then Node (e, l, r)
+			(* Go down left tree *)
+     else (if x < y then Node ( (y,dy), insert e l, r)
+			      (* Go down right tree *)
+	   else Node ((y,dy), l, insert e r)
+	  )
+
+	    (* Can we still use these less than signs for any type? 
+	     The node constructor uses any type
+	     Since we used comparison, we can*)
+
+;;
+3 < 4 ;;
+Empty < Node (3, Empty, Empty);;
+Node (3, Empty, Empty) < Node (4, Empty, Empty) ;;
+
+[3 ; 4] < [2 ; 5];;
+(* Why is this false? *)
+
+[3 ; 5] < [4 ; 7];;
+[3 ; 5] < [7];;
+(* Doesn't look at length of list, looks at first number of list *)
+(* Dangerous to have comparison on all these types. Can only compare built in data types (for lists here, it's comparing ints) 
+ OCaml will come up with something, but it might not be the correct thing
+ For example, with the suits example we made a function to quantify
+ what's bigger*)
+
+(* lookup: 'a -> ('a x 'b)tree -> b' option *)
+(* Option in case key isn't there *)
+let rec lookup x t = match t with
+  | Empty -> None
+  | Node ( (y, dy), l, r) ->
+     if x = y then Some dy
+     else ( if x < y then
+	      lookup x l
+	    else lookup x r
+	  )
+;;
+
+
+(* collect: 'a tree -> 'a list 
+ What order do we want to return it in? In order traversal*)
+let rec collect t = match t with
+  | Empty -> []
+  | Node (x, l, r) ->
+     let l1 = collect l in
+     let l2 = collect r in
+     l1 @ l2
+(* Incomplete, where to put x? *)
+;;
+
+collect (Node (5, Node (3, Empty, Empty), Empty));;
+\end{verbatim}
+
+\subsection{Proving}
+\label{sec:org49b8cb0}
+\begin{itemize}
+\item How to reason inductively about trees? Analyze their structures!
+\end{itemize}
+
+\subsection{Theorem}
+\label{sec:orgcdbc3fb}
+For all trees t, keys x, and data dx, lookup x(insert (x, dx) t) \(\Rightarrow*\) Some dx
+\subsubsection{Proof by structural induction on the tree t}
+\label{sec:org523b522}
+(You get points on an exam for mentioning what kind of induction, structural induction on tree, points for base case/case, points for stating induction hypothesis, perhaps multiple. Then show by a sequence of steps of how to get from what to show to the end)
+\begin{itemize}
+\item Case t = Empty
+\begin{itemize}
+\item lookup x (insert (x, dx) Empty) \(\stackrel{\text{By insert}}{\Rightarrow}\) lookup x (Node ((x,dx), Empty, Empty)) \(\stackrel{\text{by lookup}}{\Rightarrow}\) Some dx
+\end{itemize}
+\item Case t = Node ( (y,dy), l, r)
+\begin{itemize}
+\item Both trees l and r are smaller than t
+\item IH1: For all x, dx, lookup x (insert (x,dx) l) \(\Rightarrow*\) Some dx
+\item IH2: For all x, dx, lookup x (insert(x,dx) r) \(\Rightarrow*\) Some dx
+\end{itemize}
+\item Need to show lookup x (insert (x, dx) Node ((y, dy), l, r))
+\item Show 3 cases (x < y, x = y, y < x)
+\begin{itemize}
+\item x < y \(\Rightarrow\) lookup x (Node((y,dy), insert (x,dx) l, r)) \(\stackrel{\text{By lookup}}{\Rightarrow}\) lookup x (insert (x,dx) l) \(\stackrel{\text{by IH 1}}{\Rightarrow}\) Some dx
+\item x=y lookup x(insert (x,dx) Node ((y, dy), l, r)) \(\stackrel{\text{by ins}}{\Rightarrow}\) lookup x (Node ((x,dx), l, r)) \(\stackrel{\text{by lookup}}{\Rightarrow}\) Some dx
+\end{itemize}
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+Exercise: write a type for cake (2 slice of cake together become 1 slice), with weight
+\section{Lecture 9 \textit{<2017-09-29 Fri>}}
+\label{sec:orgde6aa1e}
+\subsection{Higher-order functions}
+\label{sec:org18ddc2b}
+\begin{itemize}
+\item Allows us to abstract over common functionality
+\item Programs can be very short and compact
+\item Very reusable, well-structured, modular
+\item Each significant piece implemented in one place
+\item Functions are first-class values!
+\begin{itemize}
+\item Pass functions as arguments (today)
+\item Return them as results (next week)
+\end{itemize}
+\end{itemize}
+\subsubsection{Abstracting over common functionality}
+\label{sec:org0be1466}
+Want to write a recursive function that sums up over an integer range: \(\sum_{k=a}^{k=b}k\)
+
+\begin{verbatim}
+let rec sum (a,b) =
+if a > b then 0 else a + sum(a+1,b)
+\end{verbatim}
+
+Now what if we want to make a sum of squares? \(\sum_{k=a}^{k=b}k^2\)
+
+\begin{verbatim}
+let rec sum (a,b) =
+if a > b then 0 else square(a) + sum(a+1,b)
+\end{verbatim}
+
+\(\sum_{k=a}^{k=b}2^k\)
+
+\begin{verbatim}
+let rec sum (a,b) =
+if a > b then 0 else exp(2,a) + sum(a+1,b)
+\end{verbatim}
+
+\begin{itemize}
+\item So you can reimplement the function every time, but it would be more useful to make a sum function that will sum up what you tell it to (what to do to each element)
+\item Non-Generic Sum (old)
+\begin{itemize}
+\item int * int -> int
+\end{itemize}
+\item Generic Sum using a function as an argument
+\begin{itemize}
+\item (int -> int) -> int * int -> int
+\end{itemize}
+\end{itemize}
+
+\subsection{Demo}
+\label{sec:orgdf659ba}
+\begin{verbatim}
+(* Arbitrary functions *)
+(* cube, rcube, square, exp, sumInts, sumSquare, sumCubes, sumExp *)
+let square x = x * x;;
+let cube x = x * x * x;;
+let rec exp (a, b) = match a with
+  | 
+
+  (* Non-generalized sums  *)
+  let rec sumInts (a,b) = if (a > b) then 0 else a + sumInts(a+1,b);;
+let rec sumSquare(a,b) = if (a > b) then 0 else square(a) + sumSquare(a+1,b);;
+let rec sumCubes(a,b) = if (a > b) then 0 else cube(a) + sumCubes(a+1, b);;
+
+
+(* We will abstract over the function f (i.e. cube, square, exp etc) 
+ to get a general sum function*)
+
+(* sum: (int -> int) -> int * int -> int  *)
+let rec sum f(a,b) =
+  if a > b then 0
+  else f(a) + sum f(a+1, b);;
+
+(* Call function on a *)
+
+(* Identity function, returns Argo *)
+let id x = x;;
+let exp2 x = exp (2, x);;
+
+(* let sumInts' (a,b) = sum id (a,b);; *)
+(* anonymous functions *)
+let sumInts' (a,b) = sum (fun x -> x) (a,b);;
+
+(* let sumSquare' (a,b) = sum square(a,b);; *)
+let sumSquare' (a,b) = sum (fun x -> x * x) (a,b)
+
+let sumCubes' (a,b) = sum cube(a,b);;
+
+(* let sumExp' (a,b) = sum exp2(a,b);; *)
+let sumExp' (a,b) = sum (fun x-> exp (2,x)) (a,b);;
+
+(* Inconvenient, we have to define a function beforehand *)
+(* How can we define a function on the fly without naming it?
+ -> Use anonymous functions*)
+
+(* Different ways to make anonymous functions *)
+fun x y -> x + y;;
+function x -> x;;
+fun x -> x;;
+(* Can use function for pattern matching 
+ Don't need to write match
+ Function can only take in one argument and implies pattern matching
+ fun can take many *)
+(function 0 -> 0 | n -> n+1);;
+(* Equivalent to fun and match *)
+(fun x -> match x with 0 -> 0 | n -> n+1);;
+
+
+(* comb: is how we combine - either * or + 
+ f : is what we do to the a
+ inc : is how we increment a to get to b
+ base : is what we return when a > b *)
+(* Make this tail recursive this time  *)
+let rec series comb f (a,b) inc base =
+  if a > b then base
+  else series comb f (inc(a),b) inc (comb base (f a));;
+(* Base acts as an accumulator *)
+\end{verbatim}
+
+\begin{itemize}
+\item How about only summing up odd numbers?
+\end{itemize}
+
+\begin{verbatim}
+let rec sumOdd (a,b) =
+if (a mod 2) = 1 then 
+sum (fun x -> x) (a, b)
+else 
+sum (fun x -> x)(a+1, b)
+\end{verbatim}
+
+
+\begin{itemize}
+\item Adding increment function
+\end{itemize}
+\begin{verbatim}
+let rec sum f (a, b) inc =
+if (a > b) then 0 else (f a) + sum f (inc(a), b) inc
+
+
+let rec sumOdd (a,b) =
+if (a mod 2) = 1 then 
+sum (fun x -> x) (a, b) (fun x -> x+1)
+else 
+sum (fun x -> x)(a+1, b) (fun x-> x+1)
+\end{verbatim}
+
+\begin{itemize}
+\item How about only multiplying?
+\end{itemize}
+
+\begin{verbatim}
+let rec product f (a, b) inc =
+if (a > b) then 1 else (f a) * product f (inc(a), b) inc
+\end{verbatim}
+
+\begin{itemize}
+\item Can make this tail recursive with accumulators for base (1 for prod, 0 for sum)
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+\begin{itemize}
+\item Types: 
+\begin{itemize}
+\item (int -> int -> int) : comb
+
+\item series: -> (int -> int) : f
+
+\item int * int : a,b lower and upper bound
+
+\item int -> int : inc
+
+\item int : base
+\end{itemize}
+\end{itemize}
+
+Types can get crazy, too much abstraction may lead to less readability
+\subsection{Bonus}
+\label{sec:org7bca223}
+Approximating the integral
+\begin{itemize}
+\item \(l = a + dx/2\)
+\begin{itemize}
+\item Use rectangles to approximate
+\item Left side of l is above the rectangle, right side is below, approximation should almost cancel them
+\item \(\int_a^b f(x) dx \approx f(l)*dx + f(l+dx)*dx+f(l+dx+dx)*dx+\ldots =dx * (f(l)+f(l+dx)+f(l+2*dx)+f(l+3*dx) \ldots)\)
+\end{itemize}
+\end{itemize}
+
+Want: sum: \(\underbrace{(float -> float)}_f -> (\underbrace{float}_l * \underbrace{float}_u) -> \underbrace{(float -> float)}_{inc} -> float\)
+
+\begin{verbatim}
+let integral f (a,b) dx =
+dx * sum f (a+.(dx/2.),b) (fun x-> x+. dx)
+(* Follows format of sum function above
+Can easily write a short program like above*)
+\end{verbatim}
+\end{document}

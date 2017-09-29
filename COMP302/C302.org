@@ -1,0 +1,601 @@
+#+OPTIONS: ^:nil 
+* Lecture 1 <2017-09-12 Tue>
+This course is an introduction to the foundations and paradigms of programming languages.
+- 5 assignments, 5% each
+- 10% midterm
+- 65% final
+- You have two late days for the semester (cumulative)
+** Four main goals of COMP 302
+1. Provide thorough introduction to fundamental concepts in programming languages
+   - Higher-order functions
+   - State-full vs state-free computation (most languages like Java we've seen are state-full)
+   - Modeling objects and closures
+   - Exceptions to defer control
+   - Continuations to defer control
+   - Polymorphism
+   - Partial evaluation
+   - Lazy programming
+   - Modules
+   - Etc.
+   - Want to explore these concepts so you can recognize them in another language you study at some point
+2. Show different ways to reason about programs
+   - Type checking
+     - One of the best inventions
+     - Checks what it expects and will actually tell you where it expects something
+     - Program is more likely to be correct now
+   - Induction
+     - Proving a program/transformation correct
+   - Operational semantics
+     - How a program is executed
+   - QuickCheck
+3. Introduce fundamental principles in programming language design
+   - Grammars
+   - Parsing
+   - Operational semantics and interpreters
+   - Type checking
+   - Polymorphism
+   - Subtyping
+4. Expose students to a different way of thinking about problems
+   - It's like going to the gym; it's good for you!
+*** How we achieve these goals
+- Functional programming in OCaml
+  - Equal playing field
+    - No one in the class really knows it, not affected by performance in previous classes like 250
+  - Allows us to explain and model object-oriented and imperative programming
+    - Isolates lots of the concepts individually
+  - Isolates concepts such as state-full vs state-free, modules and functions, etc.
+  - Statically typed language enforces disciplined programming
+    - Also demonstrates that types are an important maintenance tool
+  - Easy to reason about runtime behavior and cost
+*** Guiding Principles
+- No point in learning a programming language unless it changes how you view programming
+- Simple and elegant solutions are more effective, but harder to find than the complicated ones, take more time.
+  - You spend very little time testing OCaml code and more time compiling it
+
+*** Why do I need to know this
+- Science and craft of programming
+- Skills you learn will help you become a better programmer
+  - More productive
+  - Code easier to maintain and read
+  - Etc.
+- Will be needed in some upper level courses
+  - Like compilers, etc.
+- It is cool and fun!
+- You might even get a job!
+
+** Assignments
+- Can do assignments in groups of 2
+
+** Misc
+- Lectures won't be recorded.
+- Slides may or may not be posted, but there are lecture notes on MyCourses (most essential reading)
+* Lecture 2 <2017-09-14 Thu>
+** What is OCaml
+- Statically typed functional programming language
+*** Statically typed
+  - Types approximate runtime behavior
+  - Analyze programs before executing them
+  - Find a fix bugs before testing
+  - Tries to rule out bad scenarios
+  - Very efficient, very good error messages, very good maintenance tool
+*** Functional
+  - Primary expressions are functions!
+  - Functions are first-class!
+    - Not only can we return base types like ints, we can return functions and pass them as arguments too
+    - One of the key features of functional languages
+  - Pure vs Not Pure languages
+    - Haskell is Pure
+      - Doesn't give you ways to allocate memory or directly modify memory
+    - OCaml is impure
+      - Has arrays and consequences and stuff
+  - Call-By-Value vs Lazy
+    - OCaml is call by value
+*** Concepts for Today
+- Writing and executing basic expressions
+- Learn how to read error messages
+- Names
+*** OCaml demo in class
+- Always have to finish a line with 2 semi colons ;;
+- Can use interpreter by launching OCaml in shell
+- Functional good for parallel computing
+- Good to reason about these programs
+- int: 
+  - 1 ;;
+  - 1+3;;
+- Strings: 
+  - "Hello";;
+- Floats:
+  - 3.14;;
+- Booleans:
+  - true;;
+- if
+  - if 0=0 then 1.4 else 2.1 ;;
+**** Operators
+- +, -, /, *
+  - Take as input 2 int, return int
+- 3.14 + 1 ;; \to error
+- To specify for floating point operators, follow by a dot. Only works with floating points, no ints
+  - 3.14 +. 2.4 ;;
+**** Types
+- Approximate the runtime behaviour
+- Types classify expressions according to the value they will compute
+- Won't execute right away, will think of types you are returning to see if it's valid
+- if 0=0 then 1.4 else 3 ;; 
+  - Error, after reading 1.4 expects 3 to be float
+- if bool then T else T
+  - Both Ts have to be the same type
+- Type checker will allow 1/0;; to run, but will have a runtime exception
+  - int/int is not enough info to know that your dividing by 0
+**** Vars 
+- let pi = 3.14 ;;
+- let (pi : float) = 3.14 ;;
+- let m = 3 in
+  - let n=m * m in
+  - let k=m*m in
+  - k*n ;;
+**** Binding 
+- let m = 3 ;; puts it on the stack
+- let m = 3 in ...
+  - m is a local variable now (temporary binding), once you hit ;;, won't have m anymore
+  - Garbage collector
+- let x (name of a variable) = exp in _exp_ (x is bound to this expression)
+- variables are bind to values, not assigned values
+  - they look in the past!
+
+**** Functions
+- let area = function r -> pi *. r * .r;;
+  - Syntax error
+- let area = function r -> pi *. r *. r ;;
+- let area r = pi *. r *. r ;;
+- let a4 = area (2.0);;
+- If you redefine pi, like let pi = 6.0 ;;
+- area(2.0) will still give you the same thing
+- The function looks up in the past
+
+- Stack: 
+|      |                           |
+|------+---------------------------|
+| pi   |                       6.0 |
+| area | function r -> p *. r *. r |
+| k    |                         5 |
+| k    |                         4 |
+| pi   | 3.14                      |
+
+- Can redefine the function though
+* Lecture 3 <2017-09-15 Fri> 
+** Functions
+- Functions are values
+- Function names establish a binding of the function name to its body
+  - let area (r:float)=pi*. r *. r ;;
+*** Recursive functions
+Recursive functions are declared using the keyword _let rec_
+- let rec fact n =
+  - if m = 0 them 1
+    - else n*face(n-1)
+- fact 2 needs to be stored on the stack
+- fact 2 -> 2* fact 1
+- fact 1 -> 1* fact 0 stored on stack
+- fact 0 = 1
+- Need to remember computation when you come back out of recursion, so need to store on the stack
+  - What's the solution to this? How is functional programming efficient?
+**** Tail-recursive functions
+  A function is said to be "tail-recursive", if there is nothing to do except return the final value. Since the execution of the function is done, saving its stack frame (i.e. where we remember the work we still in general need to do), is redundant
+  - Write efficient code
+  - All recursive functions can be translated into tail-recursive form
+**** Ex. Rewrite Factorial
+- let rec fact_tr n =
+  - let rec f(n,m) -
+    - if n=0 then
+      - m
+    - else f(n-1,n*m)
+  - in
+    - f(n,1)
+
+- Second parameter to accumulate the results in the base case we simply return its result
+
+- Avoids having to return a value from the recursive call and subsequently doing further computation
+
+- Avoids building up a runtime stack to memorize what needs to be done once the recursive call returns a value
+
+- f(2,1) -> fact(1, 2*1) -> fact(0,2)-> 2
+
+- Whoever uses the function does not need to know how the function works, so you can use this more efficient way in the background
+
+- What is the type of fact_tr? fact_tr: int(input) $\to$ int(output)
+
+- Type of f? f: int * int (tuple input) $\to$ int
+
+  - n-tuples don't need to be of the same type, can have 3 different types, like int*bool*string
+*** Passing arguments
+- ' means any type, i.e. 'a
+- All args at same time
+  - 'a*'b -> 'c
+- One argument at a time
+  - 'a -> 'b -> 'c
+  - May not have a and b at the same time. Once it has both it will get c.
+- We can translate any function from one to the other type, called currying (going from one at a time to all at once) and uncurrying (opposite).
+  - Will see in 2 weeks
+** Data Types and Pattern Matching
+*** Playing cards
+- How can we model a collection of cards?
+- Declare a new type together with its elements
+- type suit = Clubs | Spades | Hearts | Diamonds
+  - Called a user-defined (non-recursive) data type
+  - Order of declaration does not matter
+    - Like a set
+  - We call clubs, spades, hearts, diamonds constructors (or constants), also called elements of this type
+    - _Constructors_ must begin with a _capital letter_ in OCaml
+- Use _pattern matching_ to analyze elements of a given type.
+- match <expression> with
+  | <pattern> -> <expression> 
+  | <pattern> -> <expression> 
+  ...
+  | <pattern> -> <expression> 
+A pattern is either a variable or a ...
+- Statements checked in order
+**** Comparing suits
+Write a function dom of type suit*suit -> bool
+- dom(s1,s2) = true iff suit s1 beats or is equal to suit s2 relative to the ordering Spades > Hearts > Diamonds > Clubs
+- (Spades, _) means Spades and anything
+- (s1, s2) -> s1=s2 will return the result of s1=s2
+- Compiler gives you warning if it's not exhaustive and tells you some that aren't matched
+* Lecture 4 <2017-09-19 Tue>
+** Data Types and Pattern Matching Continued
+- Type is unordered
+- type suit = Clubs | Spades | Hearts | Diamonds
+  - Order doesn't matter here, but they must start with capitals
+- type rank = Two | Three | ...
+- type card = rank * suit
+What is a hand? A hand is either empty or if c is a card and h is a hand then Hand(c,h). Nothing else is a hand. Hand is a constructor. hand is a type. (capitalization mattersA)
+- Recursive user defined data type
+- Inductive or recursive definition of a hand
+  - Add a card to something that is a hand, still a hand
+*** Recursive data type
+- type hand = Empty | Hand of card * hand
+**** Typing into interpreter
+- Empty;;
+  - hand = Empty
+- let h1 = Hand ((Ace, Spades),Empty);;
+  - Want only 1 card, so include empty
+  - Recursive data type, so it needs another hand in it
+- let h2 = Hand ((Queen, Hearts), Hand((Ace,Spades), Empty);;
+  - Recursive
+- let h3 = Hand ((Joker, Hearts), h2) ;;
+  - Error, Joker not defined
+- type 'a list = Nil | Cons of 'a * 'a list
+- Hand ((Queen, Hearts), (King, Spades), (Three, Diamonds));;
+  - Hand has type? card * card * card
+  - Get an error, because constructor Hand expects 2 arguments (card+hand)
+*** Extract Example
+- Given a hand, extract all cards of a certain suit
+- extract: suit -> hand -> hand
+# - let rec extract (s:suit) (h:hand) = raise Not_Implemented
+  
+#+BEGIN_SRC ocaml
+let rec extract (s:suit) (h:hand) = match h with
+  | Empty -> Empty (* We are constructing results, not destructing given hand *)
+  (* Want to extract suit from first card *)
+  | Hand ( (r0.s0) ,h) -> 
+     (*Make a hand with first card and remaining results of recursive ext*)
+     if s0 = s then Hand( (r0, s0), extract s h0)
+     else extract s h0
+#+END_SRC
+Hand is "destroyed" through this method, but old hand stays the same, it is not modified.
+- Running extract Spades hand5;; will give a new hand with only spades
+- Good exercise, write a function that counts how many cards in the hand
+- Can we make this thing tail recursive?
+
+#+BEGIN_SRC ocaml
+let rec extract' (s:suit) (h:hand) acc = match h with
+  | Empty -> acc (* Accumulator *)
+  (* Want to extract suit from first card *)
+  | Hand ( (r0.s0) ,h) -> 
+     (*Make a hand with first card and remaining results of recursive ext*)
+     if s0 = s then extract' s h0 (Hand( (r0, s0), acc))
+     else extract' s h0 acc
+#+END_SRC
+
+- extract' Spades hand5 Empty ;;
+- Gives same cards but in the reverse order of extract
+- extract Spades hand5 = extract' Spades hand5 Empty ;;
+  - False
+
+- Write a function find which when given a rank and a hand, finds the first card in hand of the specified rank and returns its corresponding suit.
+What if no card exists?
+- Optional Data Type (predefined)
+- type 'a option = None | Some of 'a
+* Lecture 5 <2017-09-21 Thu>
+#+INCLUDE: "Test/5.ml" src ocaml
+** Lists
+What are lists?
+- Nil([]) is a list
+- Given an element x and a list l x::l is a list
+- Nothing else is a list
+- [] is an $'\alpha$ list
+  - Given an element x of type $'\alpha$ and l of type $'\alpha$ list
+  - x :: l is an $'\alpha$ list (i.e. a list containing elements of type $'\alpha$)
+- ; are syntactical sugar to separate elements of a list
+** Execution
+Understand how a program is executed
+- *Operational Semantics*
+* Lecture 6 <2017-09-22 Fri> 
+** Proofs
+*** Demo: lookup & insert
+#+INCLUDE: "Test/6.ml" src ocaml
+- What is the relationship between lookup and insert?
+*** How to prove it?
+**** Step 1
+We need to understand how programs are executed (operational semantics)
+   - $e \Downarrow v$ expression $e$ evaluates in multiple steps to the value $v$. (*Big-Step*)
+   - $e \Rightarrow e'$ expression $ee$ evaluates in one steps to expression $e'$. (*Small-Step (single)*)
+   - $e \implies * e'$ expression $e$ evaluates in multiple steps to expression $e'$ (*Small-Step (multiple)*)
+
+For all l, v, k, lookup k (insert k v l) $\implies *$ Some v
+Induction on what?
+**** Step 2
+$P(l) = lookup k$ (insert$(k,v) l$) $\Downarrow$ Some $v$
+- How to reason inductively about lists?
+   - Analyze their structure!
+   - The recipe ...
+   - To prove a property $P(l)$ holds about a list $l$
+     - Base Case: $l = []$
+       - Show $P([])$ holds
+     - Step Case: $l=x::xs$
+       - IH $P(xs)$ (Assume the property $P$ holds for lists smaller than $l$)
+     - Show $P(x::xs)$ holds (Show the property $P$ holds for the original list $l$)
+**** Theorem
+For all $l, v, k$, lookup $k$ (insert $(k,v) l$) $\implies *$ Some $v$
+**** Proof
+Proof by structural inductional on the list $l$
+- Case: $l = []$
+  - lookup k (insert(k,v)[])
+  - $\stackrel{\text{By insert program}}{\implies}$ lookup k [(k,v)] (same as (k,v)::[]) $\stackrel{\text{By lookup}}{\implies}$ Some $v$
+    - Would not hold if we didn't put the k=k case
+- Case: $l=h::t$ where $h=(k',v')$
+  - IH: For $k,v$ lookup $k$ (insert (k,v) t) $\Downarrow$ Some $v$
+  - To show: lookup k (insert (k,v)) $\underbrace{(k',v')::t}_l \Downarrow$ Some $v$
+  - Subcase: $k=k'$
+    - lookup k (insert (k,v) ((k', v')::t))
+    - $\stackrel{\text{By insert}}{\implies}$ lookup k ((k,v)::t)
+    - $\stackrel{\text{By lookup}}{\implies}$ Some v (good)
+  - Subcase: $k<k'$
+    - lookup k (insert(k,v) ((k',v'):: t))
+    - $\stackrel{\text{By insert}}{\implies}$ lookup k ((k,v)::l)
+    - $\stackrel{\text{By lookup}}{\implies}$ Some v (good)
+  - Subcase: $k>k'$
+    - lookup k (insert(k,v) ((k',v')::t))
+    - $\stackrel{\text{By insert}}{\implies}$ lookup k ((k', v')::insert (k,v) t)
+    - $\stackrel{\text{By lookup}}{\implies}$ lookup k (insert (k,v) t)
+    - $\stackrel{\text{By IH}}{\implies}$ Some $v$
+**** Lesson to take away
+- State what you are doing induction on
+  - Proof by structural induction in the list l
+- Consider the different cases!
+- For lists, there are two cases- either l =[] or l = h::t
+- State your induction hypothesis
+  - IH: For all v,k, lookup insert (k,v) t $\Downarrow$ Some $v$
+- Justify your evaluation / reasoning steps by
+  - Referring to evaluation of a given program
+  - The induction hypothesis
+  - Lemmas/ Properties (such as associativity, commutativity)
+* Lecture 7 <2017-09-26 Tue> 
+** Structural Induction
+- How do I prove that all slices of cake are tasty using structural induction?
+  - Define a cake slice recursively
+  - Prove that a single piece of cake is tasty
+  - Use recursive definition of the set to prove that all slices are tasty
+  - Conclude all are tasty
+*** Example with rev
+
+#+BEGIN_SRC ocaml
+(* naive *)
+(* rev: 'a list -> 'a list *)
+let rec rev l = match l with
+| [] -> []
+| x::l -> (rev l) @ [x];;
+
+(* tail recursive *)
+(* rev': 'a list -> 'a list *)
+let rev' l =
+(* rev_tr: 'a list -> 'a list -> 'a list *)
+let rec rev_tr l acc = match l with
+| [] -> acc
+| h::t -> rev_tr t (h::acc)
+in
+rev_tr 1 [];;
+
+(* Define length *)
+let rec length l = match l with
+| [] -> 0
+| h::t -> 1+length t  
+#+END_SRC 
+**** Theorem:
+For all lists l, rev l = rev' l.
+
+What is the relationship between l, acc and rev_tr l acc?
+
+- Invariant of rev
+  - length l = length (rev l)
+- Invariant rev_tr
+  - length l + length acc = length(rev_tr l acc)
+- How are these related?
+
+------
+- rev l $\Downarrow$
+- rev_tr l acc $\Downarrow$ v
+- Not quite because:
+  - rev [] $\Downarrow$ []
+  - rev_tr [] acc $\Downarrow$ acc
+  - Not returning the same thing given empty list
+- Slightly modified so it's right:
+  - rev l @ acc $\Downarrow$ v
+  - rev_tr l acc $\Downarrow$ v
+
+# Let's test it.
+# acc = []
+----------
+
+For all l, acc, (rev l) @ acc $\Downarrow$ v and rev_tr l acc$\Downarrow$ v
+By induction on the list l.
+- Case l=[]
+  - rev [] @ acc
+  - $\stackrel{\text{prog rev}}{\rightarrow}$ [] @ acc $\rightarrow$ acc
+  - rev_tr [] acc
+  - $\stackrel{\text{by prog rev\_tr}}{\rightarrow}$ acc
+- Case $l=h::t$
+  - *IH: For all acc rev t @ acc $\Downarrow$ v and rev_tr t acc $\Downarrow$ v*
+  - rev (h::t) @ acc $\stackrel{\text{by rev}}{\rightarrow}$ (rev t @ [h])@acc
+    - $\stackrel{\text{By associativity of @}}{\rightarrow}$ rev t @ ([h] @ acc)
+    - $\stackrel{\text{@}}{\rightarrow}$ rev t @ (h::acc)
+  - rev_tr (h::t) acc $\rightarrow$ rev_tr t (h::acc)
+  - By the IH rev t @ (h::acc) $\Downarrow$ v and rev_tr t (h::acc) $\Downarrow$ v
+
+# We often simply write:
+# For all l, acc, 
+# - length(rev_tr) =
+** Trees
+#+INCLUDE: Test/7.ml src ocaml
+* Lecture 8 <2017-09-28 Thu> 
+** Binary Tree (Inductive definition)
+- The empty binary tree empty is a binary tree
+- If l and r are binary trees and v is a value of type 'a then Node(v, l, r) is a binary tree
+- Nothing else is a binary tree
+
+How to define a recursive data type for trees in OCaml?
+
+#+BEGIN_SRC ocaml
+type 'a tree =
+Empty
+| Node of 'a * 'a tree * 'a tree |
+#+END_SRC                              
+** Insert
+  Want to make a function insert
+  - Given as input (x,dx), where x is key and dx is data and a binary search tree t
+    - Return a binary search tree with (x,dx) inserted
+    - What is insert's type?
+      - (a' * b') $\to$ ('a $\times$ 'b)tree $\to$ ('a $\times$ 'b) tree
+  - Good exercise: write a function to check if a tree is a binary search tree or not
+    - Good exam question
+
+#+INCLUDE: "Test/8.ml" src ocaml
+
+** Proving
+- How to reason inductively about trees? Analyze their structures!
+
+** Theorem
+For all trees t, keys x, and data dx, lookup x(insert (x, dx) t) $\Rightarrow*$ Some dx
+*** Proof by structural induction on the tree t
+(You get points on an exam for mentioning what kind of induction, structural induction on tree, points for base case/case, points for stating induction hypothesis, perhaps multiple. Then show by a sequence of steps of how to get from what to show to the end)
+- Case t = Empty
+  - lookup x (insert (x, dx) Empty) $\stackrel{\text{By insert}}{\Rightarrow}$ lookup x (Node ((x,dx), Empty, Empty)) $\stackrel{\text{by lookup}}{\Rightarrow}$ Some dx
+- Case t = Node ( (y,dy), l, r)
+  - Both trees l and r are smaller than t
+  - IH1: For all x, dx, lookup x (insert (x,dx) l) $\Rightarrow*$ Some dx
+  - IH2: For all x, dx, lookup x (insert(x,dx) r) $\Rightarrow*$ Some dx
+- Need to show lookup x (insert (x, dx) Node ((y, dy), l, r))
+- Show 3 cases (x < y, x = y, y < x)
+  - x < y $\Rightarrow$ lookup x (Node((y,dy), insert (x,dx) l, r)) $\stackrel{\text{By lookup}}{\Rightarrow}$ lookup x (insert (x,dx) l) $\stackrel{\text{by IH 1}}{\Rightarrow}$ Some dx
+  - x=y lookup x(insert (x,dx) Node ((y, dy), l, r)) $\stackrel{\text{by ins}}{\Rightarrow}$ lookup x (Node ((x,dx), l, r)) $\stackrel{\text{by lookup}}{\Rightarrow}$ Some dx
+
+-------
+Exercise: write a type for cake (2 slice of cake together become 1 slice), with weight
+* Lecture 9 <2017-09-29 Fri> 
+** Higher-order functions
+- Allows us to abstract over common functionality
+- Programs can be very short and compact
+- Very reusable, well-structured, modular
+- Each significant piece implemented in one place
+- Functions are first-class values!
+  - Pass functions as arguments (today)
+  - Return them as results (next week)
+*** Abstracting over common functionality
+Want to write a recursive function that sums up over an integer range: $\sum_{k=a}^{k=b}k$
+
+#+BEGIN_SRC ocaml
+let rec sum (a,b) =
+if a > b then 0 else a + sum(a+1,b)
+#+END_SRC
+
+Now what if we want to make a sum of squares? $\sum_{k=a}^{k=b}k^2$
+
+#+BEGIN_SRC ocaml
+let rec sum (a,b) =
+if a > b then 0 else square(a) + sum(a+1,b)
+#+END_SRC
+
+$\sum_{k=a}^{k=b}2^k$
+
+#+BEGIN_SRC ocaml
+let rec sum (a,b) =
+if a > b then 0 else exp(2,a) + sum(a+1,b)
+#+END_SRC
+
+- So you can reimplement the function every time, but it would be more useful to make a sum function that will sum up what you tell it to (what to do to each element)
+- Non-Generic Sum (old)
+  - int * int -> int
+- Generic Sum using a function as an argument
+  - (int -> int) -> int * int -> int
+
+** Demo
+#+INCLUDE: "Test/9.ml" src ocaml
+
+- How about only summing up odd numbers?
+
+#+BEGIN_SRC ocaml
+let rec sumOdd (a,b) =
+if (a mod 2) = 1 then 
+sum (fun x -> x) (a, b)
+else 
+sum (fun x -> x)(a+1, b)
+#+END_SRC
+
+
+- Adding increment function
+#+BEGIN_SRC ocaml
+let rec sum f (a, b) inc =
+if (a > b) then 0 else (f a) + sum f (inc(a), b) inc
+
+
+let rec sumOdd (a,b) =
+if (a mod 2) = 1 then 
+sum (fun x -> x) (a, b) (fun x -> x+1)
+else 
+sum (fun x -> x)(a+1, b) (fun x-> x+1)
+#+END_SRC
+
+- How about only multiplying?
+
+#+BEGIN_SRC ocaml
+let rec product f (a, b) inc =
+if (a > b) then 1 else (f a) * product f (inc(a), b) inc
+#+END_SRC
+
+- Can make this tail recursive with accumulators for base (1 for prod, 0 for sum)
+----------------
+- Types: 
+  - (int -> int -> int) : comb
+
+  - series: -> (int -> int) : f
+
+  - int * int : a,b lower and upper bound
+
+  - int -> int : inc
+
+  - int : base
+
+Types can get crazy, too much abstraction may lead to less readability
+** Bonus
+Approximating the integral
+- $l = a + dx/2$
+  - Use rectangles to approximate
+  - Left side of l is above the rectangle, right side is below, approximation should almost cancel them
+  - $\int_a^b f(x) dx \approx f(l)*dx + f(l+dx)*dx+f(l+dx+dx)*dx+\ldots =dx * (f(l)+f(l+dx)+f(l+2*dx)+f(l+3*dx) \ldots)$
+
+Want: sum: $\underbrace{(float -> float)}_f -> (\underbrace{float}_l * \underbrace{float}_u) -> \underbrace{(float -> float)}_{inc} -> float$
+
+#+BEGIN_SRC ocaml
+let integral f (a,b) dx =
+dx * sum f (a+.(dx/2.),b) (fun x-> x+. dx)
+(* Follows format of sum function above
+Can easily write a short program like above*)
+#+END_SRC
