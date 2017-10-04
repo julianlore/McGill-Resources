@@ -1,0 +1,1623 @@
+% Created 2017-10-03 Tue 17:17
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{wasysym}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 25.3.1 (Org mode 9.1.1)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Lecture 1 \textit{<2017-09-05 Tue>}}
+\label{sec:org0691fc4}
+Logic \& Computability
+Prof. Dirk Schlimm
+\begin{itemize}
+\item Find out what Schlimm means for the next lecture
+\item Great for people in computer science, but everyone else too
+\begin{itemize}
+\item Essential material that everyone should know
+\item Stable material, as the material is old
+\item Very abstract and technical material, even if it does not require a solid mathematical background
+\item \uline{Hard} course
+\begin{itemize}
+\item Important to give feedback to the professor
+\end{itemize}
+\end{itemize}
+\end{itemize}
+This course complements the textbook, Godel, Escher Bach.
+
+\subsection{Homework}
+\label{sec:org03595e5}
+is not graded, just checked if done.
+\begin{itemize}
+\item Why?
+\begin{itemize}
+\item To motivate us to do homework exercises
+\item Practice is important, the course is hard
+\item TAs don't need to correct them, so they can hold more office hours
+\end{itemize}
+\end{itemize}
+
+Discussion board on MyCourses. Do not email the professor, ask questions on discussion board so everyone can see the answer (incase they have the same question).
+
+Some times there will be intentional mistakes on the board.
+\begin{itemize}
+\item To make it easier to ask questions
+\item To motivate us to pay attention
+\end{itemize}
+
+There are no stupid questions, even if you ask the same question as the person before you. Perhaps the professor's answer was unclear.
+The most stupid question is the one not being asked.
+\subsection{Quizzes}
+\label{sec:org7867855}
+\begin{itemize}
+\item 3 quizzes throughout this course
+\item Dates will be on the schedule on professor's website
+\item In class, 15-20 minutes long
+\item Each one is graded and worth 10\%
+\item Fairly straightforward, some are even definitions
+\item To make sure you've done your work
+\end{itemize}
+
+Midterm is 25\%, Final is 40\%
+
+\subsection{Proofs}
+\label{sec:org10af7da}
+We will see lots of proofs, different kinds of proofs.
+\begin{itemize}
+\item Direct: Go from assumption towards the theorem
+\item Indirect: Negation of claim \(\rightarrow\) contradiction \(\rightarrow\) claim
+\begin{itemize}
+\item Sometimes called proof by contradiction
+\end{itemize}
+\item Biconditional: \(2\) claims, \(p,q\)
+\begin{itemize}
+\item Start with \(p\) and prove \(q\) but also start with \(q\) and prove \(p\)
+\end{itemize}
+\item By cases: Split claim into several cases
+\begin{itemize}
+\item case 1, case 2, case 3
+\item Each one proves the same conclusion
+\item If the cases were exhaustive, then you have proved the claim
+\end{itemize}
+\item Induction (to be taught next lecture)
+\end{itemize}
+
+So you can split a proof into subproofs of these kinds.
+
+\subsubsection{Example Proofs}
+\label{sec:orgac0459f}
+\begin{enumerate}
+\item Thm
+\label{sec:org4c2c310}
+\(\sqrt{2}\) is nor rational.
+\begin{itemize}
+\item Rational: Fractions: \(\frac{x}{y}\)
+\end{itemize}
+If you have a square with sides of length 1, the length of the diagonal is \(\sqrt{2}\)
+Pythagoras proved this.
+\begin{enumerate}
+\item Def 1
+\label{sec:org769e9b2}
+A natural number \(a\) is \uline{even} if and only if (iff) \(\exists\) a natural number \(b\), such that \(a=2b\).
+\item Lemma 1
+\label{sec:org4e3e9b8}
+For any number \(a\), \(a^2\) is even \uline{iff} \(a\) is even.
+\begin{itemize}
+\item Biconditional, since iff
+\end{itemize}
+\begin{enumerate}
+\item Proof:
+\label{sec:org8c02049}
+\(\leftarrow\) Assume: \uline{\(a\) is even}.
+So there is: \(a=2b\) (by def. 1)
+
+\(a^2=(2b)^=4b^2=2(\underbrace{2b^2}_c)\) (square)
+So, \uline{\(a^2\) is even}, since it is \(2\) times \(c\), a natural number.
+
+\(\rightarrow\) (DIY)
+Assume: \uline{\(a^2\) is even}.
+So there is: \(a^2=2b\) (by def. 1)
+\end{enumerate}
+
+\item Lemma 2
+\label{sec:org9b0e3c1}
+For any rational number \(x\), there are natural numbers \(a\) and \(b\), \uline{not both even}, s.t. \(x=\frac{a}{b}\)
+\begin{itemize}
+\item If they were both even, you could simplify the fraction by dividing by 2.
+\end{itemize}
+Proof omitted for this lemma.
+\item Proof of Thm:
+\label{sec:orgb729a86}
+Indirect proof. (Contradiction)
+Assume (for reductio/contradiction): \(\sqrt{2}\) is rational.
+By Lemma 2, \(\exists\) natural numbers \uline{\(a\) and \(b\) not both even} s.t. \(\sqrt{2}=\frac{a}{b}\)
+
+Square: \(2=\left(\frac{a}{b}\right)^2=\frac{a^2}{b^2}\)
+\(a^2=2b^2\)
+
+So \(a^2\) is even (by def. 1)
+\uline{\(a\) is even} by (lemma 1)
+If \(a\) is even, we can write: \(a=2c\) (by def 1)
+Square: \(a^2=(2c)^2=4c^2=a^2\)
+
+\(4c^2=2b^2\)
+
+Divide by 2: \(2c^2=b^2\)
+So \(b^2\) is even (def. 1)
+\uline{\(b\) is even} (by lemma 1)
+
+Contradiction! Assumption is false, therefore \(\sqrt{2}\) is \uline{not} rational. \(\Box\)
+\end{enumerate}
+\item {\bfseries\sffamily TODO} Download Handout and read it
+\label{sec:org4ae8e73}
+\end{enumerate}
+\section{Lecture 2 \textit{<2017-09-07 Thu>}}
+\label{sec:orga2369da}
+Last class we talked about proofs \& types of proofs.
+Next week we'll be talking about sets and countability and comparing them all. Will talk about density of rationals and irrationals, to say which is bigger.
+\subsection{Things that are infinite}
+\label{sec:orgc2d667e}
+\begin{itemize}
+\item Natural numbers
+\item Rational numbers
+\item Infinite lists
+\end{itemize}
+\begin{enumerate}
+\item How do you prove things about infinitely large things?
+\label{sec:orgb0f6384}
+\begin{itemize}
+\item Counter example
+\begin{itemize}
+\item All swans are white
+\begin{itemize}
+\item Show one that isn't white
+\end{itemize}
+\end{itemize}
+\item Pick an arbitrary example and show that it works for that
+\begin{itemize}
+\item Use particular properties about an arbitrary object to show that something works for all of them
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\subsection{Mathematical induction}
+\label{sec:orgf5a5bae}
+\begin{itemize}
+\item Inference (step):
+\begin{itemize}
+\item Certain number of assumptions/premises \(A_n\ldots A_n\)
+\item Conclusion
+\end{itemize}
+\end{itemize}
+\subsubsection{Deduction:}
+\label{sec:org0bab790}
+\begin{itemize}
+\item It is impossible for the premises of an inference step to be \uline{true} and the conclusion \uline{false}.
+\item The conclusion follows \uline{necessarily} from the premises. (reformulation of above)
+\end{itemize}
+\begin{enumerate}
+\item e.g.
+\label{sec:org616fe5e}
+\(\frac{\text{if }A \text{ then }B \hspace{5 pt}A}{B}\)
+\begin{itemize}
+\item MODUS PONENS (type of deductive inference)
+\end{itemize}
+\end{enumerate}
+\subsubsection{Induction:}
+\label{sec:orgd1bca05}
+\begin{itemize}
+\item The premises make the conclusion \uline{more likely}
+\item My cat is smart, my friend's cat is smart, my parent's cat is smart, so all cats are smart
+\begin{itemize}
+\item Inductive argument, makes it more likely, but doesn't see them all
+\end{itemize}
+\end{itemize}
+\subsubsection{Inductive or Deductive?}
+\label{sec:orgdb847f7}
+\begin{enumerate}
+\item Claim
+\label{sec:orgfa362df}
+Let \(n\) be the number of points on a circle. Then the number of regions obtained by pairwise connecting each point is \(R=2^{n-1}\)
+\begin{enumerate}
+\item Argument
+\label{sec:org0d758d6}
+\begin{center}
+\begin{tabular}{ll}
+\(n\) & \(R\)\\
+\hline
+\(1\) & \(1=2^0\)\\
+\(2\) & \(2=2^1\)\\
+\(3\) & \(4=2^2\)\\
+\(4\) & \(8=2^3\)\\
+\(5\) & \(16=2^4\)\\
+\(6\) & \(31\)\\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i1.png}
+\end{center}   
+
+\begin{itemize}
+\item Inductive argument
+\item What was wrong with the argument?
+\begin{itemize}
+\item We saw a pattern, but\ldots{}
+\begin{itemize}
+\item There's no reason for the jump from each \(n\) to have something in common
+\item If they had something in common, then it would continue holding for the next one
+\end{itemize}
+\item Therefore induction makes the premise more likely
+\begin{itemize}
+\item But does not establish it deductively
+\end{itemize}
+\item So in order to rigorously prove something inductively, we need mathematical induction
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\end{enumerate}
+
+\subsection{Handout}
+\label{sec:org442a777}
+\subsubsection{Recursive (inductive) definition:}
+\label{sec:orgf550971}
+\begin{enumerate}
+\item Base clause(s) defines basic elements.
+\item Inductive clause(s): How to build up complex elements from parts
+\item Final clause: Nothing else is an element (bookkeeping)
+\end{enumerate}
+\begin{enumerate}
+\item E.g.
+\label{sec:org342cf2d}
+\begin{enumerate}
+\item \(\mathbb{N}\)
+\begin{itemize}
+\item Base clause \(0\) is in \(\mathbb{N}\)
+\item Inductive clause: if \(x \in \mathbb{N}\) then \(s(x)\) (successor of \(x\)) then \(s(x)\) is in \(\mathbb{N}\)
+\item Final clause: Nothing else is in \(\mathbb{N}\)
+\item So natural numbers are:
+\begin{itemize}
+\item \(0, s(0), s(s(0)), \ldots\)
+\end{itemize}
+\end{itemize}
+\item Even numbers or odd numbers
+\begin{itemize}
+\item Take successor of successor, take \(0\) as base clause for even, \(1\) for odd
+\end{itemize}
+\item Lists
+\begin{itemize}
+\item Empty list is a list
+\item What you get from adding to a list is also a list
+\end{itemize}
+\item Dominoes
+\begin{itemize}
+\item When you have a domino, you can place one 2 cm behind it
+\item Push first one, they all fall
+\begin{itemize}
+\item To prove they all fall, have to show they all have a certain amount of space between them
+\begin{itemize}
+\item Relates to proof by mathematical induction
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\item Proof by mathematical induction
+\label{sec:orgd1bc45e}
+\begin{enumerate}
+\item Base case: Show that the property holds of the basic elements.
+\item Inductive step:
+\begin{enumerate}
+\item Assume that the property holds for some element \(n\) (Inductive Hypothesis)
+\item \uline{Show}: holds for elements generated from \(n\) by inductive clauses.
+\end{enumerate}
+\item Conclusion: Property holds \uline{for all} elements.
+\end{enumerate}
+This is \textbf{deductive inference}!
+What are the premises?
+\begin{itemize}
+\item For natural numbers:
+\begin{itemize}
+\item \(\frac{\overbrace{P(0)}^{\text{Base case}} \overbrace{P(n)}^{\text{IH}}\overbrace{\to}^{\text{Ind. step}} P(s(n))}{\forall x P(x)}\)
+\end{itemize}
+\end{itemize}
+\item Variant (strong/complete induction):
+\label{sec:org858a8d1}
+\begin{itemize}
+\item \uline{Ind. Step.}
+\begin{enumerate}
+\item Assume that \(P\) holds for all elements \uline{less than} \(n\)
+\item Show: \(P\) holds of \(n\)
+\end{enumerate}
+\item \uline{No base case}
+\item See example 5.5!
+\end{itemize}
+\end{enumerate}
+\subsubsection{Theorem}
+\label{sec:org3eabf67}
+For any nat. number \(n\geq 1\), the sum \(\underbrace{1+2+\ldots+n}_{\sum_i=1^n i}=\frac{n(n+1)}{2}\)
+(If you do a proof for your homework or on an exam, always include many details. You can even use a template to structure your proofs the same way, useful for steps for induction.)
+\begin{enumerate}
+\item Proof (by math. ind)
+\label{sec:org268e924}
+\begin{enumerate}
+\item Base case: Show claim holds for \(n=1=\frac{1(1+1)}{2}\)
+\item Ind. step.
+\begin{enumerate}
+\item I.H. The claim holds for \(m\): \(\sum_{i=1}^m i = \frac{m(m+1)}{2}\)
+\item Show: The claim holds for \(m+1\)
+\end{enumerate}
+\end{enumerate}
+2 strategies, either \(\frac{n(n+1)}{2}\to {1+2+\ldots+n}\) or \({1+2+\ldots+n}\to \frac{n(n+1)}{2}\). Will be doing 2nd.
+\(1+2+\ldots+(m+1)=\sum_{i=1}^{m+1}i=\sum_{i=1}^m i + (m+1)\)
+
+\(=\frac{m(m+1)}{2}+(m+1)\) (by I.H.)
+
+\(=\frac{m(m+1)+2m+2}{2}=\frac{(m+1)(m+2)}{2}\)
+\begin{enumerate}
+\item Conclusion: The claim holds \uline{for all} \(n\geq 1\) \(\Box\)
+\end{enumerate}
+\end{enumerate}
+\section{Lecture 3 \textit{<2017-09-12 Tue>}}
+\label{sec:org73e4043}
+\subsection{Set theory}
+\label{sec:org6f650dc}
+All that is being said here is taken from the reading mathematical introduction to logic chapter zero.
+
+A \uline{set} is a thing with elements. We can present sets in two ways:
+\begin{itemize}
+\item Extensional:
+\begin{itemize}
+\item Presentation
+\item \(\{1,2,3\}\)
+\end{itemize}
+\item Intensional:
+\begin{itemize}
+\item Given a set \(A\), and a property \(P\): \(\{x\in A|P(x)\}\)
+\end{itemize}
+\end{itemize}
+\subsubsection{Ex}
+\label{sec:orgf769d44}
+\(\mathbb{N}\): the set of natural numbers.
+
+\(D=\{x\in \mathbb{N}|x \text{ is prime}\}=\{2,3,5,7,11, \ldots\}\)
+\subsubsection{Definitions}
+\label{sec:org7c9f8c6}
+\begin{itemize}
+\item \(A\subseteq B \iff \forall x, x\in A \implies x \in B\)
+\item \(A=B \iff (A\subseteq B) \wedge (B\subseteq A)\)
+\item \(A \underbrace{\subset}_{\text{Proper subset}} B \iff (A\subseteq B)\wedge (A\neq B)\)
+\item Empty set: \(\emptyset, \{\}\)
+\begin{itemize}
+\item When is \(x\in \emptyset\)? Never.
+\item \(\emptyset \subseteq X\)? Always.
+\begin{itemize}
+\item Since all elements of the empty set are in \(X\).
+\end{itemize}
+\item \(\emptyset \in X\)?. If \(X\) contains \(\emptyset\).
+\begin{itemize}
+\item E.g. \(X=\{\{\},4\}\)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\(A=\{2,4,8\}, B=\{a,4,z\}\)
+\begin{itemize}
+\item \(\underbrace{A\cap B}_{\text{intersection}}: \forall x, (x\in A) \wedge (x\in B)\)
+\begin{itemize}
+\item \(A\cap B = \{4\}\)
+\end{itemize}
+\item \(\underbrace{A\cup B}_{\text{union}}: \forall x, (x\in A) \vee (x\in B)\)
+\begin{itemize}
+\item \(A\cup B = \{2,4,8,a,z\}\)
+\end{itemize}
+\item complement: \(\bar{A}:\) all elements that are not in \(A\) (from the \uline{universe of discourse}, the universe we're talking about)
+\item Power set \(\frak{P}(A):\) the set of all subsets of \(A\)
+\begin{itemize}
+\item E.g. \(\frak{P}(B)=\{\emptyset,\{a\},\{4\},\{z\},\{a,4\},\{a,z\},\{4,z\},\{a,4,z\}\}\)
+\item If \(A\) has \(n\) elements, \(\frak{P}(A)\) has \(2^n\) elements.
+\end{itemize}
+\item Is \(\{\emptyset,a\}\subseteq\{a,4,z\}\)? No.
+\end{itemize}
+\subsection{Tuples:}
+\label{sec:orgb126b9f}
+Like sets, but order matters.
+\begin{itemize}
+\item Ordered pair: \(\langle a,b \rangle = \{\{a\},\{a,b\}\}\)
+\item \(\langle a,4,z \rangle \neq \langle 4,a,z \rangle\)
+\end{itemize}
+\subsubsection{Cross-product}
+\label{sec:org588e458}
+\(A \times B \iff \{\langle x,y \rangle|x \in A \wedge y\in B\}\)
+\begin{itemize}
+\item If \(A\) has \(n\) elements, \(B\) has \(m\) elements
+\item then \(A \times B\) has \(n\cdot m\) elements
+\item and there are \(2^{n \cdot m}\) relations between \(A\) and \(B\)
+\begin{itemize}
+\item Since this is essential just the cardinality of the power set of the cross product
+\item E.g. \(n=5, m=5\). 2 pairs of 5 friends. How many relations are possible? \(2^{25}=33,554,432\)
+\end{itemize}
+\end{itemize}
+\subsubsection{Relations}
+\label{sec:orgbb5c86e}
+\begin{itemize}
+\item \(A=\{\text{John, Paul, George}\}\)
+\item \(B=\{\text{guitar, bass}\}\)
+\item \(\{\langle \text{John, guitar}\rangle, \langle \text{Paul, bass} \rangle, \langle \text{George, guitar} \rangle\}=R_1\)
+\item \(R_2 = \{\langle \text{John, bass} \rangle\}\)
+\end{itemize}
+A \uline{relation} \(R\) on \(A\) and \(B\) is a subset of \(A\times B\).
+\begin{itemize}
+\item Elements of relations are tuples.
+\end{itemize}
+\uline{Domain} of a relation \(R: \{a| \text{there is a b, s.t. }\langle a,b \rangle \in R\}\)
+\begin{itemize}
+\item domain of \(R_1: \{\text{John, Paul, George}\}\)
+\item domain of \(R_2: \{\text{John}\}\)
+\end{itemize}
+\uline{Range} of a relation \(R\): \(\{b| \text{there is an a, s.t. } \langle a,b
+ \rangle \in R\}\)
+\begin{enumerate}
+\item Functions
+\label{sec:org4718713}
+A total \uline{function} \(f:A\to B\) is a binary relation \(R\), on \(A\) and \(B\) such that.
+\begin{itemize}
+\item It is \uline{single-valued}
+\begin{itemize}
+\item Every element in \(A\) is mapped to exactly one element in \(B\)
+\end{itemize}
+\item The domain of \(R\) is \(A\)
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i2.png}
+\end{center}
+\begin{enumerate}
+\item Definitions
+\label{sec:orga978f16}
+\begin{itemize}
+\item A function is \uline{injective} (one-to-one), if each element in the range is mapped to by exactly one element.
+\begin{itemize}
+\item To show this: Assume \(f(x)=f(y)\)
+\begin{itemize}
+\item Show \(x=y\)
+\end{itemize}
+\item So you don't have the situation that: \begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i3.png}
+\end{center}
+\end{itemize}
+\end{itemize}
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i4.png}
+\end{center} 
+
+\begin{itemize}
+\item A function is \uline{surjective} if the \(range=codomain\).
+\item A function that is both injective and surjective is \uline{bijective}.
+\end{itemize}
+\end{enumerate}
+\end{enumerate}
+\section{Lecture 4 \textit{<2017-09-14 Thu>}}
+\label{sec:org3cd00cf}
+\subsection{Recap}
+\label{sec:org3a88108}
+We talked about sets last class, such as:
+\begin{itemize}
+\item \(\{1,4,z\}\)
+\item \(|\{1,4,z\}| = 3\) (Cardinality)
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+Are there more students or chairs in this class? 
+\begin{itemize}
+\item There are more chairs.
+\item Matched students with chairs and to see what is left
+\item f(students) \(\to\) chairs
+\begin{itemize}
+\item Injective function (can't have 2 students on one chair)
+\item Every element of the range must be mapped to something
+\item No element in the range can map to two elements
+\end{itemize}
+\item \(\implies |S| \leq |C| \iff\) there is an injective function from \(S\) to \(C\).
+\end{itemize}
+
+Cantor: \(|A|=|B| \iff |A| \leq |B|\) and \(|B|\leq |A| \iff\) there is a bijection between \(A\) and \(B\).
+\subsection{More on sets}
+\label{sec:org335c1c4}
+\subsubsection{Cardinalities}
+\label{sec:org5a374da}
+A set D is \uline{finite} if its cardinality is a natural number.
+\begin{itemize}
+\item \(D \leftrightarrow \{1,\ldots,n\}\) (bijective function with natural numbers exists)
+\end{itemize}
+A set is \uline{countably infinite} (denumerable), if it is equinumerous to \(\mathbb{N}\) (bijection from this set to all the natural numbers).
+\begin{itemize}
+\item \(E=\{2,4,6,8,\ldots\}\)
+\begin{itemize}
+\item \(|E| = |\mathbb{N}| = |\mathbb{Z}|=|\mathbb{Q}|<|\mathbb{R}|\)
+\end{itemize}
+\end{itemize}
+\begin{center}
+\begin{tabular}{llllll}
+\(\mathbb{N}\) & \(1\) & \(2\) & \(3\) & \(4\) & \ldots{} \(n\)\\
+\hline
+\(E\) & \(2\) & \(4\) & \(6\) & \(8\) & \ldots{}\(2n\)\\
+\end{tabular}
+\end{center}
+\(f(x)=2x, \mathbb{N}\to E\)
+
+\(\mathbb{Z}=\{\ldots -3, -2, -1, 0, 1, 2, 3, \ldots\}\)
+\begin{itemize}
+\item Is this bigger than the cardinality of the natural numbers?
+\begin{itemize}
+\item No, it's the same size, bijection. Even to positive, odds to negative.
+\end{itemize}
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{lllllll}
+\(-3\) & \(-2\) & \(-1\) & \(0\) & \(1\) & \(2\) & \(3\)\\
+\hline
+\(5\) & \(3\) & \(1\) & \(0\) & \(2\) & \(4\) & \(6\)\\
+\end{tabular}
+\end{center}
+
+\(\mathbb{Q}^+ = \{\frac{x}{y}|x,y \in \mathbb{N}\}\)
+\begin{itemize}
+\item Are there more?
+\end{itemize}
+\begin{center}
+\begin{tabular}{rlllllll}
+ & 1 & 2 & 3 & 4 & 5 & 6 & \ldots{}\\
+\hline
+1 & 1/1 & 1/2 & 1/3 & 1/4 & 1/5 & 1/6 & \ldots{}\\
+2 & 2/1 & 2/2 & 2/3 & 2/4 & 2/5 & 2/6 & \ldots{}\\
+3 & 3/1 & 3/2 & 3/3 & 3/4 & 3/5 &  & \\
+4 & 4/1 & 4/2 & 4/3 & 4/4 &  &  & \\
+5 & 5/1 & 5/2 & 5/3 &  &  &  & \\
+6 &  &  &  &  &  &  & \\
+\end{tabular}
+\end{center}
+There are duplicates here though. So, instead of counting left to right, count diagonally.
+\begin{itemize}
+\item i.e. 1:1/1, 2:1/2, 3:2/1, 4:3/1, 5:2/2, 6:1/3, \ldots{}
+\end{itemize}
+
+\(\mathbb{R} = \mathbb{Q} \cup \{\text{irrationals}\}\)
+\begin{itemize}
+\item What are real numbers? All numbers that can be expressed via decimal expansion.
+\item \(x.xxxxx\ldots\)
+\item Is this countably infinite? No.
+\end{itemize}
+\subsubsection{Proof (by contradiction):}
+\label{sec:org1a7d2f2}
+Assume \(|\mathbb{N}|=|\mathbb{R}^{0.1}|\). 
+(\(\mathbb{R}^{0.1} = \{x \in \mathbb{R}| 0<x<1\}\).)
+
+Therefore, there is a bijection \(f: \mathbb{N} \to \mathbb{R}^{0.1}\)
+
+Then, we can build the following table:
+\begin{center}
+\begin{tabular}{ll}
+\(\mathbb{N}\) & \\
+\hline
+\(0\) & \(f(0)=0.12345\ldots\)\\
+\(1\) & \(f(1)=0.33333\ldots\)\\
+\(2\) & \(f(2)=0.5000 \ldots\)\\
+\(3\) & \(f(3)=0.011101\ldots\)\\
+\(4\) & \(\ldots\)\\
+\(\ldots\) & \(\ldots\)\\
+\(n\) & \(f(n)=0.112\ldots=z\)\\
+\end{tabular}
+\end{center}
+
+Can you explain this table? Not really. Why?
+\begin{itemize}
+\item Construct new number \(z\):
+\begin{itemize}
+\item \(z=0.z_1z_2z_3z_4\ldots\)
+\item Rule for constructing \(z\):
+\end{itemize}
+\end{itemize}
+\begin{equation*}
+z_i= \begin{cases}
+1 & \text{if } f(i)_j \neq 1 \text{ where $f(i)_j$ is the ith digit in the decimal expansion of f(i)}
+\\ 2 & \text{otherwise}
+\end{cases}
+\end{equation*}
+\begin{itemize}
+\item \(f(1)_1 = 3\)
+\item \(f(2)_2 = 0\)
+\item \(f(3)_3 = 1\)
+\item \(\implies z=0.112\ldots\)
+\item By construction, \(z\) is a real number between \(0\) and \(1\).
+\item So it must be in the table, say in line \(n\).
+\end{itemize}
+What is \(z_n\)?
+\begin{itemize}
+\item Two cases:
+\begin{itemize}
+\item \(z_n = 2 = f(n)_n\) if \(f(n)_n = 1 \lightning\)
+\item \(z_n = 1 = f(n)_n\) of \(f(n)_n \neq 1 \lightning\)
+\item \(\implies\) contradiction!
+\begin{itemize}
+\item The assumption is false.
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\section{Lecture 5 \textit{<2017-09-19 Tue>}}
+\label{sec:org4272b59}
+\begin{itemize}
+\item Quiz in one week
+\item 20 minutes, in class
+\item 8-10 questions, very simple
+\begin{itemize}
+\item Everything that was said in class
+\item Everything done in the homework
+\item Readings
+\end{itemize}
+\end{itemize}
+\subsection{Recap}
+\label{sec:org111c15c}
+Last class, we proved:
+(Size of Natural numbers) \(\aleph_0 < |\mathbb{R}|\)
+\(\implies\) Diagonalization
+\begin{itemize}
+\item We had a table and changed every element on the diagonal in order to get a new element
+\item We will see many more proofs by diagonalization
+\item Homework question: \(|\frak{P}(\mathbb{N})|>|\mathbb{N}|\)
+\begin{itemize}
+\item In general though, \(|\frak{P}(x)|>|x|\) (Cantor's theorem)
+\begin{itemize}
+\item What does this imply? There are infinite amount of infinite cardinalities (power set is bigger, power set of the power set is even bigger, \ldots{})
+\item \(|\mathbb{N}|<|\frak{P}(\mathbb{N})|=|\mathbb{R}|=2^{\aleph_0}<|\frak{P}(\frak{P}(\mathbb{N}))|\)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\subsection{Cardinality}
+\label{sec:orgfd0164f}
+Things that have the same cardinality:
+\subsubsection{Countable:}
+\label{sec:org2cde900}
+\(|\mathbb{N}|\):
+\begin{itemize}
+\item E
+\item \(\mathbb{Z}\)
+\item \(\mathbb{Q}\)
+\item English words
+\item Sentences
+\begin{itemize}
+\item Finite objects that you can list
+\item Why doesn't diagonalization work on sentences?
+\end{itemize}
+\item Programs
+\item MIU strings
+\item MIU theorems
+\item If you can list them, they're countable
+\end{itemize}
+\subsubsection{Uncountable}
+\label{sec:orgf122159}
+\(|\frak{P}(\mathbb{N})|\)
+\begin{itemize}
+\item \(\mathbb{C}\)
+\item \(\mathbb{R}\)
+\item Functions from \(\mathbb{N} \to \mathbb{N}\)
+\begin{itemize}
+\item From \(\mathbb{N} \to \{0,1\}\)
+\end{itemize}
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+\subsection{Formal Systems (GEB CH. 1)}
+\label{sec:orgab085ae}
+\subsubsection{Examples}
+\label{sec:org045d79f}
+\begin{itemize}
+\item Programming languages
+\item Logic
+\item Computation: TM
+\item Formal arithmetic
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+2 things in formal systems:
+\begin{itemize}
+\item The distinction between the two is very important
+\begin{itemize}
+\item Important concepts in this course:
+\begin{itemize}
+\item Induction
+\item Diagonalization
+\item Distinction between these 2 things
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{ll}
+Syntax & Semantics\\
+\hline
+- Grammar & - Meaning\\
+- Formal Structure & - Context\\
+\end{tabular}
+\end{center}
+
+13 -> What is this?
+\begin{itemize}
+\item 13 is a numeral
+\begin{itemize}
+\item The meaning of this numeral is the number 13 (abstraction)
+\end{itemize}
+\item Why this example? We looked at the syntax of 13 but we said it was the number 13 (the meaning)
+\begin{itemize}
+\item During everyday life we don't often make the distinction
+\end{itemize}
+\item dog
+\begin{itemize}
+\item Syntactically, has 3 letters
+\item Semantically, has fur
+\end{itemize}
+\end{itemize}
+
+\subsubsection{MIU-System:}
+\label{sec:orgd80a04b}
+Alphabet: MIU
+
+Strings (sequences of elements from the alphabet).
+
+Rec. def: 
+\begin{itemize}
+\item Base clause: \(\emptyset\) is a MIU-string
+\item Inductive clause:
+\begin{enumerate}
+\item If \(x\) is a MIU-String, then \(xM\) is a MIU string
+\begin{itemize}
+\item Is \(x\) an MIU-String? No, that's it's meaning, not it's syntax. It's a letter (also a meta-variablee)
+\end{itemize}
+\item \(xI\)
+\item \(xU\)
+\end{enumerate}
+\item Final clause: Nothing else.
+\end{itemize}
+\begin{enumerate}
+\item MIU-Theorems
+\label{sec:org49a7d7d}
+\begin{enumerate}
+\item Axiom: MI.
+\item Inference rules:
+
+I. xI \(\to\) xIU
+
+II. Mx \(\to\) Mxx
+
+III. xIIIy \(\to\) xUy
+
+IV. xUUy \(\to\) xy
+
+(for x,y MIU strings, possibly empty)
+\end{enumerate}
+\begin{enumerate}
+\item Def. Derivation
+\label{sec:org8018805}
+A \uline{derivation} is a sequence of strings such that each element is either an axiom or obtained by applying an inference rule to an element earlier in the sequence
+
+The last element in a derivation is a theorem.
+
+\begin{itemize}
+\item This is a recursive definition.
+\begin{itemize}
+\item Includes base clause
+\item Inductive clause
+\item Recursive clause
+\end{itemize}
+\end{itemize}
+\item Ex.
+\label{sec:org8e3fc7f}
+\begin{enumerate}
+\item MI is a derivation
+\item MIU by I on line 1.
+\item MII by II on line 1.
+\item MIUIU II on line 2.
+\end{enumerate}
+These are all theorems since they're the last element of a derivation.
+\item Random theorems
+\label{sec:org84b3ee1}
+\begin{itemize}
+\item MIIII
+\item MIIIIU
+\item MIUU
+\item MIUUIUU
+\item MIIUU
+\item They all have something in common, all start with M
+\end{itemize}
+\end{enumerate}
+\item Reasoning
+\label{sec:org6cb578c}
+Reason inside (M-mode)
+\begin{itemize}
+\item Generate theorems "within" the formal system
+\item Can be done by a machine
+\item Object language
+\end{itemize}
+Outside a system (I-mode)
+\begin{itemize}
+\item Show properties \uline{of} the system, reason about it
+\item Meta-language
+\begin{itemize}
+\item All theorems start with M
+\item Looking on the outside
+\item When do we use other languages to describe another language
+\item Using English to talk about programming
+\item Using English to talk about Mandarin
+\item If you speak English, then you're reasoning inside
+\end{itemize}
+\end{itemize}
+\item Bijection with Natural Numbers
+\label{sec:org922a001}
+MIU strings are countably infinite. You can construct a bijection like:
+\begin{enumerate}
+\item M
+\item I
+\item U
+\item MM
+\item MI
+\item MU
+\item II
+\item IM
+\item IU
+\item UU
+\item \ldots{}
+\end{enumerate}
+
+\noindent\rule{\textwidth}{0.5pt}
+MIU theorems are also countably infinite? Why?
+\begin{itemize}
+\item Subset of MIU strings
+\item Why not finite? Inference II, can keep expanding
+\end{itemize}
+\item Theorem
+\label{sec:orgec7c85d}
+All MIU-theorems begin with M.
+\begin{itemize}
+\item This is a proof about the MIU-system, not within
+\end{itemize}
+\begin{enumerate}
+\item Proof
+\label{sec:org1beff2d}
+By induction (strong induction) on the length of derivations: (number of steps to derive)
+\begin{itemize}
+\item Base case: Derivation of length 1: MI (good)
+\item Induction step:
+\begin{itemize}
+\item IH: The claim holds for all derivations of length \(<n\)
+\item Show: The claim holds for a derivation of length \(n\)
+\item Line n is either an axiom or derived by rule I, II, III or IV.
+\end{itemize}
+\item Case 1: Line n is an axiom: MI (you can write an axiom at any step, reverting back to MI)
+\item Case 2: Line n is derived from an earlier line (say \(m<n\) ) by Rule I. By IH, the theorem in line \(m\) begins with M. Rule I doesn't change the first letter, so it is also an \(M\).
+\item Case 3:
+\item Case 4:
+\item Case 5:
+\item (DIY)
+\end{itemize}
+\end{enumerate}
+\end{enumerate}
+\section{Lecture 6 \textit{<2017-09-21 Thu>}}
+\label{sec:orge84f357}
+\subsection{Quiz prep}
+\label{sec:orgce8da03}
+\begin{itemize}
+\item What is derivation?
+\item What is a theorem?
+\item How many infinite cardinalities are there?
+\item Can a set have the same cardinality as its power set?
+\item Is the empty set a subset of every set?
+\item How do you prove something is inductive?
+\end{itemize}
+\subsection{Review}
+\label{sec:org7ef8fc9}
+\begin{itemize}
+\item Is U a MIU-theorem?
+\begin{itemize}
+\item No, it doesn't start with M
+\end{itemize}
+\item Is MU a MIU-theorem?
+\end{itemize}
+\subsection{Decision Procedure}
+\label{sec:org921531b}
+Guarantees a \uline{yes} or a \uline{no} answer in a \uline{finite} amount of time
+\begin{itemize}
+\item A set/question that has a decision procedure is \uline{decidable}
+\item If given 2 functions with inputs and outputs, can we tell if they're identical? Is it decidable?
+\begin{itemize}
+\item No, infinite amount of inputs
+\end{itemize}
+\item Decision procedure for getting someone's cellphone number?
+\begin{itemize}
+\item Try all combinations until the phone rings, if no ring, no number
+\item Not feasible, but we care what you can do in principal, as long as its finite
+\end{itemize}
+\item Given a computer program
+\begin{itemize}
+\item Can we decide if it terminates in 10 minutes?
+\begin{itemize}
+\item Yes, just wait
+\end{itemize}
+\item Can we decide if it terminates in finite time?
+\begin{itemize}
+\item No, if it doesn't stop, you'll never know
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\subsection{pq-system}
+\label{sec:org039db3b}
+\begin{itemize}
+\item Alphabet: p, q, -
+\item Axiom(s): xp-qx-
+\begin{itemize}
+\item What is x here? An arbitrary number of hyphens, meta-variable (used to describe system, not part of the system)
+\item How many axioms? \(\aleph_0\), x can be uncountably many
+\begin{itemize}
+\item The written axiom is more like an axiom "template"
+\end{itemize}
+\item Is there a \textbf{decision procedure} to check if something is an axiom?
+\begin{itemize}
+\item Yes, just count number of hyphens.
+\end{itemize}
+\item Axioms in a formal system \textbf{have to be decidable}
+\end{itemize}
+\item IR: If xpyqz is a thm, then xpy-qz- is a thm
+\begin{itemize}
+\item E.g. \(\mbox{-}\mbox{-}p\mbox{-}\mbox{-}q\mbox{-}\mbox{-}\mbox{-}\mbox{-}\mbox{-}\)
+\end{itemize}
+\end{itemize}
+\subsubsection{Interpretation:}
+\label{sec:org4cab9ac}
+pq-system: p (plus) q (equals) \(\mbox{-}\) (1) \(\mbox{-}\mbox{-}\) (2) \(\mbox{-}\mbox{-} \mbox{-}\)(3)
+\begin{center}
+\begin{tabular}{llrrrll}
+plus & equals & 1 & 2 & 3 & (Semantics) & Math structure \(\langle \mathbb{N},+, =\rangle\)\\
+\hline
+p & q & -\mbox{-} & \(\mbox{-}\mbox{-}\) & \(\mbox{-}\mbox{-}\mbox{-}\) & (syntax) & Typographical structure \(\langle \{ \mbox{-}, \mbox{-}\mbox{-}, \mbox{-}\mbox{-}\mbox{-} \}, p, q \rangle\)\\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item GEB: Calls this an Isomorphism
+\begin{itemize}
+\item Misleading, because in mathematics, it's a structure preserving bijection
+\item \(\langle \mathbb{N},+ \rangle\) is isom \(\langle Even, + \rangle\) by \(f(x)=2x\)
+\item \(a+b = c \iff f(a)+ f(b)=f(c)\)
+\end{itemize}
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+Are \(\langle \mathbb{N},+ \rangle\) and \(\langle \mathbb{N},x\rangle\) isom?
+\begin{itemize}
+\item \(a+b = c \iff f(a) \times f(b) = f(c)\)
+\item \(f(x)=2^x\)
+\begin{itemize}
+\item \(3+5=8 \to 2^3 \times 2^5 = 2^8\)
+\item Does this work? No. Not surjective.
+\item Is there a bijection?
+\end{itemize}
+\end{itemize}
+
+If an interpretation makes all axioms and thm true, it is called a \uline{model}.
+\begin{itemize}
+\item Is our interpretation a model?
+\item Yes, argue by saying it makes axioms true and IR keeps it true.
+\begin{itemize}
+\item E.g. \(\mbox{-}\mbox{-}p\mbox{-}\mbox{-}q\mbox{-}\mbox{-}\mbox{-}\mbox{-}\mbox{-}\)
+\item \(2+3=5\)
+\end{itemize}
+\end{itemize}
+\subsubsection{More Interpretations}
+\label{sec:org997a939}
+Change p to times. It's still an interpretation, but not a model. It's false, as all axioms and theorems must be true.
+\begin{itemize}
+\item Keep p to plus, but change all dashes to negative integers. Is it also a model?
+\begin{itemize}
+\item Yes. We can still have multiple models for
+\end{itemize}
+\end{itemize}
+
+pq-system: p (equals) q (taken from) \(\mbox{-}\) (2) \(\mbox{-}\mbox{-}\) (4) \(\mbox{-}\mbox{-} \mbox{-}\)(6)
+\begin{itemize}
+\item E.g. \(\mbox{-}\mbox{-}p\mbox{-}\mbox{-}q\mbox{-}\mbox{-}\mbox{-}\mbox{-}\mbox{-}\)
+\item 6 = 4 taken from 10
+\item Still a model!
+\end{itemize}
+\begin{itemize}
+\item Formal system can have many models, just depends on interpretation
+\end{itemize}
+\subsection{geq-system:}
+\label{sec:org09b7aa1}
+\begin{itemize}
+\item Thms:
+\begin{itemize}
+\item \(\mbox{-}\) geq \(\mbox{-}\)
+\item \(\mbox{-}\mbox{-}\) geq \(\mbox{-}\)
+\item \(\mbox{-}\mbox{-}\mbox{-}\) geq \(\mbox{-}\mbox{-}\mbox{-}\)
+\end{itemize}
+\item Model: geq -> \(\geq\)
+\begin{itemize}
+\item \(\mbox{-}\) 1
+\item \(\mbox{-}\mbox{-}\) 2
+\item \(\ldots\)
+\end{itemize}
+\item Soundness: Every \textbf{thm} in a formal system is \textbf{true} under an interpretation
+\item Completeness: Every \textbf{truth} in an interpretation is a \textbf{theorem}
+\item Soundness and completeness relate semantic and syntactic notions with each other
+\item Our interpretation is sound and complete
+\item Different interpretation, if we make geq -> \(=\)
+\begin{itemize}
+\item Is it sound? No. Some theorems are true, but some, like \(\mbox{-}\mbox{-}\) geq \(\mbox{-}\) are not true
+\item Is it complete? Yes. Every equality that can be expressed via this interpretation is a theorem.
+\item Soundness and completeness are independent, so it was possible for us to get completeness and not soundness, but it's also possible to get the opposite \uline{(think of an example)}
+\end{itemize}
+\item model \(\iff\) sound
+\item Syntax and semantics can be switched, which we'll see later
+\begin{itemize}
+\item We'll be looking at formal systems of numbers/arithmetic that mean different things
+\end{itemize}
+\end{itemize}
+\subsection{Infinite Prime Numbers}
+\label{sec:orgd6f0d6c}
+Theorem: There are infinitely many prime numbers.
+
+\subsubsection{Proof (by contradiction):}
+\label{sec:org08598d5}
+Assumption: There are \uline{finitely} many prime numbers:
+\begin{itemize}
+\item \(\{p_1, p_2, \ldots , p_n\}\)
+\item So there is a greatest prime number, say \(p_n\)
+\item Define: \(g=(p_1 \times p_2 \times \ldots \times p_n)+1\)
+\begin{itemize}
+\item Is \(g\) a prime number?
+\begin{itemize}
+\item Case 1: Yes. Then \(g>p_n\) \lightning
+\item Case 2: \(g\) is not prime.
+\begin{itemize}
+\item But then it must be divisible by some prime number.
+\item But, it \uline{cannot} be divisible by \(p_1,p_2,\ldots,p_n\), as there will be a remainder of \(1\) \lightning
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item So, assumption is false.
+\end{itemize}
+\section{Lecture 7 \textit{<2017-09-26 Tue>}}
+\label{sec:org422abbe}
+\subsection{Quiz review}
+\label{sec:orgdba6a7f}
+\begin{itemize}
+\item Try to use diagonalization on rational numbers?
+\begin{itemize}
+\item Produced number may not be rational.
+\end{itemize}
+\item Show 2 sets have the same cardinality
+\begin{itemize}
+\item Prove there's a bijection
+\end{itemize}
+\item Show a set has less than or the same amount of cardinality
+\begin{itemize}
+\item Injection
+\end{itemize}
+\item Adding something to a set of size \(\aleph_0\)
+\begin{itemize}
+\item Size is still \(\aleph_0\)
+\end{itemize}
+\item What is a derivation?
+\begin{itemize}
+\item Sequence of formulas such that each element is an axiom or obtained from an axiom
+\end{itemize}
+\item Theorem?
+\begin{itemize}
+\item Last element in a derivation
+\end{itemize}
+\item When is a formal system complete?
+\begin{itemize}
+\item Every truth in the interpretation is a theorem
+\end{itemize}
+\item When is a formal system sound?
+\begin{itemize}
+\item Every theorem is a truth in the interpretation
+\end{itemize}
+\end{itemize}
+\subsection{Decision procedure}
+\label{sec:orga570850}
+\begin{itemize}
+\item What does it mean for a set to be decidable?
+\begin{itemize}
+\item If it has a decision procedure.
+\begin{itemize}
+\item Algorithm that gives a yes or no answer in a finite amount of time.
+\end{itemize}
+\end{itemize}
+\item A set is \(X\) \uline{decidable} if there is a decision procedure for it.
+\begin{itemize}
+\item Characteristic function:
+\begin{itemize}
+\item 
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\begin{equation*}
+C_x(n) = \begin{cases} 1 & \text{if }n\in X
+\\ 0 & \text{if }n\notin X
+\end{cases}
+\end{equation*}
+Later we will see that decidable set \(\iff\) characteristic function computable.
+\subsection{FS for addition}
+\label{sec:org99ae7fe}
+Write down properties of addition to try and come up with a formal system to fit that interpretation.
+
+Recursive definition of addition:
+\begin{itemize}
+\item \(x+1 = (x+1)\)
+\item \(x+(n+1) = (x+n)+1\)
+\begin{itemize}
+\item This allows you to compute any addition
+\item \(x+4 = (x+3)+1 = (x+2)+1+1 = (x+1) +1 + 1 + 1\)
+\end{itemize}
+\end{itemize}
+
+Now translating it to the pq system:
+\begin{center}
+\begin{tabular}{lll}
+Axiom & xp\mbox{-}qx\mbox{-} & x+1=(x+1)\\
+\hline
+IR & If xpyqz is a theorem & x+(n+1)=\\
+ & then xpy\mbox{-}qz\mbox{-} & (x+n)+1\\
+\end{tabular}
+\end{center}
+
+\subsection{FS for multiplication}
+\label{sec:orge609b24}
+Want FS for multiplication (tq system)
+x t y q z
+\begin{itemize}
+\item \(x \times 1 = x\)
+\item \(x \times (n+1) = (x \times n) + x\)
+\end{itemize}
+Translating:
+\begin{itemize}
+\item Axiom: \(x t \mbox{-} q x\) (\(\aleph_0\) axioms)
+\item Inference Rule: If \(x t y q z\) is a thm, then \(xt\overbrace{y\mbox{-}}^{n+1}qzx\)
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+Modification of tq system above.
+\begin{itemize}
+\item Alphabet: t q \mbox{-} C
+\item Second Inference Rule: If \(x\mbox{-}ty\mbox{-}qz\) is a theorem then \(Cz\) is a theorem. (x,y,z non-empty strings of \mbox{-})
+\item Example theorems:
+\begin{itemize}
+\item \mbox{-}t\mbox{-}q\mbox{-}
+\item \mbox{-}\mbox{-}t\mbox{-}\mbox{-}q\mbox{-}\mbox{-}\mbox{-}\mbox{-}
+\item C\mbox{-}\mbox{-}\mbox{-}\mbox{-}
+\item \mbox{-}\mbox{-}\mbox{-}t\mbox{-}\mbox{-}q\mbox{-}\mbox{-}\mbox{-}\mbox{-}\mbox{-}\mbox{-}
+\item C\mbox{-}\mbox{-}\mbox{-}\mbox{-}\mbox{-}\mbox{-}
+\end{itemize}
+\end{itemize}
+Cx is true if \(x\) is a composite number (not a prime)
+\begin{itemize}
+\item If Cx is not a Cqt theorem, then Px (prime)
+\begin{itemize}
+\item Can we add this as another inference rule? No. Not saying how to get primes, just what isn't a prime. It's \uline{not an inference rule}, you have to be able to apply an inference rule mechanically (has to be decidable)
+\end{itemize}
+\end{itemize}
+\subsection{Recursively enumerable set (r.e.)}
+\label{sec:org40f590a}
+A recursively enumerable set can be generated as theorems of a formal system.
+\begin{itemize}
+\item Ex. Natural numbers
+\end{itemize}
+\subsection{Recursive set}
+\label{sec:org58625fd}
+A set is recursive if it is r.e. and its complement is also r.e. Only want to talk about the complement in a clearly defined realm (universe).
+\begin{itemize}
+\item Well-formed expressions:
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i5.png}
+\end{center}
+\begin{itemize}
+\item In GEB, he calls the circle the figure and the ground the non-thms that are the non-thms of the circle but they are theorems themselves.
+\item Recursive sets are decidable. Why?
+\item Can a set be recursively enumerable but not recursive.
+\end{itemize}
+\section{Lecture 8 \textit{<2017-09-28 Thu>}}
+\label{sec:org6f4a0db}
+\subsection{Theorems}
+\label{sec:org265cb1a}
+\(P\) is equivalent to \(Q\) relative to \(A_1\ldots A_n\):
+\begin{itemize}
+\item \(A_1 \ldots A_n, P\) prove \(Q\)
+\item \(A_1 \ldots A_n, Q\) prove \(P\)
+\end{itemize}
+\subsubsection{E.g.}
+\label{sec:org18fec08}
+Relative to Euclid's axioms:
+
+Proclus' axiom
+\begin{itemize}
+\item If a line intersects 2 parallels it must intersect the other
+\end{itemize}
+Playfail's axiom
+\begin{itemize}
+\item If a line is parallel to a point, then there exists one parallel containing that point
+\end{itemize}
+Parallel postulate
+
+Are equivalent.
+\begin{itemize}
+\item If you cannot prove \(P\) from \(A_1\ldots A_n\) then \(P\) is \uline{independent} of \(A_1 \ldots A_n\)
+\end{itemize}
+
+Parallel postulate is independent from the axioms of Euclid.
+\begin{itemize}
+\item One way to show:
+\begin{itemize}
+\item Give a model for \(A_1 \ldots A_n\) in which \(P\) is false. (If a model makes \(P\) false, then \(P\) cannot be a theorem.)
+\end{itemize}
+\item How to show that there are certain models for Euclid's axioms where the parallel postulate is false? Well, we have to come up with a model.
+\end{itemize}
+
+\begin{enumerate}
+\item Playfail's axiom
+\label{sec:org1587465}
+There exists exactly one parallel to a given line through a given point.
+\begin{itemize}
+\item What would it mean for this to be false?
+\begin{itemize}
+\item Playfair's axiom can be false in \(2\) ways:
+
+a) More than one parallel exists
+
+b) No parallel exists
+\end{itemize}
+\end{itemize}
+
+b)
+\begin{itemize}
+\item Line -> great circle on a sphere
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i6.png}
+\end{center}
+All great circles intersect, no parallels (Elliptic geometry)
+
+\begin{itemize}
+\item Point -> Point and it's antipode
+\end{itemize}
+
+a) 
+\begin{itemize}
+\item Line -> line inside disc
+\item Point -> point inside the disk
+\end{itemize}
+
+
+Infinitely many parallel lines
+(Hyperbolic geom.)
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i8.png}
+\end{center}
+\end{enumerate}
+
+\subsection{PQ*-system}
+\label{sec:org1db3dc5}
+\begin{itemize}
+\item Ax. schema 1: xp\mbox{-}qx\mbox{-}
+\item IR: xpyqz \(\to\) xpy-qz-
+\item Ax. schema 2: xp \mbox{-} qz
+
+\item Interpretation: 
+\begin{itemize}
+\item p -> plus
+
+\item q -> equals
+
+\item \mbox{-} -> unit
+\end{itemize}
+
+\item \mbox{-}p\mbox{-}q\mbox{-}\mbox{-}
+\item Now, \mbox{-}\mbox{-}p\mbox{-}q\mbox{-}\mbox{-} is a thm
+\item Meaning: 2+1 = 2 false.
+\item Complete but not sound with respect to interpretation 1 (p -> plus)
+\begin{itemize}
+\item Different interpretation (2):
+
+\begin{itemize}
+\item p -> plus
+
+\item q -> greater or equal
+
+\item \mbox{-} -> unit
+
+\item Sound but not complete with respect to interpretation 2.
+
+\begin{itemize}
+\item Ex. \mbox{-}\mbox{-}\mbox{-}p\mbox{-}\mbox{-}q\mbox{-} is not a theorem, but \(3+1 \geq 1\) is a truth
+
+\item Axiom schema 2 only gives you things greater by 1
+\end{itemize}
+\end{itemize}
+
+\item Different interpreation (3):
+
+\begin{itemize}
+\item p -> plus
+
+\item q -> greater by 1 or equal
+
+\item \mbox{-} -> unit
+
+\item Sound and complete with respect to interpretation 3
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\subsection{Propositional Logic}
+\label{sec:orga9aaf94}
+\begin{itemize}
+\item Today's presentation is harder for those who already know propositional logic, next week will be the standard presentation.
+\end{itemize}
+\subsubsection{Formula trees:}
+\label{sec:orgea8696d}
+\begin{itemize}
+\item Language: Propositional variables: \(P_0, P_1, P_2, \ldots\)
+\begin{itemize}
+\item Unary connective: \(\sim\) (negation)
+\item Binary connectives: \(\wedge\) (conjunction)
+\begin{itemize}
+\item \(\vee\) (disjunction)
+\item \(\supset\) (implication)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\begin{enumerate}
+\item Inductive Definition
+\label{sec:orgf7a0ac5}
+\begin{enumerate}
+\item Base clause: A prop. variable is a formula tree
+\item Inductive clauses: If \(A,B\) are formula trees then \begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i9.png}
+\end{center} are also formula trees (with A, B as subtrees)
+\item Nothing else is a formula tree
+\end{enumerate}
+\item E.g.
+\label{sec:orga562ac5}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i10.png}
+\end{center}
+The tree to the right has 5 subtrees (main connective is not a subtree of itself)
+\item Truth value assignment
+\label{sec:org4ffb35a}
+A \uline{truth value assignment} is a function from propositional variables to \(\{T, F\}\) (True, False). The \uline{truth value} of a formula tree A under the truth value assignment f is:
+\begin{itemize}
+\item Case 1: A is a propositional variable: f(A)
+\begin{itemize}
+\item E.g. \(f(P_0)=T\), \(f(P_1)=F\), \(f(P_{27})=T\), \(f(P_{5})=F\)
+\end{itemize}
+\item Case 2: A is of the form: \begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i11.png}
+\end{center}
+\begin{itemize}
+\item Truth values:
+\end{itemize}
+\end{itemize}
+\begin{center}
+\begin{tabular}{ll}
+B & A\\
+\hline
+T & F\\
+F & T\\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item Case 3: A is of the form \begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i12.png}
+\end{center}
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{lllll}
+B & C & A\(_{\text{1}}\) & A\(_{\text{2}}\) & A\(_{\text{3}}\)\\
+\hline
+T & T & T & T & T\\
+T & F & F & T & F\\
+F & T & F & F & T\\
+F & F & F & F & T\\
+\end{tabular}
+\end{center}
+\end{enumerate}
+\section{Lecture 9 \textit{<2017-10-03 Tue>}}
+\label{sec:orgad03cc0}
+\subsection{Propositional Logic}
+\label{sec:org720693a}
+Most of this is on handout 2b.
+
+Let's define logic as a formal system.
+\begin{itemize}
+\item Alphabet: \(P_0, P_1, P_2, \ldots\) (\(\aleph_0\) propositional variables)
+\item Connectives: \(\wedge\) (conjunction), \(\vee\) (disjunction), \(\supset\) (implication), \(\sim\) (negation)
+\item Parentheses
+\end{itemize}
+
+\subsubsection{Well-formed formulas (wff)}
+\label{sec:orga9229da}
+\begin{enumerate}
+\item Base clause: \(P_i\) is a wff (\(i \in \mathbb{N}\)) (called atomic)
+\item Inductive clause: If \(A\) and \(B\) are wffs, then so are:
+\begin{itemize}
+\item \(\sim A\) "not"
+\item \((A \wedge B)\) "and"
+\item \((A \vee B)\) "or"
+\item \((A \supset B)\) "implies"
+\end{itemize}
+\item Nothing else is.
+\end{enumerate}
+
+E.g. 
+\begin{itemize}
+\item \(P_0\supset P_1\) is \textbf{not well formed}, lack of parentheses.
+\item \((P_0\supset P_1)\)
+\item \((P_{27})\) is \textbf{not well formed}, shouldn't have parentheses in atomic form.
+\item \((\sim P_1 \wedge \sim (P_0 \supset P_2))\)
+\item Can be shown as: \begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i13.png}
+\end{center}
+\end{itemize}
+Convention: outer parens are omitted (except if asked for a well formed expression explicitly, as parentheses are required to comply with rules that give us the nice structure)
+\begin{enumerate}
+\item Interpretation
+\label{sec:org05035cd}
+Propositional variables \(\to\) truth values: 
+\begin{center}
+\begin{tabular}{ll}
+True & False\\
+\hline
+T & F\\
+1 & 0\\
+T & \(\perp\)\\
+\end{tabular}
+\end{center}
+
+(Bivalence)
+
+\item Truth tables
+\label{sec:org39935fe}
+A,B (metavariables that stand for wff):
+\begin{center}
+\begin{tabular}{lllll}
+A B & A \(\wedge\) B & A \(\vee\) B & \(\sim\) A & A \(\supset\) B\\
+\hline
+T T & T & T & F & T\\
+T F & F & T & F & F\\
+F T & F & T & T & T\\
+F F & F & F & T & T\\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item \(A \supset B\) -> if \ldots{} then \ldots{}
+\begin{itemize}
+\item A is the antecedent
+\item B is the consequent
+\item This is material implication, not causal implication
+\item The light (B) can be on even if I didn't flip the switch (A)
+\end{itemize}
+\item Ex.
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i14.png}
+\end{center}
+
+\begin{center}
+\begin{tabular}{llll}
+\(P_1\) & \(\wedge\) & \(\sim\) & \(P_1\)\\
+\hline
+T & F & F & T\\
+F & F & T & F\\
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{llll}
+\(P_1\) & \(\vee\) & \(\sim\) & \(P_1\)\\
+\hline
+T & T & F & T\\
+F & T & T & F\\
+\end{tabular}
+\end{center}
+Something that is always true is a \textbf{tautology}.
+\begin{itemize}
+\item Two wff are \uline{logically equivalent} if their TV agrees on all possible TV-assignments:
+\end{itemize}
+\begin{center}
+\begin{tabular}{lll}
+A B & A \(\supset\) B & \(\sim\) A \(\vee\) B\\
+\hline
+T T & T & T\\
+T F & F & F\\
+F T & T & T\\
+F F & T & T\\
+\end{tabular}
+\end{center}
+
+Do we read \(\sim A \vee B\) as \((\sim A) \vee B\) or \(\sim(A \vee B)\)?
+\begin{itemize}
+\item \((\sim A)\vee B\) due to the way we defined wff
+\end{itemize}
+
+Minimal sets of connectives: 
+\begin{itemize}
+\item \(\{\sim, \vee \}\)
+\item \(\{\sim, \wedge\}\)
+\item \(\{\sim, \supset\}\)
+\item \(\implies\) Sheffer-Stroke
+\end{itemize}
+
+For a wff with \(n\) prop. vars, the truth table has \(2^n\) lines.
+
+Is finding out if a proposition is a tautology decidable or not? Yes, just write out the truth table.
+\item Inferences
+\label{sec:org2f36a8b}
+An inference is \textbf{valid} if it is impossible for all the premises to be true and the conclusion false at the same time.
+
+\begin{center}
+\begin{tabular}{lll}
+ & Premises & Conclusion\\
+\hline
+A B & A A \(\supset\) B & B\\
+T T & T T & T\\
+T F & T F & F\\
+F T & F T & T\\
+F F & F T & F\\
+\end{tabular}
+\end{center}
+This is a valid inference, when both premises are true, the conclusion is also true. Thus:
+\begin{itemize}
+\item A, A \(\supset\) B \(\models\) B
+\begin{itemize}
+\item Where \(\models\) is the (semantic) consequence
+\item Can check if something is semantically implied by checking the truth table and when all premises are true.
+\end{itemize}
+\end{itemize}
+Generalizing: \(A_1, \ldots A_n \models B\)
+\begin{itemize}
+\item \(\models\) B (tautology)
+\end{itemize}
+\item Natural Deduction (Syntax)
+\label{sec:org95240dc}
+Introduced by Gentzen, 1934.
+
+\(\frac{\text{Premises}}{\text{Conclusion}}\)
+\begin{itemize}
+\item \(\frac{A \ A \supset B}{B}\)
+\end{itemize}
+\end{enumerate}
+\end{document}
