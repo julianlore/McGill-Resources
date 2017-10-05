@@ -901,3 +901,68 @@ Proof:
   - Remove $v$ from $S$
   - Decrement $count[w]$ for all edges from $v$ to $w$ and add $w$ to $S$ if $count[w]$ hits $0$
   - This is $O(1)$ per edge
+* Lecture 9 <2017-10-05 Thu> 
+** Greedy Algorithm
+- In every step, it tries to be myopic and optimize its current goal/step
+- Doesn't care about the future
+*** Interval scheduling
+- Have a class room and a microscope
+- Every request has a starting time and finishing time $\{1,\ldots, n\}$, $(s_i,f_i)$
+- Def. $i$ and $j$ are _compatible_ $(i+j)$ when $f_i \leq s_j$ or $f_j \leq s_i$
+- Subset of requests is _compatible_ if every point of requests are compatible.
+- Maximum sized compatible subset is the _optimal subset_
+-------------
+1. Pick $s(i)$ with earliest request
+   - Might not give an optimal solution if the request that begins the earliest goes until the end, not allowing any of the other requests to be fulfilled.
+     [[./Images/i23.png]]
+2. $f(i)-s(i)$ is the smallest 
+   - Can be problematic if the smallest is in between 2 
+   [[./Images/i24.png]]
+3. For each request compute the # of requests it overlaps with. Pick the one with the smallest number.
+   - Still problematic
+     [[./Images/i25.png]]
+4. _Accept_ (greedy rule) requests $i$ for which $f(i)$ is the smallest.
+   - Sort requests so that $f(i_1)\leq f(i_2)\leq \ldots \leq f(i_n)$
+   - This one works
+\begin{algorithmic}
+  \State $A = \emptyset$
+  \For {$j=1$ to $n$}
+  \If {j is compatible with $A$}
+  \State $A \gets A \cup \{j\}$
+  \EndIf
+  \EndFor
+  \State return A
+\end{algorithmic}
+---------------
+*** TODO clean up this section
+Running time of method 4:
+- Sort : $O(n\log n)$
+- $f(j)\geq f(j^*) \forall i \in A, f(i) \leq f(j^*) \gets O(n)$
+  [[./Images/i26.png]]
+*** Theorem
+This greedy algorithm returns the optimal subset.
+$$\underbrace{|A|}_{\text{optimal}} = |O| - \text{optimal subset}$$
+- "stays ahead"
+- $|A|=k, |O|=n$, assume $k<m$
+- $O$ is ordered by their starting and finishing time for every $j \in O$, $f(i_1 \in A) \leq f(j)$
+
+**** Lemma. 
+For all $r \leq k$, $f(i_r) \leq f(j_r)$
+***** Proof
+- $r=1 f(\underbrace{i_1}_A) \leq f(\underbrace{j_1}_O)$ Works
+- This greedy algorithm returns the optimal subset $r-1$ i.e. $f(i_{r-1})\leq f(j_{r-1})$.
+- But this contradicts $f(i_r) \geq f(j_r) \implies f(i_r)\leq (j_r)$
+[[./Images/i27.png]]
+
+
+- $A: i_1 \ldots i_k$
+- $O: j_1 \ldots j_k j_{k+1} \ldots$
+- Apply the lemma with $r=k$ so $f(i_k)\leq f(j_k)$
+[[./Images/i28.png]]
+This contradicts $k<m$! Thus $m=k$
+- Sort $O$ by starting time, it's also sorted by finishing time
+*** Satisfying requests
+Given requests, how many resources do we need to satisfy all of them?
+- Def. depth is the maximum number of requests that have a common point in the time line.
+**** Claim
+The # of resources is at least $d$. $\{I_1, \ldots , I_d\}$- requests with depth $d$.
