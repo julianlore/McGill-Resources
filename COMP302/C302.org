@@ -328,7 +328,7 @@ Understand how a program is executed
 We need to understand how programs are executed (operational semantics)
    - $e \Downarrow v$ expression $e$ evaluates in multiple steps to the value $v$. (*Big-Step*)
    - $e \Rightarrow e'$ expression $ee$ evaluates in one steps to expression $e'$. (*Small-Step (single)*)
-   - $e \implies * e'$ expression $e$ evaluates in multiple steps to expression $e'$ (*Small-Step (multiple)*)
+   - $e \implies^* e'$ expression $e$ evaluates in multiple steps to expression $e'$ (*Small-Step (multiple)*)
 
 For all l, v, k, lookup k (insert k v l) $\implies *$ Some v
 Induction on what?
@@ -599,3 +599,110 @@ dx * sum f (a+.(dx/2.),b) (fun x-> x+. dx)
 (* Follows format of sum function above
 Can easily write a short program like above*)
 #+END_SRC
+* Lecture 10 <2017-10-03 Tue> 
+#+INCLUDE: "Test/10.ml" src ocaml
+* Lecture 11 <2017-10-05 Thu>
+** Lambda-Calculus
+- Simple language consisting of variables, functions (written as $\lambda x.t$) and function application
+- We can define all computable functions in the Lambda-Calculus
+- Church Encoding of Booleans:
+  - T = $\lambda x.\lambda y.x$ Keeps first argument, throws the other.
+  - F = $\lambda x.\lambda y.y$ Keeps second argument, throws the other.
+  - Lambda-Calculus is Turing complete, can do everything with it
+** Back to the beginning
+#+BEGIN_SRC ocaml
+(*Binding variables to functions*)
+let area : float -> float = function r -> pi *. r *. r
+(*or*)
+let area (r:float) = pi *. r *. r
+#+END_SRC
+
+- The variable name area is bound to the value function r -> pi *. r *. r, which OCaml prints as <fun>
+  - The type is float->float
+- Good question:
+  - let plus x y = x + y
+  - What is the type of plus?
+    - An integer? (answer 1) Wrong
+    - int -> int -> int (answer 2) _Correct answer_
+    - A function (answer 3) Wrong, function is not the *type*
+  - let plus' (x,y) = x+y
+    - type is int * int -> int
+- What are types?
+  - Base types: Int, float, string...
+  - If T is a type and S is a type then
+    - T->S is a type
+    - T*S is a type
+** Curry
+let curry $\underbrace{f}_{\text{'a * 'b -> 'c}}= fun \underbrace{x}_{\text{'a}}  \underbrace{y}_{\text{'b}} \text{ -> } f \overbrace{(x, y)}^{\text{'a * b}}_{\text{'a -> 'b -> 'c}}$
+- curry $\underbrace{plus'}_{\text{int * int -> int}}$: int -> int -> int
+- fun x y -> plus' (x,y)
+  - OCaml gives you <fun>
+  - Shouldn't we continue evaluation plus'(x,y) and get as a final result fun x y -> x + y?
+    - No, we never evaluate inside function bodies
+    - When OCaml sees fun, it stops looking
+      - It has a function, it's a value, it's done
+** Uncurrying
+uncurry ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+- The type of functions is _right associative_
+- *NOT* the same thing as 'a -> 'b -> 'c -> 'a * 'b -> 'c
+- *Important* to know how to read functions.
+  - Ex. plus function from earlier
+  - Can also have plus x = fun y -> x + y
+    - int -> (int -> int)
+    - Makes a function from an int
+** Demo
+   We've already seen functions that return other functions: derivatives!
+#+INCLUDE: "Test/11.ml" src ocaml
+** Partial evaluation
+- A technique for optimizing and specializing programs
+- Generate programs from other programs
+- Produce new programs which run faster than originals and guaranteed to behave in same way
+- What is the result of evaluation curry plus'?
+  - $\implies$ It's a function!
+  - Result: fun x y -> plus' x y
+    - Still waiting for x y
+    - What if we just pass in 3? (plus 3)
+      - fun y -> 3 + y
+      - We generated a function!
+- let plusSq x y = $\underbrace{x * x}_{horriblyExpensiveThing(x)}$ + y
+  - fun y -> 3 * 3 + y (if we set x as 3), won't evaluate this expensive function until we give it a y
+  - If we write:
+    - plusSq 3 10
+    - plusSq 3 15
+    - plusSq 3 20
+  - We'd have to evaluate horribly expensive function 3 times.
+  - Why not store it and use it for the next computation?
+#+BEGIN_SRC ocaml
+let betterPlusSq x =
+	let x = horriblyExpensiveThing(x)
+		in fun y -> x + y
+#+END_SRC ocaml 
+- Now we get:
+- let x = horriblyExpensiveThing 3 in fun y -> x+y -> fun y ->9+y
+  - Now we can use this function to quickly compute without having to do the expensive function
+  - Partial evaluation is very important
+* Lecture 12 <2017-10-06 Fri> 
+- Review by Leila: Today
+  - 6-7:30 pm, MC 103
+- Cheat sheet correction, minimum 12 pt, not max
+** Review
+Types of questions:
+1. fun x -> x +. 3.3
+   - What is the type?
+     - float -> float
+   - What does it evaluate to?
+     - <fun> or fun x -> x +. 3.3
+   - let x = 3 in x + 3
+     - type: int
+     - eval: 6
+   - let x = 3 in x +. 3
+     - type: error
+     - eval: n/a
+2. Programming in OCaml
+   1) Higher-order functions
+      - Nothing too crazy since we haven't had any assignments on it
+      - Maybe like the built in functions we implemented the other day
+      - using map, for\_all, filter, exists...
+3. Induction proof
+** Demo, using higher order functions
+#+INCLUDE: "Test/12.ml" src ocaml
