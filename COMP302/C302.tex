@@ -1,4 +1,4 @@
-% Created 2017-09-29 Fri 12:29
+% Created 2017-10-06 Fri 21:06
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,7 +28,7 @@
 \tableofcontents
 
 \section{Lecture 1 \textit{<2017-09-12 Tue>}}
-\label{sec:org4b20796}
+\label{sec:org885e6d1}
 This course is an introduction to the foundations and paradigms of programming languages.
 \begin{itemize}
 \item 5 assignments, 5\% each
@@ -37,7 +37,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \item You have two late days for the semester (cumulative)
 \end{itemize}
 \subsection{Four main goals of COMP 302}
-\label{sec:org581ea5b}
+\label{sec:org6b0ea59}
 \begin{enumerate}
 \item Provide thorough introduction to fundamental concepts in programming languages
 \begin{itemize}
@@ -86,7 +86,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{enumerate}
 \subsubsection{How we achieve these goals}
-\label{sec:org9225c82}
+\label{sec:org438a222}
 \begin{itemize}
 \item Functional programming in OCaml
 \begin{itemize}
@@ -107,7 +107,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \subsubsection{Guiding Principles}
-\label{sec:org05af3fa}
+\label{sec:org471243e}
 \begin{itemize}
 \item No point in learning a programming language unless it changes how you view programming
 \item Simple and elegant solutions are more effective, but harder to find than the complicated ones, take more time.
@@ -117,7 +117,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 
 \subsubsection{Why do I need to know this}
-\label{sec:org69192ad}
+\label{sec:org6defbd3}
 \begin{itemize}
 \item Science and craft of programming
 \item Skills you learn will help you become a better programmer
@@ -135,26 +135,26 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 
 \subsection{Assignments}
-\label{sec:orgf7ee14a}
+\label{sec:org95671d9}
 \begin{itemize}
 \item Can do assignments in groups of 2
 \end{itemize}
 
 \subsection{Misc}
-\label{sec:orga02b658}
+\label{sec:orgdc90cb9}
 \begin{itemize}
 \item Lectures won't be recorded.
 \item Slides may or may not be posted, but there are lecture notes on MyCourses (most essential reading)
 \end{itemize}
 \section{Lecture 2 \textit{<2017-09-14 Thu>}}
-\label{sec:orgb84db7b}
+\label{sec:orgc5d290a}
 \subsection{What is OCaml}
-\label{sec:org3201012}
+\label{sec:org18c3501}
 \begin{itemize}
 \item Statically typed functional programming language
 \end{itemize}
 \subsubsection{Statically typed}
-\label{sec:org5cfb4fc}
+\label{sec:org7af7042}
 \begin{itemize}
 \item Types approximate runtime behavior
 \item Analyze programs before executing them
@@ -163,7 +163,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \item Very efficient, very good error messages, very good maintenance tool
 \end{itemize}
 \subsubsection{Functional}
-\label{sec:org41adf44}
+\label{sec:org3b6b177}
 \begin{itemize}
 \item Primary expressions are functions!
 \item Functions are first-class!
@@ -188,14 +188,14 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \subsubsection{Concepts for Today}
-\label{sec:orgdbc8bf3}
+\label{sec:orgc22ab08}
 \begin{itemize}
 \item Writing and executing basic expressions
 \item Learn how to read error messages
 \item Names
 \end{itemize}
 \subsubsection{OCaml demo in class}
-\label{sec:org0a06f3f}
+\label{sec:org7a8ca32}
 \begin{itemize}
 \item Always have to finish a line with 2 semi colons ;;
 \item Can use interpreter by launching OCaml in shell
@@ -225,7 +225,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \begin{enumerate}
 \item Operators
-\label{sec:org1f5794d}
+\label{sec:orgcd746ad}
 \begin{itemize}
 \item +, -, /, *
 \begin{itemize}
@@ -238,7 +238,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \item Types
-\label{sec:orgd3c2932}
+\label{sec:org60395f5}
 \begin{itemize}
 \item Approximate the runtime behaviour
 \item Types classify expressions according to the value they will compute
@@ -257,7 +257,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \item Vars
-\label{sec:orgb668adb}
+\label{sec:orgc93c24f}
 \begin{itemize}
 \item let pi = 3.14 ;;
 \item let (pi : float) = 3.14 ;;
@@ -269,7 +269,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \item Binding
-\label{sec:org6774a82}
+\label{sec:org3f97a6c}
 \begin{itemize}
 \item let m = 3 ;; puts it on the stack
 \item let m = 3 in \ldots{}
@@ -285,7 +285,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 
 \item Functions
-\label{sec:orgac2cdb9}
+\label{sec:org91e0bda}
 \begin{itemize}
 \item let area = function r -> pi *. r * .r;;
 \begin{itemize}
@@ -317,9 +317,9 @@ pi & 3.14\\
 \end{itemize}
 \end{enumerate}
 \section{Lecture 3 \textit{<2017-09-15 Fri>}}
-\label{sec:org0203cd6}
+\label{sec:org6f9b56f}
 \subsection{Functions}
-\label{sec:orga15f7fe}
+\label{sec:org581ee10}
 \begin{itemize}
 \item Functions are values
 \item Function names establish a binding of the function name to its body
@@ -328,7 +328,7 @@ pi & 3.14\\
 \end{itemize}
 \end{itemize}
 \subsubsection{Recursive functions}
-\label{sec:org3a91f8c}
+\label{sec:org7a0c731}
 Recursive functions are declared using the keyword \uline{let rec}
 \begin{itemize}
 \item let rec fact n =
@@ -349,14 +349,14 @@ Recursive functions are declared using the keyword \uline{let rec}
 \end{itemize}
 \begin{enumerate}
 \item Tail-recursive functions
-\label{sec:orgb96453a}
+\label{sec:orgec584c3}
 A function is said to be "tail-recursive", if there is nothing to do except return the final value. Since the execution of the function is done, saving its stack frame (i.e. where we remember the work we still in general need to do), is redundant
 \begin{itemize}
 \item Write efficient code
 \item All recursive functions can be translated into tail-recursive form
 \end{itemize}
 \item Ex. Rewrite Factorial
-\label{sec:org862d40e}
+\label{sec:org2d314a3}
 \begin{itemize}
 \item let rec fact\_tr n =
 \begin{itemize}
@@ -394,7 +394,7 @@ A function is said to be "tail-recursive", if there is nothing to do except retu
 \end{itemize}
 \end{enumerate}
 \subsubsection{Passing arguments}
-\label{sec:org15f2c3b}
+\label{sec:org791f282}
 \begin{itemize}
 \item ' means any type, i.e. 'a
 \item All args at same time
@@ -412,9 +412,9 @@ A function is said to be "tail-recursive", if there is nothing to do except retu
 \end{itemize}
 \end{itemize}
 \subsection{Data Types and Pattern Matching}
-\label{sec:orgcb3a67b}
+\label{sec:org709a782}
 \subsubsection{Playing cards}
-\label{sec:org4d138ee}
+\label{sec:org0ba8d36}
 \begin{itemize}
 \item How can we model a collection of cards?
 \item Declare a new type together with its elements
@@ -451,7 +451,7 @@ A pattern is either a variable or a \ldots{}
 \end{itemize}
 \begin{enumerate}
 \item Comparing suits
-\label{sec:org32c9e9a}
+\label{sec:orgc4a882d}
 Write a function dom of type suit*suit -> bool
 \begin{itemize}
 \item dom(s1,s2) = true iff suit s1 beats or is equal to suit s2 relative to the ordering Spades > Hearts > Diamonds > Clubs
@@ -461,9 +461,9 @@ Write a function dom of type suit*suit -> bool
 \end{itemize}
 \end{enumerate}
 \section{Lecture 4 \textit{<2017-09-19 Tue>}}
-\label{sec:org643511f}
+\label{sec:orgcd5b0e3}
 \subsection{Data Types and Pattern Matching Continued}
-\label{sec:org3573350}
+\label{sec:org1d42374}
 \begin{itemize}
 \item Type is unordered
 \item type suit = Clubs | Spades | Hearts | Diamonds
@@ -482,13 +482,13 @@ What is a hand? A hand is either empty or if c is a card and h is a hand then Ha
 \end{itemize}
 \end{itemize}
 \subsubsection{Recursive data type}
-\label{sec:orgcaca0e9}
+\label{sec:org99ac6e9}
 \begin{itemize}
 \item type hand = Empty | Hand of card * hand
 \end{itemize}
 \begin{enumerate}
 \item Typing into interpreter
-\label{sec:org2dc38f8}
+\label{sec:org0834467}
 \begin{itemize}
 \item Empty;;
 \begin{itemize}
@@ -516,7 +516,7 @@ What is a hand? A hand is either empty or if c is a card and h is a hand then Ha
 \end{itemize}
 \end{enumerate}
 \subsubsection{Extract Example}
-\label{sec:org84d2915}
+\label{sec:org4330a3a}
 \begin{itemize}
 \item Given a hand, extract all cards of a certain suit
 \item extract: suit -> hand -> hand
@@ -564,7 +564,7 @@ What if no card exists?
 \item type 'a option = None | Some of 'a
 \end{itemize}
 \section{Lecture 5 \textit{<2017-09-21 Thu>}}
-\label{sec:org4cba905}
+\label{sec:org16a88c3}
 \begin{verbatim}
 (* type mylist = Nil | Cons of ? * list;; *)
 (* Polymorphic lists:  *)
@@ -622,7 +622,7 @@ which given a list l it splits into two sublists,
 (every odd element, every even element)*)
 \end{verbatim}
 \subsection{Lists}
-\label{sec:org9c4c1f1}
+\label{sec:org17c92db}
 What are lists?
 \begin{itemize}
 \item Nil([]) is a list
@@ -636,17 +636,17 @@ What are lists?
 \item ; are syntactical sugar to separate elements of a list
 \end{itemize}
 \subsection{Execution}
-\label{sec:org71ce1b0}
+\label{sec:org42e4262}
 Understand how a program is executed
 \begin{itemize}
 \item \textbf{Operational Semantics}
 \end{itemize}
 \section{Lecture 6 \textit{<2017-09-22 Fri>}}
-\label{sec:org4d7e802}
+\label{sec:orgda9876c}
 \subsection{Proofs}
-\label{sec:org5653f01}
+\label{sec:org1cef8fc}
 \subsubsection{Demo: lookup \& insert}
-\label{sec:org67a2be1}
+\label{sec:org5ae5e86}
 \begin{verbatim}
 (* Warm up *)
 (* Write a function lookup: 'a -> ('a * 'b) list -> 'b option. 
@@ -708,21 +708,21 @@ let insert_t (k,v) l =
 \item What is the relationship between lookup and insert?
 \end{itemize}
 \subsubsection{How to prove it?}
-\label{sec:org2b37d5e}
+\label{sec:org2d41b8c}
 \begin{enumerate}
 \item Step 1
-\label{sec:org0c1ebf5}
+\label{sec:org40beac5}
 We need to understand how programs are executed (operational semantics)
 \begin{itemize}
 \item \(e \Downarrow v\) expression \(e\) evaluates in multiple steps to the value \(v\). (\textbf{Big-Step})
 \item \(e \Rightarrow e'\) expression \(ee\) evaluates in one steps to expression \(e'\). (\textbf{Small-Step (single)})
-\item \(e \implies * e'\) expression \(e\) evaluates in multiple steps to expression \(e'\) (\textbf{Small-Step (multiple)})
+\item \(e \implies^* e'\) expression \(e\) evaluates in multiple steps to expression \(e'\) (\textbf{Small-Step (multiple)})
 \end{itemize}
 
 For all l, v, k, lookup k (insert k v l) \(\implies *\) Some v
 Induction on what?
 \item Step 2
-\label{sec:org56297ea}
+\label{sec:org01aeefb}
 \(P(l) = lookup k\) (insert\((k,v) l\)) \(\Downarrow\) Some \(v\)
 \begin{itemize}
 \item How to reason inductively about lists?
@@ -744,10 +744,10 @@ Induction on what?
 \end{itemize}
 \end{itemize}
 \item Theorem
-\label{sec:org8637c68}
+\label{sec:orgdde1e4c}
 For all \(l, v, k\), lookup \(k\) (insert \((k,v) l\)) \(\implies *\) Some \(v\)
 \item Proof
-\label{sec:org0ccdca6}
+\label{sec:orgc640d95}
 Proof by structural inductional on the list \(l\)
 \begin{itemize}
 \item Case: \(l = []\)
@@ -784,7 +784,7 @@ Proof by structural inductional on the list \(l\)
 \end{itemize}
 \end{itemize}
 \item Lesson to take away
-\label{sec:orgcec0943}
+\label{sec:orgc68a71f}
 \begin{itemize}
 \item State what you are doing induction on
 \begin{itemize}
@@ -805,9 +805,9 @@ Proof by structural inductional on the list \(l\)
 \end{itemize}
 \end{enumerate}
 \section{Lecture 7 \textit{<2017-09-26 Tue>}}
-\label{sec:orgadb9105}
+\label{sec:org4034b6a}
 \subsection{Structural Induction}
-\label{sec:orgf88db59}
+\label{sec:org26755a4}
 \begin{itemize}
 \item How do I prove that all slices of cake are tasty using structural induction?
 \begin{itemize}
@@ -818,7 +818,7 @@ Proof by structural inductional on the list \(l\)
 \end{itemize}
 \end{itemize}
 \subsubsection{Example with rev}
-\label{sec:orgdd9241e}
+\label{sec:orgab3c2e1}
 
 \begin{verbatim}
 (* naive *)
@@ -844,7 +844,7 @@ let rec length l = match l with
 \end{verbatim}
 \begin{enumerate}
 \item Theorem:
-\label{sec:orgdf47dd5}
+\label{sec:orgd732bac}
 For all lists l, rev l = rev' l.
 
 What is the relationship between l, acc and rev\_tr l acc?
@@ -904,7 +904,7 @@ By induction on the list l.
 \end{itemize}
 \end{enumerate}
 \subsection{Trees}
-\label{sec:orgfda4600}
+\label{sec:orgc95d11a}
 \begin{verbatim}
 type 'a tree = Empty | Node of 'a = 'a tree * 'a tree;;
 let t0 = Node (5, Node (3, Empty, Empty), Empty);;
@@ -936,9 +936,9 @@ and size_many_trees t = match t with
   | MoreTrees f -> 1 + size_forest f
 \end{verbatim}
 \section{Lecture 8 \textit{<2017-09-28 Thu>}}
-\label{sec:org3ea3d93}
+\label{sec:org55e65f5}
 \subsection{Binary Tree (Inductive definition)}
-\label{sec:org88a1db6}
+\label{sec:org65bf63f}
 \begin{itemize}
 \item The empty binary tree empty is a binary tree
 \item If l and r are binary trees and v is a value of type 'a then Node(v, l, r) is a binary tree
@@ -953,7 +953,7 @@ Empty
 | Node of 'a * 'a tree * 'a tree |
 \end{verbatim}
 \subsection{Insert}
-\label{sec:org12e5be3}
+\label{sec:orga015f71}
 Want to make a function insert
 \begin{itemize}
 \item Given as input (x,dx), where x is key and dx is data and a binary search tree t
@@ -1039,16 +1039,16 @@ collect (Node (5, Node (3, Empty, Empty), Empty));;
 \end{verbatim}
 
 \subsection{Proving}
-\label{sec:org49b8cb0}
+\label{sec:org96c0a8e}
 \begin{itemize}
 \item How to reason inductively about trees? Analyze their structures!
 \end{itemize}
 
 \subsection{Theorem}
-\label{sec:orgcdbc3fb}
+\label{sec:org1977aca}
 For all trees t, keys x, and data dx, lookup x(insert (x, dx) t) \(\Rightarrow*\) Some dx
 \subsubsection{Proof by structural induction on the tree t}
-\label{sec:org523b522}
+\label{sec:org1028884}
 (You get points on an exam for mentioning what kind of induction, structural induction on tree, points for base case/case, points for stating induction hypothesis, perhaps multiple. Then show by a sequence of steps of how to get from what to show to the end)
 \begin{itemize}
 \item Case t = Empty
@@ -1072,9 +1072,9 @@ For all trees t, keys x, and data dx, lookup x(insert (x, dx) t) \(\Rightarrow*\
 \noindent\rule{\textwidth}{0.5pt}
 Exercise: write a type for cake (2 slice of cake together become 1 slice), with weight
 \section{Lecture 9 \textit{<2017-09-29 Fri>}}
-\label{sec:orgde6aa1e}
+\label{sec:orgefbcf49}
 \subsection{Higher-order functions}
-\label{sec:org18ddc2b}
+\label{sec:orge42365a}
 \begin{itemize}
 \item Allows us to abstract over common functionality
 \item Programs can be very short and compact
@@ -1087,7 +1087,7 @@ Exercise: write a type for cake (2 slice of cake together become 1 slice), with 
 \end{itemize}
 \end{itemize}
 \subsubsection{Abstracting over common functionality}
-\label{sec:org0be1466}
+\label{sec:orgb53f932}
 Want to write a recursive function that sums up over an integer range: \(\sum_{k=a}^{k=b}k\)
 
 \begin{verbatim}
@@ -1122,7 +1122,7 @@ if a > b then 0 else exp(2,a) + sum(a+1,b)
 \end{itemize}
 
 \subsection{Demo}
-\label{sec:orgdf659ba}
+\label{sec:orgb27c825}
 \begin{verbatim}
 (* Arbitrary functions *)
 (* cube, rcube, square, exp, sumInts, sumSquare, sumCubes, sumExp *)
@@ -1250,7 +1250,7 @@ if (a > b) then 1 else (f a) * product f (inc(a), b) inc
 
 Types can get crazy, too much abstraction may lead to less readability
 \subsection{Bonus}
-\label{sec:org7bca223}
+\label{sec:orga287819}
 Approximating the integral
 \begin{itemize}
 \item \(l = a + dx/2\)
@@ -1268,5 +1268,391 @@ let integral f (a,b) dx =
 dx * sum f (a+.(dx/2.),b) (fun x-> x+. dx)
 (* Follows format of sum function above
 Can easily write a short program like above*)
+\end{verbatim}
+\section{Lecture 10 \textit{<2017-10-03 Tue>}}
+\label{sec:org447c447}
+\begin{verbatim}
+(* Common built in higher-order functions we'll be writing *)
+
+(* map: ('a -> 'b) -> 'a list -> list, bracket does whatever function f does *)
+(* map is the most important higher order function *)
+let rec map f l = match l with
+  | [] -> []
+  (* Apply function to head and then prepend to what you get from recursive call *)
+  | h :: t -> (f h) :: map f t;;
+
+(* Increment all by one  *)
+map (fun x -> x + 1) [1 ; 2 ; 3 ; 4];;
+
+(* Convert to strings *)
+map (fun x -> string_of_int x) [1 ; 2 ; 3 ; 4];;
+
+(* filter: ('a -> bool) -> 'a list -> 'a list  
+ Want to filter out elements of a list  
+ function in bracket takes an argument and returns boolean whether it's good or not*)
+(* Ex. filter (fun x-> x mod 2 = 0) [1 ; 2 ; 3 ; 4] should give [2 ; 4] *)
+let rec filter p l = match l with
+  | [] -> []
+  | h :: t ->
+     (* If it satisfies p, prepend to recursive call *)
+     if p h then h :: filter p t 
+     else filter p t;;
+
+(* Being on the safe side, we can write: 
+ * let pos l = filter (fun x -> x > 0) l *)
+
+(* But we can also write , because it partially evaluates function
+ * What we get back is a function from 'a list -> 'a list
+ * and we can return a function *)
+let pos = filter (fun x -> x > 0);;
+
+pos [1 ; -1 ; 2 ; -3 ; -4 ; 7];;
+
+(* fold_right: _f_ -> _base/init_ -> 'a list -> _result_
+`* fold_right: ('a * 'b -> 'b) -> 'b -> 'a list -> 'b 
+ * Also known as reduce in some other languages
+ * For example, if we want to sum over a list we'd write: *)
+
+(* let rec sum l =
+ *   let rec suma l acc = match l with
+ *     | [] -> acc
+ *     | h::t -> suma t (h+acc) in
+ *   suma l 0;;
+ * 
+ * (\* sum [1 ; 2 ; 3 ; 4];; *\)
+ * (\* 1+(2+(3+(4+0))) *\)
+ * 
+ * let rec prod l =
+ *   let rec proda l acc = match l with
+ *     | [] -> acc
+ *     | h::t -> proda t (h*acc) in
+ *   suma l 1;; *)
+(* For a string, we'd concat instead of add or multiply 
+ * So we want to abstract this common functionality *)
+
+(* 1, f(2, f(3,f(4))) *)
+
+(* fold_right f init [x1 ; .... ; xn] 
+ * ==> f(x1, f(x2,... (f(xn, init))))
+ * fold_right: ('a * 'b -> 'b) -> 'b -> 'a list -> 'b *)
+
+let rec fold_right f init l = match l with
+  | [] -> init
+  | h :: t -> f(h, fold_right f init t);;
+(* Not really tail recursive, can make it tail recursive though *)
+
+
+fold_right (fun (x,acc)->x+acc) 0 [1 ; 2 ; 3 ; 4 ; 5];; (* sum *)
+fold_right (fun (x,acc)->x*acc) 1 [1 ; 2 ; 3 ; 4 ; 5];; (* prod *)
+
+(* Concatenate as strings in list 
+ * Convert each int to a string and use ^ operator to concatenate 2 strings
+ * init is empty string*)
+fold_right (fun (x,acc)->(string_of_int x) ^ acc) "" [1 ; 2 ; 3 ; 4 ; 5];;
+
+
+(* Function that adds two numbers, but doesn't work with fold_right 
+ * as it needs a function that takes a tuple, not 2 ints  *)
+(+) 3 4;;
+
+(* Folds the other way, will see difference with String function, 
+ * but not with commutative things like addition
+ * fold_left f init [x1 ; .... ; xn] ==> f(xn, (f (xn-1, ... (f (x1, init)))))
+ * fold_left: ('a * b' -> 'b) -> 'b -> 'a list -> 'b*)
+
+let rec fold_left f init l = match l with
+  | [] -> init
+  | h::t -> fold_left f (f (h, init)) t;;
+
+fold_left (fun (x,acc)->(string_of_int x) ^ acc) "" [1 ; 2 ; 3 ; 4 ; 5];;
+
+(* for_all p l returns true if all elements in l satisfy p *)
+(* let rec for_all p l  *)
+
+(* exists p l returns true if there exists an elements in l satisfy p *)
+
+(* Things in basic library *)
+List.map;;
+List.fold_right;;
+List.fold_left;;
+List.filter;;
+List.for_all;;
+List.exists;;
+(* etc *)
+(* Writing these functions is good practice *)
+\end{verbatim}
+\section{Lecture 11 \textit{<2017-10-05 Thu>}}
+\label{sec:orgf054859}
+\subsection{Lambda-Calculus}
+\label{sec:org606bc07}
+\begin{itemize}
+\item Simple language consisting of variables, functions (written as \(\lambda x.t\)) and function application
+\item We can define all computable functions in the Lambda-Calculus
+\item Church Encoding of Booleans:
+\begin{itemize}
+\item T = \(\lambda x.\lambda y.x\) Keeps first argument, throws the other.
+\item F = \(\lambda x.\lambda y.y\) Keeps second argument, throws the other.
+\item Lambda-Calculus is Turing complete, can do everything with it
+\end{itemize}
+\end{itemize}
+\subsection{Back to the beginning}
+\label{sec:org305172e}
+\begin{verbatim}
+(*Binding variables to functions*)
+let area : float -> float = function r -> pi *. r *. r
+(*or*)
+let area (r:float) = pi *. r *. r
+\end{verbatim}
+
+\begin{itemize}
+\item The variable name area is bound to the value function r -> pi *. r *. r, which OCaml prints as <fun>
+\begin{itemize}
+\item The type is float->float
+\end{itemize}
+\item Good question:
+\begin{itemize}
+\item let plus x y = x + y
+\item What is the type of plus?
+\begin{itemize}
+\item An integer? (answer 1) Wrong
+\item int -> int -> int (answer 2) \uline{Correct answer}
+\item A function (answer 3) Wrong, function is not the \textbf{type}
+\end{itemize}
+\item let plus' (x,y) = x+y
+\begin{itemize}
+\item type is int * int -> int
+\end{itemize}
+\end{itemize}
+\item What are types?
+\begin{itemize}
+\item Base types: Int, float, string\ldots{}
+\item If T is a type and S is a type then
+\begin{itemize}
+\item T->S is a type
+\item T*S is a type
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\subsection{Curry}
+\label{sec:org8c1d5e8}
+let curry \(\underbrace{f}_{\text{'a * 'b -> 'c}}= fun \underbrace{x}_{\text{'a}}  \underbrace{y}_{\text{'b}} \text{ -> } f \overbrace{(x, y)}^{\text{'a * b}}_{\text{'a -> 'b -> 'c}}\)
+\begin{itemize}
+\item curry \(\underbrace{plus'}_{\text{int * int -> int}}\): int -> int -> int
+\item fun x y -> plus' (x,y)
+\begin{itemize}
+\item OCaml gives you <fun>
+\item Shouldn't we continue evaluation plus'(x,y) and get as a final result fun x y -> x + y?
+\begin{itemize}
+\item No, we never evaluate inside function bodies
+\item When OCaml sees fun, it stops looking
+\begin{itemize}
+\item It has a function, it's a value, it's done
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\subsection{Uncurrying}
+\label{sec:org51d85c7}
+uncurry ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+\begin{itemize}
+\item The type of functions is \uline{right associative}
+\item \textbf{NOT} the same thing as 'a -> 'b -> 'c -> 'a * 'b -> 'c
+\item \textbf{Important} to know how to read functions.
+\begin{itemize}
+\item Ex. plus function from earlier
+\item Can also have plus x = fun y -> x + y
+\begin{itemize}
+\item int -> (int -> int)
+\item Makes a function from an int
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\subsection{Demo}
+\label{sec:orga6b379f}
+We've already seen functions that return other functions: derivatives!
+\begin{verbatim}
+(* Write a function curry that takes as input 
+ * a function f:('a * 'b)->c' 
+ * and returns as a result a function
+ * 'a->'b->'c*)
+(* *)
+(* curry : (('a * 'b)->'c)-> 'a -> 'b -> 'c 
+ * Note: Arrows are right-associative. *)
+let curry f = (fun x y -> f (x,y))
+
+let curry_version2 f x y = f (x,y)
+
+let curry_version3 = fun f -> fun x -> fun y -> f (x,y)
+
+						  (* Uncurry *)
+						  (* uncurry ('a -> 'b -> 'c) -> 'a * 'b -> 'c *)
+let uncurry f = (fun (x,y) -> f x y)
+
+(* swap : ('a * 'b -> 'c) -> 'b * 'a -> 'c *)
+let swap f = fun (b, a) -> f(a , b)                  
+
+let plus' (x,y) = x + y
+
+(* swap plus' ===> fun (b,a) -> plus' (a,b) *)
+\end{verbatim}
+\subsection{Partial evaluation}
+\label{sec:org17c92f5}
+\begin{itemize}
+\item A technique for optimizing and specializing programs
+\item Generate programs from other programs
+\item Produce new programs which run faster than originals and guaranteed to behave in same way
+\item What is the result of evaluation curry plus'?
+\begin{itemize}
+\item \(\implies\) It's a function!
+\item Result: fun x y -> plus' x y
+\begin{itemize}
+\item Still waiting for x y
+\item What if we just pass in 3? (plus 3)
+\begin{itemize}
+\item fun y -> 3 + y
+\item We generated a function!
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\item let plusSq x y = \(\underbrace{x * x}_{horriblyExpensiveThing(x)}\) + y
+\begin{itemize}
+\item fun y -> 3 * 3 + y (if we set x as 3), won't evaluate this expensive function until we give it a y
+\item If we write:
+\begin{itemize}
+\item plusSq 3 10
+\item plusSq 3 15
+\item plusSq 3 20
+\end{itemize}
+\item We'd have to evaluate horribly expensive function 3 times.
+\item Why not store it and use it for the next computation?
+\end{itemize}
+\end{itemize}
+\#+BEGIN\_SRC ocaml
+let betterPlusSq x =
+	let x = horriblyExpensiveThing(x)
+		in fun y -> x + y
+\#+END\_SRC ocaml 
+\begin{itemize}
+\item Now we get:
+\item let x = horriblyExpensiveThing 3 in fun y -> x+y -> fun y ->9+y
+\begin{itemize}
+\item Now we can use this function to quickly compute without having to do the expensive function
+\item Partial evaluation is very important
+\end{itemize}
+\end{itemize}
+\section{Lecture 12 \textit{<2017-10-06 Fri>}}
+\label{sec:org784e058}
+\begin{itemize}
+\item Review by Leila: Today
+\begin{itemize}
+\item 6-7:30 pm, MC 103
+\end{itemize}
+\item Cheat sheet correction, minimum 12 pt, not max
+\end{itemize}
+\subsection{Review}
+\label{sec:orgd293eba}
+Types of questions:
+\begin{enumerate}
+\item fun x -> x +. 3.3
+\begin{itemize}
+\item What is the type?
+\begin{itemize}
+\item float -> float
+\end{itemize}
+\item What does it evaluate to?
+\begin{itemize}
+\item <fun> or fun x -> x +. 3.3
+\end{itemize}
+\item let x = 3 in x + 3
+\begin{itemize}
+\item type: int
+\item eval: 6
+\end{itemize}
+\item let x = 3 in x +. 3
+\begin{itemize}
+\item type: error
+\item eval: n/a
+\end{itemize}
+\end{itemize}
+\item Programming in OCaml
+\begin{enumerate}
+\item Higher-order functions
+\begin{itemize}
+\item Nothing too crazy since we haven't had any assignments on it
+\item Maybe like the built in functions we implemented the other day
+\item using map, for$\backslash$\_all, filter, exists\ldots{}
+\end{itemize}
+\end{enumerate}
+\item Induction proof
+\end{enumerate}
+\subsection{Demo, using higher order functions}
+\label{sec:orgea79051}
+\begin{verbatim}
+(* simplified roulette *)
+type colour = Red | Black
+
+type result = colour option (* Result of run*)
+
+type amt = int
+type bet = amt * colour
+
+type id = string
+type player = id * amt * bet option
+
+(* See who won *)
+let compute (am, col : bet) : result -> int = function
+  | None -> 0
+  | Some col' -> if col = col' then am * 2 else 0
+
+(* same as: *)
+
+(* let compute (am, col) r = match r with
+ *   | None -> 0
+ *   | Some col' -> if col = col' then am * 2 else 0 *)
+
+(* Solve all these questions without using recursion or 
+ * pattern matching on lists, but instead just use the HO functions we saw in class *)
+
+let bets = [ ("Aliya", 1000, Some (400, Red)) ;
+	     ("Jerome", 800, Some (240, Black)) ;
+	     ("Mo", 900, Some (200, Black)) ;
+	     ("Andrea", 950, Some (100, Red))]
+
+(* Q1: given a list of players compute the new amounts each player has and set their bets to None *)
+let compute_all_results (l : player list) (r : result) =
+  (* Should map players to their new vals, player has name id and amt. 
+   * What function? Act on bet type
+   * Keep id, add compute to amount and no more bet 
+   * Need to get bet out of bet option
+   * Use pattern matching*)
+
+  (* List.map (fun (id, amt, bopt) -> match bopt with
+   *                                  | None -> (id, amt, bopt)
+   *                                  | Some b -> (id, amt + compute b r , None)) l *)
+
+  (* Alternative with function *)
+  List.map (function (id, amt, Some b) -> (id, amt +compute b r , None)
+		   | (id, amt, None) -> (id, amt, None)) l
+;;
+compute_all_results bets (Some Red);;
+
+(* Q2: given a list of bets and a result 
+compute a list of winning players with their bets *)
+
+(* Use filter *)
+let compute_winners (l : player list) (r : result) =
+  List.filter(function (id, amt, Some b) -> compute b r > 0
+		     | (id, amt, None) -> false) l
+;;
+compute_winners bets (Some Red);;
+
+(* Q3: given a list of bets and a result compute 
+ * how much money the casino needs to pay back*)
+
+(* Use fold *)
+
+(* Q4 : given a list of bets and a result 
+ * compute if nobody won *)
+(* Check if there is a winner (exists ho func) or if everyone is a loser (for_all) *)
 \end{verbatim}
 \end{document}
