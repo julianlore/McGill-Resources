@@ -966,3 +966,105 @@ Given requests, how many resources do we need to satisfy all of them?
 - Def. depth is the maximum number of requests that have a common point in the time line.
 **** Claim
 The # of resources is at least $d$. $\{I_1, \ldots , I_d\}$- requests with depth $d$.
+* Lecture 10 <2017-10-10 Tue>
+** Recall
+Interval scheduling
+- Input: Lectures $s_j, f_n$ (start and finish) $j=1,\ldots n$
+- Goal: Find the largest non-overlapping set.
+- Alg: Always pick the job with earliest finish time.
+** Partition scheduling
+Now we really want to accommodate all these jobs. How many rooms/resources do we need?
+- Input: Same as above
+- Goal: Smallest number of rooms that can accommodate all the lectures.
+*** Greedy Template
+Consider lectures in some *natural order*. Assign each lecture _to an available room_ (how?). If none is available open a new room.
+-----------------------
+Earliest-Start-Time-first
+- (n, $s_1$, $\ldots$, $s_n$, $f_1$, $\ldots$, $f_n$)
+Sort the lectures so that $s_1 \leq s_2 \leq \ldots \leq s_n$
+
+$d=0$ (number of rooms)
+\begin{algorithmic}
+  \For {j = 1,\ldots, n}
+  \If {lecture $j$ is compatible with room $k$}
+  \State Assign $j$ to room $k$
+  \Else Assign $j$ to room $d+1$
+  \State set $d=d+1$
+  \EndIf
+  \EndFor
+\end{algorithmic}
+Now that we have the algorithm, we need to analyze its correctness and its running time.
+**** Running Time
+- Sorting: $O(n \log n)$
+- For loop runs $n$ times. Each time we check if a lecture is compatible with a room, so we must do this fast.
+- To see if lecture $j$ is compatible with a room $k$ we only need to compare $s_j$ with the finishing time of the last lecture assigned to that room. (Since we know that none of the lectures in the room start after time $s_j$)
+[[./Images/i29.png]]
+So for each room we keep a variable which tells us when the room becomes available.
+[[./Images/i30.png]]
+We need to see if $s_j > \min{(F_1,\ldots,F_d)}$. (How to do this quickly? Priority queue.)
+\begin{algorithmic}
+  \If {Yes} The room with minimum $F_k$ is available
+  \Else \ Open a new room
+  \EndIf
+\end{algorithmic}
+This is the priority queue problem: Always want to know the minimum (we can add or delete numbers from the list). Using a _heap_ this can be implemented so that all insertions and deletions can be done in $O(\log n)$
+---------------
+Running Time: 
+- $\underbrace{O(n \log n)}_{\text{Sort}} + \overbrace{n}^{\text{For loop}} \times \underbrace{O(\log n)}_{\text{Priority queue}} = O(n \log n)$
+**** Correctness
+Why does this alg output the best solution?
+- Depth: Max number of intervals that contain any point on the timeline
+[[./Images/i31.png]]
+- Obviously: Optimal $\geq$ depth
+- Claim: When the algorithm opens a new room $d$ then depth $\geq$ d
+- Proof: Room $d$ is opened since lecture $j$ was incompatible with $d-1$ other rooms.
+[[./Images/i32.png]]
+In this case every room $1,\ldots,d-1$ has a lecture that ends after $s_j$ (and starts before $s_j$, due to the way the algorithm works). These together with $j$ show depth $\geq d$
+---------
+What do we know? depth $\geq$ Output of algorithm d (just showed) $\geq$ optimal $\geq$ depth (earlier) $\implies$ depth $=$ optimal $=$ output of alg
+** Minimizing Lateness
+- Input: $n$ tasks.
+  - Processing times: $t_1, \ldots, t_n$
+  - Deadline: $d_1,\ldots,d_n$
+- Goal: We have a single processor. Ideally we want to schedule all tasks so that they all finish before their deadlines.
+Each task will be scheduled for some time $s_j = f_j-t_k$ to $f_j$ (to finish at $f_j$ we need to start at $f_j-t_k$).
+- Lateness $=$ $\max_j{f_j - d_j} (Time we finish - deadline for job)
+- Goal: Minimize the lateness
+*** Greedy Template
+Sort the jobs according to some order and assign them to the processor according to this order.
+
+Shortest job first?
+- This doesn't work.
+| Process Time | Deadline |
+|--------------+----------|
+|            1 |      100 |
+|           10 |       10 |
+Optimal is $f=10, f=11$. But this alg gives us $f=1, f=11$. 
+
+Smallest slack $(d_j-t_j)$ first. But this might give us huge lateness.
+|  t |  d |
+|----+----|
+|  1 |  2 |
+| 10 | 10 |
+Optimal: $f=1, f=11$, lateness $=$ 1
+
+Alg: $f=10, f=11$, lateness $=$ 9
+*** Optimal Alg
+Sort by the deadline: $d_1 \leq d_2 \leq \ldots d_n$
+\begin{algorithmic}
+  \State Set f $\gets 0$
+  \For {$i=1 \ldots n$}
+  \State Assign job $j$ to $[f,f+t_j]$
+  \State $f=f+t_j$
+  \EndFor
+\end{algorithmic}
+Running time: $O(n \log n)$ (sort)
+---------
+Why is this optimal? Suppose the optimal is not sorted according to deadlines. Then we will have $i$ and $j$: 
+
+What will switching these two jobs do? It can only improve the lateness. 
+** Midterm
+Next class is the midterm, will be split into 2 rooms.
+- Topics: Everything until today
+- Format: Similar to assignments, 3-4 questions like on the assignments
+- No crib sheets
