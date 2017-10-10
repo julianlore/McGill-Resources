@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\usepackage[margin=1 in,headheight=20pt]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{relsize}
+\usepackage{lastpage}
+\allowdisplaybreaks
+
+\theoremstyle{plain} 
+\newtheorem*{thm}{Theorem}
+
+\pagestyle{fancy}
+\lhead{COMP 302-001}
+\chead{practice.ml Induction Proof}
+\rhead{\today
+	\\ LORE, JULIAN}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+
+\begin{document}
+\onehalfspacing
+\begin{thm}
+  For all lists \texttt{l}, \texttt{even\_parity l} $=$ \texttt{even\_parity\_tr l}.
+\end{thm}
+\begin{proof}
+  By structural induction on \texttt{l}.
+  \begin{itemize}
+  \item \textbf{Base case}: \texttt{l = []}
+    \begin{align*}
+      \texttt{even\_parity l} &= \texttt{even\_parity []} &
+      \\ & =
+           \texttt{false} & \text{By definition of \texttt              {even\_parity}}
+      \\ & = \texttt{parity false []} & \text{By                           definition of \texttt{parity}}
+      \\ & =
+           \texttt{even\_parity\_tr
+           []} & \text{By definition of \texttt{even\_parity\_tr}}
+      \\ & = \texttt{even\_parity\_tr l}
+    \end{align*}
+  \item \textbf{Step}: \texttt{l} $=$ \texttt{x ::\ xs} for some element
+    \texttt{x} and list \texttt{xs}.
+    \\ \textbf{Inductive Hypothesis}: \texttt{even\_parity xs} $=$
+    \texttt{even\_parity\_tr xs}
+    \begin{itemize}
+    \item Case 1. \texttt{x} $=$ \texttt{true}
+      \begin{align*}
+        & \texttt{even\_parity\_tr l}
+        \\ & = \texttt{even\_parity\_tr true ::\ xs}
+        \\ & = \texttt{parity false true ::\ xs} & \text{By              definition of \texttt{even\_parity\_tr}}
+        \\ & = \texttt{parity (false <> true) xs} & \text{By
+                                                    definition of \texttt{parity}}
+        \\ & = \texttt{parity true xs} & \text{By definition of $\oplus$}
+        \\ & = \texttt{not (not(parity true xs))} & \text{By definition
+                                                  of not}
+        \\  (*) & = \texttt{not (parity false xs)} & \text{Since
+                                                 \texttt{parity false
+                                                 l} $=$ \texttt{not parity true l}}
+        \\ & = \texttt{not (even\_parity\_tr xs)} & \text{By
+                                                    definition of \texttt{even\_parity\_tr}}
+        \\ & = \texttt{not (even\_parity xs)} & \text{By IH}
+        \\ & = \texttt{even\_parity true ::\ xs} & \text{By definition
+                                                   of \texttt{even\_parity}}
+      \end{align*}
+    \item Case 2. \texttt{x} $=$ \texttt{false}.
+      \begin{align*}
+        & \texttt{even\_parity\_tr l}
+        \\ & = \texttt{even\_parity\_tr false ::\ xs}
+        \\ & = \texttt{parity false false ::\ xs} & \text{By
+                                                    definition of \texttt{even\_parity\_tr}}
+        \\ & = \texttt{parity (false <> false) xs} & \text{By
+                                                     definition of \texttt{parity}}
+        \\ & = \texttt{parity false xs} & \text{By definition of $\oplus$}
+        \\ & = \texttt{even\_parity xs} & \text{By IH}
+        \\ & = \texttt{even\_parity false ::\ xs} & \text{By
+                                                    definition of \texttt{even\_parity}}
+      \end{align*}
+    \end{itemize}
+  \end{itemize}
+  \textit{Step (*) may not be correct/may require more expansion.}
+\end{proof}
+\end{document}
