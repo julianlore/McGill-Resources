@@ -635,7 +635,7 @@ Assumption: There are _finitely_ many prime numbers:
 	- But then it must be divisible by some prime number.
 	- But, it _cannot_ be divisible by $p_1,p_2,\ldots,p_n$, as there will be a remainder of $1$ \lightning
 - So, assumption is false.
-* Lecture 7 <2017-09-26 Tue> 
+* Lecture 7 <2017-09-26 Tue>
 ** Quiz review
 - Try to use diagonalization on rational numbers?
   - Produced number may not be rational.
@@ -832,7 +832,7 @@ A _truth value assignment_ is a function from propositional variables to $\{T, F
 | T | F | F   | T   | F   |
 | F | T | F   | F   | T   |
 | F | F | F   | F   | T   |
-* Lecture 9 <2017-10-03 Tue> 
+* Lecture 9 <2017-10-03 Tue>
 ** Propositional Logic
 Most of this is on handout 2b.
 
@@ -987,3 +987,205 @@ Prove: $A\vee C, A \supset B, C \supset D \vdash_{ND} B \vee D$
   RAA is a proof by contradiction.
 Prove: $\vdash_{ND}\sim A \supset (A \supset B)$
 # Image
+* Lecture 11 <2017-10-10 Tue>
+** Recap
+- A, A $\supset$ B $\models$ B
+  - It is impossible for $B4 to be false and $A$ and $A\supset B$ to be true.
+- A, A $\supset$ B $\vdash_{ND}$ B
+  - $\frac{A \ A \supset B}{B}\supset E$
+  - How many rules in natural deduction system? About 10. How many axioms? None.
+** Axiomatic Proof System
+- IR: From A and A $\supset$ B, infer $B$ (MODUS PONENS)
+- Substitution rule: Any wff can be substituted for A, B, C
+- Axiom schemata: (has meta variables, infinitely many axioms. Difference between axioms is important, good quiz question)
+  1. $\sim A \supset (A \supset B)$
+  2. $B \supset (A \supset B)$
+  3. $(A \supset B) \supset ((\sim A \supset B) \supset B)$
+  4. $(A \supset (B \supset C)) \supset ((A \supset B) \supset (A \supset C))$
+  5. $(A \supset (B \supset (A \wedge B)))$
+  6. $(A \wedge B) \supset A$
+  7. $(A \wedge B) \supset B$
+  8. $A \supset (A \vee B)$
+  9. $B \supset (A \vee B)$
+  10. $((A \vee B) \wedge \sim A)\supset B$
+- Don't need to memorize these axioms or the natural deduction rules. Will be given on an exam if required.
+- A _proof_ of $A$ from assumptions $A_1,\ldots, A_n$ is a sequence of wffs such that each element of the sequence is:
+  1) An instance of an axiom
+  2) An assumption (since it's a proof from assumptions)
+  3) The result of MP (the inference rule) to earlier elements in the sequence
+- 1 & 2 are base clauses, 3 is the inductive clause. This is a recursive definition. Since proofs are defined inductively, we can proof things about proofs using induction.
+
+_Prove_: A $\supset$ A $\vdash_{AX}$ B $\supset$ $(A \supset A)$
+1. $A \supset A$ Assumption
+2. $(A \supset A)\supset (B \supset (A \supset A)) Ax2 (A\ supset A/B, B/A)$  $(A \supset A)$ replaces B in the axiom, $B$ replaces $A$ in the axiom.
+3. $B \supset (A \supset A)$ MP on 1 and 2
+_Prove_: $A \supset (B \supset C) \vdash_{AX} (A \supset B) \supset (A \supset C)$
+1. $A \supset (B \supset C)$ Assumption
+2. $(A \supset (B \supset C)) \supset ((A \supset B) \supset (A \supset C))$ Ax 4
+3. $(A \supset B) \supset (A \supset C)$ MP 1,2
+** GEB proof system
+# - Joining rule: If $A$ and $B$ are theorems
+*** Ex. 
+$\vdash_{ND} (A \wedge B) \supset (B \wedge A)$
+- $\frac{\frac{A \wedge B}{B}\wedge Elim \ \frac{A \wedge B}{A} \wedge Elim}{\frac{B \wedge A}{(A \wedge B) \supset (B\wedge A)} \supset Intro}\wedge Intro$
+$\vdash_{GEB} (A \wedge B) \supset (B \wedge A)$
+[ push
+- $A \wedge B$ ass
+- $A$ sep
+- $B$ sep
+- $B \wedge A$ joining
+] pop
+$(A \wedge B)\supset (B \wedge A)$
+- Won't go over GEB system in class, not as interesting, but you can look it over in handout or in GEB.
+** Relations of systems
+How do these 3 systems relate to each other?
+
+What we have so far: 
+1. Semantic consequence: $\Gamma \models A$, read as $\Gamma$ _entails_ $A$ or $A$ is a _logical consequence_ of $\Gamma$  
+   - Check via _truth tables_
+2. Syntactic: $\Gamma \vdash A$, read as $\Gamma$ _proves_ $A$ or $A$ is _derivable_ from $\Gamma$
+   - Check via natural deduction
+   - or axiomatic proof
+   - or GEB proof
+   - All 3 are equivalent
+# How do we show that they are all equivalent?
+To show that the natural deduction system and the axiomatic system are equivalent (proofs in one system can be acquired in the other system):
+1. Prove all axioms from the natural deduction rules. (Modus Ponens is an inference rule in natural deduction)
+2. Show that each natural deduction rule corresponds to an axiomatic proof
+----------
+Proving axiomatic axioms:
+1. $\vdash \sim A \supset (A \supset B)$
+   [[./Images/i19.png]]
+2. [[./Images/i20.png]]
+You can do this for all axioms and you'll get that they're equivalent. The fact that we know they're equivalent now allows us to use which one we prefer and go from one to the other, you won't lose any logical power.
+------------
+How does the semantic consequence relate to the syntactic consequence?
+*** Soundness Theorem
+If $\Gamma$ is a set of wff and $A$ wff then:
+- If $\Gamma \vdash A$, then $\Gamma \models A$
+- To show, show that all axioms are tautologies and we know the modus ponens is a semantic consequence as well.
+We also have if $\vdash A$, then $\models A$, i.e. if derivations with no or closed assumptions, then tautology, via soundness theorem.
+*** Completeness Theorem
+If $\Gamma \models A$, then $\Gamma \vdash A$
+- If $A$ is a logical consequence of $\Gamma$, then there is also a proof of $A$ from $\Gamma$
+Proof of these theorems done in PHIL 310 and MATH 318
+
+if $\models A$, then $\vdash A$, tautologies can be derivations with no or closed assumptions
+* Lecture 12 <2017-10-12 Thu>
+- There will be a proof question on the quiz (natural deduction/axiomatic)
+  - You will be given the rules, don't need to memorize
+- Most important thing is terminology
+** Recap
+- Propositional logic
+  - Syntax (formula trees):
+    - Language
+    - (Inference) rules
+    - Proof-systems
+  - Semantics:
+    - Truth tables
+  - Soundness and completeness theorem (connects them)
+- Now we will be doing the same thing (structurally), but we'll be doing first order logic
+  - No truth tables, but structures and interpretations instead
+** First Order Logic (FOL)
+Language $\frak{L}$ of FOL:
+1. Variables: $X_0, X_1, X_2, \ldots$
+2. n-ary (can have $n$ arguments) function symbols: $f_0, f_1, f_2, \ldots$
+   - $0$-ary fun symbols: _constant_, don't take in any arguments
+3. Predicate symbols ($n$-ary): $P_0, P_1, P_2$
+4. Pred. symbol $=$
+5. Propositional connectives: $\wedge, \vee, \supset, \sim, \perp$
+6. Quantifiers: $\forall$ ("for all", universal), $\exists$ ("exists", existential)
+7. Parentheses: $()$
+2 and 3 are called extra-logical, since they aren't fixed, need to be given meaning, must be interpreted when we give the semantics.
+
+Expressions: 
+| Prop.     | FOL                |
+|-----------+--------------------|
+| wff - T/F | wff - T/F          |
+|           | Terms - like names |
+
+*** Term
+Def. A _term_ is 
+1. A variable is a term
+2. If $f$ is an n-ary fun symbol, and $t_1,\ldots,t_n$ are terms, then $f(t_1,\ldots,t_n)$ is a term.
+3. Nothing else.
+
+Sometimes write $t_1 f t_2$ for $f(t_1,t_2)$ (infix notation for binary function symbols)
+*** wff
+A _wf-formula_
+1. If $P$ is an n-ary predicate symbol, $t_1, \ldots, t_n$ are terms, then $P(t_1, \ldots, t_n)$ is a wff. (atomic formula)
+   - In particular: $t_1 = t_2 = (t_1, t_2)$ is wff
+2. If $A, B$ are wff then $\sim A, (A \vee B), (A \wedge B), (A \supset B)$ (we see that propositional logic is built into first order logic)
+3. If $A$ is a wff, x a variable, then
+   - $(\forall x : A)$ and $(\exists x : A)$ are wff. Here, $A$ is called the scope of the quantifier.
+4. Nothing else.
+*** First Order Arithmetic (FOA)
+- Going to be using this a lot
+To use FOL, you must specify the language $\frak{L}$ which describes the function symbols.
+**** Syntax
+- Fun symbols: 
+|-------+-------------+------------------+-------+-------------|
+| Arity |           0 | 1                | 2     | 2           |
+|       |           0 | S                | $+$   | $x$         |
+|       | Zero symbol | Successor symbol | Plus  | Times       |
+|       |    Constant | S(x)             | $t+t$ | $t\times t$ |
+- Terms: Ex: $s(s(0)),x_1,0, +(x_1,x_2), 0 \times S(0)$
+- Formulas: $x_1 = x_2$ (Since a formula involves a predicate symbol and the only predicate symbol we have is $=$)
+  - $0=(x_1+x_2)$
+  - $\sim(0 = (x_1+x_2))$
+  - $(x_1 = x_2) \supset \sim(O = (x_1+x_2))$
+  - $(\forall x_1 : x_1 = 0)$
+  - $(\exists x_1 : x_1 = 0)$
+  - These can all be true or false depending on what we're talking about
+**** Semantics
+Structure = <universe of discourse; designated elements from UD (constants); n-ary operations (fun symbols); n-ary relations (predicate symbols)>
+- Structure depends on language you want to interpret. If your language has no constants, you won't need designated elements. If you have 5 fun symbols, you'll need 5 n-ary operations, etc.
+- An interpretation of a language $\frak{L}$, is a structure and a mapping $\sigma$ of the extra-logical symbols into the structure.
+- An interpretation of FOA: 
+  - $\frak{n}=$ <natural numbers; zero; successor; addition; multiplication> (natural number structure, how it was made to be interpreted. But you can interpret it differently. You can swap the mapping, but make sure they have the same arity: can switch addition with multiplication, but not successor with zero)
+  - $\frak{L}$: 0 s $+$ $\times$
+  - Map: 0 -> $0$, s -> successor, $+$ -> addition$(+)$, $\times$ -> multiplication $(\times)$
+    - Make sure to understand the difference between the semantic level and the syntactic level. They look the same, one is the symbol and one is the meaning. One is the symbol for addition, but the other means addition.
+    - Why don't we have n-ary relations? Because FOA has no predicate symbols. Shows how structure is dependent on language.
+    - $\times^{\sigma}=\sigma(x)=$mult, shows what $\times$ maps to in mapping $\sigma$
+**** Truth in a structure (Tarski 1933)
+(T1) If x is a variable, then $x^{\sigma}$ is given by the _valuation_ (interpretation that also interprets the variables, i.e. map $x_1$, $x_2$, etc.).
+
+(T2) If f is an n-ary function symbol, $t_1,\ldots,t_n$ terms:
+- $(f(t_1,\ldots, t_n))^{\sigma} = f^{\sigma}(t_1^{\sigma},\ldots ,t_n^{\sigma})$
+  - e.g. $[s(s(0))]^{\sigma} = s^{\sigma}(
+[s(0)
+]^{\sigma}) = s^{\sigma}(s^{\sigma}(0^{\sigma}))$
+(F1) $P$ nary predicate symbol, $t_1, \ldots , t_n$ terms
+- 
+\begin{equation}
+(P(t_1, \ldots, t_n))^{\sigma} = 
+\begin{cases}
+T \& \text{if $P^{\sigma}$ holds of $t_n^0, \ldots, t_n^{\sigma}$} 
+\\ F & \text{Otherwise}
+\end{cases}
+\end{equation}
+(F2) 
+\begin{equation}
+(\sim A)^{\sigma} =
+\begin{cases} 
+T & \text{ if $A^{\sigma}$}=F
+\\ F & \text{ other wise}
+\end{cases}
+\end{equation}
+(F3) 
+\begin{equation}
+(A\supset B)^{\sigma} = 
+\begin{cases}
+T & \text{ if $A^{\sigma}=F$ or $B^\sigma$}
+\\ F & \text{ if $A^{\sigma}=T$ and $B^{\sigma}=F$}
+\end{cases}
+\end{equation}
+(F4) 
+\begin{equation}
+(\forall x : A)^{\sigma} = 
+\begin{cases}
+T & A^{\sigma/x}=T \text{ for all }u \in UD
+\\ F & \text{otherwise}
+\end{cases}
+\end{equation}
