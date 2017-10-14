@@ -1,4 +1,4 @@
-% Created 2017-10-06 Fri 21:36
+% Created 2017-10-13 Fri 21:39
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -29,7 +29,7 @@
 \tableofcontents
 
 \section{Lecture 1 \textit{<2017-09-05 Tue>}}
-\label{sec:org7f0b9ce}
+\label{sec:org34e152f}
 Logic \& Computability
 Prof. Dirk Schlimm
 \begin{itemize}
@@ -48,7 +48,7 @@ Prof. Dirk Schlimm
 This course complements the textbook, Godel, Escher Bach.
 
 \subsection{Homework}
-\label{sec:orgd59e5a6}
+\label{sec:org8b458c7}
 is not graded, just checked if done.
 \begin{itemize}
 \item Why?
@@ -70,7 +70,7 @@ Some times there will be intentional mistakes on the board.
 There are no stupid questions, even if you ask the same question as the person before you. Perhaps the professor's answer was unclear.
 The most stupid question is the one not being asked.
 \subsection{Quizzes}
-\label{sec:org1e55243}
+\label{sec:org0cdd172}
 \begin{itemize}
 \item 3 quizzes throughout this course
 \item Dates will be on the schedule on professor's website
@@ -83,7 +83,7 @@ The most stupid question is the one not being asked.
 Midterm is 25\%, Final is 40\%
 
 \subsection{Proofs}
-\label{sec:org842678b}
+\label{sec:org1a5fc57}
 We will see lots of proofs, different kinds of proofs.
 \begin{itemize}
 \item Direct: Go from assumption towards the theorem
@@ -107,10 +107,10 @@ We will see lots of proofs, different kinds of proofs.
 So you can split a proof into subproofs of these kinds.
 
 \subsubsection{Example Proofs}
-\label{sec:org4a0f892}
+\label{sec:org4dba572}
 \begin{enumerate}
 \item Thm
-\label{sec:orgf81e8a5}
+\label{sec:org2dc2590}
 \(\sqrt{2}\) is nor rational.
 \begin{itemize}
 \item Rational: Fractions: \(\frac{x}{y}\)
@@ -119,17 +119,17 @@ If you have a square with sides of length 1, the length of the diagonal is \(\sq
 Pythagoras proved this.
 \begin{enumerate}
 \item Def 1
-\label{sec:orgb51a455}
+\label{sec:orgb88b9de}
 A natural number \(a\) is \uline{even} if and only if (iff) \(\exists\) a natural number \(b\), such that \(a=2b\).
 \item Lemma 1
-\label{sec:org4d8e5fd}
+\label{sec:orgb93afd8}
 For any number \(a\), \(a^2\) is even \uline{iff} \(a\) is even.
 \begin{itemize}
 \item Biconditional, since iff
 \end{itemize}
 \begin{enumerate}
 \item Proof:
-\label{sec:orgcd56f7f}
+\label{sec:orgbb0e65e}
 \(\leftarrow\) Assume: \uline{\(a\) is even}.
 So there is: \(a=2b\) (by def. 1)
 
@@ -142,14 +142,14 @@ So there is: \(a^2=2b\) (by def. 1)
 \end{enumerate}
 
 \item Lemma 2
-\label{sec:org3753f5b}
+\label{sec:org46379c9}
 For any rational number \(x\), there are natural numbers \(a\) and \(b\), \uline{not both even}, s.t. \(x=\frac{a}{b}\)
 \begin{itemize}
 \item If they were both even, you could simplify the fraction by dividing by 2.
 \end{itemize}
 Proof omitted for this lemma.
 \item Proof of Thm:
-\label{sec:org8879f6a}
+\label{sec:orgbaaa0f6}
 Indirect proof. (Contradiction)
 Assume (for reductio/contradiction): \(\sqrt{2}\) is rational.
 By Lemma 2, \(\exists\) natural numbers \uline{\(a\) and \(b\) not both even} s.t. \(\sqrt{2}=\frac{a}{b}\)
@@ -171,14 +171,14 @@ So \(b^2\) is even (def. 1)
 Contradiction! Assumption is false, therefore \(\sqrt{2}\) is \uline{not} rational. \(\Box\)
 \end{enumerate}
 \item {\bfseries\sffamily TODO} Download Handout and read it
-\label{sec:org5a86884}
+\label{sec:org002e416}
 \end{enumerate}
 \section{Lecture 2 \textit{<2017-09-07 Thu>}}
-\label{sec:org5c109c6}
+\label{sec:org28860fe}
 Last class we talked about proofs \& types of proofs.
 Next week we'll be talking about sets and countability and comparing them all. Will talk about density of rationals and irrationals, to say which is bigger.
 \subsection{Things that are infinite}
-\label{sec:orge6732fb}
+\label{sec:org3adbfef}
 \begin{itemize}
 \item Natural numbers
 \item Rational numbers
@@ -186,7 +186,7 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \begin{enumerate}
 \item How do you prove things about infinitely large things?
-\label{sec:org7a6ce04}
+\label{sec:org0e4270b}
 \begin{itemize}
 \item Counter example
 \begin{itemize}
@@ -202,7 +202,7 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \end{enumerate}
 \subsection{Mathematical induction}
-\label{sec:orgbf7b8bd}
+\label{sec:org1cded1e}
 \begin{itemize}
 \item Inference (step):
 \begin{itemize}
@@ -211,21 +211,21 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \end{itemize}
 \subsubsection{Deduction:}
-\label{sec:org71a0b22}
+\label{sec:org03a9f9f}
 \begin{itemize}
 \item It is impossible for the premises of an inference step to be \uline{true} and the conclusion \uline{false}.
 \item The conclusion follows \uline{necessarily} from the premises. (reformulation of above)
 \end{itemize}
 \begin{enumerate}
 \item e.g.
-\label{sec:orgd66fa5e}
+\label{sec:orgd70a195}
 \(\frac{\text{if }A \text{ then }B \hspace{5 pt}A}{B}\)
 \begin{itemize}
 \item MODUS PONENS (type of deductive inference)
 \end{itemize}
 \end{enumerate}
 \subsubsection{Induction:}
-\label{sec:orgb235902}
+\label{sec:orgdece7c3}
 \begin{itemize}
 \item The premises make the conclusion \uline{more likely}
 \item My cat is smart, my friend's cat is smart, my parent's cat is smart, so all cats are smart
@@ -234,14 +234,14 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \end{itemize}
 \subsubsection{Inductive or Deductive?}
-\label{sec:org69168ef}
+\label{sec:org69e6838}
 \begin{enumerate}
 \item Claim
-\label{sec:orgcb93829}
+\label{sec:orgf187b95}
 Let \(n\) be the number of points on a circle. Then the number of regions obtained by pairwise connecting each point is \(R=2^{n-1}\)
 \begin{enumerate}
 \item Argument
-\label{sec:orgba23f41}
+\label{sec:org6759079}
 \begin{center}
 \begin{tabular}{ll}
 \(n\) & \(R\)\\
@@ -279,9 +279,9 @@ Let \(n\) be the number of points on a circle. Then the number of regions obtain
 \end{enumerate}
 
 \subsection{Handout}
-\label{sec:orga42c044}
+\label{sec:org653abdc}
 \subsubsection{Recursive (inductive) definition:}
-\label{sec:orge6c63c0}
+\label{sec:org3660bf2}
 \begin{enumerate}
 \item Base clause(s) defines basic elements.
 \item Inductive clause(s): How to build up complex elements from parts
@@ -289,7 +289,7 @@ Let \(n\) be the number of points on a circle. Then the number of regions obtain
 \end{enumerate}
 \begin{enumerate}
 \item E.g.
-\label{sec:orga3f4927}
+\label{sec:org37461f9}
 \begin{enumerate}
 \item \(\mathbb{N}\)
 \begin{itemize}
@@ -323,7 +323,7 @@ Let \(n\) be the number of points on a circle. Then the number of regions obtain
 \end{itemize}
 \end{enumerate}
 \item Proof by mathematical induction
-\label{sec:org9d7ec22}
+\label{sec:org0fbda37}
 \begin{enumerate}
 \item Base case: Show that the property holds of the basic elements.
 \item Inductive step:
@@ -342,7 +342,7 @@ What are the premises?
 \end{itemize}
 \end{itemize}
 \item Variant (strong/complete induction):
-\label{sec:org2738f4b}
+\label{sec:orgc4aabe1}
 \begin{itemize}
 \item \uline{Ind. Step.}
 \begin{enumerate}
@@ -354,12 +354,12 @@ What are the premises?
 \end{itemize}
 \end{enumerate}
 \subsubsection{Theorem}
-\label{sec:org67afc41}
+\label{sec:org80d1ea4}
 For any nat. number \(n\geq 1\), the sum \(\underbrace{1+2+\ldots+n}_{\sum_i=1^n i}=\frac{n(n+1)}{2}\)
 (If you do a proof for your homework or on an exam, always include many details. You can even use a template to structure your proofs the same way, useful for steps for induction.)
 \begin{enumerate}
 \item Proof (by math. ind)
-\label{sec:org5ad39f7}
+\label{sec:orgb79d1e2}
 \begin{enumerate}
 \item Base case: Show claim holds for \(n=1=\frac{1(1+1)}{2}\)
 \item Ind. step.
@@ -379,9 +379,9 @@ For any nat. number \(n\geq 1\), the sum \(\underbrace{1+2+\ldots+n}_{\sum_i=1^n
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 3 \textit{<2017-09-12 Tue>}}
-\label{sec:orge932287}
+\label{sec:org14d68eb}
 \subsection{Set theory}
-\label{sec:org9c4efbd}
+\label{sec:orgcdd4cf3}
 All that is being said here is taken from the reading mathematical introduction to logic chapter zero.
 
 A \uline{set} is a thing with elements. We can present sets in two ways:
@@ -397,12 +397,12 @@ A \uline{set} is a thing with elements. We can present sets in two ways:
 \end{itemize}
 \end{itemize}
 \subsubsection{Ex}
-\label{sec:org647cd8c}
+\label{sec:org046fdb4}
 \(\mathbb{N}\): the set of natural numbers.
 
 \(D=\{x\in \mathbb{N}|x \text{ is prime}\}=\{2,3,5,7,11, \ldots\}\)
 \subsubsection{Definitions}
-\label{sec:org96e068d}
+\label{sec:orgb49906e}
 \begin{itemize}
 \item \(A\subseteq B \iff \forall x, x\in A \implies x \in B\)
 \item \(A=B \iff (A\subseteq B) \wedge (B\subseteq A)\)
@@ -439,14 +439,14 @@ A \uline{set} is a thing with elements. We can present sets in two ways:
 \item Is \(\{\emptyset,a\}\subseteq\{a,4,z\}\)? No.
 \end{itemize}
 \subsection{Tuples:}
-\label{sec:orga2bce36}
+\label{sec:org1985b2f}
 Like sets, but order matters.
 \begin{itemize}
 \item Ordered pair: \(\langle a,b \rangle = \{\{a\},\{a,b\}\}\)
 \item \(\langle a,4,z \rangle \neq \langle 4,a,z \rangle\)
 \end{itemize}
 \subsubsection{Cross-product}
-\label{sec:org3968b3a}
+\label{sec:org30570fb}
 \(A \times B \iff \{\langle x,y \rangle|x \in A \wedge y\in B\}\)
 \begin{itemize}
 \item If \(A\) has \(n\) elements, \(B\) has \(m\) elements
@@ -458,7 +458,7 @@ Like sets, but order matters.
 \end{itemize}
 \end{itemize}
 \subsubsection{Relations}
-\label{sec:orgb0f0608}
+\label{sec:org9de44ed}
 \begin{itemize}
 \item \(A=\{\text{John, Paul, George}\}\)
 \item \(B=\{\text{guitar, bass}\}\)
@@ -478,7 +478,7 @@ A \uline{relation} \(R\) on \(A\) and \(B\) is a subset of \(A\times B\).
  \rangle \in R\}\)
 \begin{enumerate}
 \item Functions
-\label{sec:org56c9dc1}
+\label{sec:orge2413a7}
 A total \uline{function} \(f:A\to B\) is a binary relation \(R\), on \(A\) and \(B\) such that.
 \begin{itemize}
 \item It is \uline{single-valued}
@@ -492,7 +492,7 @@ A total \uline{function} \(f:A\to B\) is a binary relation \(R\), on \(A\) and \
 \end{center}
 \begin{enumerate}
 \item Definitions
-\label{sec:org8d307b4}
+\label{sec:orgb2ef0a1}
 \begin{itemize}
 \item A function is \uline{injective} (one-to-one), if each element in the range is mapped to by exactly one element.
 \begin{itemize}
@@ -517,9 +517,9 @@ A total \uline{function} \(f:A\to B\) is a binary relation \(R\), on \(A\) and \
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 4 \textit{<2017-09-14 Thu>}}
-\label{sec:org9775f6b}
+\label{sec:org3f95f21}
 \subsection{Recap}
-\label{sec:org6931028}
+\label{sec:orga4d989a}
 We talked about sets last class, such as:
 \begin{itemize}
 \item \(\{1,4,z\}\)
@@ -542,9 +542,9 @@ Are there more students or chairs in this class?
 
 Cantor: \(|A|=|B| \iff |A| \leq |B|\) and \(|B|\leq |A| \iff\) there is a bijection between \(A\) and \(B\).
 \subsection{More on sets}
-\label{sec:orga89b02f}
+\label{sec:orgc944ec5}
 \subsubsection{Cardinalities}
-\label{sec:org92d922d}
+\label{sec:org05c8188}
 A set D is \uline{finite} if its cardinality is a natural number.
 \begin{itemize}
 \item \(D \leftrightarrow \{1,\ldots,n\}\) (bijective function with natural numbers exists)
@@ -609,7 +609,7 @@ There are duplicates here though. So, instead of counting left to right, count d
 \item Is this countably infinite? No.
 \end{itemize}
 \subsubsection{Proof (by contradiction):}
-\label{sec:org5734de3}
+\label{sec:org4deda79}
 Assume \(|\mathbb{N}|=|\mathbb{R}^{0.1}|\). 
 (\(\mathbb{R}^{0.1} = \{x \in \mathbb{R}| 0<x<1\}\).)
 
@@ -665,7 +665,7 @@ What is \(z_n\)?
 \end{itemize}
 \end{itemize}
 \section{Lecture 5 \textit{<2017-09-19 Tue>}}
-\label{sec:orgbca7d8c}
+\label{sec:org8ba19dc}
 \begin{itemize}
 \item Quiz in one week
 \item 20 minutes, in class
@@ -677,7 +677,7 @@ What is \(z_n\)?
 \end{itemize}
 \end{itemize}
 \subsection{Recap}
-\label{sec:org527a27e}
+\label{sec:org47d7018}
 Last class, we proved:
 (Size of Natural numbers) \(\aleph_0 < |\mathbb{R}|\)
 \(\implies\) Diagonalization
@@ -695,10 +695,10 @@ Last class, we proved:
 \end{itemize}
 
 \subsection{Cardinality}
-\label{sec:orgcb1ca7c}
+\label{sec:orgfaaebe7}
 Things that have the same cardinality:
 \subsubsection{Countable:}
-\label{sec:org0a64132}
+\label{sec:org7c5f77a}
 \(|\mathbb{N}|\):
 \begin{itemize}
 \item E
@@ -716,7 +716,7 @@ Things that have the same cardinality:
 \item If you can list them, they're countable
 \end{itemize}
 \subsubsection{Uncountable}
-\label{sec:orgf333f04}
+\label{sec:org95bd272}
 \(|\frak{P}(\mathbb{N})|\)
 \begin{itemize}
 \item \(\mathbb{C}\)
@@ -729,9 +729,9 @@ Things that have the same cardinality:
 
 \noindent\rule{\textwidth}{0.5pt}
 \subsection{Formal Systems (GEB CH. 1)}
-\label{sec:org77f4e29}
+\label{sec:org095c2f3}
 \subsubsection{Examples}
-\label{sec:org95f0d2b}
+\label{sec:orgcbdb010}
 \begin{itemize}
 \item Programming languages
 \item Logic
@@ -780,7 +780,7 @@ Syntax & Semantics\\
 \end{itemize}
 
 \subsubsection{MIU-System:}
-\label{sec:orgbdf10cf}
+\label{sec:orgafdd5d1}
 Alphabet: MIU
 
 Strings (sequences of elements from the alphabet).
@@ -801,7 +801,7 @@ Rec. def:
 \end{itemize}
 \begin{enumerate}
 \item MIU-Theorems
-\label{sec:org4b661f2}
+\label{sec:org8711135}
 \begin{enumerate}
 \item Axiom: MI.
 \item Inference rules:
@@ -818,7 +818,7 @@ IV. xUUy \(\to\) xy
 \end{enumerate}
 \begin{enumerate}
 \item Def. Derivation
-\label{sec:org7e7216d}
+\label{sec:org6ecbd81}
 A \uline{derivation} is a sequence of strings such that each element is either an axiom or obtained by applying an inference rule to an element earlier in the sequence
 
 The last element in a derivation is a theorem.
@@ -832,7 +832,7 @@ The last element in a derivation is a theorem.
 \end{itemize}
 \end{itemize}
 \item Ex.
-\label{sec:org916d0db}
+\label{sec:org6b84d85}
 \begin{enumerate}
 \item MI is a derivation
 \item MIU by I on line 1.
@@ -841,7 +841,7 @@ The last element in a derivation is a theorem.
 \end{enumerate}
 These are all theorems since they're the last element of a derivation.
 \item Random theorems
-\label{sec:orgdaeb4af}
+\label{sec:org0fe996b}
 \begin{itemize}
 \item MIIII
 \item MIIIIU
@@ -852,7 +852,7 @@ These are all theorems since they're the last element of a derivation.
 \end{itemize}
 \end{enumerate}
 \item Reasoning
-\label{sec:org730878a}
+\label{sec:org9016dc0}
 Reason inside (M-mode)
 \begin{itemize}
 \item Generate theorems "within" the formal system
@@ -873,7 +873,7 @@ Outside a system (I-mode)
 \end{itemize}
 \end{itemize}
 \item Bijection with Natural Numbers
-\label{sec:org9c95d6e}
+\label{sec:org609af00}
 MIU strings are countably infinite. You can construct a bijection like:
 \begin{enumerate}
 \item M
@@ -896,14 +896,14 @@ MIU theorems are also countably infinite? Why?
 \item Why not finite? Inference II, can keep expanding
 \end{itemize}
 \item Theorem
-\label{sec:orga128bb9}
+\label{sec:orgdcc0f8a}
 All MIU-theorems begin with M.
 \begin{itemize}
 \item This is a proof about the MIU-system, not within
 \end{itemize}
 \begin{enumerate}
 \item Proof
-\label{sec:org5e922f8}
+\label{sec:org65e6758}
 By induction (strong induction) on the length of derivations: (number of steps to derive)
 \begin{itemize}
 \item Base case: Derivation of length 1: MI (good)
@@ -923,9 +923,9 @@ By induction (strong induction) on the length of derivations: (number of steps t
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 6 \textit{<2017-09-21 Thu>}}
-\label{sec:orge779784}
+\label{sec:orgb6abbef}
 \subsection{Quiz prep}
-\label{sec:orgce48b6f}
+\label{sec:orgc817341}
 \begin{itemize}
 \item What is derivation?
 \item What is a theorem?
@@ -935,7 +935,7 @@ By induction (strong induction) on the length of derivations: (number of steps t
 \item How do you prove something is inductive?
 \end{itemize}
 \subsection{Review}
-\label{sec:orgb78c5c0}
+\label{sec:org80e0af5}
 \begin{itemize}
 \item Is U a MIU-theorem?
 \begin{itemize}
@@ -944,7 +944,7 @@ By induction (strong induction) on the length of derivations: (number of steps t
 \item Is MU a MIU-theorem?
 \end{itemize}
 \subsection{Decision Procedure}
-\label{sec:org3ecf31b}
+\label{sec:org6243146}
 Guarantees a \uline{yes} or a \uline{no} answer in a \uline{finite} amount of time
 \begin{itemize}
 \item A set/question that has a decision procedure is \uline{decidable}
@@ -970,7 +970,7 @@ Guarantees a \uline{yes} or a \uline{no} answer in a \uline{finite} amount of ti
 \end{itemize}
 \end{itemize}
 \subsection{pq-system}
-\label{sec:org9f5defe}
+\label{sec:orga6f409d}
 \begin{itemize}
 \item Alphabet: p, q, -
 \item Axiom(s): xp-qx-
@@ -992,7 +992,7 @@ Guarantees a \uline{yes} or a \uline{no} answer in a \uline{finite} amount of ti
 \end{itemize}
 \end{itemize}
 \subsubsection{Interpretation:}
-\label{sec:orgb43ba7a}
+\label{sec:org254b789}
 pq-system: p (plus) q (equals) \(\mbox{-}\) (1) \(\mbox{-}\mbox{-}\) (2) \(\mbox{-}\mbox{-} \mbox{-}\)(3)
 \begin{center}
 \begin{tabular}{llrrrll}
@@ -1032,7 +1032,7 @@ If an interpretation makes all axioms and thm true, it is called a \uline{model}
 \end{itemize}
 \end{itemize}
 \subsubsection{More Interpretations}
-\label{sec:org28bd883}
+\label{sec:org6fd4dca}
 Change p to times. It's still an interpretation, but not a model. It's false, as all axioms and theorems must be true.
 \begin{itemize}
 \item Keep p to plus, but change all dashes to negative integers. Is it also a model?
@@ -1051,7 +1051,7 @@ pq-system: p (equals) q (taken from) \(\mbox{-}\) (2) \(\mbox{-}\mbox{-}\) (4) \
 \item Formal system can have many models, just depends on interpretation
 \end{itemize}
 \subsection{geq-system:}
-\label{sec:orgcfed6a7}
+\label{sec:org9cad658}
 \begin{itemize}
 \item Thms:
 \begin{itemize}
@@ -1082,11 +1082,11 @@ pq-system: p (equals) q (taken from) \(\mbox{-}\) (2) \(\mbox{-}\mbox{-}\) (4) \
 \end{itemize}
 \end{itemize}
 \subsection{Infinite Prime Numbers}
-\label{sec:org89778a4}
+\label{sec:orgf20a821}
 Theorem: There are infinitely many prime numbers.
 
 \subsubsection{Proof (by contradiction):}
-\label{sec:orgd667624}
+\label{sec:org98c8389}
 Assumption: There are \uline{finitely} many prime numbers:
 \begin{itemize}
 \item \(\{p_1, p_2, \ldots , p_n\}\)
@@ -1108,9 +1108,9 @@ Assumption: There are \uline{finitely} many prime numbers:
 \item So, assumption is false.
 \end{itemize}
 \section{Lecture 7 \textit{<2017-09-26 Tue>}}
-\label{sec:org1039239}
+\label{sec:org054dac0}
 \subsection{Quiz review}
-\label{sec:org355e918}
+\label{sec:orgbd85085}
 \begin{itemize}
 \item Try to use diagonalization on rational numbers?
 \begin{itemize}
@@ -1146,7 +1146,7 @@ Assumption: There are \uline{finitely} many prime numbers:
 \end{itemize}
 \end{itemize}
 \subsection{Decision procedure}
-\label{sec:org035ac1d}
+\label{sec:orgd59e1b8}
 \begin{itemize}
 \item What does it mean for a set to be decidable?
 \begin{itemize}
@@ -1170,7 +1170,7 @@ C_x(n) = \begin{cases} 1 & \text{if }n\in X
 \end{equation*}
 Later we will see that decidable set \(\iff\) characteristic function computable.
 \subsection{FS for addition}
-\label{sec:org1ee8bd4}
+\label{sec:org6f709a1}
 Write down properties of addition to try and come up with a formal system to fit that interpretation.
 
 Recursive definition of addition:
@@ -1194,7 +1194,7 @@ IR & If xpyqz is a theorem & x+(n+1)=\\
 \end{center}
 
 \subsection{FS for multiplication}
-\label{sec:org0500e1e}
+\label{sec:org74c9cd3}
 Want FS for multiplication (tq system)
 x t y q z
 \begin{itemize}
@@ -1229,13 +1229,13 @@ Cx is true if \(x\) is a composite number (not a prime)
 \end{itemize}
 \end{itemize}
 \subsection{Recursively enumerable set (r.e.)}
-\label{sec:org973c6e8}
+\label{sec:org74f952e}
 A recursively enumerable set can be generated as theorems of a formal system.
 \begin{itemize}
 \item Ex. Natural numbers
 \end{itemize}
 \subsection{Recursive set}
-\label{sec:org3a48eac}
+\label{sec:org3a787af}
 A set is recursive if it is r.e. and its complement is also r.e. Only want to talk about the complement in a clearly defined realm (universe).
 \begin{itemize}
 \item Well-formed expressions:
@@ -1249,16 +1249,16 @@ A set is recursive if it is r.e. and its complement is also r.e. Only want to ta
 \item Can a set be recursively enumerable but not recursive.
 \end{itemize}
 \section{Lecture 8 \textit{<2017-09-28 Thu>}}
-\label{sec:org65b3ea7}
+\label{sec:org238aa8d}
 \subsection{Theorems}
-\label{sec:org87ceecc}
+\label{sec:org91088ea}
 \(P\) is equivalent to \(Q\) relative to \(A_1\ldots A_n\):
 \begin{itemize}
 \item \(A_1 \ldots A_n, P\) prove \(Q\)
 \item \(A_1 \ldots A_n, Q\) prove \(P\)
 \end{itemize}
 \subsubsection{E.g.}
-\label{sec:org99e4d39}
+\label{sec:orga0671d0}
 Relative to Euclid's axioms:
 
 Proclus' axiom
@@ -1287,7 +1287,7 @@ Parallel postulate is independent from the axioms of Euclid.
 
 \begin{enumerate}
 \item Playfail's axiom
-\label{sec:org73dbe69}
+\label{sec:org18fad6f}
 There exists exactly one parallel to a given line through a given point.
 \begin{itemize}
 \item What would it mean for this to be false?
@@ -1329,7 +1329,7 @@ Infinitely many parallel lines
 \end{enumerate}
 
 \subsection{PQ*-system}
-\label{sec:org75dea9f}
+\label{sec:orga4ad929}
 \begin{itemize}
 \item Ax. schema 1: xp\mbox{-}qx\mbox{-}
 \item IR: xpyqz \(\to\) xpy-qz-
@@ -1381,12 +1381,12 @@ Infinitely many parallel lines
 \end{itemize}
 \end{itemize}
 \subsection{Propositional Logic}
-\label{sec:org6aa4092}
+\label{sec:org6a06f83}
 \begin{itemize}
 \item Today's presentation is harder for those who already know propositional logic, next week will be the standard presentation.
 \end{itemize}
 \subsubsection{Formula trees:}
-\label{sec:org9362c0e}
+\label{sec:org8041930}
 \begin{itemize}
 \item Language: Propositional variables: \(P_0, P_1, P_2, \ldots\)
 \begin{itemize}
@@ -1400,7 +1400,7 @@ Infinitely many parallel lines
 \end{itemize}
 \begin{enumerate}
 \item Inductive Definition
-\label{sec:org59f3dd8}
+\label{sec:orgc341440}
 \begin{enumerate}
 \item Base clause: A prop. variable is a formula tree
 \item Inductive clauses: If \(A,B\) are formula trees then \begin{center}
@@ -1409,13 +1409,13 @@ Infinitely many parallel lines
 \item Nothing else is a formula tree
 \end{enumerate}
 \item E.g.
-\label{sec:org4b7fa1b}
+\label{sec:orgef9f045}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i10.png}
 \end{center}
 The tree to the right has 5 subtrees (main connective is not a subtree of itself)
 \item Truth value assignment
-\label{sec:orgf5d1a72}
+\label{sec:org1834a3a}
 A \uline{truth value assignment} is a function from propositional variables to \(\{T, F\}\) (True, False). The \uline{truth value} of a formula tree A under the truth value assignment f is:
 \begin{itemize}
 \item Case 1: A is a propositional variable: f(A)
@@ -1455,9 +1455,9 @@ F & F & F & F & T\\
 \end{center}
 \end{enumerate}
 \section{Lecture 9 \textit{<2017-10-03 Tue>}}
-\label{sec:org1155244}
+\label{sec:org8d8cb79}
 \subsection{Propositional Logic}
-\label{sec:org9efcf4f}
+\label{sec:org96e4f8e}
 Most of this is on handout 2b.
 
 Let's define logic as a formal system.
@@ -1468,7 +1468,7 @@ Let's define logic as a formal system.
 \end{itemize}
 
 \subsubsection{Well-formed formulas (wff)}
-\label{sec:orgc5d92ff}
+\label{sec:org411f9f2}
 \begin{enumerate}
 \item Base clause: \(P_i\) is a wff (\(i \in \mathbb{N}\)) (called atomic)
 \item Inductive clause: If \(A\) and \(B\) are wffs, then so are:
@@ -1494,7 +1494,7 @@ E.g.
 Convention: outer parens are omitted (except if asked for a well formed expression explicitly, as parentheses are required to comply with rules that give us the nice structure)
 \begin{enumerate}
 \item Interpretation
-\label{sec:org8ff4385}
+\label{sec:org2319483}
 Propositional variables \(\to\) truth values: 
 \begin{center}
 \begin{tabular}{ll}
@@ -1509,7 +1509,7 @@ T & \(\perp\)\\
 (Bivalence)
 
 \item Truth tables
-\label{sec:org65ea86a}
+\label{sec:org27b9d87}
 A,B (metavariables that stand for wff):
 \begin{center}
 \begin{tabular}{lllll}
@@ -1585,7 +1585,7 @@ For a wff with \(n\) prop. vars, the truth table has \(2^n\) lines.
 
 Is finding out if a proposition is a tautology decidable or not? Yes, just write out the truth table.
 \item Inferences
-\label{sec:org2ff07d1}
+\label{sec:org62f4b68}
 An inference is \textbf{valid} if it is impossible for all the premises to be true and the conclusion false at the same time.
 
 \begin{center}
@@ -1612,7 +1612,7 @@ Generalizing: \(A_1, \ldots A_n \models B\)
 \item \(\models\) B (tautology)
 \end{itemize}
 \item Natural Deduction (Syntax)
-\label{sec:org0556f1b}
+\label{sec:org5554fef}
 Introduced by Gentzen, 1934.
 
 \(\frac{\text{Premises}}{\text{Conclusion}}\)
@@ -1637,9 +1637,9 @@ Missing:
 \end{itemize}
 \end{enumerate}
 \section{Lecture 10 \textit{<2017-10-05 Thu>}}
-\label{sec:orga9ac39c}
+\label{sec:orgfbf1960}
 \subsection{Natural Deduction}
-\label{sec:org965a7a8}
+\label{sec:org1221359}
 \begin{itemize}
 \item Proof system for propositional logic
 \item In the land of syntax when we do this
@@ -1681,7 +1681,7 @@ Note that \(A, A \supset B \models B\) consists of semantics, not \textbf{syntax
 \item This is like a formal definition for a proof by cases
 \end{itemize}
 \subsection{Exercise}
-\label{sec:orge2224a7}
+\label{sec:org35fe638}
 Prove: \(A\vee C, A \supset B, C \supset D \vdash_{ND} B \vee D\)
 \url{./Images/i17}
 
@@ -1702,4 +1702,320 @@ Prove: \(A\vee C, A \supset B, C \supset D \vdash_{ND} B \vee D\)
 RAA is a proof by contradiction.
 \end{itemize}
 Prove: \(\vdash_{ND}\sim A \supset (A \supset B)\)
+\section{Lecture 11 \textit{<2017-10-10 Tue>}}
+\label{sec:orgfdf0d4c}
+\subsection{Recap}
+\label{sec:orgcd6d5c4}
+\begin{itemize}
+\item A, A \(\supset\) B \(\models\) B
+\begin{itemize}
+\item It is impossible for \$B4 to be false and \(A\) and \(A\supset B\) to be true.
+\end{itemize}
+\item A, A \(\supset\) B \(\vdash_{ND}\) B
+\begin{itemize}
+\item \(\frac{A \ A \supset B}{B}\supset E\)
+\item How many rules in natural deduction system? About 10. How many axioms? None.
+\end{itemize}
+\end{itemize}
+\subsection{Axiomatic Proof System}
+\label{sec:org35ac120}
+\begin{itemize}
+\item IR: From A and A \(\supset\) B, infer \(B\) (MODUS PONENS)
+\item Substitution rule: Any wff can be substituted for A, B, C
+\item Axiom schemata: (has meta variables, infinitely many axioms. Difference between axioms is important, good quiz question)
+\begin{enumerate}
+\item \(\sim A \supset (A \supset B)\)
+\item \(B \supset (A \supset B)\)
+\item \((A \supset B) \supset ((\sim A \supset B) \supset B)\)
+\item \((A \supset (B \supset C)) \supset ((A \supset B) \supset (A \supset C))\)
+\item \((A \supset (B \supset (A \wedge B)))\)
+\item \((A \wedge B) \supset A\)
+\item \((A \wedge B) \supset B\)
+\item \(A \supset (A \vee B)\)
+\item \(B \supset (A \vee B)\)
+\item \(((A \vee B) \wedge \sim A)\supset B\)
+\end{enumerate}
+\item Don't need to memorize these axioms or the natural deduction rules. Will be given on an exam if required.
+\item A \uline{proof} of \(A\) from assumptions \(A_1,\ldots, A_n\) is a sequence of wffs such that each element of the sequence is:
+\begin{enumerate}
+\item An instance of an axiom
+\item An assumption (since it's a proof from assumptions)
+\item The result of MP (the inference rule) to earlier elements in the sequence
+\end{enumerate}
+\item 1 \& 2 are base clauses, 3 is the inductive clause. This is a recursive definition. Since proofs are defined inductively, we can proof things about proofs using induction.
+\end{itemize}
+
+\uline{Prove}: A \(\supset\) A \(\vdash_{AX}\) B \(\supset\) \((A \supset A)\)
+\begin{enumerate}
+\item \(A \supset A\) Assumption
+\item \((A \supset A)\supset (B \supset (A \supset A)) Ax2 (A\ supset A/B, B/A)\)  \((A \supset A)\) replaces B in the axiom, \(B\) replaces \(A\) in the axiom.
+\item \(B \supset (A \supset A)\) MP on 1 and 2
+\end{enumerate}
+\uline{Prove}: \(A \supset (B \supset C) \vdash_{AX} (A \supset B) \supset (A \supset C)\)
+\begin{enumerate}
+\item \(A \supset (B \supset C)\) Assumption
+\item \((A \supset (B \supset C)) \supset ((A \supset B) \supset (A \supset C))\) Ax 4
+\item \((A \supset B) \supset (A \supset C)\) MP 1,2
+\end{enumerate}
+\subsection{GEB proof system}
+\label{sec:org8acae0a}
+\subsubsection{Ex.}
+\label{sec:org948504a}
+\(\vdash_{ND} (A \wedge B) \supset (B \wedge A)\)
+\begin{itemize}
+\item \(\frac{\frac{A \wedge B}{B}\wedge Elim \ \frac{A \wedge B}{A} \wedge Elim}{\frac{B \wedge A}{(A \wedge B) \supset (B\wedge A)} \supset Intro}\wedge Intro\)
+\end{itemize}
+\(\vdash_{GEB} (A \wedge B) \supset (B \wedge A)\)
+[ push
+\begin{itemize}
+\item \(A \wedge B\) ass
+\item \(A\) sep
+\item \(B\) sep
+\item \(B \wedge A\) joining
+\end{itemize}
+] pop
+\((A \wedge B)\supset (B \wedge A)\)
+\begin{itemize}
+\item Won't go over GEB system in class, not as interesting, but you can look it over in handout or in GEB.
+\end{itemize}
+\subsection{Relations of systems}
+\label{sec:org7bac0ac}
+How do these 3 systems relate to each other?
+
+What we have so far: 
+\begin{enumerate}
+\item Semantic consequence: \(\Gamma \models A\), read as \(\Gamma\) \uline{entails} \(A\) or \(A\) is a \uline{logical consequence} of \(\Gamma\)  
+\begin{itemize}
+\item Check via \uline{truth tables}
+\end{itemize}
+\item Syntactic: \(\Gamma \vdash A\), read as \(\Gamma\) \uline{proves} \(A\) or \(A\) is \uline{derivable} from \(\Gamma\)
+\begin{itemize}
+\item Check via natural deduction
+\item or axiomatic proof
+\item or GEB proof
+\item All 3 are equivalent
+\end{itemize}
+\end{enumerate}
+
+To show that the natural deduction system and the axiomatic system are equivalent (proofs in one system can be acquired in the other system):
+\begin{enumerate}
+\item Prove all axioms from the natural deduction rules. (Modus Ponens is an inference rule in natural deduction)
+\item Show that each natural deduction rule corresponds to an axiomatic proof
+\end{enumerate}
+
+\noindent\rule{\textwidth}{0.5pt}
+Proving axiomatic axioms:
+\begin{enumerate}
+\item \(\vdash \sim A \supset (A \supset B)\)
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i19.png}
+\end{center}
+\item \begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i20.png}
+\end{center}
+\end{enumerate}
+You can do this for all axioms and you'll get that they're equivalent. The fact that we know they're equivalent now allows us to use which one we prefer and go from one to the other, you won't lose any logical power.
+
+\noindent\rule{\textwidth}{0.5pt}
+How does the semantic consequence relate to the syntactic consequence?
+\subsubsection{Soundness Theorem}
+\label{sec:org9faa08f}
+If \(\Gamma\) is a set of wff and \(A\) wff then:
+\begin{itemize}
+\item If \(\Gamma \vdash A\), then \(\Gamma \models A\)
+\item To show, show that all axioms are tautologies and we know the modus ponens is a semantic consequence as well.
+\end{itemize}
+We also have if \(\vdash A\), then \(\models A\), i.e. if derivations with no or closed assumptions, then tautology, via soundness theorem.
+\subsubsection{Completeness Theorem}
+\label{sec:orgba70da4}
+If \(\Gamma \models A\), then \(\Gamma \vdash A\)
+\begin{itemize}
+\item If \(A\) is a logical consequence of \(\Gamma\), then there is also a proof of \(A\) from \(\Gamma\)
+\end{itemize}
+Proof of these theorems done in PHIL 310 and MATH 318
+
+if \(\models A\), then \(\vdash A\), tautologies can be derivations with no or closed assumptions
+\section{Lecture 12 \textit{<2017-10-12 Thu>}}
+\label{sec:orge46f963}
+\begin{itemize}
+\item There will be a proof question on the quiz (natural deduction/axiomatic)
+\begin{itemize}
+\item You will be given the rules, don't need to memorize
+\end{itemize}
+\item Most important thing is terminology
+\end{itemize}
+\subsection{Recap}
+\label{sec:orgcbc92c5}
+\begin{itemize}
+\item Propositional logic
+\begin{itemize}
+\item Syntax (formula trees):
+\begin{itemize}
+\item Language
+\item (Inference) rules
+\item Proof-systems
+\end{itemize}
+\item Semantics:
+\begin{itemize}
+\item Truth tables
+\end{itemize}
+\item Soundness and completeness theorem (connects them)
+\end{itemize}
+\item Now we will be doing the same thing (structurally), but we'll be doing first order logic
+\begin{itemize}
+\item No truth tables, but structures and interpretations instead
+\end{itemize}
+\end{itemize}
+\subsection{First Order Logic (FOL)}
+\label{sec:orgdac162c}
+Language \(\frak{L}\) of FOL:
+\begin{enumerate}
+\item Variables: \(X_0, X_1, X_2, \ldots\)
+\item n-ary (can have \(n\) arguments) function symbols: \(f_0, f_1, f_2, \ldots\)
+\begin{itemize}
+\item \$0\$-ary fun symbols: \uline{constant}, don't take in any arguments
+\end{itemize}
+\item Predicate symbols (\$n\$-ary): \(P_0, P_1, P_2\)
+\item Pred. symbol \(=\)
+\item Propositional connectives: \(\wedge, \vee, \supset, \sim, \perp\)
+\item Quantifiers: \(\forall\) ("for all", universal), \(\exists\) ("exists", existential)
+\item Parentheses: \(()\)
+\end{enumerate}
+2 and 3 are called extra-logical, since they aren't fixed, need to be given meaning, must be interpreted when we give the semantics.
+
+Expressions: 
+\begin{center}
+\begin{tabular}{ll}
+Prop. & FOL\\
+\hline
+wff - T/F & wff - T/F\\
+ & Terms - like names\\
+\end{tabular}
+\end{center}
+
+\subsubsection{Term}
+\label{sec:org87cf5d1}
+Def. A \uline{term} is 
+\begin{enumerate}
+\item A variable is a term
+\item If \(f\) is an n-ary fun symbol, and \(t_1,\ldots,t_n\) are terms, then \(f(t_1,\ldots,t_n)\) is a term.
+\item Nothing else.
+\end{enumerate}
+
+Sometimes write \(t_1 f t_2\) for \(f(t_1,t_2)\) (infix notation for binary function symbols)
+\subsubsection{wff}
+\label{sec:orgf8a17de}
+A \uline{wf-formula}
+\begin{enumerate}
+\item If \(P\) is an n-ary predicate symbol, \(t_1, \ldots, t_n\) are terms, then \(P(t_1, \ldots, t_n)\) is a wff. (atomic formula)
+\begin{itemize}
+\item In particular: \(t_1 = t_2 = (t_1, t_2)\) is wff
+\end{itemize}
+\item If \(A, B\) are wff then \(\sim A, (A \vee B), (A \wedge B), (A \supset B)\) (we see that propositional logic is built into first order logic)
+\item If \(A\) is a wff, x a variable, then
+\begin{itemize}
+\item \((\forall x : A)\) and \((\exists x : A)\) are wff. Here, \(A\) is called the scope of the quantifier.
+\end{itemize}
+\item Nothing else.
+\end{enumerate}
+\subsubsection{First Order Arithmetic (FOA)}
+\label{sec:org85fa653}
+\begin{itemize}
+\item Going to be using this a lot
+\end{itemize}
+To use FOL, you must specify the language \(\frak{L}\) which describes the function symbols.
+\begin{enumerate}
+\item Syntax
+\label{sec:orgc530dc3}
+\begin{itemize}
+\item Fun symbols:
+\end{itemize}
+\begin{center}
+\begin{tabular}{lrlll}
+\hline
+Arity & 0 & 1 & 2 & 2\\
+ & 0 & S & \(+\) & \(x\)\\
+ & Zero symbol & Successor symbol & Plus & Times\\
+ & Constant & S(x) & \(t+t\) & \(t\times t\)\\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item Terms: Ex: \(s(s(0)),x_1,0, +(x_1,x_2), 0 \times S(0)\)
+\item Formulas: \(x_1 = x_2\) (Since a formula involves a predicate symbol and the only predicate symbol we have is \(=\))
+\begin{itemize}
+\item \(0=(x_1+x_2)\)
+\item \(\sim(0 = (x_1+x_2))\)
+\item \((x_1 = x_2) \supset \sim(O = (x_1+x_2))\)
+\item \((\forall x_1 : x_1 = 0)\)
+\item \((\exists x_1 : x_1 = 0)\)
+\item These can all be true or false depending on what we're talking about
+\end{itemize}
+\end{itemize}
+\item Semantics
+\label{sec:org507ce0c}
+Structure = <universe of discourse; designated elements from UD (constants); n-ary operations (fun symbols); n-ary relations (predicate symbols)>
+\begin{itemize}
+\item Structure depends on language you want to interpret. If your language has no constants, you won't need designated elements. If you have 5 fun symbols, you'll need 5 n-ary operations, etc.
+\item An interpretation of a language \(\frak{L}\), is a structure and a mapping \(\sigma\) of the extra-logical symbols into the structure.
+\item An interpretation of FOA: 
+\begin{itemize}
+\item \(\frak{n}=\) <natural numbers; zero; successor; addition; multiplication> (natural number structure, how it was made to be interpreted. But you can interpret it differently. You can swap the mapping, but make sure they have the same arity: can switch addition with multiplication, but not successor with zero)
+\item \(\frak{L}\): 0 s \(+\) \(\times\)
+\item Map: 0 -> \(0\), s -> successor, \(+\) -> addition\((+)\), \(\times\) -> multiplication \((\times)\)
+\begin{itemize}
+\item Make sure to understand the difference between the semantic level and the syntactic level. They look the same, one is the symbol and one is the meaning. One is the symbol for addition, but the other means addition.
+\item Why don't we have n-ary relations? Because FOA has no predicate symbols. Shows how structure is dependent on language.
+\item \$\texttimes{}\(^{\sigma}\)=\(\sigma\)(x)=\$mult, shows what \(\times\) maps to in mapping \(\sigma\)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\item Truth in a structure (Tarski 1933)
+\label{sec:org2e43be5}
+(T1) If x is a variable, then \(x^{\sigma}\) is given by the \uline{valuation} (interpretation that also interprets the variables, i.e. map \(x_1\), \(x_2\), etc.).
+
+(T2) If f is an n-ary function symbol, \(t_1,\ldots,t_n\) terms:
+\begin{itemize}
+\item \((f(t_1,\ldots, t_n))^{\sigma} = f^{\sigma}(t_1^{\sigma},\ldots ,t_n^{\sigma})\)
+\begin{itemize}
+\item e.g. \$[s(s(0))]\(^{\sigma}\) = s\(^{\sigma}\)(
+\end{itemize}
+\end{itemize}
+[s(0)
+]\(^{\sigma}\)) = s\(^{\sigma}\)(s\(^{\sigma}\)(0\(^{\sigma}\)))\$
+(F1) \(P\) nary predicate symbol, \(t_1, \ldots , t_n\) terms
+\begin{itemize}
+\item 
+\end{itemize}
+\begin{equation}
+(P(t_1, \ldots, t_n))^{\sigma} = 
+\begin{cases}
+T \& \text{if $P^{\sigma}$ holds of $t_n^0, \ldots, t_n^{\sigma}$} 
+\\ F & \text{Otherwise}
+\end{cases}
+\end{equation}
+(F2) 
+\begin{equation}
+(\sim A)^{\sigma} =
+\begin{cases} 
+T & \text{ if $A^{\sigma}$}=F
+\\ F & \text{ other wise}
+\end{cases}
+\end{equation}
+(F3) 
+\begin{equation}
+(A\supset B)^{\sigma} = 
+\begin{cases}
+T & \text{ if $A^{\sigma}=F$ or $B^\sigma$}
+\\ F & \text{ if $A^{\sigma}=T$ and $B^{\sigma}=F$}
+\end{cases}
+\end{equation}
+(F4) 
+\begin{equation}
+(\forall x : A)^{\sigma} = 
+\begin{cases}
+T & A^{\sigma/x}=T \text{ for all }u \in UD
+\\ F & \text{otherwise}
+\end{cases}
+\end{equation}
+\end{enumerate}
 \end{document}
