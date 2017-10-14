@@ -162,7 +162,7 @@ This course is an introduction to the foundations and paradigms of programming l
 | pi   | 3.14                      |
 
 - Can redefine the function though
-* Lecture 3 <2017-09-15 Fri> 
+* Lecture 3 <2017-09-15 Fri>
 ** Functions
 - Functions are values
 - Function names establish a binding of the function name to its body
@@ -213,7 +213,7 @@ Recursive functions are declared using the keyword _let rec_
 - One argument at a time
   - 'a -> 'b -> 'c
   - May not have a and b at the same time. Once it has both it will get c.
-- We can translate any function from one to the other type, called currying (going from one at a time to all at once) and uncurrying (opposite).
+- We can translate any function from one to the other type, called currying (going all at once to one at a time) and uncurrying (opposite).
   - Will see in 2 weeks
 ** Data Types and Pattern Matching
 *** Playing cards
@@ -318,7 +318,7 @@ What are lists?
 ** Execution
 Understand how a program is executed
 - *Operational Semantics*
-* Lecture 6 <2017-09-22 Fri> 
+* Lecture 6 <2017-09-22 Fri>
 ** Proofs
 *** Demo: lookup & insert
 #+INCLUDE: "Test/6.ml" src ocaml
@@ -378,7 +378,7 @@ Proof by structural inductional on the list $l$
   - Referring to evaluation of a given program
   - The induction hypothesis
   - Lemmas/ Properties (such as associativity, commutativity)
-* Lecture 7 <2017-09-26 Tue> 
+* Lecture 7 <2017-09-26 Tue>
 ** Structural Induction
 - How do I prove that all slices of cake are tasty using structural induction?
   - Define a cake slice recursively
@@ -455,7 +455,7 @@ By induction on the list l.
 # - length(rev_tr) =
 ** Trees
 #+INCLUDE: Test/7.ml src ocaml
-* Lecture 8 <2017-09-28 Thu> 
+* Lecture 8 <2017-09-28 Thu>
 ** Binary Tree (Inductive definition)
 - The empty binary tree empty is a binary tree
 - If l and r are binary trees and v is a value of type 'a then Node(v, l, r) is a binary tree
@@ -499,7 +499,7 @@ For all trees t, keys x, and data dx, lookup x(insert (x, dx) t) $\Rightarrow*$ 
 
 -------
 Exercise: write a type for cake (2 slice of cake together become 1 slice), with weight
-* Lecture 9 <2017-09-29 Fri> 
+* Lecture 9 <2017-09-29 Fri>
 ** Higher-order functions
 - Allows us to abstract over common functionality
 - Programs can be very short and compact
@@ -599,7 +599,7 @@ dx * sum f (a+.(dx/2.),b) (fun x-> x+. dx)
 (* Follows format of sum function above
 Can easily write a short program like above*)
 #+END_SRC
-* Lecture 10 <2017-10-03 Tue> 
+* Lecture 10 <2017-10-03 Tue>
 #+INCLUDE: "Test/10.ml" src ocaml
 * Lecture 11 <2017-10-05 Thu>
 ** Lambda-Calculus
@@ -681,7 +681,7 @@ let betterPlusSq x =
 - let x = horriblyExpensiveThing 3 in fun y -> x+y -> fun y ->9+y
   - Now we can use this function to quickly compute without having to do the expensive function
   - Partial evaluation is very important
-* Lecture 12 <2017-10-06 Fri> 
+* Lecture 12 <2017-10-06 Fri>
 - Review by Leila: Today
   - 6-7:30 pm, MC 103
 - Cheat sheet correction, minimum 12 pt, not max
@@ -706,3 +706,71 @@ Types of questions:
 3. Induction proof
 ** Demo, using higher order functions
 #+INCLUDE: "Test/12.ml" src ocaml
+* Lecture 13 <2017-10-12 Thu>
+** Midterm Review
+See either 13.ml or Midterm.ml for the questions.
+* Lecture 14 <2017-10-13 Fri>
+How can we do imperative programming (like C) in a functional language?
+- So far, expressions in OCaml have:
+  - An expression has a type
+  - Expression evaluates to a value (or diverges)
+- Today:
+  - Expressions in OCaml may also have an effect (one effect is allocating values to memory and updating them)
+** Overshadowing
+Recall: 
+#+BEGIN_SRC ocaml
+let (k : int) = 4;;
+let (k : int) = 3 in k * k;;
+k;; (* This will be 4! *)
+#+END_SRC
+Binding in line 2 will be gone after line 2.
+#+BEGIN_SRC ocaml
+let pi = 3.14;;
+let area (r:float) = pi *. r *. r;;
+
+let a2 = area (2.0)
+
+let (pi : float) = 6.0;;
+
+let b1 = area (2.0) = a2 (* True *)
+
+let area (r:float) = pi *. r *. r;;
+let b2 = area (2.0) = a2 (* False *)
+#+END_SRC
+For b1, calling area will use the old definition of pi (it already evaluated it when we created the function).
+** State
+How to program with state? We may want to update memory, for example if we have values that change or an array.
+- How to allocate state?
+#+BEGIN_SRC ocaml
+let x = ref 0
+#+END_SRC
+Allocates a reference cell with the name x in memory and initializes it with 0. Not the address, cannot do address manipulation.
+- How to compare 2 reference cells?
+  - Compare their address: ~r == s~
+    - Succeeds if both are names for the same location in memory.
+  - Compare their content: ~r = s~
+#+BEGIN_SRC ocaml
+let x = ref 0
+let y = ref 0
+x = y (*true*)
+x==y (*false*)
+#+END_SRC
+- How to read value stored in a reference cell?
+  - ~!x~
+  - ~let {contents = x} = r~
+    - Pattern match on value that is stored in the reference cell with name x
+- How to update value stored?
+  - ~x := 3~
+** Demo 
+#+INCLUDE: "Test/14.ml" src ocaml
+- Updating a cell in memory has
+  - a value (i.e. unit, written in OCaml as ~()~)
+  - an effect (i.e. changes the value in cell x)
+- Types
+  - ~let r = ref 0~
+    - Type of r: int ref
+    - ref 0 is an int ref
+    - 0 is an int
+    - We cannot store a float in r
+    - ~!r~ is an int
+    - For ~r:=3+2~ to make sense, r should be an int ref and 3+2 must be an int. This returns a type of unit.
