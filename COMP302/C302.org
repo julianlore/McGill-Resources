@@ -774,3 +774,45 @@ x==y (*false*)
     - We cannot store a float in r
     - ~!r~ is an int
     - For ~r:=3+2~ to make sense, r should be an int ref and 3+2 must be an int. This returns a type of unit.
+* Lecture 15 <2017-10-17 Tue>
+** Warm up
+Given the following expression write down its type, its value (i.e. what the expression evaluates to), and its effect, if it has any.
+- Usually on exams, they should all type check. The error option is just in case they make a typo in typing the question.
+- ~3+2~
+  - ~int~
+  - ~5~
+  - No effect
+- ~55~
+  - ~int~
+  - ~55~
+  - No effect
+- ~fun x -> x+3 *2~
+  - ~int -> int~
+  - ~<fun>~ or ~fun x -> x + 3 * 2~
+- ~((fun x -> match x with [] -> true | y::ys -> false), 3.2 *. 2.0)~
+  - ~('a list -> bool) * float~
+  - ~(<fun>,6.4)~
+  - No effect
+- ~let x = ref 3 in x := !x + 2~
+  - Example: ~let k=1 in k+2~ is an int, and ~k=1~ gets discarded after ~k+2~ 
+  - ~unit~
+  - ~()~
+  - Effect? No, x is disposed of. Removed from the stack after evaluation in this example. x is now unbound
+- ~fun x -> x := 3~
+  - ~int ref -> unit~
+  - ~<fun>~
+  - Effect: updated x to 3
+- ~(fun x -> x := 3) y~
+  - type: unit
+  - value: ()
+  - Effect: updated y to 3
+- ~fun x -> (x := 3; x)~ (returns x)
+  - ~int ref -> int ref~
+- ~fun x -> (x := 3; !x)~ (returns !x)
+  - ~int ref -> int~
+- ~let x = 3 in print_string (string_of_int x)~
+  - type: unit
+  - value: ()
+  - Effect: prints 3 to the screen
+** Demo
+#+INCLUDE: "Test/15.ml" src ocaml
