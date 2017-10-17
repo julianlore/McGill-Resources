@@ -1068,3 +1068,79 @@ Next class is the midterm, will be split into 2 rooms.
 - Topics: Everything until today
 - Format: Similar to assignments, 3-4 questions like on the assignments
 - No crib sheets
+* Lecture 11 <2017-10-17 Tue>
+- Recall: Minimize Lateness
+  - Input: Jobs $(t_i, d_i), i=1,\ldots,n$, where $t_i$ is the process time and $d_i$ is the deadline.
+  - In which order should we proceed them in order to _minimize_
+  - Lateness $=max_i f_i - d_i$
+    - Where $f_i$ is the finishing time of job $i$
+-----------------------
+Greedy alg: Process these jobs in increasing order of their deadlines
+- (Earliest deadline first)
+- Sort $d_1 \leq d_2 \leq \ldots \leq d_n$
+[[./Images/i33.png]]
+----------
+How do we show that this is optimal?
+- Most greedy algorithm proofs are similar, start with the optimal solution and then show that the algorithm keeps with it
+Consider an optimal solution. If different from the output of the algorithm (not sorted), then we can find 2 jobs that are not sorted in order of deadline
+[[./Images/i34.png]]
+- How does the lateness of the jobs we switch change?
+- $f_i = T + t_i \rightarrow f'_i = T+t_i+t_j$
+- $f_j = T + t_i + t_j \rightarrow f'_j T + t_i$
+- $f'_j$ has better lateness than before (smaller lateness), but $f'_i$ lateness might increase
+  - new lateness $= T+t_i+t_j - d_i$
+- Why won't this increase lateness? This is smaller than the original lateness of the $j^{th}$ job $= T+t_i+t_j- d_j$ (since $d_i$ is larger than $d_j$)
+A different way of writing this proof: Among all optimal solutions pick the one that agrees with the greedy algorithm for the longest period.
+** Optimal Caching
+(Very complicated)
+- Cache with some capacity to store items
+- If someone requests an item that we have in the cache, we can show it to them
+- If they request something we don't have in the cache, then we have to remove it from the cache
+- Sequence of $m$ requests: $d_1, d_2, \ldots, d_m$
+- Cache hit: The item is in the cache.
+- Cache miss: Item not in cache when requested. (Must bring the item to the cache and evict some existing item) This is a costly operation.
+- We want to make the cache optimal given the schedule beforehand
+- We assume that we start with a full cache.
+Example: $k=2$, initial cache |a|b|
+- Requests:
+|                  | cache |             |
+|------------------+-------+-------------|
+| 1 \checkmark a   | ab    |             |
+| 2 \checkmark b   | ab    |             |
+| 3 miss \times  c | cb    | $a \gets c$ |
+| 4 \checkmark   b | cb    |             |
+| 5 \checkmark c   | cb    |             |
+| 6 miss \times a  | ab    | $c \gets a$ |
+| 7 \checkmark a   | ab    |             |
+| 8 \checkmark b   | ab    |             |
+We managed to do this one with $2$ cache misses. How do we optimize this?
+-------------
+Greedy Alg: Evict the item that is needed farthest in the future. In the above example, in step 3, we see that a is needed in step 6 but b is needed in step 4, so we evict a.
+
+Example: cache abc
+\begin{tabular}{c | c | c}
+  1 \checkmark a & abc
+  \\ 2 \checkmark b & abc
+  \\ 3 \checkmark c & ab\textbf{c}
+  \\ 4 $\times$ d & abd & $c\gets d$
+  \\ 5 \checkmark a & abd
+  \\ 6 \checkmark d & a \textbf{b} d
+  \\ 7 $\times$ e & aed & $b\gets e$
+  \\ 8 \checkmark a & aed
+  \\ 9 \checkmark d & aed
+  \\ 10 $\times$ b & bed & $a\gets b$
+  \\ 11 $\times$ c & ced & $b\gets c$
+\end{tabular}
+Can do anything for steps 10 & 11, but are steps 4 and 7 unique? No, we can do $b \gets d$ at step 4 instead. So the greedy algorithm is one solution, but it isn't the only solution, making it harder to prove.
+---------
+Reminder: We will assume that we only evict items if there is a request that is not in the cache. (won't preemptively remove something)
+- Read the book: There is no disadvantage in doing this
+
+Proof: Among all the optimal solutions, pick the one that agrees with our algorithm for the longest period (assuming they all diverge eventually), call it solution S.
+[[./Images/i35.png]]
+- From the algorithm, we know that e is requested earlier than f, say at step $n$.
+- As for the optimal solution, at step $n$ it must have e. Let $t$ be the first time after $j$ that S has $g \gets e$ for some $g$.
+  - $t$ cannot be later than $n$ so $t \leq n$
+  - How do we satisfy $t$ without increasing the number of cache misses in S and making the solution closer to our algorithm? Evict $f$ at $j$ instead of $e$
+[[./Images/i36.png]]
+So for the proof, either assume that there's an optimal solution that remains stays the same for $j$ steps and reach a contradiction showing that it is the same for $j+1$ steps or show that it keeps going on
