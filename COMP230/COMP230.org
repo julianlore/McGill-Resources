@@ -1,4 +1,4 @@
-#+LaTeX_HEADER:\usepackage{wasysym}
+#+LaTeX_HEADER:\usepackage{wasysym,bussproofs}
 * Lecture 1 <2017-09-05 Tue>
 Logic & Computability
 Prof. Dirk Schlimm
@@ -956,7 +956,7 @@ Missing:
 ----------------------
 Some rules:
 - $\frac{A \ A\supset B}{B}\supset Elim$
-- $\frac{A \ B}{A\vee B}\vee Intro$
+- $\frac{A \ B}{A\wedge B}\wedge Intro$
 - $\frac{A \wedge B}{A}\wedge ElimR$
 - $\frac{A \wedge B}{B}\wedge ElimL$
 - $\frac{A}{A \vee B}\vee Intro$
@@ -1187,3 +1187,81 @@ T & A^{\sigma(u/x)}=T \text{ for all }u \in UD
 \\ F & \text{otherwise}
 \end{cases}
 \end{equation*}
+* Lecture 13 <2017-10-17 Tue> 
+** Quiz Review
+- Inductive definition of Strings
+- Prime numbers recursive? Yes
+- Tautology, semantic
+- Proof system, syntactic
+- Derivation, syntactic
+- Truth table, semantic
+- Inference rule, syntactic
+- How do you know something can be proved by something? Use Completeness theorem and check truth table
+** Tarski & Quantifiers
+\begin{equation*}
+  (\forall x: A)^{\sigma} =
+  \begin{cases}
+    T & A^{\sigma(u/x)}=T \text{ for every }
+    u \in UD
+    \\ F & \text{otherwise}
+  \end{cases}
+\end{equation*}
+\begin{equation*}
+  (\forall x:\sim (0=Sx))^{\sigma (u/x)} = T \text{ for every }u \in \mathbb{N}
+\end{equation*}
+How to check this?
+
+Decompose
+\begin{align*}
+  (\sim (0=Sx))^{\sigma (u/x)} = T \text{ for every }u \in \mathbb{N}
+  \\ (0=Sx)^{\sigma (u/x)} = F \text{ for every }u \in \mathbb{N}
+  \\ (\textbf{0 = succ u}) = F \text{ for every }u \in mathbb{N}
+\end{align*}
+False for every $u \in \mathbb{N}$, $succ 0 \neq 0, succ 1 \neq 0, \ldots$
+
+Can then define the following:
+$$\exists x : A \iff \sim \forall x : \sim A$$
+Read as "there exist an x ..."
+
+If one wanted to define it formally like the universal quantifier:
+\begin{equation*}
+  (\exists x : A)^{\sigma} =
+  \begin{cases}
+    T & \text{if } A^{\sigma(u/x)}=T \text{ for at least one }u \in UD
+    \\ F & \text{otherwise}
+  \end{cases}
+\end{equation*}
+
+$$\forall x : \exists y : M(x,y)$$
+Structure for interpretation: < all people ; is mother of>
+- For all $x$, there is a y, such that x is the mother of y.
+  - This is false, not everyone is a mother.
+  - How can we make it true?
+$$ \forall x : \exists y : M(y,x)$$
+- Everybody has a mother, true
+What does the following mean?
+$$\exists x : \forall y : M(x,y)$$
+- There exists somebody who is the mother of everybody
+  - False
+$$\exists x : \forall y : M(y,x)$$
+- There exists someone such that everyone is their mother
+We see that just switching around quantifiers changes meaning completely. So we must read quantifiers correctly, from left to right.
+- We can say:
+  - $\overbrace{\sigma}^{\text{valuation}}$ _satisfies_ $\overbrace{A}^{\text{wff}}$ : $A^{\sigma}=T$
+  - $\overbrace{\sigma}^{\text{valuation}}$ _satisfies_ $\overbrace{\Gamma}^{\text{set of wff}}$ : $A^{\sigma}=T$ for all $A \in \Gamma$
+- A is _logically true_: A is satisfied by every valuation
+  - $\models A$
+- A is a _logical consequence_ of $\Gamma$: every valuation that satisfies $\Gamma$ also satisfies $A$
+  - $\Gamma \models A$
+- $\Gamma$ unsatisfiable, no valuation that satisfies each $A \in \Gamma$ at the same time
+- These are similar to what was said in propositional logic, but with different terms
+This was all in the land of semantics (we talked about truth). Now we'll go back to the land of syntax.
+** Syntax
+Variable $x$ is bound if it falls in the scope of a quantifier that has $x$ as a variable of quantification. $x$ is quantified in $A$.
+$$\forall x : \overbrace{\underbrace{A}_{\text{scope}}}^{\text{$x$ is bound in $A$}}$$
+$$ \forall x_1 : \exists x_2 : (x_1 = x_2 + x_3)$$
+- $x_1$ and $x_2$ are bound variables, while $x_3$ is a free variable.
+$$ (\forall x_1 : \exists x_2 : (x_1 = x_2 + x_3)) \vee (\underbrace{x_1}_{\text{free}} = 0)$$
+The second $x_1$ is free since it's not in the scope of the quantifier.
+$$ \forall x_1 : \exists x_2 : (x_1 = x_2 + x_3) \vee (\underbrace{x_1}_{\text{free}} = 0)$$
+In this case, both $x_1$ are bound.
