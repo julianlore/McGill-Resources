@@ -575,7 +575,7 @@ The above implementation of BFS runs in $O(m+n)$ time if the graph is given by i
 - Actually runs in $O(m+n)$ time:
   - When we consider node $u$, there are $degree(u)$ incident edges $(u,v)$
   - total time processing edges is $\sum_{u\in V} degree(u)=2m$
-* Lecture 6 <2017-09-26 Tue> 
+* Lecture 6 <2017-09-26 Tue>
 ** Stable Marriage
 Continuation of Lecture 4: Stable Marriage algorithm analysis.
 - Good data structure to tell if someone is free or not?
@@ -686,7 +686,7 @@ Q: How can we use this data structure to sort a list of $n$ numbers?
 Answer: Insert the elements one by one and then extract the minimums one by one.
 - Running time? $2n O(\log n)$
   - $O(n\log n)$
-* Lecture 7 <2017-09-28 Thu> 
+* Lecture 7 <2017-09-28 Thu>
 ** Graph Exploration Algorithms
 *** Breadth-First-Search (BFS)
 [[./Images/i16.png]]
@@ -820,7 +820,7 @@ Q: Given $G$, how can we tell if it is strongly connected?
   - Run DFS(s) in $G^{rev}$ (same as $G$, but with directions reversed)
   - If $\exists$ any unexplored vertex then "not strongly connected"
   - Otherwise declare "G is strongly connected"
-* Lecture 8 <2017-10-03 Tue> 
+* Lecture 8 <2017-10-03 Tue>
 ** Directed Graphs
 - Each edge has a direction (seen last class)
 - Not symmetric, edge from u to v means no edge from v to u.
@@ -901,7 +901,7 @@ Proof:
   - Remove $v$ from $S$
   - Decrement $count[w]$ for all edges from $v$ to $w$ and add $w$ to $S$ if $count[w]$ hits $0$
   - This is $O(1)$ per edge
-* Lecture 9 <2017-10-05 Thu> 
+* Lecture 9 <2017-10-05 Thu>
 ** Greedy Algorithm
 - In every step, it tries to be myopic and optimize its current goal/step
 - Doesn't care about the future
@@ -1144,3 +1144,69 @@ Proof: Among all the optimal solutions, pick the one that agrees with our algori
   - How do we satisfy $t$ without increasing the number of cache misses in S and making the solution closer to our algorithm? Evict $f$ at $j$ instead of $e$
 [[./Images/i36.png]]
 So for the proof, either assume that there's an optimal solution that remains stays the same for $j$ steps and reach a contradiction showing that it is the same for $j+1$ steps or show that it keeps going on
+* Lecture 12 <2017-10-19 Thu>
+** Shortest Path in Graphs
+- Input: Directed graph $G=(V,E)$, source $s$, destination $t$
+- $\forall e, \ell e =$ length of edge $e$
+- Goal: Find the length of the shortest path from _$s$_ to _$t$_.
+** Dijkstra's Algorithm
+It will find shortest paths from $s$ to all the other nodes in one go.
+- Idea: We keep a list of all vertices (initially includes source)
+- We already know the lengths of the shortest paths from $s$ to all the explored vertices
+- At the next step we choose the vertex with smallest
+  $$\pi(v)=\min_{\ell=(u,v)_\text{u is explored}} d(s,u)+\ell e$$
+and mark that as explored and set $d(s,v)=\pi(v)$
+[[./Images/i37.png]]
+----------------
+Alg: $S =$ set of explored vertices
+- $d(u)=$ distance from $s$ to $u$ for explored $u$
+\begin{algorithmic}
+  \State set $S = \{s\}, d(s)=0$
+  \While{$S \neq V$} choose $w \in V-S$ with minimum
+  $\pi(w)=\min_{\ell=uw,u\in S}d(u)+\ell e$
+  \State $S \gets S \cup \{w\}$
+  \State $d(w)=\pi(w)$
+  \EndWhile
+\end{algorithmic}
+- Example:
+[[./Images/i38.png]]
+*** Correctness
+Claim: During the execution of the algorithm for every $u \in S$, $d(u)$ is the length of the shortest path from $s$ to $u$
+- Proof: We use induction on size of $S$.
+  - Base: Trivial, $S=\{s\}, d(s)=0$
+  - Induction Hypothesis: The claim remains true after adding next $v$.
+    [[./Images/i39.png]]
+  - If $\pi(v)$ is not the length of the shortest $s-v$ path
+    - Consider the shortest $s-v$ path on the red path
+    - Consider first vertex $y$ outside $S$ on the path. Let $x$ be the previous vertex. 
+ [[./Images/i40.png]]
+    - $\pi (y)\leq d(x)+\ell xy \leq$ length of the red path $<\pi(v)$ (because we assumed $\pi(v)$ is not the shortest path from $s$ to $v$)
+    - Contradiction as we assumed $\pi(v)$ was the smallest (we want to pick smallest $\pi$ outside of explored area and we showed that $\pi(y)$ is clearly smaller) 
+----------
+Runtime of implementation
+\begin{algorithmic}
+  \State set $S = \{s\}, d(s)=0$
+  \While{$S \neq V$} choose $w \in V-S$ with minimum
+  $\pi(w)=\min_{\ell=uw,u\in S}d(u)+\ell e$
+  \State $S \gets S \cup \{w\}$
+  \State $d(w)=\pi(w)$
+  \EndWhile
+\end{algorithmic}
+----------
+- While: $|V| = n$ iterations
+  - Computing $\pi(w) \forall w \in V - S \rightarrow O(m) \rightarrow O(mn)$ after multiplying loop iterations
+    - Might be costly to calculate one $\pi$, as we can have many incoming edges to a vertex, up to $m$ incoming edges
+  - Taking their min
+[[./Images/i41.png]]
+When we add $v$ to $S$ we onlny need to update the $pi$ value for all $w \in S-v$ with $vw \in E$
+- If we use a binary heap to implement a priority queue for $\pi$ values then
+- Finding $\min \pi : O(\log n)$
+  - (Extracting $\min$ from a binary heap)
+- Updating the key $(\pi-value)$ for all $w\in V-S with $vw \in E$: Updating each one at these $w$'s costs $O(\log n)$ (either heapify-up or heapify-down, depending on if we're increasing or lowering key)
+  - $n \log n$ since a vertex might have linear amount of outward eges to unvisited vertices
+- Note that each edge $vw \in E$ is causing at most one of those updates. It will never be visited again. Therefore total # of these key updates is at most $m=|E|$
+
+[[./Images/i42.png]]
+So all these updates cost $O(m \log n)$
+- Binary heap implementation $O(m \log n + n \log n)$
+- Fibonacci Heap: $O(m+n\log n)$ (Won't be looking at this in this course as it's much more complicated)
