@@ -1187,7 +1187,7 @@ T & A^{\sigma(u/x)}=T \text{ for all }u \in UD
 \\ F & \text{otherwise}
 \end{cases}
 \end{equation*}
-* Lecture 13 <2017-10-17 Tue> 
+* Lecture 13 <2017-10-17 Tue>
 ** Quiz Review
 - Inductive definition of Strings
 - Prime numbers recursive? Yes
@@ -1265,3 +1265,137 @@ $$ (\forall x_1 : \exists x_2 : (x_1 = x_2 + x_3)) \vee (\underbrace{x_1}_{\text
 The second $x_1$ is free since it's not in the scope of the quantifier.
 $$ \forall x_1 : \exists x_2 : (x_1 = x_2 + x_3) \vee (\underbrace{x_1}_{\text{free}} = 0)$$
 In this case, both $x_1$ are bound.
+* Lecture 14 <2017-10-19 Thu>
+- Good midterm question: What does $\Gamma \models A$ mean in one sentence?
+  - $\Gamma$ is a set of wff and $A$ is a wff. $\Gamma \models A$ if everything in $\Gamma$ is true then $A$ is true or it is impossible that everything in $\Gamma$ is true and $A$ isn't
+- $\Gamma \vdash A$
+  - There's a proof of $A$ from $\Gamma$
+- $\Gamma \models A$ (What does this mean in FOL?)
+  - $\Gamma$ entails $A$
+  - Every valuation that satisfies $\Gamma$ satisfies $A$
+    - A lot harder to check than propositional logic, since you have to check *every* valuation
+** FOA
+If UD $= \mathbb{N}$, Even(x) $\implies$ even
+- What does: $\exists x \ Even(x)$ mean?
+  - There exists at least one number that is even.
+- $\exists x \exists y \ Even(x) \wedge Even(y)$
+  - There exist a $x$ and $y$ such that $x$ is even and $y$ is even
+  - There exists at least an even number ($x$ and $y$ can be the same)
+- $\exists x \exists y \ (Even(x) \wedge Even(y)) \wedge \sim (x = y)$
+  - There exists at least two even numbers
+- $\exists x \exists y \ (Even(x) \wedge Even(y)) \supset \sim (x = y)$
+  - True, since it's exists and we can pick our $x$ and $y$
+- $\forall x: \forall y: x = y$
+  - For all $x$ and for all $y$, $x=y$
+  - False.
+  - We can make this true if we use a universe of discourse with one element, such as $UD = \{A\}$
+- $\forall x: \forall y: \sim (x = y) \supset [Even(x) \vee Even(y)]$
+  - For 2 numbers that aren't equal, one of them is even
+  - False
+- $\forall x: \forall y: \sim (x = y) \supset [Even(x) \vee Even(y)]$
+  - If two numbers aren't equal, then one is greater than the other
+  - True
+** Substitution
+Recall, a term is either a variable or a function symbol followed by the appropriate number of terms. 
+- A term is _closed_ if it contains no variables.
+  - Ex. $0, S0$ in FOA
+- Otherwise it's called open
+- _Sentence_: wff with no free variables, $0=0$, $\forall x_1:\exists x_2: x_1=x_2$
+- A term _$t$_ is free for an occurrence of _$x$_ in _$A$_ iff
+  - $x$ is a free variable in $A$
+  - And $x$ does not lie within the scope of any quantifier, where $y$ is a variable that appears in $t$
+- What do we want to do? Replace variables by terms.
+_Substitution_:
+- $s,t$ terms, $x$ var
+- $x(t/x) = t$
+  - Term $t$ replaces variable $x$
+- $y(t/x) = y$
+- $f(s_1,\ldots,s_n)(x/t) = f(s_1(t/x),\ldots,s_n(t/x))$
+  - Since the $s_i$ are terms, we have to do the substitution on each term
+- $\forall x: P(x) (t/x)$
+  - We cannot do this, $x$ is not a free variable
+  - It isn't $\forall t : P(t)$, because you cannot use a quantifier on a term, a term can be a constant.
+- $\forall y : \underbrace{x}_{\text{free}}=y (y/x) \rightarrow \forall y: \underbrace{y}_{\text{bound}}=y$
+  - These are not equivalent
+  - Might end up making a false statement true, want to avoid this.
+  - Don't want to switch from free to bound.
+** Proofs
+Now we need a proof system for First Order Logic. Will see natural deduction in class, read about axiomatic and GEB on the handout.
+*** Natural deduction calculus
+We need introduction and elimination rules for quantifiers. 
+\begin{prooftree}
+\AxiomC{A(a/x)}
+\LeftLabel{$\forall \ Intro:$}
+\UnaryInfC{$\forall x: A$}
+\end{prooftree}
+Here, $a$ is a variable/Eigen variable.
+- e.g. 
+\begin{prooftree}
+\AxiomC{0=a}
+\UnaryInfC{$\forall x : (0 = x)$}
+\end{prooftree}
+$a$ must be free for $x$ in $A$, cannot bind it.
+\begin{prooftree}
+\AxiomC{$\forall x : A$}
+\LeftLabel{$\forall \ Elim$}
+\UnaryInfC{A(t/x)}
+\end{prooftree}
+$t$ must be free for $x$ in $A$
+- e.g. 
+\begin{prooftree}
+\AxiomC{$\forall x:(x=x)$}
+\UnaryInfC{$s0 = s0$}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{A(t/k)}
+\LeftLabel{$\exists \ Intro$}
+\UnaryInfC{$\exists x: A$}
+\end{prooftree}
+- E.g.
+\begin{prooftree}
+\AxiomC{$\overbrace{\sim (0=S0)}^{A(0/x)}$}
+\RightLabel{$t=0$, $A(x) \sim (x=S0)$}
+\UnaryInfC{$\exists x : \underbrace{\sim (x = S0)}_{=A}$}
+\end{prooftree}
+$A(0/x) \implies \sim (O = S0)$
+
+\begin{prooftree}
+\AxiomC{$\exists x: A$}
+\AxiomC{[A(a/x)]}
+\UnaryInfC{.}
+\UnaryInfC{.}
+\UnaryInfC{.}
+\UnaryInfC{C}
+\LeftLabel{$\exists \ Elim$}
+\BinaryInfC{C}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\forall x: A(x)$}
+\RightLabel{$\forall \ Elim$}
+\UnaryInfC{$A(t)$}
+\RightLabel{$\exists \ Intro$}
+\UnaryInfC{$\exists : A(x)$}
+\end{prooftree}
+For all $x$, $A(x)$ means that there exists $x$ such that $A(x)$
+
+**** Ex
+$\vdash \forall x: (A(x)\supset B)\supset (\exists x: A(x)\supset B)$
+\begin{prooftree}
+\AxiomC{$[\exists x: A(x)]_1$}
+\AxiomC{$\forall x : A(x) \supset B$}
+\RightLabel{$\forall \ Elim$}
+\UnaryInfC{$A(t)\supset B$}
+\AxiomC{$A(t)$}
+\RightLabel{$\supset \ Elim$}
+\BinaryInfC{$B$}
+\RightLabel{$\exists \ Elim$}
+\BinaryInfC{$B$}
+\RightLabel{$\supset \ Intro_1$}
+\UnaryInfC{$\exists x : A(x) \supset B$}
+\RightLabel{$\supset \ Intro_2$}
+\UnaryInfC{$\forall x : \supset$}
+\end{prooftree}
+Complicated proof, won't have something like this on midterm (since just introduced these rules), but maybe final.
+**** FOL: Sound & Complete
+Proved by Godel in 1930
