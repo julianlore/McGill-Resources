@@ -816,3 +816,8 @@ Given the following expression write down its type, its value (i.e. what the exp
   - Effect: prints 3 to the screen
 ** Demo
 #+INCLUDE: "Test/15.ml" src ocaml
+* Lecture 16 <2017-10-19 Thu>
+** Demo
+- Mutable Data-Structures
+- Closures and Objects
+#+INCLUDE: "Test/16.ml" src ocaml
