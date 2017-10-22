@@ -821,3 +821,30 @@ Given the following expression write down its type, its value (i.e. what the exp
 - Mutable Data-Structures
 - Closures and Objects
 #+INCLUDE: "Test/16.ml" src ocaml
+* Lecture 17 <2017-10-20 Fri>
+** Exceptions
+- Primary benefits:
+  - Force you to consider the exceptional case
+  - Allows you to segregate the special case from other cases in the code (avoids clutter!)
+  - Diverting control flow!
+*** Warm-up
+- ~3/0~
+  - Type: ~int~
+  - Value: No value
+  - Effect: Raises run-time exception ~Division_by_zero~
+#+BEGIN_SRC ocaml
+let head_of_empty_list =
+    let head (x::t) = x in
+	head []
+#+END_SRC
+- Type: ~'a~
+  - head is ~'a list -> 'a~, so it returns ~'a~ in last line
+  - Value: No value
+  - Effect: raises run-time exception ~Match_failure~
+  - Would have been well-defined if we used option return type
+*** Demo
+1. Signal Error
+   - Ex. raise Domain
+2. Handle an exception
+   - Try <exp> with Domain -> <exp>
+#+INCLUDE: "Test/17.ml" src ocaml 
