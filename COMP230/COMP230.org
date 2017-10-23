@@ -1394,7 +1394,7 @@ $\vdash \forall x: (A(x)\supset B)\supset (\exists x: A(x)\supset B)$
 \RightLabel{$\supset \ Intro_1$}
 \UnaryInfC{$\exists x : A(x) \supset B$}
 \RightLabel{$\supset \ Intro_2$}
-\UnaryInfC{$\forall x : \supset$}
+\UnaryInfC{$\forall x : (A(x) \supset B)\supset (\exists x: A(x)\supset B)$}
 \end{prooftree}
 Complicated proof, won't have something like this on midterm (since just introduced these rules), but maybe final.
 **** FOL: Sound & Complete
