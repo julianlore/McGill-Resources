@@ -1210,3 +1210,60 @@ When we add $v$ to $S$ we onlny need to update the $pi$ value for all $w \in S-v
 So all these updates cost $O(m \log n)$
 - Binary heap implementation $O(m \log n + n \log n)$
 - Fibonacci Heap: $O(m+n\log n)$ (Won't be looking at this in this course as it's much more complicated)
+* Lecture 13 <2017-10-24 Tue> 
+** The Minimum Spanning Tree Problems (MST)
+- Input: Undirected Connected Graph $G=(V,E)$
+  - To every edge _e_ a positive cost $c_e >0$ is assigned
+- Goal: Find a spanning tree in $G$ (i.e. a tree that includes all the vertices of $G$) with minimum cost.
+$$cost = \sum_{\text{$e$ is an edge of the tree}} c_e$$
+[[./Images/i43.png]]
+$$cost = 4 + 6 + 5 + 8 + 11 + 9 + 7$$
+- Why not check all the spanning trees? Very costly.
+- Cayley's Thm: Complete graph on $n$ vertices have $n^{n-2}$ spanning trees
+- So checking all the spanning trees requires exponential time $\Omega(n^{n-2})$
+*** Three Greedy Algorithms: 
+- _Kruskal_: Start with $T=\empty$. At each step add the edge with minimum cost that does not create a cycle until we find a spanning tree (i.e. $n-1$ edges are added)
+[[./Images/i44.png]]
+- _Reverse Deletion_: Now start with $T=E$ (all the edges). At every step we remove the most expensive edge from $T$ that does not _disconnect_ it until we arrive at a spanning tree
+[[./Images/i45.png]]
+- _Prims_: Start with a node _s_ (root) and greedily grow a tree from _s_ outward by adding the cheapest edge that leaves $T$.
+[[./Images/i46.png]]
+-------------
+*** Correctness
+Why do they all find the MST?
+- Simplifying assumption: we assume that all $c_e$ are different (just to simplify the presentation of the proof)
+_Cut Property_: Let $S$ be a subset of nodes and _$e$_ be the minimum cost edge from $S$ to $\overline{S}$. Then _$e$_ is in every minimum spanning tree.
+[[./Images/i47.png]]
+_Proof_: Suppose not. Let $T$ be an MST that does not include _$e$_
+- Consider the path that connects $u$ to $v$ in $T$.
+[[./Images/i48.png]]
+Pick an edge on this path that goes from $S$ to $\overline{S}$ and replace it with $e$. Thus way we find another spanning tree with smaller cost. This contradicts the assumption that $T$ is a MST.
+- Why am I allowed to do this? Why doesn't it create a cycle?
+  - Can this create a cycle? If adding $e$ made a cycle, then we had a cycle in the original $T$.
+  - If there were two paths from $u$ to $v$ (such that adding $e$ makes a cycle), then $T$ already had a cycle.
+Cycle Property: Let $C$ be a cycle in $G$ and let $e$ be the most costly edge on this cycle. Then $e$ does not belong to any spanning tree.
+[[./Images/i49.png]]
+Proof: Suppose not. There is a MST "$T$" that contains $e$.
+- Remove $e$ from $T$. This will break $T$ into two components $S$ and $\overline{S}$.
+[[./Images/i50.png]]
+Since $C$ is a cycle it crosses the cycle at some other edge $e'$. Adding $e'$ instead of $e$ creates a better spanning tree. A contradiction!
+--------------
+_Prims_: Each time add the smallest edge from $T$ to the rest of the graph (starting from a root $s$).
+- Theorem: If all costs are different then there's a unique MST and Prims Alg finds it.
+- Pf: Consider a step of the alg. Let $S$ be the component of the current $T$.
+[[./Images/i51.png]]
+Prim's alg picks the smallest edge _$e$_ between $S$ and $\overline{S}$ and adds it to $T$. By cut property $e$ is in every MST. So our alg indeed only picks edges that are in every MST. This finishes` the proof of the theorem. 
+----------
+Implementation: We maintain $S$ (initially $S=\empty$)
+- For each $v \notin S$ maintain an attachment cost.
+- $a_v =$ The cost of the cheapest edge from $S$ to $v$
+  [[./Images/i52.png]]
+- At each step we add the vertex with smallest attachment cost to $S$ and _update attachment costs_.
+- Using a priority queue seems like a good idea.
+-----------
+Running time of updating attachment costs once $v$ is added to $S$. Only vertices in $\overline{S}$ with edges to $v$ need updates: There are $\leq deg(v)$ of these vertices $w$. If we use a binary heap to keep attachment costs then the updates have running time $deg(v)$.
+$$ dev(v) \times O(\log_n)$$
+- $\log_n$ for updating key in binary heap
+- So total running time:
+$$ \sum_{v \in V}deg(v) )(\log n) = O(\log (n))\times \sum_{v \in V} deg(v) = O(m \log n)$$
+
