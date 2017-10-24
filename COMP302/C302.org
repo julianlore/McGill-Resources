@@ -848,3 +848,26 @@ let head_of_empty_list =
 2. Handle an exception
    - Try <exp> with Domain -> <exp>
 #+INCLUDE: "Test/17.ml" src ocaml 
+* Lecture 18 <2017-10-24 Tue>
+** Backtracking 
+- General algorithm for finding all (or some) solutions incrementally - abandons partial candidates as soon as it determines that it cannot lead to a successful solution
+- Important tool to solve constraint satisfaction problems such as crosswords, puzzles, Sudoku, etc.
+- Ex today:
+  - Implement a function ~change~. It takes as input a list of available coins and an amount ~amt~. It returns the exact change for the amount (i.e. a list of available coins, ~[c1;c2;...;cn]~ such that ~c1 + c2 + ... + cn = amt~), if possible; otherwise it raises an exception ~Change~.
+~change : int list~ (list of coins) ~-> int~ (amt) ~-> int list~ (list of coins)
+- Assumptions:
+  - List of coins is ordered
+  - Each coin in our list can be used as often as needed
+- Good practice/exam question
+#+INCLUDE: "Test/18.ml" src ocaml
+
+Backtracking with exceptions:
+- Given ~change[6,5,2] 9~
+- ~try 6::change[6;5;2] 3 with Change -> change [5;2] 9~
+  - ~change [5;2] 3~
+    - ~change[2] 3~
+    - ~try 2::change[2] 1~ will not work, raise Change and get back to ~change [5;2] 9~ from before
+Key thing to take away is:
+- You can use exceptions for special cases like dividing by 0
+- But a more interesting use is that you can divert control flow
+- So you can use it to backtrack and solve problems
