@@ -1,4 +1,4 @@
-% Created 2017-10-19 Thu 09:50
+% Created 2017-10-24 Tue 10:41
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -29,9 +29,9 @@
 \tableofcontents
 
 \section{Lecture 1 \textit{<2017-09-05 Tue>}}
-\label{sec:orgc8e261a}
+\label{sec:org7282f74}
 \subsection{Algorithm}
-\label{sec:org6bb4bea}
+\label{sec:org9d96af9}
 \begin{itemize}
 \item Al-Khwarizmi (9th Century)
 \item Algorismus (Latin)
@@ -55,7 +55,7 @@ Even though the concept of an algorithm is very simple and intuitive, it's not v
 \item Algorithms are an old concept, have been studied forever. Some examples are really old
 \end{itemize}
 \subsubsection{Examples of algorithms}
-\label{sec:org487d02f}
+\label{sec:org8c0d6d5}
 \begin{itemize}
 \item Recipes
 \item 1600 BC Babylonians (Factorization and square roots)
@@ -71,19 +71,19 @@ Field of theoretical computer science is much older than first computers.
 \item Theoretical computer science is part of math and science and has been studied for milennials
 \end{itemize}
 \subsection{Teacher's website}
-\label{sec:orgb1d7c66}
+\label{sec:orgcd9d6cb}
 \url{http://www.cs.mcgill.ca/\~hatami/}
 \begin{itemize}
 \item He will be following the textbook.
 \end{itemize}
 \subsection{Stable matching}
-\label{sec:org472770f}
+\label{sec:orga03aba4}
 n men: \(m_1, m_2, \ldots, m_n\)
 n women: \(w_1, w_2, \ldots, w_n\)
 
 Every man and woman has a ranking of people of other gender.
 \subsubsection{Ex: \(n=4\)}
-\label{sec:org1226dc2}
+\label{sec:org03ec17c}
 \(m_1: w_3 > w_1 > w_2 > w_4\)
 
 \(m_2: w_1 > w_4 > w_2 > w_3\)
@@ -104,7 +104,7 @@ Every man and woman has a ranking of people of other gender.
 
 \begin{enumerate}
 \item A pairing
-\label{sec:org75349ed}
+\label{sec:orge6e31c3}
 \begin{itemize}
 \item \(m_1+w_2\)
 \item \(m_2+w_4\)
@@ -116,7 +116,7 @@ What is unstable about this? The last pair, \(m_4\) and \(w_3\).
 \item \(m_1\) and \(w_3\) prefer each other
 \end{itemize}
 \item Unstability:
-\label{sec:org5dcaa13}
+\label{sec:orgb4a6679}
 If there is a pair \((m,w)\) such that
 \begin{enumerate}
 \item m prefers w to his current partner
@@ -124,11 +124,11 @@ If there is a pair \((m,w)\) such that
 \item Selfish agents, everyone wants to be with the best possible partner they can find
 \end{enumerate}
 \item Problem:
-\label{sec:orgf33d6c0}
+\label{sec:orgc02c959}
 Can we find a stable matching?
 \end{enumerate}
 \subsection{Stable Matching Algorithm}
-\label{sec:org2145767}
+\label{sec:org703c9d0}
 while \(\exists\) a free man \uline{\(m\)}
 \begin{itemize}
 \item \(m\) proposes to the highest-ranked woman \uline{\(w\)} that he has not prosed yet
@@ -141,7 +141,7 @@ else
 End while
 
 \subsubsection{For our example:}
-\label{sec:orgcf17c36}
+\label{sec:org8030b80}
 \begin{itemize}
 \item \(m_1\) proposes to \(w_3\), accepts > \(m_1+w_3\)
 \item \(m_2\) proposes to \(w_1\), accepts > \(m_2+w_1\)
@@ -158,7 +158,7 @@ End while
 Simple example, no one broke up.
 Let's change the example a bit.
 \subsubsection{Modified example}
-\label{sec:org486b3ca}
+\label{sec:org6f61975}
 \(m_1: w_3 > w_1 > w_2 > w_4\)
 
 \(m_2: w_1 > w_4 > w_2 > w_3\)
@@ -196,28 +196,28 @@ Let's change the example a bit.
 \end{itemize}
 
 \subsubsection{Why isn't this infinite?}
-\label{sec:org3f0d3f7}
+\label{sec:org3c346d6}
 \(P(t)\): Number of pairs \((m,w)\) such that \(m\) has not proposed to \(w\) yet at time \(t\) (number of iterations of while loop).
 \(P(0)=n^2\)
 \(P(1)=n^2-1\)
 Is it possible that a man proposes to a woman more than once? No.
 \begin{enumerate}
 \item Fact:
-\label{sec:org13d7808}
+\label{sec:org6f1ae4d}
 No man proposes to the same woman more than once.
 
 Some of these proposals may never happen.
 
 The quantity \(P\) will never go negative.
 \item Fact:
-\label{sec:org7eda24a}
+\label{sec:org096e9c9}
 \(P(t)\) decreases by \(1\) at every iteration.
 \item Lemma:
-\label{sec:orgfbed891}
+\label{sec:orgcaf27b5}
 The algorithm terminates after at most \(n^2\) iterations. There will be no free men at the end.
 
 \item Fact:
-\label{sec:org0412091}
+\label{sec:org86f4fe1}
 Once a woman gets a proposal, she is never free again.
 
 \(\implies\) If a man \uline{\(m\)} remains free by the end of the alg it means that at the end all women are engaged.
@@ -232,21 +232,21 @@ Once a woman gets a proposal, she is never free again.
 \end{itemize}
 \end{enumerate}
 \section{Lecture 2 \textit{<2017-09-07 Thu>}}
-\label{sec:orgfdcd18d}
+\label{sec:org13c2866}
 \subsection{Announcements}
-\label{sec:orga9095d8}
+\label{sec:org02d5674}
 \begin{itemize}
 \item Lectures will be recorded.
 \item Assignment 1 to come out soon, probably early next week.
 \end{itemize}
 \subsection{Recall:}
-\label{sec:org4fc21b5}
+\label{sec:org79994e3}
 Stable matching \(n\) men \(n\) women.
 \begin{itemize}
 \item Not a fundamental problem, but contains many of the elements we'll see later in this course
 \end{itemize}
 \subsubsection{Ex: \(n=4\)}
-\label{sec:org6f88098}
+\label{sec:orgec09b87}
 \begin{center}
 \begin{tabular}{lllll}
 Man & Preference 1 & 2 & 3 & 4\\
@@ -283,7 +283,7 @@ Matching becomes:
 Top matched with bottom. Does \(w_1\) have a tendancy to break up and go with \(m_3\)? No.
 
 \subsubsection{Last lecture we proved:}
-\label{sec:org8b4285e}
+\label{sec:org6abff26}
 \begin{enumerate}
 \item The algorithm always terminates.
 \begin{itemize}
@@ -302,29 +302,29 @@ Top matched with bottom. Does \(w_1\) have a tendancy to break up and go with \(
 
 \noindent\rule{\textwidth}{0.5pt}
 \subsection{Stable Matching Algorithm}
-\label{sec:orge0a3480}
+\label{sec:org9c5b49c}
 \subsubsection{Does this algorithm produce a stable marriage?}
-\label{sec:org4f2d3c1}
+\label{sec:org2b2feec}
 It remains to show that the output is stable.
 \begin{enumerate}
 \item Observation 1
-\label{sec:org0aea0ac}
+\label{sec:org69a8443}
 \begin{itemize}
 \item Throughout the algorithm every man's partner gets worse and worse
 \end{itemize}
 \item Observation 2
-\label{sec:org11231f5}
+\label{sec:org23f3514}
 \begin{itemize}
 \item However, for women it is the opposite
 \item They accept the first proposal
 \item But every partner gets better and better
 \end{itemize}
 \item Theorem:
-\label{sec:orgde07925}
+\label{sec:orge599d0d}
 The final matching is stable.
 \begin{enumerate}
 \item Proof:
-\label{sec:org9b0841f}
+\label{sec:orgbc838cc}
 Suppose not! Then there exists engaged pairs as in the following:
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i1.png}
@@ -334,12 +334,12 @@ But in this case \(m\) would have proposed to \(w\) before proposing to \(w'\), 
 \end{enumerate}
 
 \subsubsection{Is this algorithm better for men or women?}
-\label{sec:orgcb2d87c}
+\label{sec:orge16afce}
 Let's say \((m,w)\) is valid if there exists \uline{some} stable matching that pairs \(m\) and \(w\).
 
 \begin{enumerate}
 \item Fact:
-\label{sec:org4de76c2}
+\label{sec:org933e2e5}
 This algorithm matches every man with their most preferred valid \(w\) and every woman with their least preferred valid \(m\).
 \begin{itemize}
 \item For men, they start ambituously and go for their most preferred partner and go down the list if needed
@@ -349,7 +349,7 @@ This algorithm matches every man with their most preferred valid \(w\) and every
 \end{enumerate}
 
 \subsection{Notes on problems}
-\label{sec:org1170457}
+\label{sec:orgc283aea}
 \begin{itemize}
 \item Formulate the problem as a precise mathematical problem.
 \begin{itemize}
@@ -382,9 +382,9 @@ This algorithm matches every man with their most preferred valid \(w\) and every
 Professor won't do much on first point, about formulating problem as math. Textbook often presents the problem in a bunch of sentences for some real life thing and we need to extract the mathematical problem from there, which the professor isn't a big fan of.
 
 \subsection{Some example problems}
-\label{sec:org96d9fb1}
+\label{sec:org06f52d4}
 \subsubsection{Interval scheduling}
-\label{sec:orgc133850}
+\label{sec:org14a4bb9}
 \begin{itemize}
 \item Let's say you have a room and want to rent it out
 \item Bunch of offers that say the person wants to use the room from a start time to an end time
@@ -396,7 +396,7 @@ Professor won't do much on first point, about formulating problem as math. Textb
 
 \begin{enumerate}
 \item Input:
-\label{sec:org418e0c9}
+\label{sec:org140e5ef}
 \begin{itemize}
 \item \(n\) requests
 \item Starting time \(s_1, s_2, \ldots , s_n\)
@@ -405,14 +405,14 @@ Professor won't do much on first point, about formulating problem as math. Textb
 \end{itemize}
 
 \item Problem
-\label{sec:orgdd36b7f}
+\label{sec:org7bd3e26}
 We want to pick the max number of these tasks s.t. no two overlap. (Maximum bookings, not maximum time, not charging per hour)
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i2.png}
 \end{center}
 \begin{enumerate}
 \item Algorithm?
-\label{sec:org2633fc0}
+\label{sec:orge9d9ddc}
 \begin{itemize}
 \item What algorithm is good for this?
 \item Pick next available room that finishes the earliest and keep going
@@ -421,7 +421,7 @@ We want to pick the max number of these tasks s.t. no two overlap. (Maximum book
 \end{enumerate}
 \end{enumerate}
 \subsubsection{Weighted Interval Scheduling}
-\label{sec:org1e983ad}
+\label{sec:org7907392}
 \begin{itemize}
 \item Now every offer comes with some value.
 \item \(v_1,\ldots,v_n\)
@@ -447,7 +447,7 @@ We will solve this using \textbf{Dynamic Programming}
 \end{itemize}
 \begin{enumerate}
 \item Independent set problem
-\label{sec:org225c7e8}
+\label{sec:org4626f0b}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i3.png}
 \end{center}
@@ -465,7 +465,7 @@ Find the largest independent set.
 \end{itemize}
 \begin{enumerate}
 \item P vs NP?
-\label{sec:org014865e}
+\label{sec:org4953f1d}
 \begin{itemize}
 \item Most important problem in computer science
 \item Common belief: \(P\neq NP\)
@@ -476,14 +476,14 @@ So that is essentially a small instruction about the types of problems we'll be 
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 3 \textit{<2017-09-12 Tue>}}
-\label{sec:org6849d97}
+\label{sec:orgf2099fa}
 \subsection{Running Time Analysis}
-\label{sec:org4499312}
+\label{sec:org930e88e}
 \begin{itemize}
 \item We will be talking about running time of an algorithm.
 \end{itemize}
 \subsubsection{Questions}
-\label{sec:orgf18b8f0}
+\label{sec:orgd847cf5}
 Thinking back without knowledge of running time, what questions can we pose?
 
 \begin{itemize}
@@ -498,7 +498,7 @@ Thinking back without knowledge of running time, what questions can we pose?
 \end{itemize}
 \begin{enumerate}
 \item One option:
-\label{sec:org6d25cd3}
+\label{sec:org341120b}
 \begin{itemize}
 \item Call an algorithm efficient if it performs "fast" on \uline{"real world"} inputs.
 \begin{itemize}
@@ -510,7 +510,7 @@ Thinking back without knowledge of running time, what questions can we pose?
 \end{itemize}
 \end{itemize}
 \item Option II:
-\label{sec:orgb535bfc}
+\label{sec:orge0d790b}
 \begin{itemize}
 \item Take the set of all inputs of a certain size and take the average \uline{running time} of our algorithm on them.
 \begin{itemize}
@@ -523,7 +523,7 @@ Thinking back without knowledge of running time, what questions can we pose?
 \end{itemize}
 \end{itemize}
 \item Example: Algorithm for prime numbers
-\label{sec:org5125bfb}
+\label{sec:org58e6802}
 \begin{itemize}
 \item Input: integer \(n\)
 \item Output: Is \(n\) a prime number?
@@ -545,7 +545,7 @@ Thinking back without knowledge of running time, what questions can we pose?
 \item Better to just care about the worst case
 \end{itemize}
 \item Worst case time analysis
-\label{sec:org751151a}
+\label{sec:org157f1a8}
 We measure the \uline{running time} against the worst input of a given \uline{size}
 \begin{itemize}
 \item Want to be inddependent of implementation:
@@ -555,10 +555,10 @@ We measure the \uline{running time} against the worst input of a given \uline{si
 \end{itemize}
 \end{enumerate}
 \subsubsection{Efficiency}
-\label{sec:orge28f5a8}
+\label{sec:org87b7bb1}
 \begin{enumerate}
 \item \underline{Def:}
-\label{sec:orge9e0a17}
+\label{sec:org2b24718}
 We call an algorithm \textbf{efficient} if its running time is bounded by a polynomial \(P(n)\) for every input of \uline{size} (in number of bits) \(n\)
 \begin{itemize}
 \item \(n\) efficient
@@ -581,7 +581,7 @@ Remember that you need \(\log{n}\) bits to store a number \(n\).
 \end{itemize}
 \end{itemize}
 \item \underline{Alternative Def:}
-\label{sec:orgc9c356d}
+\label{sec:orgc770193}
 Efficient is running time \(<n^3\) seems a better def as it overrules cases like \(n^{100}\)
 \begin{itemize}
 \item Let's say you're combining 2 algorithms, say you're running a \(n^2\) algorithm in a \(n^2\) for-loop
@@ -595,7 +595,7 @@ Efficient is running time \(<n^3\) seems a better def as it overrules cases like
 \end{itemize}
 \end{itemize}
 \item Example:
-\label{sec:orgf065dd3}
+\label{sec:orged7c2f8}
 Input: An array \(A[0\ldots n-1]\)
 
 Goal: Are all elements in \(A[]\) distinct?
@@ -634,7 +634,7 @@ This much accuracy is \uline{meaningless}: Each one of these commands consist of
 \end{enumerate}
 
 \subsubsection{Big-O notation}
-\label{sec:org23ad3b4}
+\label{sec:org4362c2a}
 Informally \(O(g(n))\) is the set of all functions with smaller or same order of growth.
 \begin{itemize}
 \item You should think of it as a set, not a value.
@@ -645,27 +645,27 @@ Informally \(O(g(n))\) is the set of all functions with smaller or same order of
 \end{itemize}
 \begin{enumerate}
 \item Def:
-\label{sec:orgac75ed4}
+\label{sec:org9fd6621}
 \(f(n)\in O(g(n))\) if \(\exists n_0, c > 0\) such that \(f(n)<cg(n)\)  \(\forall n>n_0\)
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i4.png}
 \end{center}
 \item Ex:
-\label{sec:orgbceb6a7}
+\label{sec:orgc6d5ce7}
 \(100n+5 \in O(n^2)\)
 \begin{enumerate}
 \item Proof
-\label{sec:org3a59c84}
+\label{sec:org158151d}
 \(100n+5 \stackrel{n\geq 5, n_0=5}{\leq} 100n+n \leq \underbrace{101}_{c=101}n\)
 \end{enumerate}
 \end{enumerate}
 
 \subsubsection{\(\Omega\)-notation:}
-\label{sec:org5a43806}
+\label{sec:org59041aa}
 Informally \(f(n)\in \Omega(g(n))\) if \(f(n)\) grows faster or the same as \(g(n)\)
 \begin{enumerate}
 \item Def:
-\label{sec:orgd438941}
+\label{sec:org5222f49}
 \(f(n) \in \Omega(g(n))\) if \(\exists n_0, c > 0\) such that \(f(n) \geq cg(n)\)  \(\forall n\geq n_0\)
 
 (Equivalently \(g(n)\in O(f(n))\))
@@ -675,26 +675,26 @@ Informally \(f(n)\in \Omega(g(n))\) if \(f(n)\) grows faster or the same as \(g(
 \end{center}
 
 \item Ex:
-\label{sec:org69e8ff9}
+\label{sec:org3f45a99}
 \(\frac{n^2}{2}-5n\in \Omega(n^2)\)
 \(\frac{n^2}{2}-5n \geq \frac{1}{4} n^2 \implies c=\frac{1}{4}\)
 \(\forall n \geq 20 = n_0\)
 \end{enumerate}
 \section{Lecture 4 \textit{<2017-09-14 Thu>}}
-\label{sec:orgd907026}
+\label{sec:org1c971c2}
 \subsection{Recall:}
-\label{sec:org3f0e101}
+\label{sec:org8b8d771}
 \begin{itemize}
 \item Big-Oh
 \item Omega notation
 \end{itemize}
 \subsection{Examples}
-\label{sec:org6f4bbf5}
+\label{sec:org86a36f7}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i6.jpg}
 \end{center}
 \subsection{\(\Theta\)-notation:}
-\label{sec:org6b38e31}
+\label{sec:orgc99e071}
 \(f(n)\iff f(n) = O(g(n))\) and \(f(n)=\Omega(g(n))\)
 \begin{itemize}
 \item Grows at the same rate as \(g(n)\)
@@ -705,7 +705,7 @@ Alternatively:
 
 \(\exists n_0, c_1, c_2 \forall n>n_0\), s.t. \(c_1g(n)\leq f(n) \leq c_2 g(n)\)
 \subsubsection{Examples}
-\label{sec:orgb3bd11b}
+\label{sec:org8c031ed}
 \begin{itemize}
 \item \(2n^2+1 = \Theta(n^2)\)
 \begin{enumerate}
@@ -714,12 +714,12 @@ Alternatively:
 \end{enumerate}
 \end{itemize}
 \subsection{Theorem}
-\label{sec:org065d100}
+\label{sec:orgeb18f36}
 Let \(f(n)=a_d n^d + a_{d-1}n^{d-1}+\ldots+a_1 n + a_0, a_d>0\).
 
 Then \(f(n)=\Theta(n^d)\)
 \subsubsection{Proof}
-\label{sec:org2418c05}
+\label{sec:org44e5fa9}
 \begin{itemize}
 \item \((f(n)=O(n^d)\)
 \begin{itemize}
@@ -740,7 +740,7 @@ Then \(f(n)=\Theta(n^d)\)
 \end{itemize}
 \end{itemize}
 \subsection{Little o and Little omega}
-\label{sec:org6d3e892}
+\label{sec:org4b6d7c1}
 \begin{itemize}
 \item Show strict upper and lower bounds, rather than equalities
 \end{itemize}
@@ -763,7 +763,7 @@ Proof: \(\lim_{n\to \infty}\frac{\log_2(n)^5}{n^{1/100}} = \lim_{n\to\infty}\fra
 
 The lesson is that anything in log grows much slower than any polynomial.
 \subsection{Theorem}
-\label{sec:org2e02905}
+\label{sec:orgddacb72}
 \begin{itemize}
 \item \(\forall r>1, d>0\)
 \item \(n^d = o(r^n)\) (i.e. polynomials grow much slower than exponential functions)
@@ -772,7 +772,7 @@ The lesson is that anything in log grows much slower than any polynomial.
 \noindent\rule{\textwidth}{0.5pt}
 \(\underbrace{n^{10000}}_{\text{Better}}\) vs \(1.0001^{n}\)
 \subsection{Stable Marriage}
-\label{sec:org42ba030}
+\label{sec:org7a662c2}
 Data structures we may use:
 \begin{itemize}
 \item Array \(A[0\ldots n-1]\)
@@ -837,11 +837,11 @@ Data structures we may use:
 \end{itemize}
 \end{itemize}
 \section{Lecture 5 \textit{<2017-09-21 Thu>}}
-\label{sec:orgc0c1938}
+\label{sec:org7e86798}
 \subsection{Graphs}
-\label{sec:org71a87b1}
+\label{sec:org65f5466}
 \subsubsection{Undirected Graphs}
-\label{sec:orga272d57}
+\label{sec:org6acae0a}
 \begin{itemize}
 \item Notation \(G=(V,E)\)
 \begin{itemize}
@@ -852,7 +852,7 @@ Data structures we may use:
 \end{itemize}
 \end{itemize}
 \subsubsection{Example applications}
-\label{sec:org8d65609}
+\label{sec:org94ba7c5}
 \begin{center}
 \begin{tabular}{lll}
 Graph & Node & Edge\\
@@ -871,10 +871,10 @@ molecule & atom & bond\\
 \end{tabular}
 \end{center}
 \subsubsection{Ways of implementing in a program}
-\label{sec:org8c778b3}
+\label{sec:org66a5190}
 \begin{enumerate}
 \item Adjacency matrix
-\label{sec:orgb4ed07a}
+\label{sec:orgaaf12d6}
 \$n\$-by-\(n\) matrix with \(A_{uv} = 1\) if \((u,v)\) is an edge.
 \begin{itemize}
 \item Two representations of each edge.
@@ -884,7 +884,7 @@ molecule & atom & bond\\
 \item It's exactly symmetric
 \end{itemize}
 \item Adjacency list
-\label{sec:org9686c7e}
+\label{sec:org58f0933}
 Node-indexed array of lists
 \begin{itemize}
 \item Two representations of each edge
@@ -894,25 +894,25 @@ Node-indexed array of lists
 \end{itemize}
 \end{enumerate}
 \subsubsection{Paths and connectivity}
-\label{sec:org6c23998}
+\label{sec:org2427649}
 \begin{itemize}
 \item Def. A \textbf{path} in an undirected graph \(G=(V,E)\) is a sequence of nodes \(v_1,v_2,\ldots,v_k\) with the property that each consecutive pair \(v_{i-1},v_i\) is joined by an edge in \(E\).
 \item Def. A path is \textbf{simple} if all nodes are distinct.
 \item Def. An undirected graph is \textbf{connected} if for every pair of nodes \(u\) and \(v\), there is a path between \(u\) and \(v\)
 \end{itemize}
 \subsubsection{Cycles}
-\label{sec:org500b0c7}
+\label{sec:orgb3587da}
 \begin{itemize}
 \item Def. A \textbf{cycle} is a path \(v_1, v_2, \ldots, v_k\) in which \(v_1 = v_k\), \(k>2\), and the first \(k-1\) nodes are all distinct.
 \end{itemize}
 \subsubsection{Trees}
-\label{sec:orgcc50d31}
+\label{sec:org6e86623}
 \begin{itemize}
 \item Def. An undirected graph is a \textbf{tree} if it is connected and does not contain a cycle
 \end{itemize}
 \begin{enumerate}
 \item Theorem
-\label{sec:orgdcda244}
+\label{sec:org62b8362}
 Let \(G\) be an undirected graph on \(n\) nodes. Any two of the following statements imply the third:
 \begin{itemize}
 \item \(G\) is connected
@@ -920,14 +920,14 @@ Let \(G\) be an undirected graph on \(n\) nodes. Any two of the following statem
 \item \(G\) has \(n-1\) edges
 \end{itemize}
 \item Rooted trees
-\label{sec:orgb88c25e}
+\label{sec:orgc485cb5}
 \begin{itemize}
 \item Given a tree \(T\), choose a root node \(r\) and orient each edge away from \(r\).
 \item Importance. Models hierarchical structure
 \end{itemize}
 \end{enumerate}
 \subsubsection{Connectivity}
-\label{sec:orgfa01f98}
+\label{sec:org4080058}
 \begin{itemize}
 \item s-t connectivity problem. Given two nodes \(s\) and \(t\), is there a path between \(s\) and \(t\)?
 \item s-t shortest path problem. Given two nodes \(s\) and \(t\), what is the length of a shortest path between \(s\) and \(t\)?
@@ -940,13 +940,13 @@ Let \(G\) be an undirected graph on \(n\) nodes. Any two of the following statem
 \end{itemize}
 \end{itemize}
 \subsubsection{Breadth-first search}
-\label{sec:org2914277}
+\label{sec:org2c666eb}
 \begin{enumerate}
 \item BFS intuition
-\label{sec:orgf361540}
+\label{sec:org7f553ec}
 Explore outward from s in all possible directions, adding nodes one "layer" at a time. At most \(n\) layers.
 \item BFS algorithm
-\label{sec:orgac66127}
+\label{sec:org94d4be4}
 \begin{itemize}
 \item \(L_0=\{s\}\)
 \item \(L_1 =\) all neighbors of \(L_0\)
@@ -954,20 +954,20 @@ Explore outward from s in all possible directions, adding nodes one "layer" at a
 \item \(L_{i+1}=\) all nodes that do not belong to an earlier layer, and that have an edge to a node in \(L_i\)
 \end{itemize}
 \item Theorem
-\label{sec:org1ae0ef1}
+\label{sec:org44dba7b}
 For each \(i, L_i\) consists of all nodes at distance exactly \(i\) from \(s\). There is a path from \(s\) to \(t\) iff \(t\) appears in some layer.
 \item Property
-\label{sec:org1247b67}
+\label{sec:org1cc87ff}
 Let \(T\) be a BFS tree of \(G=(V,E)\), and let \((x,y)\) be an edge of \(G\). Then, the levels of \(x\) and \(y\) differ by at most \(1\).
 
 \item Analysis
-\label{sec:org8585618}
+\label{sec:orgc471123}
 \begin{enumerate}
 \item Theorem
-\label{sec:orgf9732e8}
+\label{sec:org165f30b}
 The above implementation of BFS runs in \(O(m+n)\) time if the graph is given by its adjacency representation.
 \item Proof
-\label{sec:org2cebedb}
+\label{sec:org2cb7704}
 \begin{itemize}
 \item Easy to prove \(O(n^2)\) running time:
 \begin{itemize}
@@ -984,9 +984,9 @@ The above implementation of BFS runs in \(O(m+n)\) time if the graph is given by
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 6 \textit{<2017-09-26 Tue>}}
-\label{sec:org1911bb3}
+\label{sec:orgafe996e}
 \subsection{Stable Marriage}
-\label{sec:org08952de}
+\label{sec:org60bf5cf}
 Continuation of Lecture 4: Stable Marriage algorithm analysis.
 \begin{itemize}
 \item Good data structure to tell if someone is free or not?
@@ -1028,7 +1028,7 @@ Now we need to know if the woman is free. Make a boolean array of women with tru
 
 With all these data structures, our algorithm can run in \(O(n^2)\)
 \subsection{Priority Queue}
-\label{sec:org56cf9d5}
+\label{sec:org894c2a3}
 Say we're running a clinic and new patients come. A nurse assesses them and gives them a priority so that we know who we should see next. 
 
 Dynamic Scenario
@@ -1067,7 +1067,7 @@ Some ideas:
 \end{itemize}
 \end{itemize}
 \subsubsection{Heap Data Structure}
-\label{sec:orgd2a1890}
+\label{sec:orgea97f6a}
 A balanced binary tree
 \begin{itemize}
 \item All levels are full except the last level which is filled \textbf{from left to right}
@@ -1156,11 +1156,11 @@ Answer: Insert the elements one by one and then extract the minimums one by one.
 \end{itemize}
 \end{itemize}
 \section{Lecture 7 \textit{<2017-09-28 Thu>}}
-\label{sec:org909ae9b}
+\label{sec:orge8d88d0}
 \subsection{Graph Exploration Algorithms}
-\label{sec:orgda53b11}
+\label{sec:orga35c8ed}
 \subsubsection{Breadth-First-Search (BFS)}
-\label{sec:org2fc78c8}
+\label{sec:org97d9cab}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i16.png}
 \end{center}
@@ -1209,7 +1209,7 @@ A good way to implement this is to keep the newly discovered vertices in a queue
 \end{center}
 
 \subsubsection{Depth-First-Search (DFS)}
-\label{sec:orgbc28472}
+\label{sec:org17d9912}
 We go in a path discovering new vertices until we reach a dead-end, and then we step back \(\ldots\)
 
 \noindent\rule{\textwidth}{0.5pt}
@@ -1229,7 +1229,7 @@ We go in a path discovering new vertices until we reach a dead-end, and then we 
 \noindent\rule{\textwidth}{0.5pt}
 Non-recursive DFS: Every time we discover a new vertex we put it at the top of a stack (FILO, first in last out).
 \subsection{Data Structure for Graphs}
-\label{sec:orga507bc7}
+\label{sec:org4addbc0}
 What data structure to use for graphs?
 \begin{itemize}
 \item Adjacency Matrix
@@ -1256,13 +1256,13 @@ What data structure to use for graphs?
 \item Cons: Takes \(O(n)\) to see if u is adjacent to v.
 \end{itemize}
 \subsection{Bipartites}
-\label{sec:orgbdbf5d6}
+\label{sec:orgc93f406}
 An undirected graph is called \uline{bipartite} if we can \uline{partition} the vetices into two parts \(R\) and \(B\) such that all the edges are between \(R\) and \(B\)
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i19.png}
 \end{center}
 \subsubsection{Testing for bipartites}
-\label{sec:org979a60c}
+\label{sec:orge39cc15}
 How can we test to see if \(G\) is bipartite? Label one vertex in \(R\) then:
 \begin{itemize}
 \item Look at neighbors to see if they're supposed to be \(R\) or \(B\)
@@ -1300,14 +1300,14 @@ How can we test to see if \(G\) is bipartite? Label one vertex in \(R\) then:
 \end{algorithmic}
 This is called proper two coloring of a graph.
 \subsection{Directed Graphs}
-\label{sec:org88490ce}
+\label{sec:orgffd59a6}
 Every edge has an orientation.
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i21.png}
 \end{center}
 
 \subsubsection{Data Structure:}
-\label{sec:orge25087f}
+\label{sec:org1a6de0a}
 For every vertex keep two lists: the edge going out, the edges coming into that vertex
 Given two vertices, s and t, is there a path from s to t?
 \begin{itemize}
@@ -1334,15 +1334,15 @@ Q: Given \(G\), how can we tell if it is strongly connected?
 \item Otherwise declare "G is strongly connected"
 \end{itemize}
 \section{Lecture 8 \textit{<2017-10-03 Tue>}}
-\label{sec:org8eae72c}
+\label{sec:org4411f9d}
 \subsection{Directed Graphs}
-\label{sec:orge8c553d}
+\label{sec:org4bf4ffe}
 \begin{itemize}
 \item Each edge has a direction (seen last class)
 \item Not symmetric, edge from u to v means no edge from v to u.
 \end{itemize}
 \subsubsection{Graph search}
-\label{sec:orgb6d214d}
+\label{sec:org7a0f559}
 \begin{itemize}
 \item Directed reachability
 \begin{itemize}
@@ -1359,14 +1359,14 @@ Q: Given \(G\), how can we tell if it is strongly connected?
 \end{itemize}
 \end{itemize}
 \subsubsection{Strong Connectivity}
-\label{sec:org0570633}
+\label{sec:org2194f35}
 \begin{itemize}
 \item Node u and v are \textbf{mutually reachable} if there is a path from u to v and also a path from v to u.
 \item A graph is \textbf{strongly connected} if every pair of nodes is mutually reachable.
 \end{itemize}
 \begin{enumerate}
 \item Lemma
-\label{sec:org42804cb}
+\label{sec:orgc5d2164}
 Let s be any node. G is strongly connected iff every node is reachable from s, and s is reachable from every node.
 \begin{itemize}
 \item Proof: \(\implies\) Follows from definition
@@ -1376,10 +1376,10 @@ Let s be any node. G is strongly connected iff every node is reachable from s, a
 \end{itemize}
 \end{itemize}
 \item Algorithm
-\label{sec:orged560ec}
+\label{sec:org3026130}
 \begin{enumerate}
 \item Theorem
-\label{sec:orge38bc02}
+\label{sec:org7b00e5e}
 Can determine if G is strongly connected in \(O(m+n)\) time.
 
 Proof:
@@ -1394,7 +1394,7 @@ Proof:
 \end{enumerate}
 \end{enumerate}
 \subsection{Directed Acyclic Graphs}
-\label{sec:orgb2f8906}
+\label{sec:org3838a88}
 \begin{itemize}
 \item A \textbf{DAG} is a directed graph that contains no directed cycles
 \begin{itemize}
@@ -1407,7 +1407,7 @@ Proof:
 \item A \textbf{topological order} of a directed graph \(G=(V,E)\) is an ordering of its nodes as \(v_1,v_2,\ldots,v_n\) so that for every edge \((v_i,v_j)\) we have \(i<j\)
 \end{itemize}
 \subsubsection{Lemma}
-\label{sec:org4b1c815}
+\label{sec:orgbcf45d4}
 If \(G\) has a topological order, the \(G\) is a DAG.
 
 Proof (by contradiction)
@@ -1418,7 +1418,7 @@ Proof (by contradiction)
 \item On the other hand, since \((v_j,v_i)\) is an edge and \(v_1,v_2,\ldots,v_n\) is a topological order, we must have a contradiction. \lightning
 \end{itemize}
 \subsubsection{Lemma}
-\label{sec:orgbd53f35}
+\label{sec:org29c4b49}
 If \(G\) is a DAG, then \(G\) has a node with no incoming edges.
 
 Proof (by contradiction)
@@ -1430,7 +1430,7 @@ Proof (by contradiction)
 \item Let \(C\) denote the sequence of nodes encountered between successive visits to \(w\). \(C\) is a cycle. \lightning
 \end{itemize}
 \subsubsection{Lemma}
-\label{sec:org1bb569f}
+\label{sec:org2f43fea}
 If \(G\) is a DAG, then \(G\) has a topological ordering.
 
 Proof (by induction on \(n\))
@@ -1443,7 +1443,7 @@ Proof (by induction on \(n\))
 \end{itemize}
 \begin{enumerate}
 \item Algorithm
-\label{sec:org4f639bd}
+\label{sec:orgba2aab5}
 To compute a topological ordering of \(G\)
 \begin{itemize}
 \item Find a node \(v\) with no incoming edges and order it first
@@ -1452,7 +1452,7 @@ To compute a topological ordering of \(G\)
 \item Running time: \(O(n)\) for each call, calling exactly \(n\) times. So algorithm runs in \(O(n^2)\). Lots of running time if the graph is sparse, not many edges. If we reimplement this more carefully, we can get \(O(m+n)\), with \(m\) being the number of edges. Note that making an algorithm run faster usually requires more space.`
 \end{itemize}
 \item Theorem
-\label{sec:org27e6704}
+\label{sec:org0777b94}
 Algorithm finds a topological order in \(O(m+n)\) time
 
 Proof:
@@ -1472,15 +1472,15 @@ Proof:
 \end{itemize}
 \end{enumerate}
 \section{Lecture 9 \textit{<2017-10-05 Thu>}}
-\label{sec:org690e406}
+\label{sec:orgca8029c}
 \subsection{Greedy Algorithm}
-\label{sec:org1a4166b}
+\label{sec:orgf2d501d}
 \begin{itemize}
 \item In every step, it tries to be myopic and optimize its current goal/step
 \item Doesn't care about the future
 \end{itemize}
 \subsubsection{Interval scheduling}
-\label{sec:org36a0348}
+\label{sec:org89d1ef6}
 \begin{itemize}
 \item Have a class room and a microscope
 \item Every request has a starting time and finishing time \(\{1,\ldots, n\}\), \((s_i,f_i)\)
@@ -1530,7 +1530,7 @@ Proof:
 
 \noindent\rule{\textwidth}{0.5pt}
 \subsubsection{{\bfseries\sffamily TODO} clean up this section}
-\label{sec:orgb0bfcd0}
+\label{sec:org4bc27aa}
 Running time of method 4:
 \begin{itemize}
 \item Sort : \(O(n\log n)\)
@@ -1540,7 +1540,7 @@ Running time of method 4:
 \end{center}
 \end{itemize}
 \subsubsection{Theorem}
-\label{sec:orgaa104b6}
+\label{sec:orgbbd5084}
 This greedy algorithm returns the optimal subset.
 $$\underbrace{|A|}_{\text{optimal}} = |O| - \text{optimal subset}$$
 \begin{itemize}
@@ -1551,11 +1551,11 @@ $$\underbrace{|A|}_{\text{optimal}} = |O| - \text{optimal subset}$$
 
 \begin{enumerate}
 \item Lemma.
-\label{sec:org49179c9}
+\label{sec:org8d761b0}
 For all \(r \leq k\), \(f(i_r) \leq f(j_r)\)
 \begin{enumerate}
 \item Proof
-\label{sec:orgac24e65}
+\label{sec:org74b6299}
 \begin{itemize}
 \item \(r=1 f(\underbrace{i_1}_A) \leq f(\underbrace{j_1}_O)\) Works
 \item This greedy algorithm returns the optimal subset \(r-1\) i.e. \(f(i_{r-1})\leq f(j_{r-1})\).
@@ -1581,20 +1581,20 @@ This contradicts \(k<m\)! Thus \(m=k\)
 \end{enumerate}
 \end{enumerate}
 \subsubsection{Satisfying requests}
-\label{sec:org74a28eb}
+\label{sec:org1b5e913}
 Given requests, how many resources do we need to satisfy all of them?
 \begin{itemize}
 \item Def. depth is the maximum number of requests that have a common point in the time line.
 \end{itemize}
 \begin{enumerate}
 \item Claim
-\label{sec:org3fb2951}
+\label{sec:org75b3f99}
 The \# of resources is at least \(d\). \$$\backslash${I\(_{\text{1}}\), \ldots , I\(_{\text{d}}\)$\backslash$}\$- requests with depth \(d\).
 \end{enumerate}
 \section{Lecture 10 \textit{<2017-10-10 Tue>}}
-\label{sec:org5193b09}
+\label{sec:org3f2f23a}
 \subsection{Recall}
-\label{sec:orge164d84}
+\label{sec:org7214714}
 Interval scheduling
 \begin{itemize}
 \item Input: Lectures \(s_j, f_n\) (start and finish) \(j=1,\ldots n\)
@@ -1602,14 +1602,14 @@ Interval scheduling
 \item Alg: Always pick the job with earliest finish time.
 \end{itemize}
 \subsection{Partition scheduling}
-\label{sec:org2ed363b}
+\label{sec:org03227be}
 Now we really want to accommodate all these jobs. How many rooms/resources do we need?
 \begin{itemize}
 \item Input: Same as above
 \item Goal: Smallest number of rooms that can accommodate all the lectures.
 \end{itemize}
 \subsubsection{Greedy Template}
-\label{sec:orgc4a398e}
+\label{sec:org472ddb3}
 Consider lectures in some \textbf{natural order}. Assign each lecture \uline{to an available room} (how?). If none is available open a new room.
 
 \noindent\rule{\textwidth}{0.5pt}
@@ -1632,7 +1632,7 @@ Sort the lectures so that \(s_1 \leq s_2 \leq \ldots \leq s_n\)
 Now that we have the algorithm, we need to analyze its correctness and its running time.
 \begin{enumerate}
 \item Running Time
-\label{sec:orgc400e33}
+\label{sec:orge4cc282}
 \begin{itemize}
 \item Sorting: \(O(n \log n)\)
 \item For loop runs \(n\) times. Each time we check if a lecture is compatible with a room, so we must do this fast.
@@ -1659,7 +1659,7 @@ Running Time:
 \item \(\underbrace{O(n \log n)}_{\text{Sort}} + \overbrace{n}^{\text{For loop}} \times \underbrace{O(\log n)}_{\text{Priority queue}} = O(n \log n)\)
 \end{itemize}
 \item Correctness
-\label{sec:orgc9fdb99}
+\label{sec:orgd96cd5e}
 Why does this alg output the best solution?
 \begin{itemize}
 \item Depth: Max number of intervals that contain any point on the timeline
@@ -1681,7 +1681,7 @@ In this case every room \(1,\ldots,d-1\) has a lecture that ends after \(s_j\) (
 What do we know? depth \(\geq\) Output of algorithm d (just showed) \(\geq\) optimal \(\geq\) depth (earlier) \(\implies\) depth \(=\) optimal \(=\) output of alg
 \end{enumerate}
 \subsection{Minimizing Lateness}
-\label{sec:org9bb9091}
+\label{sec:org1ed6c0b}
 \begin{itemize}
 \item Input: \(n\) tasks.
 \begin{itemize}
@@ -1696,7 +1696,7 @@ Each task will be scheduled for some time \(s_j = f_j-t_k\) to \(f_j\) (to finis
 \item Goal: Minimize the lateness
 \end{itemize}
 \subsubsection{Greedy Template}
-\label{sec:org43270be}
+\label{sec:org7df7ebf}
 Sort the jobs according to some order and assign them to the processor according to this order.
 
 Shortest job first?
@@ -1726,7 +1726,7 @@ Optimal: \(f=1, f=11\), lateness \(=\) 1
 
 Alg: \(f=10, f=11\), lateness \(=\) 9
 \subsubsection{Optimal Alg}
-\label{sec:org83045fd}
+\label{sec:org4cb16ab}
 Sort by the deadline: \(d_1 \leq d_2 \leq \ldots d_n\)
 \begin{algorithmic}
   \State Set f $\gets 0$
@@ -1742,7 +1742,7 @@ Why is this optimal? Suppose the optimal is not sorted according to deadlines. T
 
 What will switching these two jobs do? It can only improve the lateness. 
 \subsection{Midterm}
-\label{sec:org1dcd8a3}
+\label{sec:org8474baa}
 Next class is the midterm, will be split into 2 rooms.
 \begin{itemize}
 \item Topics: Everything until today
@@ -1750,7 +1750,7 @@ Next class is the midterm, will be split into 2 rooms.
 \item No crib sheets
 \end{itemize}
 \section{Lecture 11 \textit{<2017-10-17 Tue>}}
-\label{sec:orgaa6ea30}
+\label{sec:org5e97069}
 \begin{itemize}
 \item Recall: Minimize Lateness
 \begin{itemize}
@@ -1794,7 +1794,7 @@ Consider an optimal solution. If different from the output of the algorithm (not
 \end{itemize}
 A different way of writing this proof: Among all optimal solutions pick the one that agrees with the greedy algorithm for the longest period.
 \subsection{Optimal Caching}
-\label{sec:org0e61892}
+\label{sec:org8e58a09}
 (Very complicated)
 \begin{itemize}
 \item Cache with some capacity to store items
@@ -1868,16 +1868,16 @@ Proof: Among all the optimal solutions, pick the one that agrees with our algori
 \end{center}
 So for the proof, either assume that there's an optimal solution that remains stays the same for \(j\) steps and reach a contradiction showing that it is the same for \(j+1\) steps or show that it keeps going on
 \section{Lecture 12 \textit{<2017-10-19 Thu>}}
-\label{sec:org8b711eb}
+\label{sec:org361cefe}
 \subsection{Shortest Path in Graphs}
-\label{sec:org0e2a550}
+\label{sec:org7899e11}
 \begin{itemize}
 \item Input: Directed graph \(G=(V,E)\), source \(s\), destination \(t\)
 \item \(\forall e, \ell e =\) length of edge \(e\)
 \item Goal: Find the length of the shortest path from \uline{\(s\)} to \uline{\(t\)}.
 \end{itemize}
 \subsection{Dijkstra's Algorithm}
-\label{sec:org2a5bca6}
+\label{sec:orgdb9e264}
 It will find shortest paths from \(s\) to all the other nodes in one go.
 \begin{itemize}
 \item Idea: We keep a list of all vertices (initially includes source)
@@ -1910,7 +1910,7 @@ Alg: \(S =\) set of explored vertices
 \includegraphics[width=.9\linewidth]{./Images/i38.png}
 \end{center}
 \subsubsection{Correctness}
-\label{sec:orgd45d87c}
+\label{sec:org9e35a08}
 Claim: During the execution of the algorithm for every \(u \in S\), \(d(u)\) is the length of the shortest path from \(s\) to \(u\)
 \begin{itemize}
 \item Proof: We use induction on size of \(S\).
@@ -1982,4 +1982,116 @@ So all these updates cost \(O(m \log n)\)
 \item Binary heap implementation \(O(m \log n + n \log n)\)
 \item Fibonacci Heap: \(O(m+n\log n)\) (Won't be looking at this in this course as it's much more complicated)
 \end{itemize}
+\section{Lecture 13 \textit{<2017-10-24 Tue>}}
+\label{sec:org389bbfb}
+\subsection{The Minimum Spanning Tree Problems (MST)}
+\label{sec:org4decec2}
+\begin{itemize}
+\item Input: Undirected Connected Graph \(G=(V,E)\)
+\begin{itemize}
+\item To every edge \uline{e} a positive cost \(c_e >0\) is assigned
+\end{itemize}
+\item Goal: Find a spanning tree in \(G\) (i.e. a tree that includes all the vertices of \(G\)) with minimum cost.
+\end{itemize}
+$$cost = \sum_{\text{$e$ is an edge of the tree}} c_e$$
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i43.png}
+\end{center}
+$$cost = 4 + 6 + 5 + 8 + 11 + 9 + 7$$
+\begin{itemize}
+\item Why not check all the spanning trees? Very costly.
+\item Cayley's Thm: Complete graph on \(n\) vertices have \(n^{n-2}\) spanning trees
+\item So checking all the spanning trees requires exponential time \(\Omega(n^{n-2})\)
+\end{itemize}
+\subsubsection{Three Greedy Algorithms:}
+\label{sec:org1e91eaa}
+\begin{itemize}
+\item \uline{Kruskal}: Start with \(T=\empty\). At each step add the edge with minimum cost that does not create a cycle until we find a spanning tree (i.e. \(n-1\) edges are added)
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i44.png}
+\end{center}
+\begin{itemize}
+\item \uline{Reverse Deletion}: Now start with \(T=E\) (all the edges). At every step we remove the most expensive edge from \(T\) that does not \uline{disconnect} it until we arrive at a spanning tree
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i45.png}
+\end{center}
+\begin{itemize}
+\item \uline{Prims}: Start with a node \uline{s} (root) and greedily grow a tree from \uline{s} outward by adding the cheapest edge that leaves \(T\).
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i46.png}
+\end{center}
+
+\noindent\rule{\textwidth}{0.5pt}
+\subsubsection{Correctness}
+\label{sec:orgc7b4ed7}
+Why do they all find the MST?
+\begin{itemize}
+\item Simplifying assumption: we assume that all \(c_e\) are different (just to simplify the presentation of the proof)
+\end{itemize}
+\uline{Cut Property}: Let \(S\) be a subset of nodes and \uline{\(e\)} be the minimum cost edge from \(S\) to \(\overline{S}\). Then \uline{\(e\)} is in every minimum spanning tree.
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i47.png}
+\end{center}
+\uline{Proof}: Suppose not. Let \(T\) be an MST that does not include \uline{\(e\)}
+\begin{itemize}
+\item Consider the path that connects \(u\) to \(v\) in \(T\).
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i48.png}
+\end{center}
+Pick an edge on this path that goes from \(S\) to \(\overline{S}\) and replace it with \(e\). Thus way we find another spanning tree with smaller cost. This contradicts the assumption that \(T\) is a MST.
+\begin{itemize}
+\item Why am I allowed to do this? Why doesn't it create a cycle?
+\begin{itemize}
+\item Can this create a cycle? If adding \(e\) made a cycle, then we had a cycle in the original \(T\).
+\item If there were two paths from \(u\) to \(v\) (such that adding \(e\) makes a cycle), then \(T\) already had a cycle.
+\end{itemize}
+\end{itemize}
+Cycle Property: Let \(C\) be a cycle in \(G\) and let \(e\) be the most costly edge on this cycle. Then \(e\) does not belong to any spanning tree.
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i49.png}
+\end{center}
+Proof: Suppose not. There is a MST "\(T\)" that contains \(e\).
+\begin{itemize}
+\item Remove \(e\) from \(T\). This will break \(T\) into two components \(S\) and \(\overline{S}\).
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i50.png}
+\end{center}
+Since \(C\) is a cycle it crosses the cycle at some other edge \(e'\). Adding \(e'\) instead of \(e\) creates a better spanning tree. A contradiction!
+
+\noindent\rule{\textwidth}{0.5pt}
+\uline{Prims}: Each time add the smallest edge from \(T\) to the rest of the graph (starting from a root \(s\)).
+\begin{itemize}
+\item Theorem: If all costs are different then there's a unique MST and Prims Alg finds it.
+\item Pf: Consider a step of the alg. Let \(S\) be the component of the current \(T\).
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i51.png}
+\end{center}
+Prim's alg picks the smallest edge \uline{\(e\)} between \(S\) and \(\overline{S}\) and adds it to \(T\). By cut property \(e\) is in every MST. So our alg indeed only picks edges that are in every MST. This finishes` the proof of the theorem. 
+
+\noindent\rule{\textwidth}{0.5pt}
+Implementation: We maintain \(S\) (initially \(S=\empty\))
+\begin{itemize}
+\item For each \(v \notin S\) maintain an attachment cost.
+\item \(a_v =\) The cost of the cheapest edge from \(S\) to \(v\)
+\begin{center}
+\includegraphics[width=.9\linewidth]{./Images/i52.png}
+\end{center}
+\item At each step we add the vertex with smallest attachment cost to \(S\) and \uline{update attachment costs}.
+\item Using a priority queue seems like a good idea.
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+Running time of updating attachment costs once \(v\) is added to \(S\). Only vertices in \(\overline{S}\) with edges to \(v\) need updates: There are \(\leq deg(v)\) of these vertices \(w\). If we use a binary heap to keep attachment costs then the updates have running time \(deg(v)\).
+$$ dev(v) \times O(\log_n)$$
+\begin{itemize}
+\item \(\log_n\) for updating key in binary heap
+\item So total running time:
+\end{itemize}
+$$ \sum_{v \in V}deg(v) )(\log n) = O(\log (n))\times \sum_{v \in V} deg(v) = O(m \log n)$$
 \end{document}
