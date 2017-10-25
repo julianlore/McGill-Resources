@@ -363,8 +363,8 @@ z_i= \begin{cases}
 - So it must be in the table, say in line $n$.
 What is $z_n$?
 - Two cases:
-  - $z_n = 2 = f(n)_n$ if $f(n)_n = 1 \lightning$
-  - $z_n = 1 = f(n)_n$ of $f(n)_n \neq 1 \lightning$
+  - $z_n = 2 = f(n)_n$ if $f(n)_n = 1$ \lightning
+  - $z_n = 1 = f(n)_n$ if $f(n)_n \neq 1$ \lightning
   - $\implies$ contradiction!
     - The assumption is false.
 * Lecture 5 <2017-09-19 Tue>
@@ -1399,3 +1399,17 @@ $\vdash \forall x: (A(x)\supset B)\supset (\exists x: A(x)\supset B)$
 Complicated proof, won't have something like this on midterm (since just introduced these rules), but maybe final.
 **** FOL: Sound & Complete
 Proved by Godel in 1930
+* Lecture 15 <2017-10-24 Tue>
+Reviewed quiz 2. 
+- Recursive Definition
+  1. Base clause
+  2. Inductive clause
+  3. Final clause
+- Recursive
+Means that both the set and its complement are recursively enumerable (we can derive them as theorems in a proof system)
+- Terms
+Either a variable or an n-ary function with $n$ terms
+- Atomic wff
+Formula made up of only terms and predicates
+- Decision procedure to see if $\Gamma \models A$
+  - Make a truth table, see if when all of $\Gamma$ is true, then $A$ must be true
