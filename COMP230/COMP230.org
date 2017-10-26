@@ -1215,7 +1215,7 @@ Decompose
 \begin{align*}
   (\sim (0=Sx))^{\sigma (u/x)} = T \text{ for every }u \in \mathbb{N}
   \\ (0=Sx)^{\sigma (u/x)} = F \text{ for every }u \in \mathbb{N}
-  \\ (\textbf{0 = succ u}) = F \text{ for every }u \in mathbb{N}
+  \\ (\textbf{0 = succ u}) = F \text{ for every }u \in \mathbb{N}
 \end{align*}
 False for every $u \in \mathbb{N}$, $succ 0 \neq 0, succ 1 \neq 0, \ldots$
 
@@ -1310,7 +1310,7 @@ _Substitution_:
 - $x(t/x) = t$
   - Term $t$ replaces variable $x$
 - $y(t/x) = y$
-- $f(s_1,\ldots,s_n)(x/t) = f(s_1(t/x),\ldots,s_n(t/x))$
+- $f(s_1,\ldots,s_n)(t/x) = f(s_1(t/x),\ldots,s_n(t/x))$
   - Since the $s_i$ are terms, we have to do the substitution on each term
 - $\forall x: P(x) (t/x)$
   - We cannot do this, $x$ is not a free variable
@@ -1375,7 +1375,7 @@ $A(0/x) \implies \sim (O = S0)$
 \RightLabel{$\forall \ Elim$}
 \UnaryInfC{$A(t)$}
 \RightLabel{$\exists \ Intro$}
-\UnaryInfC{$\exists : A(x)$}
+\UnaryInfC{$\exists x : A(x)$}
 \end{prooftree}
 For all $x$, $A(x)$ means that there exists $x$ such that $A(x)$
 
@@ -1398,7 +1398,7 @@ $\vdash \forall x: (A(x)\supset B)\supset (\exists x: A(x)\supset B)$
 \end{prooftree}
 Complicated proof, won't have something like this on midterm (since just introduced these rules), but maybe final.
 **** FOL: Sound & Complete
-Proved by Godel in 1930
+     Proved by Godel in 1930
 * Lecture 15 <2017-10-24 Tue>
 Reviewed quiz 2. 
 - Recursive Definition

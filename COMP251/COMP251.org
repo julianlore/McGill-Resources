@@ -1210,7 +1210,7 @@ When we add $v$ to $S$ we onlny need to update the $pi$ value for all $w \in S-v
 So all these updates cost $O(m \log n)$
 - Binary heap implementation $O(m \log n + n \log n)$
 - Fibonacci Heap: $O(m+n\log n)$ (Won't be looking at this in this course as it's much more complicated)
-* Lecture 13 <2017-10-24 Tue> 
+* Lecture 13 <2017-10-24 Tue>
 ** The Minimum Spanning Tree Problems (MST)
 - Input: Undirected Connected Graph $G=(V,E)$
   - To every edge _e_ a positive cost $c_e >0$ is assigned
@@ -1266,4 +1266,59 @@ $$ dev(v) \times O(\log_n)$$
 - $\log_n$ for updating key in binary heap
 - So total running time:
 $$ \sum_{v \in V}deg(v) )(\log n) = O(\log (n))\times \sum_{v \in V} deg(v) = O(m \log n)$$
+* Lecture 14 <2017-10-26 Thu>
+** Recall
+Minimum Spanning Tree Problem. (MST)
+- Input: Undirected Graph $G=(V,E)$
+  - Every edge _$e$_ has weight $c_e > 0$
+- Goal: Find a _spanning_ tree in $G$ with minimum weight
+- _Cut Property_: If $S,\overline{S}$ is a "cut" in $G$ and _$e$_ is the cheapest edge between $S$ and $\overline{S}$ then _$e$_ is in every MST.
+  - Shows that Prims algorithm is optimal
+- _Cycle Property_: IF $e$ has the max cost edge in a cycle $C$ then $e$ is not in any MST.
+** The Kruskal Alg (Proof of Correctness)
+Sort the edges from lowest cost to highest.
+- Add these edges one by one to the tree (skipping the ones that create a cycle)
+[[./Images/i53.png]]
+*** Thm:
+If costs are different then the Kruskal Algorithm finds the (unique) minimum spanning tree.
+*** Pf: 
+(Let's look at the edges that the algorithm skips and what we can say about those edges)
+- Note that the edges are added in the increasing order according to their costs.
+- Let's consider the point in the execution of the algorithm where we are deciding whether to include _$e$_ or to skip it.
+- We know that the edges included so far are all cheaper than _$e$_
+[[./Images/i54.png]]
+We will skip _$e$_ only if $e$ creates a cycle with the currently included edges. In this case _$e$_ is the most expensive edge in that cycle and thus by the cycle property, has to be excluded. This shows that all the excluded edges do not belong to any MST. So the included edges form the unique MST. (In contrast with Prims, here we're showing that every edge we exclude has to be excluded, whereas in the proof for Prims we showed that every edge added had to be added)
+** Application
+A clustering problem. (Analyzing data, saying what is similar)
 
+_$k$-clustering problem_: Given $n$ points with pairwise distances $d(i,j)=d(j,i)\geq 0$ (distance between $i$ and $j$)
+- $d(i,j) = 0 \iff i=j$
+- Not necessarily geometric distances, may be similarities
+  - Does not satisfy triangle inequality (or else it would be a metric)
+- Input: $d(i,j) \ \forall i,j$, a para
+meter $k \in \mathbb{N}$
+- Goal: "Partition" the set of points into $k$ sets so that the "spacing" is maximized where
+  - spacing = $\min_{i,j \\ \text{in different clusters}} d(i,j)$
+  - Ex. $k=3$
+[[./Images/i55.png]]
+[[./Images/i56.png]]
+Want minimum distance between clusters to be big, or else you're saying two points are different even though they're quite close/similar to each other.
+*** Algorithm
+An algorithm for this: 
+- Remark: Note that the "worst" clustering puts the closest two points in different clusters.
+- Now among all clusterings that put the two closest points in the same cluster, which one is the worst?
+[[./Images/i57.png]]
+- Answer: Any clustering that separates the next pair of closest points
+[[./Images/i58.png]]
+--------
+We are basically running the Kruskal algorithm until we have $k$ connected components and then we stop. Connected components are the desired clusters. Here costs are the distances. 
+*** Remark
+Another way to think about this algorithm is that "we find the MST and then remove the $(k-1)$ most expensive edges
+*** Thm
+Let $C^{*}$ denote the clustering $C_1^*,\ldots C_k^{*}$ obtained by deleting the $(k-1)$ most expensive edges from the MST. Then $C^{*}$ is the $k$-cluster with largest spacing,
+*** Proof
+Let $C_1,\ldots,C_k$ be a different $k$-clustering.
+- Let $i$ and $j$ be two points that are in the same cluster in  $C^{*}$ but in different clusters in $C$.
+[[./Images/i59.png]]
+$$spacing \leq \ d(i,n)$$
+- It suffices to show $d(i,j)<spacing  \ of C^*$

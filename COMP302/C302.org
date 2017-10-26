@@ -871,3 +871,24 @@ Key thing to take away is:
 - You can use exceptions for special cases like dividing by 0
 - But a more interesting use is that you can divert control flow
 - So you can use it to backtrack and solve problems
+* Lecture 19 <2017-10-26 Thu> 
+** Modules
+Primary Benefits:
+- Control complexity of developing and maintaining software
+- Split large programs into separate pieces
+- Name space separation
+- Allows for separate compilation
+  - Don't always want to recompile the whole project after a small change
+  - Incremental compilation & type checking
+- Incremental development
+- Clear specifications at module boundaries
+- Programs are easier to maintain and reuse (!)
+- Enforces abstractions
+- Isolates bugs
+** Signatures (Module Types)
+- Declarations can be more specific in the signature than what the module actually implements
+- Tying a module to a module type we are hiding information!
+  - We can change the module implementation in the future and users won't notice as long as it still implements what we specified in the signature
+- Order of signature doesn't have to have the same order as module
+** Demo
+#+INCLUDE: "Test/19.ml" src ocaml
