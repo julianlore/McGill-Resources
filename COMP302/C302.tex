@@ -1,4 +1,4 @@
-% Created 2017-10-26 Thu 12:33
+% Created 2017-10-27 Fri 11:25
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,7 +28,7 @@
 \tableofcontents
 
 \section{Lecture 1 \textit{<2017-09-12 Tue>}}
-\label{sec:org6f8ac19}
+\label{sec:orgcbd0335}
 This course is an introduction to the foundations and paradigms of programming languages.
 \begin{itemize}
 \item 5 assignments, 5\% each
@@ -37,7 +37,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \item You have two late days for the semester (cumulative)
 \end{itemize}
 \subsection{Four main goals of COMP 302}
-\label{sec:org90eebda}
+\label{sec:org85c7427}
 \begin{enumerate}
 \item Provide thorough introduction to fundamental concepts in programming languages
 \begin{itemize}
@@ -86,7 +86,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{enumerate}
 \subsubsection{How we achieve these goals}
-\label{sec:org2382909}
+\label{sec:orgb71a88b}
 \begin{itemize}
 \item Functional programming in OCaml
 \begin{itemize}
@@ -107,7 +107,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \subsubsection{Guiding Principles}
-\label{sec:orga8d26fa}
+\label{sec:org6fbc62c}
 \begin{itemize}
 \item No point in learning a programming language unless it changes how you view programming
 \item Simple and elegant solutions are more effective, but harder to find than the complicated ones, take more time.
@@ -117,7 +117,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 
 \subsubsection{Why do I need to know this}
-\label{sec:orgee73401}
+\label{sec:org027b364}
 \begin{itemize}
 \item Science and craft of programming
 \item Skills you learn will help you become a better programmer
@@ -135,26 +135,26 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 
 \subsection{Assignments}
-\label{sec:org5ad3e78}
+\label{sec:org21466d1}
 \begin{itemize}
 \item Can do assignments in groups of 2
 \end{itemize}
 
 \subsection{Misc}
-\label{sec:org943776d}
+\label{sec:orgbf02cab}
 \begin{itemize}
 \item Lectures won't be recorded.
 \item Slides may or may not be posted, but there are lecture notes on MyCourses (most essential reading)
 \end{itemize}
 \section{Lecture 2 \textit{<2017-09-14 Thu>}}
-\label{sec:orgd938741}
+\label{sec:org842b2fd}
 \subsection{What is OCaml}
-\label{sec:org32c9543}
+\label{sec:orgbd57560}
 \begin{itemize}
 \item Statically typed functional programming language
 \end{itemize}
 \subsubsection{Statically typed}
-\label{sec:org77e5c26}
+\label{sec:org94e5d46}
 \begin{itemize}
 \item Types approximate runtime behavior
 \item Analyze programs before executing them
@@ -163,7 +163,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \item Very efficient, very good error messages, very good maintenance tool
 \end{itemize}
 \subsubsection{Functional}
-\label{sec:orga495edf}
+\label{sec:org73918fb}
 \begin{itemize}
 \item Primary expressions are functions!
 \item Functions are first-class!
@@ -188,14 +188,14 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \subsubsection{Concepts for Today}
-\label{sec:org39979fa}
+\label{sec:org303cb39}
 \begin{itemize}
 \item Writing and executing basic expressions
 \item Learn how to read error messages
 \item Names
 \end{itemize}
 \subsubsection{OCaml demo in class}
-\label{sec:orgc517143}
+\label{sec:org239a735}
 \begin{itemize}
 \item Always have to finish a line with 2 semi colons ;;
 \item Can use interpreter by launching OCaml in shell
@@ -225,7 +225,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \begin{enumerate}
 \item Operators
-\label{sec:orgb355e29}
+\label{sec:org006eeeb}
 \begin{itemize}
 \item +, -, /, *
 \begin{itemize}
@@ -238,7 +238,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \item Types
-\label{sec:org2017752}
+\label{sec:org11d91ba}
 \begin{itemize}
 \item Approximate the runtime behaviour
 \item Types classify expressions according to the value they will compute
@@ -257,7 +257,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \item Vars
-\label{sec:org54871b5}
+\label{sec:orgcd0c714}
 \begin{itemize}
 \item let pi = 3.14 ;;
 \item let (pi : float) = 3.14 ;;
@@ -269,7 +269,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 \end{itemize}
 \item Binding
-\label{sec:org3af4d9b}
+\label{sec:org893b2a2}
 \begin{itemize}
 \item let m = 3 ;; puts it on the stack
 \item let m = 3 in \ldots{}
@@ -285,7 +285,7 @@ This course is an introduction to the foundations and paradigms of programming l
 \end{itemize}
 
 \item Functions
-\label{sec:org9faf048}
+\label{sec:orgabac567}
 \begin{itemize}
 \item let area = function r -> pi *. r * .r;;
 \begin{itemize}
@@ -317,9 +317,9 @@ pi & 3.14\\
 \end{itemize}
 \end{enumerate}
 \section{Lecture 3 \textit{<2017-09-15 Fri>}}
-\label{sec:org535d027}
+\label{sec:org1fa4355}
 \subsection{Functions}
-\label{sec:orgdd9598d}
+\label{sec:org730a86b}
 \begin{itemize}
 \item Functions are values
 \item Function names establish a binding of the function name to its body
@@ -328,7 +328,7 @@ pi & 3.14\\
 \end{itemize}
 \end{itemize}
 \subsubsection{Recursive functions}
-\label{sec:org2508d46}
+\label{sec:org85762a7}
 Recursive functions are declared using the keyword \uline{let rec}
 \begin{itemize}
 \item let rec fact n =
@@ -349,14 +349,14 @@ Recursive functions are declared using the keyword \uline{let rec}
 \end{itemize}
 \begin{enumerate}
 \item Tail-recursive functions
-\label{sec:org01c852a}
+\label{sec:org289644a}
 A function is said to be "tail-recursive", if there is nothing to do except return the final value. Since the execution of the function is done, saving its stack frame (i.e. where we remember the work we still in general need to do), is redundant
 \begin{itemize}
 \item Write efficient code
 \item All recursive functions can be translated into tail-recursive form
 \end{itemize}
 \item Ex. Rewrite Factorial
-\label{sec:org02f6605}
+\label{sec:orge0ac913}
 \begin{itemize}
 \item let rec fact\_tr n =
 \begin{itemize}
@@ -394,7 +394,7 @@ A function is said to be "tail-recursive", if there is nothing to do except retu
 \end{itemize}
 \end{enumerate}
 \subsubsection{Passing arguments}
-\label{sec:org4a3380f}
+\label{sec:org56be74b}
 \begin{itemize}
 \item ' means any type, i.e. 'a
 \item All args at same time
@@ -412,9 +412,9 @@ A function is said to be "tail-recursive", if there is nothing to do except retu
 \end{itemize}
 \end{itemize}
 \subsection{Data Types and Pattern Matching}
-\label{sec:org4f10c7c}
+\label{sec:org9b9932d}
 \subsubsection{Playing cards}
-\label{sec:org006e19d}
+\label{sec:orga70d718}
 \begin{itemize}
 \item How can we model a collection of cards?
 \item Declare a new type together with its elements
@@ -451,7 +451,7 @@ A pattern is either a variable or a \ldots{}
 \end{itemize}
 \begin{enumerate}
 \item Comparing suits
-\label{sec:org48312d5}
+\label{sec:orgb1ddeba}
 Write a function dom of type suit*suit -> bool
 \begin{itemize}
 \item dom(s1,s2) = true iff suit s1 beats or is equal to suit s2 relative to the ordering Spades > Hearts > Diamonds > Clubs
@@ -461,9 +461,9 @@ Write a function dom of type suit*suit -> bool
 \end{itemize}
 \end{enumerate}
 \section{Lecture 4 \textit{<2017-09-19 Tue>}}
-\label{sec:org445b90d}
+\label{sec:orgc9688fe}
 \subsection{Data Types and Pattern Matching Continued}
-\label{sec:org3fe658e}
+\label{sec:org3670e17}
 \begin{itemize}
 \item Type is unordered
 \item type suit = Clubs | Spades | Hearts | Diamonds
@@ -482,13 +482,13 @@ What is a hand? A hand is either empty or if c is a card and h is a hand then Ha
 \end{itemize}
 \end{itemize}
 \subsubsection{Recursive data type}
-\label{sec:orgff2c3af}
+\label{sec:org9a96a9d}
 \begin{itemize}
 \item type hand = Empty | Hand of card * hand
 \end{itemize}
 \begin{enumerate}
 \item Typing into interpreter
-\label{sec:org57c2169}
+\label{sec:org11fafab}
 \begin{itemize}
 \item Empty;;
 \begin{itemize}
@@ -516,7 +516,7 @@ What is a hand? A hand is either empty or if c is a card and h is a hand then Ha
 \end{itemize}
 \end{enumerate}
 \subsubsection{Extract Example}
-\label{sec:orgf58cfd9}
+\label{sec:orgeeabadf}
 \begin{itemize}
 \item Given a hand, extract all cards of a certain suit
 \item extract: suit -> hand -> hand
@@ -564,7 +564,7 @@ What if no card exists?
 \item type 'a option = None | Some of 'a
 \end{itemize}
 \section{Lecture 5 \textit{<2017-09-21 Thu>}}
-\label{sec:orgbdd2a69}
+\label{sec:org7de7acb}
 \begin{verbatim}
 (* type mylist = Nil | Cons of ? * list;; *)
 (* Polymorphic lists:  *)
@@ -622,7 +622,7 @@ which given a list l it splits into two sublists,
 (every odd element, every even element)*)
 \end{verbatim}
 \subsection{Lists}
-\label{sec:org27cfbe7}
+\label{sec:org543aa9d}
 What are lists?
 \begin{itemize}
 \item Nil([]) is a list
@@ -636,17 +636,17 @@ What are lists?
 \item ; are syntactical sugar to separate elements of a list
 \end{itemize}
 \subsection{Execution}
-\label{sec:orga787839}
+\label{sec:orgee33710}
 Understand how a program is executed
 \begin{itemize}
 \item \textbf{Operational Semantics}
 \end{itemize}
 \section{Lecture 6 \textit{<2017-09-22 Fri>}}
-\label{sec:orgadbc9ed}
+\label{sec:org2af724c}
 \subsection{Proofs}
-\label{sec:orgb790904}
+\label{sec:orgd5beafc}
 \subsubsection{Demo: lookup \& insert}
-\label{sec:orgb4a4326}
+\label{sec:org4decf90}
 \begin{verbatim}
 (* Warm up *)
 (* Write a function lookup: 'a -> ('a * 'b) list -> 'b option. 
@@ -708,10 +708,10 @@ let insert_t (k,v) l =
 \item What is the relationship between lookup and insert?
 \end{itemize}
 \subsubsection{How to prove it?}
-\label{sec:org20545de}
+\label{sec:org2369963}
 \begin{enumerate}
 \item Step 1
-\label{sec:org785d6c7}
+\label{sec:org6e29789}
 We need to understand how programs are executed (operational semantics)
 \begin{itemize}
 \item \(e \Downarrow v\) expression \(e\) evaluates in multiple steps to the value \(v\). (\textbf{Big-Step})
@@ -722,7 +722,7 @@ We need to understand how programs are executed (operational semantics)
 For all l, v, k, lookup k (insert k v l) \(\implies *\) Some v
 Induction on what?
 \item Step 2
-\label{sec:org03485bc}
+\label{sec:orgbcd6545}
 \(P(l) = lookup k\) (insert\((k,v) l\)) \(\Downarrow\) Some \(v\)
 \begin{itemize}
 \item How to reason inductively about lists?
@@ -744,10 +744,10 @@ Induction on what?
 \end{itemize}
 \end{itemize}
 \item Theorem
-\label{sec:org53ddf42}
+\label{sec:org7517349}
 For all \(l, v, k\), lookup \(k\) (insert \((k,v) l\)) \(\implies *\) Some \(v\)
 \item Proof
-\label{sec:org66a340a}
+\label{sec:orgf484b9f}
 Proof by structural inductional on the list \(l\)
 \begin{itemize}
 \item Case: \(l = []\)
@@ -784,7 +784,7 @@ Proof by structural inductional on the list \(l\)
 \end{itemize}
 \end{itemize}
 \item Lesson to take away
-\label{sec:orgafa99ee}
+\label{sec:org849b346}
 \begin{itemize}
 \item State what you are doing induction on
 \begin{itemize}
@@ -805,9 +805,9 @@ Proof by structural inductional on the list \(l\)
 \end{itemize}
 \end{enumerate}
 \section{Lecture 7 \textit{<2017-09-26 Tue>}}
-\label{sec:orgbce835a}
+\label{sec:orgc3a5721}
 \subsection{Structural Induction}
-\label{sec:org0580fa8}
+\label{sec:org23b0035}
 \begin{itemize}
 \item How do I prove that all slices of cake are tasty using structural induction?
 \begin{itemize}
@@ -818,7 +818,7 @@ Proof by structural inductional on the list \(l\)
 \end{itemize}
 \end{itemize}
 \subsubsection{Example with rev}
-\label{sec:orga4c2e72}
+\label{sec:org5f3d021}
 
 \begin{verbatim}
 (* naive *)
@@ -844,7 +844,7 @@ let rec length l = match l with
 \end{verbatim}
 \begin{enumerate}
 \item Theorem:
-\label{sec:org9fd462a}
+\label{sec:org7cb3e5e}
 For all lists l, rev l = rev' l.
 
 What is the relationship between l, acc and rev\_tr l acc?
@@ -904,7 +904,7 @@ By induction on the list l.
 \end{itemize}
 \end{enumerate}
 \subsection{Trees}
-\label{sec:org134b0df}
+\label{sec:org0daa6e4}
 \begin{verbatim}
 type 'a tree = Empty | Node of 'a = 'a tree * 'a tree;;
 let t0 = Node (5, Node (3, Empty, Empty), Empty);;
@@ -936,9 +936,9 @@ and size_many_trees t = match t with
   | MoreTrees f -> 1 + size_forest f
 \end{verbatim}
 \section{Lecture 8 \textit{<2017-09-28 Thu>}}
-\label{sec:orgcfc2f6f}
+\label{sec:org3cb80e2}
 \subsection{Binary Tree (Inductive definition)}
-\label{sec:orgca562c7}
+\label{sec:orge55ef3c}
 \begin{itemize}
 \item The empty binary tree empty is a binary tree
 \item If l and r are binary trees and v is a value of type 'a then Node(v, l, r) is a binary tree
@@ -953,7 +953,7 @@ Empty
 | Node of 'a * 'a tree * 'a tree |
 \end{verbatim}
 \subsection{Insert}
-\label{sec:orgfffde50}
+\label{sec:orgf010bdd}
 Want to make a function insert
 \begin{itemize}
 \item Given as input (x,dx), where x is key and dx is data and a binary search tree t
@@ -1039,16 +1039,16 @@ collect (Node (5, Node (3, Empty, Empty), Empty));;
 \end{verbatim}
 
 \subsection{Proving}
-\label{sec:org14456ba}
+\label{sec:org74c80f7}
 \begin{itemize}
 \item How to reason inductively about trees? Analyze their structures!
 \end{itemize}
 
 \subsection{Theorem}
-\label{sec:orgd802f45}
+\label{sec:org8744d12}
 For all trees t, keys x, and data dx, lookup x(insert (x, dx) t) \(\Rightarrow*\) Some dx
 \subsubsection{Proof by structural induction on the tree t}
-\label{sec:orgbb78307}
+\label{sec:orgcabc100}
 (You get points on an exam for mentioning what kind of induction, structural induction on tree, points for base case/case, points for stating induction hypothesis, perhaps multiple. Then show by a sequence of steps of how to get from what to show to the end)
 \begin{itemize}
 \item Case t = Empty
@@ -1072,9 +1072,9 @@ For all trees t, keys x, and data dx, lookup x(insert (x, dx) t) \(\Rightarrow*\
 \noindent\rule{\textwidth}{0.5pt}
 Exercise: write a type for cake (2 slice of cake together become 1 slice), with weight
 \section{Lecture 9 \textit{<2017-09-29 Fri>}}
-\label{sec:org2a690cf}
+\label{sec:orgf3e2828}
 \subsection{Higher-order functions}
-\label{sec:org5a5c5f6}
+\label{sec:orga4a3dee}
 \begin{itemize}
 \item Allows us to abstract over common functionality
 \item Programs can be very short and compact
@@ -1087,7 +1087,7 @@ Exercise: write a type for cake (2 slice of cake together become 1 slice), with 
 \end{itemize}
 \end{itemize}
 \subsubsection{Abstracting over common functionality}
-\label{sec:org3e2f62b}
+\label{sec:orgcda3ab8}
 Want to write a recursive function that sums up over an integer range: \(\sum_{k=a}^{k=b}k\)
 
 \begin{verbatim}
@@ -1122,7 +1122,7 @@ if a > b then 0 else exp(2,a) + sum(a+1,b)
 \end{itemize}
 
 \subsection{Demo}
-\label{sec:org73b4e44}
+\label{sec:org43ba56b}
 \begin{verbatim}
 (* Arbitrary functions *)
 (* cube, rcube, square, exp, sumInts, sumSquare, sumCubes, sumExp *)
@@ -1250,7 +1250,7 @@ if (a > b) then 1 else (f a) * product f (inc(a), b) inc
 
 Types can get crazy, too much abstraction may lead to less readability
 \subsection{Bonus}
-\label{sec:org014acfe}
+\label{sec:org3365725}
 Approximating the integral
 \begin{itemize}
 \item \(l = a + dx/2\)
@@ -1270,7 +1270,7 @@ dx * sum f (a+.(dx/2.),b) (fun x-> x+. dx)
 Can easily write a short program like above*)
 \end{verbatim}
 \section{Lecture 10 \textit{<2017-10-03 Tue>}}
-\label{sec:orge94ad2f}
+\label{sec:orgf8f512c}
 \begin{verbatim}
 (* Common built in higher-order functions we'll be writing *)
 
@@ -1382,9 +1382,9 @@ List.exists;;
 (* Writing these functions is good practice *)
 \end{verbatim}
 \section{Lecture 11 \textit{<2017-10-05 Thu>}}
-\label{sec:org7da494e}
+\label{sec:org9eb5123}
 \subsection{Lambda-Calculus}
-\label{sec:org7e41317}
+\label{sec:orgfc7374f}
 \begin{itemize}
 \item Simple language consisting of variables, functions (written as \(\lambda x.t\)) and function application
 \item We can define all computable functions in the Lambda-Calculus
@@ -1396,7 +1396,7 @@ List.exists;;
 \end{itemize}
 \end{itemize}
 \subsection{Back to the beginning}
-\label{sec:orgea9ffa4}
+\label{sec:orgd4f003f}
 \begin{verbatim}
 (*Binding variables to functions*)
 let area : float -> float = function r -> pi *. r *. r
@@ -1434,7 +1434,7 @@ let area (r:float) = pi *. r *. r
 \end{itemize}
 \end{itemize}
 \subsection{Curry}
-\label{sec:org59b96db}
+\label{sec:org47c5686}
 let curry \(\underbrace{f}_{\text{'a * 'b -> 'c}}= fun \underbrace{x}_{\text{'a}}  \underbrace{y}_{\text{'b}} \text{ -> } f \overbrace{(x, y)}^{\text{'a * b}}_{\text{'a -> 'b -> 'c}}\)
 \begin{itemize}
 \item curry \(\underbrace{plus'}_{\text{int * int -> int}}\): int -> int -> int
@@ -1452,7 +1452,7 @@ let curry \(\underbrace{f}_{\text{'a * 'b -> 'c}}= fun \underbrace{x}_{\text{'a}
 \end{itemize}
 \end{itemize}
 \subsection{Uncurrying}
-\label{sec:orgfff1e92}
+\label{sec:org4f94d0d}
 uncurry ('a -> 'b -> 'c) -> 'a * 'b -> 'c
 \begin{itemize}
 \item The type of functions is \uline{right associative}
@@ -1468,7 +1468,7 @@ uncurry ('a -> 'b -> 'c) -> 'a * 'b -> 'c
 \end{itemize}
 \end{itemize}
 \subsection{Demo}
-\label{sec:orgad3b518}
+\label{sec:org8e589e2}
 We've already seen functions that return other functions: derivatives!
 \begin{verbatim}
 (* Write a function curry that takes as input 
@@ -1496,7 +1496,7 @@ let plus' (x,y) = x + y
 (* swap plus' ===> fun (b,a) -> plus' (a,b) *)
 \end{verbatim}
 \subsection{Partial evaluation}
-\label{sec:orgf05b872}
+\label{sec:orgfc944bb}
 \begin{itemize}
 \item A technique for optimizing and specializing programs
 \item Generate programs from other programs
@@ -1541,7 +1541,7 @@ let betterPlusSq x =
 \end{itemize}
 \end{itemize}
 \section{Lecture 12 \textit{<2017-10-06 Fri>}}
-\label{sec:org3f00679}
+\label{sec:orge4614be}
 \begin{itemize}
 \item Review by Leila: Today
 \begin{itemize}
@@ -1550,7 +1550,7 @@ let betterPlusSq x =
 \item Cheat sheet correction, minimum 12 pt, not max
 \end{itemize}
 \subsection{Review}
-\label{sec:org70cfdd3}
+\label{sec:orgd163a4e}
 Types of questions:
 \begin{enumerate}
 \item fun x -> x +. 3.3
@@ -1586,7 +1586,7 @@ Types of questions:
 \item Induction proof
 \end{enumerate}
 \subsection{Demo, using higher order functions}
-\label{sec:org2cc4c9e}
+\label{sec:orgf3af767}
 \begin{verbatim}
 (* simplified roulette *)
 type colour = Red | Black
@@ -1656,12 +1656,12 @@ compute_winners bets (Some Red);;
 (* Check if there is a winner (exists ho func) or if everyone is a loser (for_all) *)
 \end{verbatim}
 \section{Lecture 13 \textit{<2017-10-12 Thu>}}
-\label{sec:org10d3c1b}
+\label{sec:org4b59096}
 \subsection{Midterm Review}
-\label{sec:orgb327f0d}
+\label{sec:org2548243}
 See either 13.ml or Midterm.ml for the questions.
 \section{Lecture 14 \textit{<2017-10-13 Fri>}}
-\label{sec:orgb2dc583}
+\label{sec:orgd3fcdff}
 How can we do imperative programming (like C) in a functional language?
 \begin{itemize}
 \item So far, expressions in OCaml have:
@@ -1675,7 +1675,7 @@ How can we do imperative programming (like C) in a functional language?
 \end{itemize}
 \end{itemize}
 \subsection{Overshadowing}
-\label{sec:org3959f17}
+\label{sec:org6387c1a}
 Recall: 
 \begin{verbatim}
 let (k : int) = 4;;
@@ -1698,7 +1698,7 @@ let b2 = area (2.0) = a2 (* False *)
 \end{verbatim}
 For b1, calling area will use the old definition of pi (it already evaluated it when we created the function).
 \subsection{State}
-\label{sec:org79459b1}
+\label{sec:org84cbad8}
 How to program with state? We may want to update memory, for example if we have values that change or an array.
 \begin{itemize}
 \item How to allocate state?
@@ -1738,7 +1738,7 @@ x==y (*false*)
 \end{itemize}
 \end{itemize}
 \subsection{Demo}
-\label{sec:org878c506}
+\label{sec:org3ba55ba}
 \begin{verbatim}
 let r = ref 0;;
 let s = ref 0;;
@@ -1848,9 +1848,9 @@ let imperative_fact n =
 \end{itemize}
 \end{itemize}
 \section{Lecture 15 \textit{<2017-10-17 Tue>}}
-\label{sec:orga336b03}
+\label{sec:org6d91636}
 \subsection{Warm up}
-\label{sec:orgfa7a579}
+\label{sec:org709cbc5}
 Given the following expression write down its type, its value (i.e. what the expression evaluates to), and its effect, if it has any.
 \begin{itemize}
 \item Usually on exams, they should all type check. The error option is just in case they make a typo in typing the question.
@@ -1912,7 +1912,7 @@ Given the following expression write down its type, its value (i.e. what the exp
 \end{itemize}
 \end{itemize}
 \subsection{Demo}
-\label{sec:org11ecba6}
+\label{sec:org5834da1}
 \begin{verbatim}
 ();;
 (* unit *)
@@ -1936,9 +1936,9 @@ l1 := !l2;;
 !l1;;
 \end{verbatim}
 \section{Lecture 16 \textit{<2017-10-19 Thu>}}
-\label{sec:org6dda8d1}
+\label{sec:org3757ddc}
 \subsection{Demo}
-\label{sec:org533a342}
+\label{sec:org3a26da4}
 \begin{itemize}
 \item Mutable Data-Structures
 \item Closures and Objects
@@ -2014,9 +2014,9 @@ c.tick ();;
 d.reset ();;
 \end{verbatim}
 \section{Lecture 17 \textit{<2017-10-20 Fri>}}
-\label{sec:orgc4e0b7f}
+\label{sec:org237ac34}
 \subsection{Exceptions}
-\label{sec:org36b31ea}
+\label{sec:org80e133a}
 \begin{itemize}
 \item Primary benefits:
 \begin{itemize}
@@ -2026,7 +2026,7 @@ d.reset ();;
 \end{itemize}
 \end{itemize}
 \subsubsection{Warm-up}
-\label{sec:orgab58089}
+\label{sec:orgbc79879}
 \begin{itemize}
 \item \texttt{3/0}
 \begin{itemize}
@@ -2050,7 +2050,7 @@ let head_of_empty_list =
 \end{itemize}
 \end{itemize}
 \subsubsection{Demo}
-\label{sec:org05ef721}
+\label{sec:orge9aeb12}
 \begin{enumerate}
 \item Signal Error
 \begin{itemize}
@@ -2145,9 +2145,9 @@ let rec find t k = match t with
      else try (find l k with NotFound -> find r k) 
 \end{verbatim}
 \section{Lecture 18 \textit{<2017-10-24 Tue>}}
-\label{sec:org1fa390c}
+\label{sec:org2ec012d}
 \subsection{Backtracking}
-\label{sec:org55c9824}
+\label{sec:org36a0968}
 \begin{itemize}
 \item General algorithm for finding all (or some) solutions incrementally - abandons partial candidates as soon as it determines that it cannot lead to a successful solution
 \item Important tool to solve constraint satisfaction problems such as crosswords, puzzles, Sudoku, etc.
@@ -2221,9 +2221,9 @@ Key thing to take away is:
 \item So you can use it to backtrack and solve problems
 \end{itemize}
 \section{Lecture 19 \textit{<2017-10-26 Thu>}}
-\label{sec:org1c488cc}
+\label{sec:org697d92e}
 \subsection{Modules}
-\label{sec:org351b106}
+\label{sec:orgab04dd2}
 Primary Benefits:
 \begin{itemize}
 \item Control complexity of developing and maintaining software
@@ -2241,7 +2241,7 @@ Primary Benefits:
 \item Isolates bugs
 \end{itemize}
 \subsection{Signatures (Module Types)}
-\label{sec:org74bcddc}
+\label{sec:orgf5f6b5e}
 \begin{itemize}
 \item Declarations can be more specific in the signature than what the module actually implements
 \item Tying a module to a module type we are hiding information!
@@ -2251,7 +2251,7 @@ Primary Benefits:
 \item Order of signature doesn't have to have the same order as module
 \end{itemize}
 \subsection{Demo}
-\label{sec:orgf6b5ded}
+\label{sec:org58a63a0}
 \begin{verbatim}
 (* Want to give an interface to this module 
  * What functions do we want to expose? 
@@ -2355,5 +2355,171 @@ module FS = FloatStack
 (* open Stack;; 
  * Now erases all namespace boundaries
  * Don't need to prefix anymore *)
+\end{verbatim}
+\section{Lecture 20 \textit{<2017-10-27 Fri>}}
+\label{sec:org48f2771}
+\subsection{More on Modules}
+\label{sec:org1322106}
+\begin{itemize}
+\item Can hide information when we bind to a module type
+\item Don't expose how we implement it
+\item Can even hide what elements we store in the stack
+\item Nice level of abstraction, so we can easily rip out the implementation and put in a new one
+\item Makes programs easy to maintain
+\item Modules are great for enforcing abstraction
+\end{itemize}
+\subsection{Demo}
+\label{sec:orgcf8986d}
+\begin{itemize}
+\item Want to implement different currencies
+\item Bank
+\item Money
+\end{itemize}
+\begin{verbatim}
+module type CURRENCY =
+  sig
+    type t
+    val unit : t
+    val plus : t -> t -> t
+    val prod : float -> t -> t
+    val toString : t -> string
+  end;;
+
+(* Here, float is not yet tied to currency *)
+(* Ideally, we'd also like to define multiple currencies *)
+module Float =
+  struct
+    type t = float
+    let unit = 1.0
+    let plus = (+.)
+    let prod = ( *. )
+    let toString x = string_of_float x
+  end;;
+
+(* Abbreviation for a module *)
+(* module Euro = Float *)
+(* But we don't just want to abbreviate it, 
+ * want to also say it implements currency *)
+module Euro = (Float : CURRENCY);;
+module USD = (Float : CURRENCY);;
+module CAD = (Float : CURRENCY);;
+module BitCoins = (Float : CURRENCY);;
+(* All these currencies use the same implementation of float, 
+ * but all referring to different implementations 
+ * Important that we specify CURRENCY here rather than in float
+ * so that they can be different
+ * Want to keep abstraction. We made plus and prod require Euros
+ * so we don't just add floats*)
+(* Isomorphic structures, but all accessed differently *)
+
+(* Conversion functions  *)
+let euro x = Euro.prod x Euro.unit
+let usd x = USD.prod x USD.unit
+let cad x = CAD.prod x CAD.unit
+let bitcoins x = BitCoins.prod x BitCoins.unit
+
+let x = Euro.plus (euro 10.0) (euro 20.5);;
+(* Will not show result because it is abstract 
+ * Can show result by printing/showing with toString*)
+
+Euro.toString x;;
+
+(* Euro.plus (euro 10.0) (10.0) does not work *)
+
+Euro.plus;;
+(* Euro.t -> Euro.t -> Euro.t 
+ * Requires Euros *)
+
+(* If we say that Float : CURRENCY when declaring module 
+ * will still get different types for 
+ * module Euro = Float;; module USD = Float;;
+ * Just aliases for different types
+ * Not actually different!
+ * Binding to signature multiple times makes them all different
+ * Isomorphic, can do the same stuff, but not the same type
+ * But then you'll be able to add USDs and EUROs*)
+
+(* Important principle since you're abstracting 
+ * implementations but also not mixing currencies *)
+
+(* Now let's think of banks and their view 
+   and how we'll implement it for them *)
+module type CLIENT = (* Client's view*)
+  sig
+    type t (* account *)
+    type currency
+    val deposit : t -> currency -> currency
+    val retrieve : t -> currency -> currency
+    val print_balance: t -> string
+  end;;
+
+module type BANK =
+  sig
+    include CLIENT (* Inheritance *)
+(* Don't have to literally copy all things from the client module 
+ * Now has the same things as client*)
+
+    val create : unit -> t
+
+  end;;
+
+(* We want banks of different currencies 
+ * with particular functions, adding 2 currencies
+ * printing currencies, etc.*)
+
+(* Parameterize a module Old_Bank with the functionality 
+   provided by the module type CURRENCY *)
+(* Should not matter what type of currency, 
+   bank should be able to do the same thing regardless of currency *)
+
+(* Module parametized by another module is also called a functor 
+ * Similar to higher order functions but for modules *)
+module Old_Bank (M : CURRENCY) : (BANK with type currency = M.t) =
+  (* M describes a module, can implement a module 
+     with a module for currency, M *)
+  struct
+    type currency = M.t
+    type t = { mutable balance : currency }
+    (* Could have made it a currency ref *)
+
+    let zero = M.prod 0.0 M.unit
+    and neg = M.prod (-1.0)
+
+    let create() = { balance = zero }
+
+    let deposit c x =
+      if x > zero then
+	c.balance <- M.plus c.balance x; c.balance
+
+    let retrieve c x =
+      if c.balance > x then
+	deposit c (neg x)
+      else
+	c.balance
+
+    let print_balance c =
+      M.toString c.balance
+  end;;
+
+(* How do we get an implementation of a bank now? *)
+
+module Post = Old_Bank (Euro);;
+(* How to make the client see less? *)
+module Post_Client : (CLIENT with type currency = Post.currency and type t = Post.t) = Post;;
+(* Tells you what is shared with Post *)
+
+let my_account = Post.create () ;;
+Post.deposit my_account (euro 100.0);;
+Post_Client.deposit my_account (euro 10.00);;
+Post.print_balance my_account;;
+Post_Client.print_balance my_account;;
+(* Shared functionality among the two, but different ways of accessing *)
+
+module Citybank = Old_Bank (USD);;
+module Citybank_Client : (CLIENT with type currency = Citybank.currency and type t = Citybank.t) = Citybank;;
+
+let my_cb_account = Citybank.create ();;
+Citybank.deposit my_cb_account (usd 50.00);;
+(* Citybank_Client.deposit my_account;; Won't work *)
 \end{verbatim}
 \end{document}
