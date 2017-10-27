@@ -871,7 +871,7 @@ Key thing to take away is:
 - You can use exceptions for special cases like dividing by 0
 - But a more interesting use is that you can divert control flow
 - So you can use it to backtrack and solve problems
-* Lecture 19 <2017-10-26 Thu> 
+* Lecture 19 <2017-10-26 Thu>
 ** Modules
 Primary Benefits:
 - Control complexity of developing and maintaining software
@@ -892,3 +892,16 @@ Primary Benefits:
 - Order of signature doesn't have to have the same order as module
 ** Demo
 #+INCLUDE: "Test/19.ml" src ocaml
+* Lecture 20 <2017-10-27 Fri>
+** More on Modules
+- Can hide information when we bind to a module type
+- Don't expose how we implement it
+- Can even hide what elements we store in the stack
+- Nice level of abstraction, so we can easily rip out the implementation and put in a new one
+- Makes programs easy to maintain
+- Modules are great for enforcing abstraction
+** Demo
+- Want to implement different currencies
+- Bank
+- Money
+#+INCLUDE: "Test/20.ml" src ocaml
