@@ -1413,3 +1413,97 @@ Either a variable or an n-ary function with $n$ terms
 Formula made up of only terms and predicates
 - Decision procedure to see if $\Gamma \models A$
   - Make a truth table, see if when all of $\Gamma$ is true, then $A$ must be true
+* Lecture 16 <2017-10-31 Tue>
+** Typographic Number Theory (TNT)/Dedekind Peano Arithmetic (DPA)/FOA
+Why were people so concerned with the consistency of this?
+
+Say we start with geometry
+  - -> $\mathbb{R}\times \mathbb{R}$ (cartesian)
+    - But then how do we know that real numbers are consistent?
+    - -> $\mathbb{Q}+(sets)$
+      - But then what about the rational numbers?
+      - -> $\mathbb{N}$
+	- How do we show the consistency of natural numbers and therefore the consistency of mathematics?
+	- -> Logic (FREGE, invented predicate logic on the way)
+	- -> Set theory (Cantor)
+Hilbert's program (1920s):
+- Blob with everything mathematicians do
+  - Arithmetic -> Formalize: FOA
+  - Analysis ->
+  - Set Theory -> Formalize: ZFC
+Used finitary arithmetic to show consistency of all 3
+- Can look at finite elements to prove something about the other domains that are infinite
+- Difference between DPA and FOA?
+  - There's no difference! Just different names.
+------------------
+TNT: 
+- Language: 0, S, +, $\times$
+- Axioms:
+  1. $\forall x:\sim(Sx=0)$, For all numbers successor of $x$ is not $0$
+  2. $\forall x: \forall y: (Sx=Sy)\supset x=y$, succ is injective
+  3. $\forall x: (x+0) = x$
+  4. $\forall x : \forall y : (x+Sy) = S(x+y)$
+  5. $\forall x: (x\cdot 0) = 0$
+  6. $\forall x:\forall y:(x\cdot Sy) = ((x \cot y) +x)$
+*** Theorems
+    A _theory_ $T$ is said to be wff, s.t. $s \in T$ iff $T \vdash S$ (closed under deduction)
+- A theory $T$ is _axiomatic_ if there exists a recursive set $A_k$ st 
+- $T=\{S|A \vdash S\}$
+- A theorem is _consistent_ if it does not contain both $A$ and $\sim A$ for some wff $A$.
+[[./Images/i21.png]]
+A theory $T$ is _complete_, if for every wff $A$, either $A \in T$ or $\sim A \in T$. Both can be true, but then it'll be complete and inconsistent.
+
+Can we come up with something not derivable from a theory?
+- (Axioms 1.-6.) $\nvdash \forall x: \sim(Sx = x)$
+  - True in standard interpretation
+  - Claim: Cannot derive from these axioms
+  - How do we show this?
+  - How do we show $\Gamma \nvDash A$?
+    - We're looking for an interpretation. Want one that satisfies $\Gamma$ but does not satisfy $A$.
+    - Recall that $\Gamma \nvDash A$ means that every interpretation that satisfies $\Gamma$ must satisfy $A$ (no truth tables as we're no longer in propositional logic)
+    - So $\Gamma \nvDash A \implies \Gamma \nvdash A$ from soundness (opposite direction because of negation)
+- UD: $\mathbb{N}\cup \{*\}$
+  - 0 -> zero
+  - + -> $+^*$
+    - $n \in \mathbb{N}$
+
+      \begin{tabular}{l|l l}
+	$+^*$ & $n$ & $*$
+	\\ \hline $n$ & $n+n$ & $*$
+	\\ $*$ & $*$ & $*$
+      \end{tabular}
+
+  - $\times$ -> $\times^*$
+    - $n \in \mathbb{N}$
+      
+    \begin{tabular}{l|l l l}
+	$+^*$ & $0$ & $n$ & $*$
+	\\ \hline $0$ & $0$ & $0$ & $*$
+	\\ $n$ & $0$ & $n \times n$ & $*$
+	\\ $*$ & $0$ & $*$ & $*$
+    \end{tabular}
+  - s -> $s^*$
+    - $s^*(n) = s(n)$ if $n\in \mathbb{N}$
+    - $s^*(*) = *$
+$$\frak{n}=\langle\mathbb{N};0,succ,+,\times\rangle$$
+$$\frak{n'}=\langle\mathbb{N}\cup\{*\};0,s^*,+^*,\times^*\rangle$$
+Looking at the axioms: 
+- Is 2 true in both? Yes.
+- Checking them all you will see that all the axioms are true in $\frak{n'}$ as well.
+- But (1.-6.) $\nvdash \forall x: \sim (sx = x)$ is not true in the new interpretation (because $s^*(*)=*$), when it is true in the old one. Which is why these axioms are insufficient to prove things as simple as this.
+So these are in fact not all the axioms of TNT.
+
+*** $\omega-incomplete$
+- (1.-6.) $\nvdash (0+0=0)$
+  - $\ldots (0+s0=s0)$
+  - $\ldots (0+ss0=ss0)$
+- But $\nvdash \forall x: (0+x=x)$ (not the same as axiom 3)
+This is called $\omega-incomplete$
+
+Need an additional axiom
+
+7.Axiom schema of induction
+$$A(0) \supset [\forall x:(A(x)\supset A(sx))\supset \forall x:A(x)]$$
+Called a schema because it can make countably infinite amount of axioms
+
+Now with all 6 axioms and the axiom schema we have TNT.
