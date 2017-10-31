@@ -1322,3 +1322,79 @@ Let $C_1,\ldots,C_k$ be a different $k$-clustering.
 [[./Images/i59.png]]
 $$spacing \leq \ d(i,n)$$
 - It suffices to show $d(i,j)<spacing  \ of C^*$
+* Lecture 15 <2017-10-31 Tue>
+** Data Compression/Huffman Codes
+- Very essential and important result in coding theory
+- Wouldn't have the digital world without it
+- Trying to compress a file that consists of characters. Want to make it into a smaller file, optimize it. How small can you make it? How redundant is it? Is it the same character over and over or random characters?
+
+Question: Consider a file that uses certain characters (say 32 characters). How can we encode this in bits?
+- The easiest way is to assign a unique 5-bit string to each one of these characters (There are $2^{5}=32$ such strings)
+- Example: $c(a)=00000, c(b)=00001, \ldots , c(z)=11001, \ldots$
+Now given a string of characters we can "code" it and easily "decode" it back
+- $abb \stackrel{\text{code}}{\rightarrow} 000000000100001$
+- $00001,00000 \stackrel{\text{decode}{\rightarrow}} ba$
+---------------
+_Efficiency_: Suppose that some letters in the file are way more frequent than the others
+- In this case it is more efficient to assign fewer number of bits to frequent characters and more to others
+- Doing this in an arbitrary way can cause a problem!
+  - Say $c(a)=1, c(b)=01, c(c)=010$
+  - Consider $0101$. How can we decode this? 01,01 -> bb, 010,1 -> ca
+    - Won't know original string here, ambiguity
+    - Didn't face this problem in the original approach
+- How can we avoid this?
+  - What property of the code words can guarantee that we won't run into this problem?
+  - We do not want any code word to be a prefix of another one.
+[[./Images/i60.png]]
+cw1 is a prefix of cw2.
+- Example _01101_ is a prefix of _0011010010_
+*** Prefix property
+_Def_: We say that an encoding has _prefix property_ if no code word is a prefix of another
+- Ex: $c(a)=0, c(b)=10, c(c)=11$ has prefix property
+- Ex: $c(a)=0, c(b)=10, c(c)=110, c(d)=111$ has prefix property
+- When you make one code short (like a), you're paying by making the others longer
+For this example
+- $001011110110$
+- $0,0,10,111,10,110$
+- a,a,b,d,b,c
+*** Prefix Codes as binary trees
+- The two codes in the previous two  examples can be represented by the leaves of the following trees
+[[./Images/i61.png]]
+This has prefix property because all the codes are only on leaves
+
+Given a binary tree let "Left" be _$0$_ and "Right" be _$1$_
+- Now every path from the root to a leaf corresponds to a zero-one string and these strings have the prefix property as the prefix of a code leads to an internal node and not a leaf
+*** The best prefix codes
+Consider the text and assume that for every letter $x$, $f_x$ is its frequency. 
+$$ f_x = \frac{\text{\# of times $x$ appears in text}}{\text{total \# of characters in text}}$$
+Example: $abbbacddaa$
+- $f_a = \frac{4}{10}=0.4$
+- $f_b = \frac{3}{10}=0.3$
+- $f_c = \frac{1}{10}=0.1$
+- $f_d = \frac{2}{10}=0.2$
+_Def_: Average bit per letter of a prefix code is
+$$ ABL(c) = \sum_x f_x \cdot |c(x)| = \frac{\text{\# of bits in the coded version}}{\text{Size of the original text}}$$
+_Goal_: Minimize # bits in the coded version. Equivalently minimize $ABL(c)$
+-----------
+Observation: In the binary tree representation, need as many bits as depth of the leaf to represent that number. So
+$$ ABL(c) = \sum_{leaves\ x}f_x \cdot depth(x)$$
+_Def_: A binary tree is called *full* if every node has _$0$_ or _$2$_ children.
+- _Claim_: The optimal prefix code has a full binary tree.
+- _Proof_: If tree is not full then we can improve it in the following way.
+[[./Images/i62.png]]
+We have the same set of leaves and the depth of some creases so
+$ABL(c) = \sum f_x depth(x)$ has decreased. So the initial tree was not optimal.
+
+How do we come up with the codes? Want more frequent characters to have less bits, put higher up on the tree.
+- _Observation_: Since we are trying to minimize $\sum f_x \cdot depth(x)$ We want to assign letters with larger frequencies to leaves at lower depths and letters with smaller frequencies to leaves at higher depths.
+- Claim: There is an optimal in which the two least frequent letters are at the highest depth and are siblings.
+[[./Images/i63.png]]
+- If one of them was higher up (lower depth) then we could have swapped it with a more frequent letter at higher depth and decreasing $ABL(c)$. 
+- Example: $f_z =0.1, f_a = 0.2$, $z$ (least frequent) is on the $3^{rd}$ layer, then swapping it from $2$ to $5$ gives you:
+$$ 0.1 \times 3 + 0.2 \times 5 \implies 0.1 \times 5 + 0.2 \times 3$$
+- Shuffling letters at the same depth does not change $ABL(c)$. So we can bring the least frequent # letters next to each other
+*** Huffman Coding with an example
+- $f_a =0.4, f_b = 0.3, f_c = 0.1, f_d = 0.2$
+- At each step we take the two least frequent nodes and make them the children of a new node and assign the summation of the frequencies to this new word. (Bottom up construction)
+[[./Images/i64.png]]
+[[./Images/i65.png]]
