@@ -905,3 +905,34 @@ Primary Benefits:
 - Bank
 - Money
 #+INCLUDE: "Test/20.ml" src ocaml
+* Lecture 21 <2017-10-31 Tue>
+** Continuations
+A *continuation* is a representation of the execution state of a program (for example a call stack) at a certain point in time.
+
+Save the current state of execution into some object and restore the state from this object at a later point in time resuming its execution.
+*** First-class Support for Continuations
+| C#     | async/wait                     |
+| Racket | call-with-current-continuation |
+| Ruby   | callcc                         |
+| Scala  | shift/reset                    |
+| Scheme | callcc                         |
+
+Ocaml doesn't have first-class support, so we'll be using functions as continuations! Back to higher order functions.
+- Back to the beginning: Recall what tail-recursive means. Can every recursive function be written tail-recursively?
+#+BEGIN_SRC ocaml
+let rec append l k = match l with
+  | [] -> k
+  | h::t -> h::append t k
+#+END_SRC
+- Not tail-recursive, because of ~h::append t k~
+- But still efficient
+- Can we rewrite it tail-recursively?
+*** Recipe
+How to re-write a function tail-recursively?
+- Add an additional argument, a *continuation*, which acts like an accumulator
+- In the base case, we call the continuation
+- In the recursive case, we build up the computation that still needs to be done.
+A continuation is a stack of functions modeling the call stack, i.e. the work we still need to do upon returning.
+- Not always easy to do this, the earlier attempt at tail recursion for append reversed the list.
+*** Demo
+#+INCLUDE: "Test/21.ml" src ocaml
