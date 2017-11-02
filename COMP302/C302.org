@@ -936,3 +936,12 @@ A continuation is a stack of functions modeling the call stack, i.e. the work we
 - Not always easy to do this, the earlier attempt at tail recursion for append reversed the list.
 *** Demo
 #+INCLUDE: "Test/21.ml" src ocaml
+* Lecture 22 <2017-11-02 Thu> 
+** Continuation recap
+- Building up the stack
+- Once you hit base, it collapses
+- Seen an example, tail-recursion: the continuation is a functional accumulator; it represents the call stack built when recursively calling a function and builds the final result
+- Failure Continuation: the continuation keeps track of what to do upon failure and defers control to the continuation
+- Success Continuation: the continuation keeps track of what to do upon success, defers control to the continuation, and builds the final result
+*** Demo
+#+INCLUDE: "Test/22.ml" src ocaml
