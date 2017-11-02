@@ -1398,3 +1398,80 @@ $$ 0.1 \times 3 + 0.2 \times 5 \implies 0.1 \times 5 + 0.2 \times 3$$
 - At each step we take the two least frequent nodes and make them the children of a new node and assign the summation of the frequencies to this new word. (Bottom up construction)
 [[./Images/i64.png]]
 [[./Images/i65.png]]
+* Lecture 16 <2017-11-02 Thu>
+** Recall: Huffman Coding
+- Frequencies: $f_x = \frac{\# \text{ appearances of }x}{\# \text{ of characters}}$
+- Goal: Find the best prefix code. Minimize the number of bits. Equivalently minimize
+$$ABL(c)=\sum_{x}f_x = |c(x)|=\frac{\#\text{ bits}}{\#\text{ of characters}}$$
+- Idea was to see how frequent strings are and to replace frequent strings with shorter codes and rarer strings with longer codes
+- With prefix codes they're easy to decode, no ambiguity
+  - When you see a code word you know that you're not looking at any other code word
+*** Observation 1:
+The optimal binary tree is full. i.e. every node has zero or two children
+*** Observation 2:
+The two least frequent letters appear at max depth and we can assume that they are siblings (if they aren't you can make them siblings without making your code worse).
+** Huffman Coding
+At each step take the two least frequent nodes and make them siblings by creating a new node as their parent and assign the sum of the frequencies to the parent.
+- $f_a=0.1, f_b=0.1, f_c=0.3, f_d=0.5$
+[[./Images/i66.png]]
+*** Thm
+Huffman code has the optimal ABL among all prefix codes.
+*** Proof
+Let's consider an optimal code _c_ that satisfies the properties mentioned in observations I and II.
+
+The proof is by induction.
+- Base case: Only one letter. In this case the best we can do is to assign a 1-bit string to this letter and that is what Huffman Code does.
+- I.H. Huffman code is optimal if we have _$m$_ letters.
+- I. Step: We want to show that Huffman Code is optimal for $m+1$ letters
+Let $c$ be an optimal code as described above. Consider the tree of $c$:
+[[./Images/i67.png]]
+The two least frequent letters $a,b$ are as in the picture.
+- Consider the same text but replace occurrences of both $a$ and $b$ with a new character [ab]. The new next has $m$ characters. 
+- ex: a b c c c a b -> [ab] [ab] c c c [a] [b]
+Let's rename the leaves $a,b$ from the optimal tree and assign [ab] to their parent (now a leaf)
+- Call the new code c'
+$$ABL(v)=\sum_x f_x \times |c(x)| vs ABL(c')=\sum_x f_x \times |c'(x)|$$
+- So $c(x)=c'(x)$ for all abl characters except $a,b$
+$$|c'([ab])|=|c(a)|-1=|c(b)|-1$$
+$$ABL(c')=ABL(c)-f_a-f_b$$
+By induction hypothesis the Huffman coding applied to the new text (the one [ab] character) leads to a code with
+$$ABL \leq ABL(c')$$
+Now we compare Huffman coding of the new text to the old text:
+- Huffman code of new file:
+[[./Images/i68.png]]
+- Adding the red part gives us the Huffman tree for the original text.
+$$ABL(\text{Huffman original})=ABL(\text{Huffman for the []})+f_a+f_b$$
+I.H. $ABL(\text{Huffman for []}) \leq ABL(c')$
+- (Showed earlier:) $ABL(c')=ABL(c)+f_a+f_b \rightarrow ABL(\text{Huffman original})\leq ABL(c)$
+** Divide and Conquer
+- Break up the input into several parts.
+- Solve each part _recursively_.
+- Combine the solution to sub-problem into a solution for the original problem
+*** Example: Merge Sort
+- Divide the array into two equal parts.
+- Sort each part recursively
+- Merge the two parts into one sorted array.
+-------------
+Sort the letters of ALGORITHMS
++ ALGOR | ITHMS, Divide $O(1)$
++ AGLOR | HIMS, recursive and sort params $2T(n/2)$
++ AGHILMORST, merge $O(n)$
+$T(n)=2T(n/2)+O(n)$, recursive formula, how fast is it really?
+[[./Images/i69.png]]
+- Merging cost = $n \log n$
+- Running time = $O(n\log n +n)=O(n \log n)$
+  More formal way to prove using induction:
+**** Thm
+\begin{equation*} T(n) \leq
+\begin{cases}
+2T(n/2)+cn & \text{if }n>1
+\\ c & \text{if }n=1
+\end{cases}
+\end{equation*}
+Then $T(n)\leq c n\log_2 n$ ($n$ is power of $2$).
+**** Pf.
+Assume $n=2^m$, $m\in \mathbb{N}\cup\{0\}$
+- We use induction on $m$.
+- Base: $m=0: T(2^0)=T(1)\leq c$
+- I.H. $T(2^m)\leq c2^m \log 2^m = c2^m m$
+- I. Step: $\underbrace{T(2^{m+1})}_n\leq \underbrace{2T(2^h)}_{n/2}+\underbrace{c2^{m+1}}_n \stackrel{I.H}{\leq} 2 c2^m m+c2^{m+1}=c2^{m+1}m+c2^{m+1}=c2^{m+1}(m_1)=cn\log n$
