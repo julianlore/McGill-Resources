@@ -1507,3 +1507,88 @@ $$A(0) \supset [\forall x:(A(x)\supset A(sx))\supset \forall x:A(x)]$$
 Called a schema because it can make countably infinite amount of axioms
 
 Now with all 6 axioms and the axiom schema we have TNT.
+* Lecture 17 <2017-11-02 Thu> 
+** MIU
+Is MU a MIU theorem? Recall:
+
+I. xI -> xIU
+
+II. Mx -> Mxx
+
+III. III -> U
+
+IV. UU -> $\emptyset$
+
+Axiom: MI
+- If it is a theorem, then you can prove it.
+- If it isn't though, you can do MIU proofs for the rest of your life and never know the answer
+- One way to answer this is find properties of these theorems
+*** Theorem
+ The number of I's in a MIU theorem is not a multiple of $3$ (and $0$ is a multiple of $3$, so if this follows then MU is not a theorem)
+*** Proof by strong induction
+ - Let $t$ be a theorem, obtained from a proof of length $n$ (theorem at line $n$ of our proof)
+ - IH. The I-count of all theorems in lines $1-(n-1)$ is not a multiple of $3$
+ - Show: Claim holds for line n
+ t can be:
+ 1. An axiom: MI: $1$ is not a multiple of $3$
+ 2. $t$ is obtained by Rule I from theorem $s$ ($1\leq s < n$). By IH. the I-count of $s$ is not a multiple of $3$. So the I-count of $t$ is also not a multiple of $3$.
+ 3. $t$ is obtained by Rule II ...
+ 4. $t$ is obtained by Rule III ...
+ 5. $t$ is obtained by Rule IV ...
+ Conclusion: The claim holds.
+
+ So we get the answer, to is MU a MIU-theorem -> No, because $0$ is a multiple of $3$. This here is a proof about proofs, which we'll be seeing a bit more of later with proofs about proofs in the TNT system.
+
+** G\"odel numbering
+Continuing with the MIU system:
+- We have the symbols
+  - M->3
+  - I->1
+  - U->0
+Now we can use these proofs for arbitrary strings
+| 1. | MI   | Axiom    | $31$ (Godel #) |
+| 2. | MII  | Rule II  | $311$        |
+| 3: | MUI  | Rule II  | $3111$       |
+| 4. | MUI  | Rule III | $301$        |
+| 5. | MUIU | Rule I   | $3010$       |
+$5$ can be represented as -> a) x1 -> x10 (typographical) ; b) A number whose remainder, when divided by 10 is 1, can be multiplied by 10.
+- Two ways of talking about it once we transform it into a number.
+
+So G\"odel Numbering allows us to go from a formal system to number theory. 
+| Formal System -> | Number Theory          |
+|------------------+------------------------|
+| MIU              |                        |
+| MIU-thm          | MIU-producible numbers |
+MIU-producible numbers are recursively enumerable, since we can get them from the MIU formal system   
+
+But a more interesting transition is going from Number theory to FOA/TNT, another formal system.
+| Number Theory ->       | FOA/TNT (formal system) |
+|------------------------+-------------------------|
+| e.g. 2 ->              | SSO                     |
+| MIU-producible numbers | theorems                |
+
+| FS              | Number Theory              | FOA                                                   |
+|-----------------+----------------------------+-------------------------------------------------------|
+| MU is a MIU-thm | $30$ is a MIU-prod. number | $MON(\overbrace{SS \ldots S}^{30}0)$ is a TNT-theorem |
+MON is a predicate standing for the MIU-producible numbers. Looks something like $\forall x : \exists y : \ldots$.
+Can look specifically at one system to show it for another. Like a translation, but nothing is lost.
+
+Now let's start with the TNT system:
+| Formal System  | Number Theory          | FOA      |
+|----------------+------------------------+----------|
+| TNT            |                        |          |
+| TNT-thm        | TNT-producible numbers | theorems |
+| _ is a TNT-thm | _ is a TNT-prod.number | _        |
+
+How do we talk about the English language? "short" is short.
+
+- TNT-formula: $\forall a : \sim Sa = 0$ is a theorem of TNT
+- Go #: 626 262 636 223 123 262 111 666 is a TNT number -> $F(SS\ldots S0)$ is a TNT-thm
+- -> $\sim F(G)$ is a TNT-thm -> says that "I am not a TNT-thm"
+Can go from TNT to number theory to TNT. Reaching something different in the end will lead us to G\"odel's theorem
+
+In a TNT proof, every line can be mapped to a Godel # (since you can translate formulas into numbers) and then you can get a unique Godel number for an entire proof
+
+TNT-PROOF-PAIR(x,y): Predicate between a pair of numbers. True if x codes (is the godel number of) a proof of the wff coded by y
+
+TNT-PROOF(x): $\exists y:TNT-PROOF-PAIR(y,x)$
