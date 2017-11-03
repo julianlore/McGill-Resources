@@ -1222,7 +1222,7 @@ $$cost = 4 + 6 + 5 + 8 + 11 + 9 + 7$$
 - Cayley's Thm: Complete graph on $n$ vertices have $n^{n-2}$ spanning trees
 - So checking all the spanning trees requires exponential time $\Omega(n^{n-2})$
 *** Three Greedy Algorithms: 
-- _Kruskal_: Start with $T=\empty$. At each step add the edge with minimum cost that does not create a cycle until we find a spanning tree (i.e. $n-1$ edges are added)
+- _Kruskal_: Start with $T=\{\emptyset\}$. At each step add the edge with minimum cost that does not create a cycle until we find a spanning tree (i.e. $n-1$ edges are added)
 [[./Images/i44.png]]
 - _Reverse Deletion_: Now start with $T=E$ (all the edges). At every step we remove the most expensive edge from $T$ that does not _disconnect_ it until we arrive at a spanning tree
 [[./Images/i45.png]]
