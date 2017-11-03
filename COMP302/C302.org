@@ -936,7 +936,7 @@ A continuation is a stack of functions modeling the call stack, i.e. the work we
 - Not always easy to do this, the earlier attempt at tail recursion for append reversed the list.
 *** Demo
 #+INCLUDE: "Test/21.ml" src ocaml
-* Lecture 22 <2017-11-02 Thu> 
+* Lecture 22 <2017-11-02 Thu>
 ** Continuation recap
 - Building up the stack
 - Once you hit base, it collapses
@@ -945,3 +945,35 @@ A continuation is a stack of functions modeling the call stack, i.e. the work we
 - Success Continuation: the continuation keeps track of what to do upon success, defers control to the continuation, and builds the final result
 *** Demo
 #+INCLUDE: "Test/22.ml" src ocaml
+* Lecture 23 <2017-11-03 Fri>
+** Regular expressions
+Going to implement regex with continuations. This is another example of a success continuation.
+
+You might have used them in a Unix shell:
+- ~ls *.ml~, list files with suffix ml
+- ~ls hw[1-3].ml~, lists hw1.ml, hw2.ml, hw3.ml
+Patterns for regular expressions:
+- Singleton: Matching a specific character
+- Alternation: choice between two patterns
+- Concatenation: Succession of patterns
+- Iteration: indefinite repetition of patterns
+More rigorously: Regular expression $r ::= a | r_1+r_2 | r_1 r_2 | r^* | 0 | 1$
+- Backus-Naur-Form
+- This is an inductive definition
+- How to read this?
+- A regex is either: 
+  - $a$, a character (anything of type char)
+  - $r_1\ r_2$ is concatenation, have both regular expressions
+  - $r_1 + r_2$ alternation, can have either
+  - $r^*$ iteration, indefinite amount
+  - $0$ None
+  - $1$ Success
+Question: When does a string $s$ match a regular expression $r$?
+- If $s$ is in the set of terms described by $r$. (When does this happen?)
+*** Examples:
+- $a(p^*)l(e+y)$ would match /apple/ or /apply/ or /ale/
+- $g(1+r)(e+a)y$, either you succeed (skip it) or find r, /grey/,/gray/,/gay/
+- $g(1+o)^*(gle)$, /google/,/gogle/,/goooogle/,/ggle/ (1+o) doesn't matter here, could just be o
+- $b(ob0+oba)$, /boba/ but not bob
+*** Demo
+#+INCLUDE: "Test/23.ml" src ocaml
