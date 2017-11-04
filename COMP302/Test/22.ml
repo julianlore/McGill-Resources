@@ -88,5 +88,5 @@ let rec findAll' p t sc = match t with
      if (p d) then
        findAll' p l (fun el -> findAll' p r (fun er -> sc (el @ (d::er))))
      else
-       assert false
-              (* Figure this out yourself *)
+       findAll' p l (fun el -> findAll' p r (fun er -> sc (el @ er)))
+                (* Figure this out yourself *)
