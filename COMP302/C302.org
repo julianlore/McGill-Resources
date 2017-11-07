@@ -977,3 +977,61 @@ Question: When does a string $s$ match a regular expression $r$?
 - $b(ob0+oba)$, /boba/ but not bob
 *** Demo
 #+INCLUDE: "Test/23.ml" src ocaml
+* Lecture 24 <2017-11-07 Tue>
+** Lazy Programming
+*** Eager vs Lazy
+- Eager Evaluation
+  - Evaluate expressions by call-by-value
+  - Variables are bound to values
+  - Ex. ~let x = 3+2 in x * 2~
+    1. Evaluate expression ~3+2~ to the value ~5~
+    2. Evaluate expression ~x*2~ in an environment where variable ~x~ is bound to the value ~5~ to the final value ~10~
+  - Ex. let x = horribleComp (345) in 5
+    1. Evaluate expression horribleComp (345) to some value ~777~
+    2. Evaluate expression ~5~ in an environment where variable ~x~ is bound to the value ~777~ to the final value ~5~. Here we bind an expression we don't need.
+- Lazy Computation
+  - Ex. ~let x = horribleComp (345) in 5~
+  - Bind variables to unevaluated expressions (not values!)
+  - Suspend computation ~horribleComp (345)~ until needed
+  - Memoize results because:
+    - ~let x = horribleComp (345) in x + x~ will recompute horribleComp twice
+  - Lazy usually doesn't go well with state, which is why most imperative languages are eager
+  - Harder to reason about but very useful for:
+    - Infinite data (ex. representing all prime numbers, reading part of a file instead of the whole thing)
+    - Interactive data (ex. sequence or stream of inputs)
+*** Finite vs Infinite
+- Finite Data
+  - ~type 'a list = Nil | Cons of 'a * 'a list~
+    - Encodes an inductive definition of finite lists
+    - ~Nil~ is a list of type ~'a list~
+    - If ~x~ is of type ~'a~ and ~xs~ is a list of type ~'a list~ then ~cons(x,xs)~ is a list of type ~'a list~
+    - Nothing else is a list
+  - How do we take apart lists? By pattern matching.
+  - How do we reason with lists? By induction on the structure of lists
+- Infinite Data
+  - Instead of saying how to construct infinite data, we define it by the observations we make about them
+  - Given a stream ~1,2,3,4,5,...~ we can ask:
+    - The head of the stream: ~1~
+    - The tail of the stream: ~2, 3, 4, 5, ...~
+  - Can we always make an observation? Does this terminate eventually? No, does not terminate.
+    - Observations should be productive, shouldn't go into infinite loops. We can make an observation at each step.
+*** Suspending
+How to suspend and prevent evaluation of an expression?
+#+BEGIN_SRC ocaml
+    type 'a susp = Susp of unit -> 'a
+
+    (* Force evaluation of suspended computation *)
+    let force (Susp f) = f ()
+
+  (* Example of suspending and forcing computation *)
+  let x = Susp (fun () -> horribleComp(345)) in force x + force x
+#+END_SRC
+Wrap your function in lazy programming so that it suspends computation
+- Infinite Streams: ~type 'a str = {hd : 'a ; tl : ('a str) susp}~
+  - Encodes a coinductive definition of infinite streams using the two observations ~hd~ and ~tl~
+    - Asking for the head using the observation ~hd~ returns element of type ~'a~
+    - Asking for the tail using the observation ~tl~ returns a suspended stream of type ~('a str) susp~
+    - If you want more elements you need to ask for more
+    - Very demand driven
+** DEMO
+#+INCLUDE: "Test/24.ml" src ocaml
