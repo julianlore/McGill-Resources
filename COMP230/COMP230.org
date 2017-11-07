@@ -1507,7 +1507,7 @@ $$A(0) \supset [\forall x:(A(x)\supset A(sx))\supset \forall x:A(x)]$$
 Called a schema because it can make countably infinite amount of axioms
 
 Now with all 6 axioms and the axiom schema we have TNT.
-* Lecture 17 <2017-11-02 Thu> 
+* Lecture 17 <2017-11-02 Thu>
 ** MIU
 Is MU a MIU theorem? Recall:
 
@@ -1592,3 +1592,122 @@ In a TNT proof, every line can be mapped to a Godel # (since you can translate f
 TNT-PROOF-PAIR(x,y): Predicate between a pair of numbers. True if x codes (is the godel number of) a proof of the wff coded by y
 
 TNT-PROOF(x): $\exists y:TNT-PROOF-PAIR(y,x)$
+* Lecture 18 <2017-11-07 Tue>
+** Turing Machines
+- Formalizations of computability
+  - What is computable? Need some sort of handle on studying this mention, formalizing is a good way to do so, you can then check if something is valid in the formal system or not valid. Can also meta-reason about them and such.
+- Different formal systems for computability have been made
+  1. Representability in FOA
+     - If it can be represented in FOA it's computable
+  2. Arithmetic descriptions: $\mu-\text{recursive fun}$
+  3. $\lambda-\text{calculus}$
+  4. Machine-like descriptions: TM, Post, register
+These 4 were done in 1930s. All 4 can be proved to be equivalent.
+- Going from these formal systems to computability (and vice versa) is sometimes called the Church-Turing thesis
+  - Can this be proved? No, because the Church-Turing thesis isn't well posed, going from something formal to something informal (computability). How can you go from one to the other? That's why it's a thesis not a proof.
+- Alan Turing (1912-1954) invented Turing Machines in 1936
+------------------
+Say you have a paper with numbers on it:
+[[./Images/i22.png]]
+Conditions: 
+- Boundedness: finite # of symbols and possible actions
+- Locality: finite range for reading and writing
+- Tape: [[./Images/i23.png]]
+  - finite alphabet, e.g. every square is either $1$ or $B$(lank)
+  - Head: over one square
+    - read symbol (that it's currently looking at)
+    - write & delete symbol
+    - move left or right: L R
+    - States: $q_0, q_1, q_2,\ldots$
+    - Instructions:
+      - $(q_i,S_y,O_p,q_j)$
+      - $q_i$ is current state
+      - $S_y$ is symbol read
+      - $O_p$ is operation, either $1,B,L,R$
+      - $q_j$ is next state
+    - Always begin in state $q_0$
+Now we can write Turing Machine programs.
+
+TM1 = 
+- $(q_0,B,R,q_0)$, if at a blank, go right
+- $(q_0,1,B,q_0)$, if at a 1, write a blank
+- Erases tape and never halts [[./Images/i24.png]]
+- Now we want a TM that erases all 1s
+TM2 = 
+- $(q_0,1,R,q_1)$ 
+- $(q_1,B,R,q_0)$
+- Erases consecutive 1s
+- [[./Images/i25.png]]
+*** TM as functions
+TM as functions from $\mathbb{N}\to \mathbb{N}$ (input is only $1$ block of consecutive $1$'s)
+- [[./Images/i26.png]]
+- TM2: $f(x)=0$
+- TM3: What if we want $f(x)=2$
+  - Can reuse TM2, erase everything
+  - Once everything is erased, write 2 $1$'s
+  - TM3 =
+    - $(q_0,1,R,q_1)$ 
+    - $(q_1,B,R,q_0)$
+    - $(q_0,B,1,q_2)$
+    - $(q_2,1,R,q_3)$
+    - $(q_3,B,1,q_4)$, $q_4$ doesn't exist, will stop at this point
+  - Alternate notation:
+    - [[./Images/i27.png]]
+- TM4: $f(x)=x+2$
+  - Skip all $1$'s and then add $2 1$'s
+  - Alternatively, just go left and add $2 1$'s
+- TM5: $f(x,y) = x+y$
+  - Sequence of $1$'s and then a blank and then another sequence of $1$'s
+    - Delete first $1$ and then go right until you see a blank and then write a $1$ there
+    - Need to know conventions about number of blanks in between
+- TM6: $f(x,y)=x\cdot y$
+  - Have to copy $y x$ amount of times after $y$ and then delete $y$, more complicated, but a good exercise
+How many functions are there from $\mathbb{N} \to \mathbb{N}$? Uncountably infinite. How many turing machines are there? Countably infinite. Why? Because there are finitely many instructions with a finite amount of states in your turing machine.
+- This means that not every function can be represented as a turing machine, i.e. some are not computable.
+** The Halting Problem
+We can enumerate all Turing Machines based off a fixed alphabet. So we can write: $T_1, T_2, T_3, \ldots, T_n, \ldots$.
+- $T_n(m): T_n$ on input $m$
+- $K=\{x\in\mathbb{N}|T_x(x)\text{ halts}\}$
+  - TMs can either halt (stop) or go on forever.
+The Halting Problem is as follows: Is there a TM that decides whether $y\in K$ or $y \notin K$? In other words:
+\begin{equation*}
+TM_k (y) =
+\begin{cases}
+1 & \text{if }y\in k
+\\ 0 & \text{if }y \notin k
+\end{cases}
+\end{equation*}
+*** Claim
+This function is not computable. Then by Church-Turing thesis, a computer cannot compute this.
+
+Note that $K$ is r.e.
+   - Make a table with $T_1$ on input $1$, $T_2$ on input $2$, \ldots
+   - Check at each step if it's still running or halts, to see if they eventually halt
+   - Go through this table diagonally like was done for the rational numbers. This way we can list all elements of $K$.
+
+*** Proof (by contradiction)
+Assume $T_H$ decides the set $K$. i.e.
+\begin{equation*}
+T_H (x) =
+\begin{cases}
+1 & \text{if }x\in k, \text{ }T_x(x) \text{ halts}
+\\ 0 & \text{if }x \notin k, \text{ }T_x(x) \text{ loops}
+\end{cases}
+\end{equation*}
+Now define a new machine:
+\begin{equation*}
+T_G (x) =
+\begin{cases}
+0 & \text{if }T_H(x)=0
+\\ \text{loops} & \text{if }T_X(x)=1
+\end{cases}
+\end{equation*}
+
+So $T_G(x)=T_n(x)$ for some $n$ (since we enumerated all Turing machines).
+
+Want to know output of $T_G(n)$
+- So machine can either give $0$ or loop
+- It is $0$ if $T_H(n)=0$, i.e. $n\notin k$ and $T_n(n)$ loops, so $T_G(n)$ loops. Can't loop and give $0$ at the same time! \lightning
+- Loops if $T_H(n)$ halts, i.e. $n \in k$ $T_n(n)$ halts, $T_G(n)$ halts. Can't loop and halt! \lightning
+
+This is diagonalization!
