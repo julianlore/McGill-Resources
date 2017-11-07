@@ -1475,3 +1475,123 @@ Assume $n=2^m$, $m\in \mathbb{N}\cup\{0\}$
 - Base: $m=0: T(2^0)=T(1)\leq c$
 - I.H. $T(2^m)\leq c2^m \log 2^m = c2^m m$
 - I. Step: $\underbrace{T(2^{m+1})}_n\leq \underbrace{2T(2^h)}_{n/2}+\underbrace{c2^{m+1}}_n \stackrel{I.H}{\leq} 2 c2^m m+c2^{m+1}=c2^{m+1}m+c2^{m+1}=c2^{m+1}(m_1)=cn\log n$
+* Lecture 17 <2017-11-07 Tue>
+** Recall: Merge sort
+- $T(n)=2T(n/2)+O(n)(\text{n from merging})=\Theta(n \log n)$
+** Counting Inversions
+- Input: A sequence of $n$ distinct numbers $a_1,a_2,\ldots,a_n$
+- Output: How many $i<j$ satisfy $a_i>a_j$ (number of pairs that are in the wrong order)?
+*** Example
+Array: 5, 2, 1, 4, 3
+- (5,2)
+- (5,1)
+- (5,4)
+- (5,3)
+- (2,1)
+- (4,3)
+- $6$ inversions
+---------------
+1,2,3,4,5 has $0$ inversions
+*** Brute-Force
+\begin{algorithmic}
+\For{$i=1,\ldots,n$}
+	\For{$j=i+1,\ldots,n$}
+		\If{$a_i>a_j$} counter++
+		\EndIf
+	\EndFor
+\EndFor
+\end{algorithmic}
+This is $\Theta(n^2)$.
+*** Divide and Conquer
+- Divide: Separate the sequence into two halves $O(1)$
+- Conquer: Count the inversions in each part recursively $2T(\frac{n}{2})$ (solving 2 halves)
+[[./Images/i70.png]]
+- Combine: Counting number of inversions where _$i$_ and _$j$_ are in different halves
+  [[./Images/i71.png]]
+Naive Combine: 
+
+\begin{algorithmic}
+\For{$i=1,\ldots,\frac{n}{2}$}
+	\For{$j=\frac{n}{2}+1,\ldots,n$}
+		\If{$a_i>a_j$} counter++
+		\EndIf
+	\EndFor
+\EndFor
+\end{algorithmic}
+This is $\Theta(\left(\frac{n}{2}\right)) = \Theta(n^2)$, bad.
+
+- $T(n)=2T(\frac{n}{2})+\Theta(n^2)$
+- $T(n)=\Theta(n^2)$, no improvement over brute force
+-----------
+Idea: Suppose each part is sorted. Then combine can be done faster. 
+-Example
+[[./Images/i72.png]]
+[[./Images/i73.png]]
+$O(n)$ if they were sorted.
+-------
+Key Observation: Sorting the two halves does not change the number of inversions in the combine step.
+[[./Images/i74.png]]
+- If $(i,j)$ is an inversion as in the picture, $(a_i, a_j)$ will remain one.
+----------
+Attempt: 
+- Divide into two halves $O(1)$
+- Conquer recursively $2T(\frac{n}{2})$
+- Sort $(O(n\log n))$
+- Combine $O(n)$
+$T(n)=2T(\frac{n}{2})+O(n \log n)=O(n \log^2 n)$. Want to get rid of $n \log n$
+---------
+Final Alg:
+- Divide into two halves $O(1)$
+- Conquer: "Sort" and "count inversions"
+- Combine: "Merge" $O(n)$ the sorted arrays and count inversions $O(n)$
+Running Time:
+- $T(n)=2(\frac{n}{2})+O(n)$
+- $T(n)=O(n \log n)$
+*** Applications
+Closest Pair of Points
+- Input: The coordinates of $n$ points on the plane
+- Goal: Find a pair with smallest distance between them
+Brute-force, $O(n^2)$
+\begin{algorithmic}
+\For{$i=1,\ldots,n$}
+    \For{$j=i+1,\ldots,n$}
+	\If{$dis(P_i,P_j)<min$} update min
+	\EndIf
+    \EndFor
+\EndFor
+\end{algorithmic}
+Divide-and-conquer:
+Find a vertical line that separates the points into two equal size halves.
+Assumption: Points have distinct $x$ coordinates. 
+[[./Images/i75.png]]
+(sort the points according to their $x$ coordinates and find the middle point, $O(n\log n))
+
+Conquer: Find the closest pair in each part recursively. $2T(\frac{n}{2})$
+Combine: Find the closes pair with each pair on one side of the line. Compare this to the pairs found in "conquer step" (distance between 2 sides we split). Return the best of the three.
+[[./Images/i76.png]]
+Finding the closest pair with points in different parts: 
+- Naive approach: $\frac{n}{2}+\frac{n}{2}$
+- $T(n)=2T(\frac{n}{2})+\Theta(n^2) = \Theta(n^2)$, no improvement over brute-force.
+Observation: If $\delta$ is the best distance found in the recursion, we only need to consider a window of width $2\delta$ around the splitting line. Unfortunately all or a significant number of points can be in this $2\delta$-strip.
+[[./Images/i77.png]]
+[[./Images/i78.png]]
+Suppose that the points are sorted according to their $y-coordinates$. Now for the point $P_i$ (blue point in picture) in the $2\delta-strip$
+- Want to find $P_i, P_j$ with
+  - $P_i$ one side $+ dist(P_i,P_j)$
+  - $P_j$ other side
+Claim: We only need to look at $j \in [i-12, i+12]$
+- Sort the points according to y-coord
+\begin{algorithmic}
+\State $min=\delta$
+\For{$i=1,\ldots,n$}
+    \For{$j=i-20$ to $i+20$}
+	\If{$P_i,P_j$ are on different sides and $dist(P_i,P_j)<min$} update min
+	\EndIf
+    \EndFor
+\EndFor
+\end{algorithmic}
+
+Running time: $O(n log n)$ sort, $O(n)$ nested for loop gives you: $T(n)=2T(n/2)+O(n log n) = \Theta(n^2\log n)$
+
+Exercise, can show $T(n)=2T(n/2)+O(n)=\Theta(n \log n)$
+
