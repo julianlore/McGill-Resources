@@ -1711,3 +1711,123 @@ Want to know output of $T_G(n)$
 - Loops if $T_H(n)$ halts, i.e. $n \in k$ $T_n(n)$ halts, $T_G(n)$ halts. Can't loop and halt! \lightning
 
 This is diagonalization!
+* Lecture 19 <2017-11-09 Thu>
+** Reminder: Turing Machines & Computers
+| TM           | Computer           |
+|--------------+--------------------|
+| tape         | memory/disc        |
+| head         | processor/pointers |
+| instructions | program            |
+| $\square$ (square) | 1 bit              |
+Everything you can do on a computer you can do on a Turing Machine. Things you can't do on a Turing Machine you cannot do on a computer, i.e. The Halting Problem
+
+Turing Machines were supposed to be a formalization of "computability"
+- Another way of analyzing computability is with functions
+  - Primitive recursive functions, which we'll try and extend to other functions
+** Class of functions
+
+Inductive def of a class of functions: $\mathbb{N}\to \mathbb{N}$
+
+Primitive Recursive Functions
+1. $z(x)=0$ (zero function)
+   - $s(x)=$ the next number in the sequence following $\mathbb{N}$ (successor)
+   - $P_k^i(\underbrace{x_1,\ldots,x_k}_{\vec{x}})=x_i, 1\leq i \leq k$ (projection)
+2. Composition: Given $g$ with $m$ arguments and $h_1,\ldots,h_m$ with $\underbrace{k \text{ arguments}}_{\vec{x}}$
+   - $f(\vec{x})=g(h_1(\vec{x},\ldots,h_m(\vec{x}))$
+   - Schema of prim. rec. ($h$ is primitive recursive)
+     - $f(0)=d$
+     - $f(n+1)=h(f(n),n)$
+   - Generalizing: $g,h$ are prim. rec.
+     - $f(0, \vec{x})=g(\vec{x})$
+     - $f(n+1, \vec{x})=h(f(n,\vec{x}),n,\vec{x})$
+---------
+*** E.g
+1. $id(x) = x =P_1^1 (x)$
+2. $plus(0,x)=x$
+   - $plus (n+1,x)=S(plus(n,x))$
+   - $\implies g(x)=p_1^1(x))$
+     - $h(u,v,w)=S(P_3^1(u,v,w))$
+     - $u$ is $plus(n,x)$ , $v=n, w=x$
+3. $mult(x,y)$, factorial, exponentiation
+4. $pred(0)=0, pred(n+1)=n$ (only need the simple scheme, not the generalized one)
+   - $h(u,v)=P_2^2(u,v)$
+5. 
+\begin{equation*}
+cond(x,y,z) = 
+\begin{cases}
+y & \text{if }z=0
+\\x & \text{otherwise}
+\end{cases}
+\end{equation*}
+6. For relation $R(\vec{x})$: (Characteristic function)
+\begin{equation*}
+C_R(x) = 
+\begin{cases}
+1 & \text{if }R(\vec{x})
+\\ 0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+7. Def by cases: 
+\begin{equation*}
+f(x)=
+\begin{cases}
+h_1(x) & \text{if }x \text{ satifies }A_1
+\\ \ldots
+\\ h_n(x) & \text{if }x \text{ satisfies }A_n
+\end{cases}
+\end{equation*}
+$$f(x)=(h_1(x)\cdot C_{A_1}(x))+\ldots+(h_n(x)\cdot C_{A_n}(x))$$
+Assuming they're disjoint, only one will happen at a time, i.e. you get one of these values (as that's the only one satisfied).
+8. Bounded minimization:
+$$f(\vec{x})=\min y\leq n[h(\vec{x},y)=0]$$
+    - Tries out all $y$'s from $0$ to $n$ and as soon as $h$ is $0$, it will return $y$
+    - e.g. $h(3,0)=7$
+      - $h(3,1)=4$
+      - $h(3,2)=0$
+      - With $n=10$, $f(3)=2$
+      - If condition is not met (none of the values up to $n$ are $0$, then it will return $n$)
+    - Essentially this is like searching, like a for-loop
+-------------
+Are all computable functions primitive recursion functions
+- All primitive recursion functions can be enumerated (since they're theorems of a formal system)
+Prim. rec: $f_1,f_2,f_3,f_4,\ldots$
+|       | 1        | 2        |        3 | \ldots |
+|-------+----------+----------+----------+--------|
+| $f_1$ | $f_1(1)$ | $f_1(2)$ | $f_1(3)$ |        |
+| $f_2$ | $f_2(1)$ | $f_2(2)$ |          |        |
+| $f_3$ | \ldots   |          |          |        |
+Let $g(x)=f_x(x)+1$. If $g$ were primitive recursive, then $g(x)=f_n(x)$ for some $n$.
+
+So what is $g(n)$? $g(n)=f_n(n)$ but by definition of $g$, $g(n)=f_n(n)+1$. A function cannot be the same value as a function and that function plus $1$. \lightning
+
+Therefore, $g$ is _not_ primitive recursive. 
+
+Primitive recursive functions are really nice and most if not all we've seen in our lives are primitive recursive.
+** Bloop-Programs
+Bloop -> Bounded loop. This is the definition used in GEB instead of defining primitive recursive functions like we just did
+*** Ex
+- LOOP 4 TIMES
+- BLOCK: BEGIN
+- \ldots
+- BLOCK: END
+[[http://www.cs.mcgill.ca/~cs230/TisLoopy/index.html][TisLoopy]] from course webpage to compile Bloop-Programs and practice without having to define a primitive recursive function.
+*** Syntax
+\begin{verbatim}
+DEFINE PROCEDURE "MINUS" [M,N]:
+BLOCK 0: BEGIN
+      OUTPUT <= 0;
+      IF M<N, THEN: QUIT BLOCK 0;
+      LOOP AT MOST M+1 TIMES:
+      BLOCK 1: BEGIN
+      	    IF OUTPUT+N=M, THEN ABORT LOOP 1;
+	    OUTPUT <= OUTPUT + 1
+      BLOCK 1: END
+BLOCK 0: END
+\end{verbatim}
+| M | N | OUTPUT |
+|---+---+--------|
+| 5 | 2 |      0 |
+|   |   |      1 |
+|   |   |      2 |
+|   |   |      3 |
+
