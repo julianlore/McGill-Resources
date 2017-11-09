@@ -1,4 +1,4 @@
-#+LaTeX_HEADER: \usepackage{algpseudocode, wasysym}
+#+LaTeX_HEADER: \usepackage{algpseudocode, wasysym, mathtools}
 * Lecture 1 <2017-09-05 Tue>
 ** Algorithm
 - Al-Khwarizmi (9th Century)
@@ -1594,4 +1594,131 @@ Claim: We only need to look at $j \in [i-12, i+12]$
 Running time: $O(n log n)$ sort, $O(n)$ nested for loop gives you: $T(n)=2T(n/2)+O(n log n) = \Theta(n^2\log n)$
 
 Exercise, can show $T(n)=2T(n/2)+O(n)=\Theta(n \log n)$
+* Lecture 18 <2017-11-09 Thu>
+** Integer Addition
+So far we've considered these basic operations as constant operations, like adding two numbers, comparing two numbers, etc. But they really aren't, since they're sequence of bits.
+- Input: Two $n-bit$ positive integers $a,b$
+- Output: $a+b$, $n+1-bit$ number.
+- Example:
+\begin{flalign*}
+& 11010101 &
+\\ + & 01111101
+\\ \hline
+\\ 1&01010010
+\end{flalign*}
+Basically need a for-loop to keep track and check if there's a carry over. This is $O(n)$. Cannot be improved as even reading the input requires $\Omega(n)$.
+** Integer Multiplication
+- Input: Two $n-bit$ integers $a,b>0$
+- Goal: Output $a \times b$
+-----------
+\begin{flalign*}
+& 0101 &
+\\ \timesp & 1101
+\\ \hline
+\\ & 0101
+\\ 0&0000
+\\ 01&0100
+\\ +010&1000
+\\ \hline
+\\ 100&0001
+\end{flalign*}
+Running time: $(n-1)$ additions of numbers with at most $2n$ bits $\implies O(n^2)$. Can we improve this? Yes.
+*** Divide and Conquer approach
+Split each one of $a,b$ into two $\frac{n}{2}-bit$ (assume $n$ even) numbers.
+- $a=2^{n/2}a_1+a_0$
+- $b=2^{n/2}b_1+b_0$
+- Example: $a = \underbrace{01}_{a_1}\underbrace{01}_{a_0}$
+  - $b = \underbrace{11}_{b_1}\underbrace{01}_{b_0}$
+\begin{flalign*}
+ab = 2^n a_1 b_1 + 2^{n/2}(a_1b_0+b_1a_0)+a_0b_0
+\end{flalign*}
+Recursively compute: $a_0b_0$
+- $a_1b_0$
+- $a_0b_1$
+- $a_1b_1$
+- $4T(n/2)$
+Same shifting: $2^na_1b_1, \ldots$, $O(n)$
 
+Same additions: Three of these. $O(n)$
+
+$T(n)=4T(n/2)+O(n)$
+[[./Images/i79.png]]
+- Number of leaves $4^{\log_2 n}=n^2$
+Expanding this
+$$T(n)=\underbrace{T(1)+\ldots+T(1)}_{n^2}+O(n)+4O(\frac{n}{2})+\ldots \implies T(n)=\Theta(n^2)$$
+- So no improvement from before.
+Or by using Master Theorem:
+$$\log_2 4 > 1 \implies O(n^{\log_2 4}) = O(n^2)$$
+-----------
+Karatsuba 1962
+- $a=2^{n/2}a_1+a_0$
+- $b=2^{n/2}b_1+b_0$
+- $ab=2^na_1b_1+2^{n/2}((a_0+a_1)(b_0+b_1)-a_1b_1-a_0b_0)+a_0b_0$
+  - Different way of writing $ab$ in the previous approach
+-----------
+Karatsuba's Alg:
+- Recursively compute:
+  - $a_1b_1,a_0b_0,(a_0+a_1)\times(b_0+b_1)$
+  - This time we only have 3 multiplications instead of 4. The rest is addition and shifting, which costs $O(n)$.
+$$T(n)=3T(n/2)+O(n)$$
+Applying Master's Theorem: 
+$$ \log_2 3 > 1 \implies \Theta(n^{\log_2 3}) = \Theta(n^{1.585\ldots})$$
+- This algorithm isn't used in practice and can be improved to $O(n \log n \log \log n)$ (Fast Fourier transforms)
+** Matrix Multiplication
+- Input: Two $n\times n$ matrices. $A,B$
+- Output: $A \times B$
+---------
+Simple Alg: $C=AB$
+$$C_{ij}=\sum_{k=1}^{n}A_{ik}B_{kj}$$
+\begin{algorithmic}
+\State $C=[0]_{n\times n}$
+\For{$i=1,\ldots,n$}
+	\For{$j=1,\ldots,n$}
+		\For{$k=1,\ldots,n$}
+			\State $C_{ij}+=A_{ik}B_{kj}$
+		\EndFor
+	\EndFor
+\EndFor
+\end{algorithmic}
+This is $O(n^3)$ if we assume that the matrix has a very simple form ($0$ and $1$s or if we're just counting number of multiplication rather the actual bits like before).
+*** Divide and Conquer
+Split $A,B$ into four $\frac{n}{2}\times \frac{n}{2}$ blocks
+$$ A = \begin{bmatrix*}[r] A_{00} & A_{01} \\ A_{10} & A_{11} \end{bmatrix*}, B = \begin{bmatrix*}[r] B_{00} & B_{01} \\ & B_{10} B_11 \end{bmatrix*}$$
+where $A_{00},A_{01}, A_{10}, A_{11}, B_{00}, \ldots, B_{11}$ are $\frac{n}{2} \times \frac{n}{2}$ matrices.
+- Example: [[./Images/i80.png]]
+$$AB = \begin{bmatrix*}[r] \underbrace{A_{00}B_{00}+A_{01}B_{10}}_{\frac{n}{2}\times \frac{n}{2}} & A_{00}B_{01}+A_{01}+B_{11}
+\\ A_{10}B_{00}+A_{11}B_{10} & A_{10}B_{01}+A_{11}B_{11}
+\end{bmatrix*}$$
+$$T(n)=8T(n/3) (multiplications)+O(n^2) (additions)$$
+Recursively compute: $A_{00}B_{00},A_{01}B_{10},A_{00}B_{01}, \ldots$$
+
+Using Master Theorem:
+$$\log_2(8)>2 \implies \Theta(n^3)$$
+
+$$\begin{bmatrix*}[r] C_{00} & C_{01} \\ C_{10} & C_{11} \end{bmatrix*} = \begin{bmatrix*}[r]A_{00} & A_{01} \\ A_{10} & A_{11} \end{bmatrix*} \times \begin{bmatrix*}[r]B_{00} & B_{01} \\ B_{10} & B_{11}$$
+
+\begin{align*}
+P_1 & = A_{00}\times (B_{01}-B_{11})
+\\ P_2 & = (A_{00}+A_{01})B_{11}
+\\ P_3 & = (A_{10}+A_{11})B_{00}
+\\ P_4 & = A_{11}(B_{10}-B_{11})
+\\P_5 & = (A_{00}+A_{11})(B_{00}+B_{11})
+\\P_6 & = (A_{01}-A_{11})(B_{10}+B_{11})
+\\ P_7 & = (A_{00}-A_{10})(B_{00}+B_{01})
+\\ \hline
+\\ C_{00} & = P_5+P_4-P_2-P_6
+\\ C_{01} & = P_1+P_2
+\\ C_{10} & = P_3+P_4
+\\ C_{11} & = P_5+P_1-P_3-P_2
+\end{align*}
+Strassen Alg: 1971
+$$ T(n/2)+O(n^2) (additions)$$
+- Compute: $P_1,\ldots,P_7$ recursively (all size $\frac{n}{2}\times \frac{n}{2}$)
+- Compute: $C_{00}, C_{01},C_{10},C_{11}$ using them
+$$T(n)=7 \times T(n/2)+O(n^2)(additions/subtractions)$$
+$$\log_2 7 > 2 \implies \Theta (n^{\log_2 7})=\Theta(n^{2.81\ldots})$$
+Matrix computations are everywhere, graphics do matrix computations all the time. 
+- Can this be improved? Has been improved to something like $\Theta(n^{2.37\ldots})$
+Open Problem: Can we do matrix multiplication in $O(n^{2+O(1)})$?
+- Say $O(n^2(\log n)^{1000})$
+- We don't know
