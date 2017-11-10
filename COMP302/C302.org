@@ -1046,3 +1046,83 @@ Generate a stream of prime numbers
 - Now look at tail and filter out all even numbers.
   - Now you have a stream of odd numbers.
 - Head this time is $3$. Now remove all things that are multiples of $3$
+* Lecture 26 <2017-11-10 Fri>
+** Fundamental Principles in Programming Language Design
+Three key questions:
+- What are the syntactically legal expression? What expressions does the parser accept?
+  - Grammar
+- What are well-typed expressions? What expressions does the type-checker accept?
+  - Static semantics
+- How is an expression executed?
+  - Dynamic semantics
+  - Why isn't a program working? Seems logically correct, but then how do we delve further?
+Definitely need to know the answers to all 3 questions if you're writing a compiler or your own language.
+*** Syntactically Legal Expressions
+Def. (Not the definition for Ocaml, but similar and essentially for a basic language)
+
+The set of expressions is defined inductively by the following clauses
+1. A number $n$ is an expression
+2. The booleans ~true~ and ~false~ are expressions.
+3. If $e_1$ and $e_2$ are expressions, then $e_1$ op $e_2$ is an expression where $op =\{+,=,-,*,<\}$
+4. If $e$, $e_1$ and $e_2$ are expressions, then ~if~ $e$ then $e_1$ ~else~ $e_2$ is an expression
+Example of legal expressions:
+- ~if 3 then 2+3 else 5~
+  - This is syntactically fine, but it's a type error
+When we define languages, we typically have 3 stages: 
+1. source -> lexer -> parser (syntax errors here)
+   - After parse, you have an abstract syntax tree
+   - How do I read ~3+2=7~? ~(3+2)=7~ or ~3+(2=7)~?
+   - The definition above is tree like (with the if statements)
+   - We won't talk much about parsing and lexing, as most of that has been solved
+2. -> type checker (if it exists, also type errors are here) -> interpreter & evaluation (run-time errors/run time exceptions)
+*** Backus-Naur Form (BNF)
+Alternative to the previous definition.
+
+Operations op ::= $+|-|*|<|=$
+
+Expressions $e$ ::= $n|e_1 \ op \ e_2 | true | false | if \ e \ then \ e_1 \ else \ e_2$
+
+**** Representation in OCaml
+#+BEGIN_SRC ocaml
+type primop = Equals | LessThan | Plus | Minus | Times
+
+type exp = 
+| Int of int (* 0 | 1 | 2 | ... *)
+| Bool of bool (* true | false *)
+| If of exp * exp * exp (* if e then e_1 else e_2 *)
+| Primop of primop * exp list (*e_1 primop e_2 or primop e *)
+#+END_SRC
+Example: 
+- ~if 3<0 then 1 else 0~ is represented as ~If (Primop (LessThan, [Int 3 ; Int 0]), Int 1, Int 0)~
+- ~if true then 3~ cannot be represented, no else
+*** Evaluation
+How to evaluate an expression?
+- How to describe evaluation of expressions?
+- We want to say: "Expression $e$ evaluates to a value $v$"
+- What are values?
+  - Values $v$ ::= $n | true | false$
+Definition
+
+Evaluation of the expression $e$ to a value $v$ is defined inductively by the following clauses:
+- A value $v$ evaluates to itself.
+- If expression $e$ evaluates to the value ~true~ and expression $e_1$ evaluates to a value $v$, then ~if~ $e$ ~then~ $e_1$ ~else~ $e_2$ evaluates to the value $v$.
+- If expression $e$ evaluates to the value ~false~ and expression $e_2$ evaluates to a value $v$, then ~if~ $e$ ~then~ $e_1$ ~else~ $e_2$ evaluates to the value $v$.
+Too verbose and doesn't even talk about primitive operators. Need more compact notation.
+
+$e \Downarrow v$ for "Expression $e$ evaluates to value $v$"
+
+Definition with new notation:
+
+$e \Downarrow v$ is defined inductively by the following clauses:
+- $v \Downarrow v$
+- If $e \Downarrow$ ~true~ and $e_1 \Downarrow v$, then ~if~ $e$ ~then~ $e_1$ ~else~ $e_2 \Downarrow v$
+- If $e \Downarrow$ ~false~ and $e_2 \Downarrow v$, then ~if~ $e$ ~then~ $e_1$ ~else~ $e_2 \Downarrow v$
+
+Turning informal description into a formal one
+$$\frac{premise_1 \ \ldots \ premise_n}{conclusion}\text{name}$$
+Read as: If $premise_1$ and $premise_2$ and $\ldots premise_n$, then conclusion.
+
+$$\frac{}{v \Downarrow v}\text{B-VAL}$$
+$$\frac{e \Downarrow true \ e_1 \Downarrow v}{if \ e \ then \ e_1 \ else \ e_2 \Downarrow v}\text{B-IFTRUE}$$
+$$\frac{e \Downarrow false \ e_2 \Downarrow v}{if \ e \ then \ e_1 \ else \ e_2 \Downarrow v}\text{B-IFFALSE}$$
+Here we only talk about the good things, ~true~ or ~false~. We don't define what would happen if $e \Downarrow$ something else, like a number. Then we would raise not defined.
