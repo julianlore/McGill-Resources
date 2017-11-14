@@ -1126,3 +1126,77 @@ $$\frac{}{v \Downarrow v}\text{B-VAL}$$
 $$\frac{e \Downarrow true \ e_1 \Downarrow v}{if \ e \ then \ e_1 \ else \ e_2 \Downarrow v}\text{B-IFTRUE}$$
 $$\frac{e \Downarrow false \ e_2 \Downarrow v}{if \ e \ then \ e_1 \ else \ e_2 \Downarrow v}\text{B-IFFALSE}$$
 Here we only talk about the good things, ~true~ or ~false~. We don't define what would happen if $e \Downarrow$ something else, like a number. Then we would raise not defined.
+* Lecture 27 <2017-11-14 Tue>
+** Designing our own language
+(Continuation from last class)
+
+We transformed evaluation into a formal description with premises and a conclusion. Note that evaluation rules do not impose an order on the premises. This works if we don't have state.
+
+Extending further:
+- If $e_1 \Downarrow v_1$ and $e_2 \Downarrow v_2$, then $e_1 \ op \ e_2 \Downarrow v$ where $v = \overline{v_1 \ op \ v_2}$
+- $\frac{e_1 \Downarrow v_1 \ e_2 \Downarrow v_2}{e_1 \ op \ e_2 \Downarrow \overline{v_1 \ op \ v_2}}$ B-OP
+How to use these rules?
+- Example in slides
+
+Our operational semantics ($e \Downarrow v$) is what we formalized.
+
+Task: Implement a function ~eval~ that does what $e \Downarrow v$ describes.
+#+BEGIN_SRC ocaml
+let rec eval e = match e with
+| Int _ -> e
+| Bool _ -> e
+| If (e, e1, e2) ->
+    (match eval e with
+    | Bool true -> eval e1
+    | Bool false -> eval e2
+    | _ -> raise (Stuck "guard is not  bool"))
+#+END_SRC
+*** Why do we care about a formal description?
+- More compact
+Establish properties and formal guarantees
+- Coverage: For all expressions ~e~ there exists an evaluation rule.
+- Determinacy: If $e \Downarrow v_1$ and $e \Downarrow v_2$ then $v_1=v_2$
+- Value Soundness: If $e \Downarrow v$ then $v$ is a value.
+  - Should always return a value
+*** Advantages of an implementation
+We can run it!
+*** Static Type Checking
+- Types approximate runtime behavior
+- Lightweight tool for reasoning about programs
+- Detect errors statically, early in the development cycle
+- Great for code maintenance
+- Precise error messages
+- Checkable documentation of code
+How do we make types work?
+- Types classify expressions according to the kinds of values they compute
+  - What are values though?
+    - Values v ::= n | true | false
+  - Hence, there are only two basic types.
+    - Types T ::= int | bool
+    - In OCaml -> ints, floats, functions, unit, ref, etc.
+**** Types
+e:T, expression $e$ has type $T$
+
+Def:
+1. n : int
+2. true : bool and false : bool
+3. If e : bool and $e_1:T$ and $e_2:T$, then if $e$ then $e_1$ else $e_2$ : $T$
+4. If $e_1$ : int and $e_2$ : int, then $e_1 + e_2$ : int
+5. If $e_1 : T$ and $e_2 : T$, then $e_1 = e_2$ : bool
+Can be converted to premises
+- $\frac{}{true:bool}$ T-T
+- $\frac{}{false:bool}$ T-F
+- $\frac{e_1:T \ e_2:T}{e_1 = e_2 : bool}$ T-EQ
+- $\frac{}{n:int}$ T-NUM
+- $\frac{e_1:int \ e_2:int}{e_1+e_2:int}$ T-PLUS
+- $\frac{e:bool \ e_1:T \ e_2:T}{if \ e \ then \ e_1 \ else \ e_2:T}$ T-IF
+
+Two readings of typing
+- Type Checking $e:T$
+  - Given the expression $e$ and the type $T$, we check that $e$ does have type $T$
+- Type Inference $e:T$
+  - Given the expression $e$, we infer its type $T$
+- OCaml does both and well
+- Checking is difficult for us with T-EQ, we don't know what type $T$ is.
+** Demo
+#+INCLUDE: "Test/27.ml" src ocaml
