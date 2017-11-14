@@ -1613,7 +1613,7 @@ Basically need a for-loop to keep track and check if there's a carry over. This 
 -----------
 \begin{flalign*}
 & 0101 &
-\\ \timesp & 1101
+\\ \times & 1101
 \\ \hline
 \\ & 0101
 \\ 0&0000
@@ -1690,12 +1690,28 @@ $$AB = \begin{bmatrix*}[r] \underbrace{A_{00}B_{00}+A_{01}B_{10}}_{\frac{n}{2}\t
 \\ A_{10}B_{00}+A_{11}B_{10} & A_{10}B_{01}+A_{11}B_{11}
 \end{bmatrix*}$$
 $$T(n)=8T(n/3) (multiplications)+O(n^2) (additions)$$
-Recursively compute: $A_{00}B_{00},A_{01}B_{10},A_{00}B_{01}, \ldots$$
+Recursively compute:
+
+\begin{equation*}
+A_{00}B_{00},A_{01}B_{10},A_{00}B_{01}, \ldots
+\end{equation*}
 
 Using Master Theorem:
-$$\log_2(8)>2 \implies \Theta(n^3)$$
-
-$$\begin{bmatrix*}[r] C_{00} & C_{01} \\ C_{10} & C_{11} \end{bmatrix*} = \begin{bmatrix*}[r]A_{00} & A_{01} \\ A_{10} & A_{11} \end{bmatrix*} \times \begin{bmatrix*}[r]B_{00} & B_{01} \\ B_{10} & B_{11}$$
+\begin{align*}
+\log_2(8)>2 \implies \Theta(n^3)
+\\
+\begin{bmatrix*}[r] 
+C_{00} & C_{01} \\ C_{10} & C_{11} 
+\end{bmatrix*} 
+= 
+\begin{bmatrix*}[r]
+A_{00} & A_{01} \\ A_{10} & A_{11} 
+\end{bmatrix*} 
+\times 
+\begin{bmatrix*}
+[r]B_{00} & B_{01} \\ B_{10} & B_{11}
+\end{bmatrix*}
+\end{align*}
 
 \begin{align*}
 P_1 & = A_{00}\times (B_{01}-B_{11})
@@ -1722,3 +1738,130 @@ Matrix computations are everywhere, graphics do matrix computations all the time
 Open Problem: Can we do matrix multiplication in $O(n^{2+O(1)})$?
 - Say $O(n^2(\log n)^{1000})$
 - We don't know
+* Lecture 19 <2017-11-14 Tue>
+** Dynamic Programming
+Each instance of the problem is solved by "looking up" the solution to smaller instances of the problem. Hence often we fill up a table with solutions to instances of the problem, starting from smaller values of a parameter, and each one looks up the earlier values in the table to compute the current entry.
+---------------
+Name "Dynamic" was suggested by Bellman in the 50's. Was very theoretical but not much money was given to theoretical things during the time. Wanted to make the name nicer to get more funding, even though this name doesn't fit that much.
+*** Weighted interval scheduling
+_Recall_: Weighted interval scheduling
+Input: Jobs $(s_i, f_i, v_i)$, where $s$ is starting time, $f$ is finishing time and $v$ is the value, $v_i\geq 0$
+
+_Goal_: Find the maximum value, non-overlapping set of jobs.
+[[./Images/i81.png]]
+------
+Remark: Setting all $v_i$ to $1$ recovers the simple interval scheduling problem (maximizing # of jobs)
+
+_Recall_: In the original interval scheduling problem, we showed that the greedy algorithm that sorts the jobs $f_1 \leq f_2 \leq \ldots \leq f_n$ and picks each job iff it is consistent with the earlier chosen jobs. In the above example, we would choose $1,2,1$ on the top (ignoring values) and only getting $4$ instead of $6$.
+[[./Images/i82.png]]
+- Come up with any greedy algorithm, won't work. If you pick biggest value first, the above example won't work. If you look at ratios between time and values it won't work, etc.
+------------------
+Let us still sort them by their finishing time
+$$ f_1 \leq f_2 \leq \ldots \leq f_n$$
+[[./Images/i83.png]]
+- Consider the problem until time $f_j$ -> Two cases:
+  - Reject job $j$ ->
+    - We are optimizing value until job $j-1$
+  - Accept job $j$ -> gain $v_i +$ we are optimizing value until the _last job where finishing time is before $s_j$_ (call this $P(j)$)
+$$ P(j) = \max \{i | f_i \leq s_j\}$$
+--------
+Def: $Opt[j]=$ maximum profit that we can make from jobs $1, \ldots, j$
+- We just showed $Opt[j] = \max \{Opt[j-1], v_j + Opt[P(j)]\}$ with base case $Opt[0]=0$. Not that $Opt[P(j)]$ considers jobs $1,\ldots,P(j)$
+**** Alg
+- Sort the jobs so that 
+$$f_1 \leq f_2 \leq \ldots \leq f_n, O(n \log n)$$
+- Compute the values $P(j)$ for $j=1,\ldots,n$. Can be done easily in $O(n \log n)$ via binary search, can even be possible to do in $O(n)$ but we already have $O(n \log n)$ from sorting above anyway.
+- $Opt[0] = 0$
+\begin{algorithmic}
+\For {$j=1,\ldots,n$}
+    \State $Opt[j] = \max\{Opt[j-1],v_j+Opt[P(j)]\}$
+    \State // Note that $Opt[j-1]$ and $Opt[P(j)]$ are already computed and in an array.
+\EndFor
+\State Return $Opt[n]$
+\end{algorithmic}
+Total -> $O(n \log n)$
+
+What if we implement this as a recursive program?
+- Sort $f_1 \leq \ldots \leq f_n$
+- Compute $P(j)$ for $j=1,\ldots,n$
+\begin{algorithmic}
+\State ComputeOpt(j)
+\If {$j==0$}
+    \State return $0$
+\Else
+    \State return $\max(ComputeOpt(j-1), v_j+ComputeOpt(P(j)))$
+\EndIf
+\end{algorithmic}
+Running time? You have recursion and a binary structure that will just go down. This can get exponential.
+- Example: [[./Images/i84.png]]
+Running time: $O(2^n)$. But why? This is similar to the way we did it dynamically. We recompute opt values many times, and this leads to exponential time.
+- Another example: [[./Images/i85.png]]
+Storing the values in an array and not recomputing them is dynamic programming. Really just recursion except we save the values.
+**** Memorization
+\begin{algorithmic}
+\State Sort $f_1 \leq \ldots \leq f_n$
+\State Compute $P(j)$, $j=1,\ldots,n$
+\For {$j=1,\ldots,n$}
+     \State $Opt[j]=$ empty
+\EndFor
+\State $Opt[0]=0$
+\end{algorithmic}
+\begin{algorithmic}
+\State ComputeOpt(j)
+    \If {$Opt[j] = empty$}
+    	\State $Opt[j] = \max \{ComputeOpt(j-1), v_j+ComputeOpt(P(j))\}$
+    \Else
+	\State return $Opt[j]$
+\EndIf	
+\end{algorithmic}
+Now for every $j$ we make two _recursive calls_ at most once. -> $O(2\times n) = O(n)$ for recursive step -> $O(n \log n)$ total time.
+-------------------
+This memorization technique is useful when computing most of the entries in the table are not necessary.
+[[./Images/i86.png]]
+*** Knapsack Problem
+(Will be also used in COMP360 with Hatami, important)
+- Given $n$ objects and a "knapsack"
+- Item $i$ has weight $w_i>0$ (integers)
+  - value $v_i>0$
+- Knapsack has capacity $W$ (in weight)
+_Goal_: Fill the knapsack so as to maximize the value without exceeding its capacity.
+- Ex: 
+|    | $w_i$ | $v_i$ | ratio           |
+|----+-------+-------+-----------------|
+| #1 | $1$   | $1$   | $1$             |
+| #2 | $2$   | $6$   | $3$             |
+| #3 | $5$   | $18$  | $3 \frac{3}{5}$ |
+| #4 | $6$   | $22$  | $3 \frac{2}{3}$ |
+| #5 | $7$   | $28$  | $4$             |
+Optimal total value: $40$
+------------
+Greedy Alg: Compute value/weight ratio and start from the items with higher ratio -> #5, #2, #1 -> $value = 28+6+1=35$
+
+Optimal #3, #4 -> $40$
+
+This is an NP complete problem. Can't solve it greedily. Let's try and solve it.
+
+_Attempt #2_: 
+Define $Opt[i]=\max$ value if we only consider items $1,\ldots,j$
+
+Two cases: 
+- Case 1: Not include item $j$
+  - $Opt[j-1]$ can be achieved
+- Case 2: Item $j$ in the knapsack. Value $v_j$ included.
+  - $v_j+Opt[j-1]$?
+    - No because this will use $w_j$ of the capacity!
+  - It is $v_j+Opt(j-1, \text{ new cap}=W-w_j)$
+-------------
+_Solution_:
+$Opt[j,u]=\max$ value if we consider items $1,\ldots,j$ with capacity $u$, where $u=0, \ldots, W$
+----------
+\begin{algorithmic}
+\For{$u=0,\ldots,W$}
+	\State $Opt[0,u]=0$
+\EndFor
+\For{$j=1, \ldots, n$}
+	   \State $Opt[j,u] = \max \{opt[j-1,u], v_j+opt[j-1,u-w_j]\}$
+	   \State // Only if $w_j \leq u$
+\EndFor
+\end{algorithmic}
+Running time: $O(nW)$. This isn't considered polynomial. $W$ is just a number here and may be a number to a big exponent.
