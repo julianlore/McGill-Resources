@@ -1200,3 +1200,48 @@ Two readings of typing
 - Checking is difficult for us with T-EQ, we don't know what type $T$ is.
 ** Demo
 #+INCLUDE: "Test/27.ml" src ocaml
+* Lecture 28 <2017-11-16 Thu>
+Extending our language with variables, let-expressions, and functions!
+- Add the following expressions: $x | let \ x = e_1 \ in \ e_2 \ end$
+Are the following well-formed?
+- ~let x = x in x + 1 end~
+  - x is not defined, not well-formed
+- ~let x = y in x + 1 end~
+  - Same problem, y is not defined.
+  - Is this equal to the line above? What kind of renaming do we want?
+- ~let x = 1 in let y = x end in x + y end~
+  - Legal
+- ~let x = 1 in let x = x + 2 end in x + x end~
+  - Legal, important to know where things are bound, the first x bounds the $x$ in $x+2$. The second let x statement bounds the $x$ in $x+x$
+** Free Variables
+Variable names should not matter
+
+These are all the same: 
+- ~let x = 5 in (let y = x + 3 in y + y end) end~
+- ~let x = 5 in (let x = x + 3 in x + x end) end~
+- ~let v = 5 in (let w = v + 3 in w + w end) end~
+
+Defining Free Variables:
+- $FV(e)$ returns the set of the free variable names occurring in the expression ~e~.
+  - It is defined inductively based on the structure of the expression ~e~.
+- $FV(e_1 \ op \ e_2) = FV(e_1) \cup FV(e_2)$
+- $FV(n) = \{ \ \}$
+- $FV(x) = \{x\}$
+- $FV(let \ x = e_1 \ in \ e_2)$
+- $FV(e_1) \cup FV(e_1) \setminus \{x\}$
+  - ~let x = 1 in let y = x+1 end in x+y end~
+    - First look at ~x+y~ -> x and y are free
+    - Now looking at ~let y = x + 1~, ~x~ is free here.
+    - Apply the function to this let expression, get that ~x~ is free
+      - $\{x\} \cup \{x,y\}\setminus \{y\}$
+    - Then look at the outer ~let x~. Nothing free there.
+    - Apply the function again, get $\{\} \cup \{x\} \setminus \{x\}$
+- $FV(if \ e \ then \ e_1 \ else \ e_2) = FV(e) \cup FV(e_1) \cup FV(e_2)$
+In OCaml, ~let~, functions and pattern matching bound variables. In programming languages, no variables should be free, not bound.
+** Substitution
+Define as: ~[e'/x]e~ Replace all *free* occurrences of the variable ~x~ in the expression ~e~ with expression ~e'~
+
+Can be read as a function:
+- Input: Expression ~e'~, variable ~x~, and expression ~e~
+- Output: an expression where all *free* occurrences of the variable ~x~ in expression ~e~ have been replaced by ~e'~
+Substitution is defined by considering different cases for ~e~.
