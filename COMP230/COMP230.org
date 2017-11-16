@@ -1951,3 +1951,35 @@ $p(x)=\mu y [y+f(x)=0]$
 - Then $p(x)$ is partial recursive because it's just the $\mu-\text{operator}$ applied on another partial recursive function.
 Because $p(x)$ is partial recursive, it must occur in the enumeration such that $p(x)=\varphi_y(x)$
 - What is $p(y)$? $p(y)=\varphi_y(y)$. It is undefined if $f(y)=1$ and $f(y)=1$ if $\varphi_y(y)$ is defined. Contradiction ($p(y)$ is defined and undefined at the same time). \lightning
+* Lecture 21 <2017-11-16 Thu>
+Review of Turing Machines
+** Turing Machine on Handout 5
+This machine doubles a string of $1$'s
+- Doubling 1: [[./Images/i30.png]]
+- Doubling 3 (part of execution): [[./Images/i31.png]]
+** Turing Machine for addition
+[[./Images/i32.png]]
+
+[[./Images/i33.png]]
+
+Try: http://turingmachinesimulator.com/shared/tsgfopdqwb
+
+** Turing Machine for multiplication
+We're not actually going to make one, but what if we wanted to? We would reuse our Turing Machine for addition, don't reinvent the wheel from scratch each time. Note that:
+\begin{equation*}
+n \times m = 
+\begin{cases}
+0 & \text{if }n=0
+\\ (n-1) \times m + m & \text{if }n>0
+\end{cases}
+\end{equation*}
+Can recursively add in order to multiply. 
+
+** The Halting Problem
+This helps you understand the Halting Problem more. [[./Images/i34.png]]
+- Turing Machines can be inputted as an argument for another
+- Review of Halting Problem
+- Key points:
+  - Assuming existence of $T_H$
+  - Constructing the $T_G$ through elementary operations on $T_H$
+  - Self-reference (feeding $T_G$ to itself)-> \lightning

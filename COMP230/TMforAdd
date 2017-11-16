@@ -1,0 +1,60 @@
+http://turingmachinesimulator.com/shared/tsgfopdqwb
+//LOAD AN EXAMPLE TO TRY
+//then load an input and click play
+
+//Syntax:
+
+//-------CONFIGURATION
+name: Addition
+init: q0
+accept: q7
+
+//-------DELTA FUNCTION:
+//[current_state],[read_symbol]
+//[new_state],[write_symbol],[>|<|-]
+
+q0, 1
+q1, 1, >
+
+q0, _
+q2, _, >
+
+q1, 1
+q1, 1, >
+
+q1, _
+q2, _, >
+
+q2, _
+q3, _, <
+
+q2, 1
+q4, _, -
+
+q3, _
+q3, _, <
+
+q3, 1
+q6, 1, <
+
+q4, _
+q5, _, <
+
+q5, _
+q1, 1, -
+
+q6, 1
+q6, 1, <
+
+q6, _
+q7, _, >
+
+// < = left
+// > = right
+// - = hold
+// use underscore for blank cells
+
+//States and symbols are case-sensitive
+
+//Load your code and click COMPILE.
+//or load an example (top-right).
