@@ -1397,7 +1397,7 @@ $$ 0.1 \times 3 + 0.2 \times 5 \implies 0.1 \times 5 + 0.2 \times 3$$
 - $f_a =0.4, f_b = 0.3, f_c = 0.1, f_d = 0.2$
 - At each step we take the two least frequent nodes and make them the children of a new node and assign the summation of the frequencies to this new word. (Bottom up construction)
 [[./Images/i64.png]]
-[[./Images/i65.png]]
+[[./Images/i65.png]]`
 * Lecture 16 <2017-11-02 Thu>
 ** Recall: Huffman Coding
 - Frequencies: $f_x = \frac{\# \text{ appearances of }x}{\# \text{ of characters}}$
@@ -1865,3 +1865,103 @@ $Opt[j,u]=\max$ value if we consider items $1,\ldots,j$ with capacity $u$, where
 \EndFor
 \end{algorithmic}
 Running time: $O(nW)$. This isn't considered polynomial. $W$ is just a number here and may be a number to a big exponent.
+* Lecture 20 <2017-11-16 Thu>
+** Recall
+Knapsack $\Theta(nW)$
+- Input: Weights $w_1,\ldots,w_n$
+  - Values $v_1,\ldots,v_n$
+  - Capacity $W$
+- $Opt[i,u]=$ optimal value items $1,\ldots,i$ capacity $u$
+---------
+Weren't able to solve this greedily, but we did come up with a recursive algorithm that could be implemented through dynamic programming.
+\begin{equation*}
+Opt[i,u] = \max 
+\begin{cases}
+opt[i-1, u]
+\\ & \text{if } w_i\leq u \ v_i + opt[i-1, u-w_i]
+\end{cases}
+\end{equation*}
+$Opt[n,W]=$ Final answer
+
+This is not a polynomial time algorithm. Why?
+- Recall: An algorithm is polynomial time if it's running time is $O(N^c)$ where $c$ is a constant and $N$ is the size of the input (in bits)
+---------------------
+What is $N$ here?
+- input $w_1, \ldots, w_n$
+  - $v_1, \ldots, v_n$
+  - $W$
+How many bits do we need for this? N?
+$$ N = O(\log w_1 + \log w_2 + \ldots + \log w_n + \log v_1 + \log v_2 + \ldots + \log v_n + \log W) $$
+Where here logs are base 2 (for number of bits to store the number in binary)
+
+Ex: $w_1=2, w_2=4, v_1=3, v_2=1, w=2^{10}$
+$$10, 100, 11, 1, 1\underbrace{00 \ldots 0}_10$$
+---------------
+Running Time $\Theta(nW)$
+- Let us show that this is not polynomial time: 
+- $W = 2^n$ and $w_1 = \ldots = w_n = v_1 = \ldots = v_n = 2$
+- $N=O(\log w_1 + \ldots + \log w_v + \log v_1 + \ldots + \log v_n + \log W) = O(n)$
+Running Time: $\Theta(nW) = \Theta(n2^n)$
+** Another Example
+Input $n$
+- Goal: Is $n$ a prime?
+\begin{algorithmic}
+\For {$i=2, \ldots, n-1$}
+     \If{$(n \mod i) = 0$}
+     	     \State return ``Not prime"
+     \EndIf 
+\EndFor
+\State return Prime
+\end{algorithmic}
+---------
+Running time $\Omega(n)$
+- Input size: $N=\log_2 n$
+- Running time: $\Omega(n)=\Omega(2^N)$
+** RNA secondary structures
+RNA: String $B=b_1,\ldots,b_n$ over alphabet $\{A,C,G,U\}$.
+- Ex: $GUCGAUUAGC \ldots GA$
+- Secondary Structure: RNA's tend to loop back and make pairs with itself
+[[./Images/i87.png]]
+Secondary Structure: Is a set of pairs $S=\{(b_i,b_j), \ldots\}$ that satisfies three properties
+
+[Watson-Crick (Property)]: $S$ is a matching and each pair is a Watson-Crick complement: $A-U, U-A, C-G, G-C$
+
+[No sharpturns]: If $(b_i,b_j), i<j$ is a pair then $i<j-4$ (at least distance $4$ between a pair)
+
+[No crossings]: We can't have $(b_i,b_j),(b_k,b_l)$ with $i<k<j<l
+[[./Images/i88.png]]
+RNA molecules tend to form a structure with maximum number of pairings
+- Example: $AUGUGGCCAU$
+[[./Images/i89.png]]
+- Bad pairing: 
+[[./Images/i90.png]]
+
+Problem: Given an RNA sequence find the maximum number of pairings.
+-------
+Attempt #1: Let $Opt[j]$ to be the optimal number of pairs until point $j$ : $b_1,\ldots,b_j$
+- Case $1$: $b_j$ is not in any pair
+  - $Opt[j] = Opt[j-1]$
+- Case $2$: $b_j$ is paired with $b_t$
+$$Opt[i,j] = 1 + Opt[1_t-1]+Opt[t+1,j-1]$$
+$$Opt[i,j] = \max \{Opt[i,t-1]+Opt[t+1,j-1]\}$$
+- Max is over all $t$ such that $(b_t,v_j) is a _legal_ pair.
+  - $i \leq t < j-4$
+  - $(b_t,b_j) \in \{AU, UA, CG, GC\}$
+$Opt[i,j] = 0$ if $i \geq j-4$
+Can be implemented using memorization (recursion) or can be implemented with loops
+------------
+The second way to implement this:
+\begin{algorithmic}
+\If {$i \geq j$}
+    \State $Opt[i,j]=0$
+\EndIf
+\For {$k=5,\ldots,n-1$}
+     \For{$i=1, \ldots, n-k$}
+     		\State $j=i+k$
+		\State Compute $Opt[i,j]$ using the formula we obtained earlier.
+     \EndFor
+\EndFor
+\end{algorithmic}
+
+-----------
+Running time $O(n^3)$ because Compute $Opt[i,j]$ takes $O(n)$
