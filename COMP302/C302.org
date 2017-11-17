@@ -1245,3 +1245,32 @@ Can be read as a function:
 - Input: Expression ~e'~, variable ~x~, and expression ~e~
 - Output: an expression where all *free* occurrences of the variable ~x~ in expression ~e~ have been replaced by ~e'~
 Substitution is defined by considering different cases for ~e~.
+* Lecture 29 <2017-11-17 Fri>
+Continuation from last class.
+** Substitution
+- Example: ~e = if x = 1 then y + 2 else x + y~
+  - ~[w*2/x]e = if (w * 2) = 1 then y + 2 else (w*2) + y~
+How to define this function? Let's look at different cases.
+- ~[e'/x] (n) = n~
+- ~[e'/x] (x) = e'~
+- ~[e'/x] (y) = y~ (where $x \neq y$)
+- *Incorrect definition:* ~[e'/x]~ ~(let y =~ $e_1$ ~in~ $e_2$ ~end) = let y = [e'/x]~ $e_1$ in ~[e'/x]~ $e_2$ ~end~
+  - Ex: ~[5/x](let y = x + 1 in x + y end) = let y = 5 + 1 in 5 + y end~
+  - But what about: ~[5/x] (let x = x + 1 in x + y end) = let x = 5 + 1 in x + y end~
+    - The first ~x~ is now bound
+    - Check $y\neq x$
+    - Rename _x_
+    - ~[5/x] (let x1 = x + 1 in x1 + y end) = let x1 = 5 + 1 in x1 + y end~
+  - What about: ~[y*5/x](let x = (y * 5) + 1 in x + y end) = let y = (y * 5) + 1 in (y * 5) + y end~
+    - But the ~y~ we substituted in was free, but it is now bound
+    - Should check if the free expression we're substitution in is captured by some other expression inside
+    - $y \notin FV(e')$
+    - _Capture avoidance_
+#+INCLUDE: "Test/29.ml" src ocaml
+** Free variables
+- $FV(e_1 e_2) = FV(e_1) \cup FV(e_2)$
+- $FV(fun \ x = e) = FV(3) \setminus \{x\}$
+- $FV([e'/x] (fun y = e))$
+  - Need to check 2 conditions for substitution for free vars: $x \neq y$ and $y \notin FV(e')$
+** Important concepts of the past few lectures
+Variables, understanding what the scope is, understanding free variables, how to substitute variables into different expressions (and avoiding issues like capture avoidance), replacing calls via substitution
