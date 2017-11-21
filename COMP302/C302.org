@@ -1274,3 +1274,53 @@ How to define this function? Let's look at different cases.
   - Need to check 2 conditions for substitution for free vars: $x \neq y$ and $y \notin FV(e')$
 ** Important concepts of the past few lectures
 Variables, understanding what the scope is, understanding free variables, how to substitute variables into different expressions (and avoiding issues like capture avoidance), replacing calls via substitution
+* Lecture 30 <2017-11-21 Tue>
+How to describe well-typed expressions?
+- How can we statically check whether an expression would potentially lead to a runtime error?
+  - Conservative, won't find all errors, but will find some
+  - Lightweight
+  - Gives precise error messages
+  - Check-able documentation in code
+We can write many non-sensical expressions. The following should be ill-typed:
+- ~if 3 then 4 else 2~
+  - ~3~ is not a boolean here
+- ~if true then 2 else false~
+  - ~2~ and ~false~ are not the same time
+- ~true*false-1~
+  - We don't allow multiplication of booleans in our language
+- ~let y = x in y + 1 end~
+  - This could be considered ill-typed
+  - But in many languages this is considered ill-scoped (~x~ is unbound)
+- ~let x = true in let y = 3 in y + y end end~
+  - Well-typed
+- ~let y = true in let y = 3 in y + y end end~
+  - Well-typed? Why? The second let statement overshadows the previous ~y~. The ~y + y~ refers to the inner ~y~
+** Typing in context
+Reconsider: $e: T$
+- The expression ~let x = e_1 in e_2 end~ has type $S$ if
+  1. $e_1$ has type $T$
+  2. Assuming $x$ has type $T$, show that $e_2$ has type $S$.
+     - ex. y has type int, y+1 returns int given an int y
+Generally: 
+- Given assumptions $\underbrace{x_1 : T_1 , \ldots , x_n : T_n}_{\text{Typing Context }\Gamma}$, $e$ has type $T$
+- In our language we're going to restrict every variable to appearing at most once in our context assumptions
+- Don't necessarily have to use assumptions
+- Can use assumptions multiple times, like in ~y + y~
+- Useful to think of assumptions as resources -> this is linear logic
+
+When do we collect use assumptions?
+- When you encounter the variable itself. Variable $x$ has type $T$ in a typing context $\Gamma$ if there exists a declaration $x:T$ in $\Gamma$
+When do we collect assumptions?
+- ~let x = e_1 in e_2 end end~ has type $T$ in a typing context $\Gamma$, if
+  - expression $e_1$ has type $T_1$ in the context $\Gamma$
+  - expression $e_2$ has type $T$ in the extended context $\Gamma, x : T_1$
+
+Does this type-check?
+#+BEGIN_SRC 
+let y = true in
+    if true then (let y=3 in y+3 end)
+    else (if y then 1 else 2)
+
+#+END_SRC
+This is well typed, we are not replacing $y$, just having a newer local version
+- Think of this as a stack, will use newer values first. When we get to else, ~y~ is still a bool.
