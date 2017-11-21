@@ -1983,3 +1983,72 @@ This helps you understand the Halting Problem more. [[./Images/i34.png]]
   - Assuming existence of $T_H$
   - Constructing the $T_G$ through elementary operations on $T_H$
   - Self-reference (feeding $T_G$ to itself)-> \lightning
+* Lecture 22 <2017-11-21 Tue>
+** Quiz Review
+- Non logical symbols in FOA: $0, S, +, \times$
+- Halting set: $K=\{n\in \mathbb{N} | T_n(n) \text{ halts}\}$
+- Partial recursive def
+- $\mu y [S(y) \text{ op }1 = 0]$
+  - $f(1)=0, f(0)=\uparrow$
+- $\aleph_0$ Turing Machines/Primitive Recursive Functions
+** Functions
+| Prim. rec | BlooP             | -              |
+| Part. rec | FlooP             | TM             |
+| Rec.      | terminating FlooP | TM always halt |
+** Representability
+[[./Images/i35.png]]
+Today we will learn how to go from computability to provability in a formal system.
+
+A predicate is _represented_ in a FS:
+1. All true instances are theorems in FS
+2. All false instances are not thms
+
+*** Ex.
+_Express_: Evenness
+\begin{equation*}
+Even(x) = 
+\begin{cases}
+1 & \text{if }\exists y: x=2\cdot y
+\\ 0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+Represented in TNT: 
+- $TNT \vdash Even(SS0)$
+- $TNT \nvdash Even(S0)$
+- $TNT \vdash \sim Even(S0)$
+*** Thm 
+Any primitive recursive predicate (BlooP) is representable in FOA.
+- Recall: What is a primitive recursive predicate? A predicate is primitive recursive if its characteristic function is primitive recursive
+- $Even(x) = \forall x : \exists y : \ldots$
+*** Thm
+Any recursive predicate is representable in FOA
+** Theories of Arithmetic
+(Handout 8)
+| $\Pi_0\text{/baby}$ | $\Pi_1\text{/junior}$ | $\Pi_2\text{/Q}$         | $\Pi\text{/FOA}$ |
+| 4 axiom schemas     | 4+3 axiom schemas     | finitely many (9) axioms | 4 schema + induction |
+$\Pi_0 \nvdash 0 \neq S0$
+
+$$\Pi_0 \subset \Pi_1 \subset \Pi_2 \subset \Pi $$
+** Proof-Pairs
+TNT-PROOF-PAIR(n,m), where $n$ is the G\"odel # of a proof of $m$ and $m$ is the G\"odel # of the theorem
+
+The property of being a proof-pair is primitive recursive (it's like proof checking, just decompose it and see if it works): proof-pair(x,y)
+- This means that it's representable
+  - $\implies$ There is a FOA-formula Bew(x,y) (German word Beweis = proof) that represents it.
+Being a theorem-number:
+- $theorem-number(x) = \exists y:proof-pair(y,x)$
+  - i.e. $x$ is a theorem number if it's a G\"odel number of a theorem
+  - Is this primitive recursive? Not clear. You have to find a proof rather than check a proof.
+** Substitutions
+| Formula                        | G\"odel #                   |
+| $a=a$                          | 262 111 262                 |
+| $SS0=SS0$ (substitute by term) | 123 123 666 111 123 123 666 |
+SUB(formula with free variable, numeral (term), resulting formula) -> In our example, SUB(262 111 262, 2, 123 123 666 111 123 123 666)   
+- This is primitive recursive
+  - This means that there is a formula in TNT that represents it
+- All we have to do to check this is just decode the first formula, plug in the numeral into it and see if it's equal to the resulting formula
+
+SUB(x,y,z)
+- Good exam question, which numbers represent x,y,z?
+
+ARITHMOQUINE(a,b) = SUB(a,a,b)
