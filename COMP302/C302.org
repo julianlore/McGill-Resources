@@ -1324,3 +1324,48 @@ let y = true in
 #+END_SRC
 This is well typed, we are not replacing $y$, just having a newer local version
 - Think of this as a stack, will use newer values first. When we get to else, ~y~ is still a bool.
+* Lecture 31 <2017-11-23 Thu>
+** T-FN rule
+Get the type of a function given the typing context and the type $T_1$ of x (the argument) which implies the type of the returning expression
+- Can't use this yet, don't know where $T_1$ is coming from
+- How to deal with this? Make $T_1$ an unknown type
+*** Type variables
+- Add a new type, $\alpha$
+Examples of type checking and inference with this new type
+- ~fun x -> x :~ $\alpha$ ~->~ $\alpha$
+  + $\alpha$ here is the most general type
+  + We can get ~int -> int~ from it by [int/$\alpha$] ($\alpha$ ~->~ $\alpha$)
+  + ~bool -> bool~ = [bool/$\alpha$] ($\alpha$ ~->~ $\alpha$)
+  + ~(char * bool) -> (char~ $\times$ ~bool) =~ [char $\times$ bool/$\alpha$] $\alpha$ ~->~ $\alpha$
+  + No matter what we chose for $\alpha$, this is still well typed
+- Type of ~fn f~ $\implies$ ~fn x -> f(x)~?
+  - i.e. ~(fn f -> fn x -> f x) (fn y -> y + 1) 2~ returns ~3~
+  - ($\alpha$ -> $\beta$) -> $\alpha$ -> $\beta$
+  - Does there exist an instantiation for the type variables s.t. it becomes well typed?
+    - Yes [$\alpha/\beta$]
+  - Instantiation for identity?
+    - Yes [$\alpha$ -> $\alpha/\beta$]
+- Instantiation for $\alpha$ ~-> int~? Yes, [int/$\alpha$]
+- There are polymorphic types & functions in OCaml, like List.map. Doesn't care what type $\alpha$ and $\beta$ are, it will work on any
+** T-APP rule
+** Type Inference
+We want to infer types.
+
+Damas-Hindley-Milner Style Type Inference
+
+# Given typing context $\Gamma$ and an expression $e$, infer a type $T$ (and some constraints) as follows:
+# - Analyze $e$ as before following the given typing rules
+# - When we analyze $e$ recursively and e is type information, introduce a type variable and generate possible constraints
+# - Te type $T$ is a skeleton that may contain type variables
+# - To determine whether $e$ is well-typed, solve the constraints!
+# - Solving constraints
+- Infer type of if expression ~if x then 3 else 2 + 2~
+  - Infer type of ~x~. Apply guard, constraint is checking if condition is a boolean, constraint $\alpha=$ ~bool~
+  - Infer type of y as $\beta$
+  - Infer type of ~2+2~ as ~int~
+  - Gives you constraint $\beta=$ ~int~
+- Another ex. Infer the type of ~fn f -> fn x -> f x :~
+  - We end up with $\alpha$ -> $\beta$ -> $\gamma$, with the constraint ($\alpha = \beta$ -> $\gamma$). Therefore, ($\beta$ -> $\gamma$) -> $\beta$ -> $\gamma$
+- ~fn x => x+1~ has type $\alpha$ ~-> int/~ {$\alpha =$ ~int~}
+- ~fn x => if x then x+1 else 2~, does not type check. You get \ldots/{$\alpha =$ bool, $\alpha=$ int}. Clashes
+- ~fn f => fn x => f (f x)~ type $\alpha$ -> $\beta$ -> $\alpha_1$ with {$\alpha = \beta$ -> $\alpha_0$, $\alpha = \alpha_0$ -> $\alpha_1$}
