@@ -2080,3 +2080,87 @@ If the minimum cost way revisits any vertices, then we can remove a cycle from i
 Maybe shift all the costs to make them positive
 [[./Images/i97.png]]
 This doesn't work, shifting one path by more since it has more edges
+* Lecture 22 <2017-11-23 Thu>
+** Shortest Path with Negative Weights (Continuation)
+Finding shortest path in directed graphs with no negatives cycles from a vertex _$s$_. We will use dynamic programming for the algorithm.
+---------------------
+- $D[v,i]=$ minimum cost of a path from $s$ to $v$ that has at most $i$ edge
+- $D[v,n + 1]=$ minimum cost of a path from $s$ to $v$ (since a path has at most $n-1$ edges)
+Base case
+\begin{equation*}
+D[v,0] = 
+\begin{cases}
+0 & \text{ if }v=s
+\\ \infty & \text{ if } v \neq s
+\end{cases}
+\end{equation*}
+Recursion
+- $D[v,i]=\min_{w:wv\in E}\{c_{wv}+D[w,i-1],D[v,i-1]\}
+  - Use the previous $i-1$ edges and then take the least expensive edge going to previous vertex
+    [[./Images/i98.png]]
+---------------------
+[[./Images/i99.png]]
+|   | s |        a | b        |        c |
+|---+---+----------+----------+----------|
+| 0 | 0 | $\infty$ | $\infty$ | $\infty$ |
+| 1 | 0 |        2 | $\infty$ |        1 |
+| 2 | 0 |        2 | 5        |        1 |
+| 3 | 0 |        2 | 5        |       -1 |
+- $D[a,1]=\min\{D[a,0] (\infty), 2+D[s,0] (2)\}$
+- $D[b,1]=\min{D[b,0],3+D[a,0]}$
+- $D[c,3]=\min \{D[c,2] (1), 1+D[s,2] (1+0), -6+D[b,2] (-6+5)\}$
+*** Running Time
+For every $i$ and $v$, $D[v,i]$ costs $O(deg^{in}v))$ where $deg^{in}(v)$ is the number of edges pointing to $v$. So $D[v,i] \forall v \in V$ but fixed : (i.e. a row in the table)
+$$O(\sum_v deg^{in}v) = O(n)$$
+We are doing this for $i=0,1,2,\ldots n-1$
+- $O(nm)$
+|   | s | a | b | c |
+|---+---+---+---+---|
+| 0 | s | x | x | x |
+| 1 | s | s | x | s |
+| 2 | s | s | a | s |
+| 3 | s | s | a | b |
+Can we compute these with less memory? Yes as we don't need to keep all $D[v,i]$ for all $i$. Indeed to compute $D[v,i]$ we only need $D[w,i-1]$ for all $w$.
+---------------
+$D[s] = 0$ and $D[v] = \infty$ for $v\neq s$
+\begin{algorithmic}
+\For{$i=1,\ldots,n-1$}
+	\For{all $v$}
+		 \State $x = \min_{wv \in E} c_{wv}+D[w]$
+		 \If{$x<D[v]$} $D[v]=x$
+		 \EndIf
+	\EndFor
+\EndFor	
+\end{algorithmic}
+[[./Images/i100.png]]
+Local algorithm, every vertex only has to interact with their neighbors, they don't need to see the global picture.
+
+This can be used in situations where nodes only see their neighbors and not the global network
+
+** Finding Negative Cycles
+Can we find out whether the graph has negative cycles?
+- (Will be using the following in the assignment)
+Without a negative cycle, the minimum should be at the end of the for loop at $n-1$. If that isn't the minimum/things are still changing, we have a negative cycle.
+[[./Images/i101.png]]
+
+What if we can't get to the cycle from $s$?
+[[./Images/i102.png]]
+
+*** Slow fix
+\begin{algorithmic}
+\For {every vertex $u$}
+     \State {set $s=u$}
+     \State Run the algorithm until $i=n-1$
+     \State Run one more round $(i=n)$
+     \If {any updates happen $\implies$ negative cycle}
+     \EndIf
+\EndFor
+\end{algorithmic}
+Running time: $O(n \times nm)$
+*** Faster algorithm
+Add a new vertex $s$
+- Connect $s$ to every vertex with an edge cost $0$.
+[[./Images/i103.png]]
+- This won't add a cycle
+Now there is a path from $s$ to any potential negative cycle and thus we can detect it.
+- Instead of the for loop in the slow fix, we connect $s$ to everything with cost $0$ as mentioned above and then check $n-1$ versus $n$.
