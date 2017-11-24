@@ -2052,3 +2052,73 @@ SUB(x,y,z)
 - Good exam question, which numbers represent x,y,z?
 
 ARITHMOQUINE(a,b) = SUB(a,a,b)
+* Lecture 23 <2017-11-23 Thu>
+What is a theory? Set of sentences closed under deduction. $x\in T \iff T \vdash x$, where $T$ is a theory.
+
+A theory $T$ is _complete_, if for all sentences $A$: either $T \vdash A$ or $T \vdash \sim A$
+
+What we will show next is that TNT is not complete (incomplete)!
+- Proof: Produce $G$, s.t. $TNT \nvdash G$ and $TNT \nvdash \sim G$ 
+- This is (more or less) G\"odel's First Incompleteness Theorem
+  - Very important, perhaps the highlight of the course
+ARITHMOQUINE(a,b) = SUB(a,a,b)
+- $a$ is a G\"odel number of a formula with a free variable, the second $a$ is the number that stands for a certain numeral and $b$ is the G\"odel number of the formula from the first $a$, but with the free variable replaced by the numerable represented by the second $a$
+** Ex
+$A(x)$ is $\sim (Sx=0)$
+- We want to get the ARITHMOQUINE of this number
+- G\"odel number is: $a = 223 362 123 262 111 666 323$
+- ARITHMOQUINE(a,b)
+  - Take $A(a)$ => $\sim (S\underbrace{SS \ldots S}_{a-many}0 = 0)$
+    - Now take the G\"odel number of this and you get your $b$
+- Arithmoquine is certainly recursive and terminates. We can easily make a computer program to mimic it.
+More mathematically: Arithmoquine is usually called: d (diagonal function)
+
+\begin{equation*}
+d(\underbrace{\#\alpha}_{\text{the Godel \# of $\alpha$}} =
+\begin{cases}
+\#\alpha (S_{\#\alpha}) & \text{if $\#\alpha$ is the Go of a form $\alpha$ with one free variable}
+\\ \#\alpha & \text{otherwise}
+\end{cases}
+\end{equation*}
+- E.g. $d(5) = 5, d(a)=b$
+----------------
+- $Even (x)$ expresses "x is even"
+- $Even (SSSS0)$ expresses "4 is even"
+- $A(x)$ "x has the property A"
+- $A(SSSS0)$ "4 has the property A"
+
+A number (ex. student id), can just be a number but it can represent a student.
+
+IS-TNT-AXIOM(x) => property of the number $x$ or property of the formula with G\"odel # x
+- $\forall a : \exists b: \ldots x \ldots$
+
+G's aunt:
+- $\sim \exists a : \exists a': \underbrace{TNT-PROOF-PAIR(a,a')}_{a \text{ is a proof of }a'} \wedge \underbrace{ARITHMOQUINE(a'', a')}_{a' \text{ is the arithmoquinification of }a''} = F(a'')$ with G\"odel # $u$
+  - Equation has one free variable, $a''$
+  - Putting them together we get $a$ is a proof of the arithmoquinification of a''
+- Now G's aunt is:
+  - there is no ($a$, s.t. $a$ is a) TNT proof of ($a'$ and $a'$ is )the arithmoquinification of a''
+Now we plug in $u$ as the free variable $a''$
+- $\sim \exists a : \exists a': TNT-PROOF-PAIR(a,a') \wedge ARITHMOQUINE (\underbrace{SS\ldots S 0}_{u \text{ many}},a') = F(u) = G$
+- This is now a sentence, no more free variables
+What is the G\"odel # of $G$? The arithmoquinification of $u$.
+- We have done the same thing we did earlier with the smaller example except for a longer formula.
+What does $G$ express? There is no TNT-proof of $\underbrace{\text{the arithmoquinification of }u}_{G}$.
+
+=> $G$ says: "I am unprovable (in TNT)"
+- Is G a TNT theorem? Assume TNT $\vdash G$. Since we're working in a system that is sound, then $G$ must be true. But $G$ expresses that it is not a TNT theorem. \lightning
+- => TNT $\nvdash G$
+- Is $\sim G$ a TNT-theorem? Assume TNT $\vdash \sim G$. So, $\sim G$ true, i.e. $G$ is provable in TNT. So TNT $\vdash G$ => TNT is inconsisten.
+- If TNT is consistent then TNT $\nvdash \sim G$
+So we end up with: If TNT is consistent, then TNT is not complete! *G\"odel's First Incompleteness Theorem*
+- TNT was important here to tell us that the functions we used (i.e. TNT-PROOF-PAIR) are representable
+- We did not need TNT directly, we could have used a weaker theory, like $\Pi_1$
+** General Version of G\"odel's First Incompleteness Theorem
+$G1$: Every theory that includes $\Pi_1$ is consistent (or else you prove everything, including $G$) and axiomatizable (has an axiom system, or else we wouldn't have anywhere to start, we need to be able to define what a proof is) is incomplete.
+- How could you make $G$ provable in TNT?
+  - Just turn it into an axiom
+  - So we can do something like TNT$+G$
+    - But this still includes $\Pi_1$ and is axiomatizable (because TNT has axioms)
+    - But then you can do the same thing with this new system and get something similar, say $G'$
+    - This will once again, be incomplete
+  - As long as you're axiomatizable, you'll still be incomplete, no matter how much we try to extend TNT.
