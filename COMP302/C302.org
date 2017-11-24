@@ -1369,3 +1369,42 @@ Damas-Hindley-Milner Style Type Inference
 - ~fn x => x+1~ has type $\alpha$ ~-> int/~ {$\alpha =$ ~int~}
 - ~fn x => if x then x+1 else 2~, does not type check. You get \ldots/{$\alpha =$ bool, $\alpha=$ int}. Clashes
 - ~fn f => fn x => f (f x)~ type $\alpha$ -> $\beta$ -> $\alpha_1$ with {$\alpha = \beta$ -> $\alpha_0$, $\alpha = \alpha_0$ -> $\alpha_1$}
+* Lecture 32 <2017-11-24 Fri>
+** How to solve constraints?
+Examples. Can we solve the following constraints? i.e. Is there an instantiation for $\alpha$ and $\beta$ such that all the equations are true. Want to ccome up with a method/algorithm for this.
+- {$\alpha =$ int, $\alpha$ -> $\beta =$ int -> bool}
+  - Plug in $\alpha=$ int $\implies$ int -> $\beta$ = int -> bool
+  - int = int, $\beta=$ bool
+  - {$\beta$ = bool} $\implies \emptyset$
+  - Yes
+- {$\alpha_1$ -> $\alpha_2 =$ int -> $\beta$, $\beta=$ bool}
+  - Yes
+- {$\alpha_1$ -> $\alpha_2 =$ int -> $\beta$, $\beta = \alpha_2$ -> $\alpha_2}
+  - $\implies$ {$\alpha_1 =$ int, $a_2 = \beta$, $\beta = alpha_2$ -: $\alpha_2$}
+  - $\implies$ {$\alpha_2 = \beta, \beta = \alpha_2$ -> $\alpha_2$}
+  - $\implies$ {$\alpha_2 = \alpha_2$ -> $\alpha_2$}
+    - This cannot be solved! This is called Occur's Check
+    - Only solvable if the variable on the left does not occur on the right
+Constraint Solving via Unification
+- Given as set of constraints $C$ try to simplify the set until we derive the empty set.
+  - {$C$, int $=$ int} $\implies C$
+- Unification is a fundamental algorithm to determine whether two objects can be made syntactically equal, very important and used quite foten.
+More examples: 
+- $\alpha$ -> $\beta$ -> int -> $\alpha$ = ($\gamma \times$ bool) -> $\gamma$'
+  - How do we read this? Where are the brackets?
+  - Function types are associative to the right! *Important*
+  - $\alpha$ -> ($\beta$ -> (int -> $\alpha$))
+  - $\alpha =$ ($\gamma \times$ bool), $\beta$ -> (int -> $\alpha$) $=\gamma'$
+  - $\beta$ -> (int -> ($\gamma \times$ bool )) = $\gamma'$ = T if $\gamma' \notin FV(T)$
+
+#+BEGIN_SRC ocaml
+let double = fn f -> fn x -> f (f x)
+in if double (fn x -> x) false then
+    double (fn x -> x + 1 ) 3
+else 4
+#+END_SRC
+This will typecheck as fn is a polymorphic function
+- ~let foo f = if f true then f 1 else f 2~
+  - Does not typecheck
+  - This is called System F
+#+INCLUDE: "Test/32.ml" src ocaml
