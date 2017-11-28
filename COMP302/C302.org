@@ -1408,3 +1408,75 @@ This will typecheck as fn is a polymorphic function
   - Does not typecheck
   - This is called System F
 #+INCLUDE: "Test/32.ml" src ocaml
+* Lecture 33 <2017-11-28 Tue>
+** Subtyping
+- So far, every expression has a unique type.
+- In OCaml, every expression has a most general type.
+Today: Why do we want subtyping and why does OCaml not support it?
+- What is subtyping?
+  - At it's most basic form: ~3 + 2.5~
+  - In OCaml we'd have to do: ~(float 3) +. 2.5~, where ~float~ here is a coercion
+  - It would be more convenient if the system would just accept the first time of program and do coercions for you.
+  - Since int is a subtype of float
+  - So "we can supply an int whenever a float is required."
+    - Since we can "cast" an int to a float
+  - When is a type a subtype of another? Contrast to a language like Java where you declare that a class is a subclass of another.
+--------
+Basic subtyping principle: $S \leq T$
+
+$S$ is a subtype of $T$ if we can provide a value of type $S$ whenever a value of type $T$ is required. The opposite isn't true though, as you'll be losing information.
+- Why doesn't OCaml support subtyping?
+  - It would lose its type inference
+  - Runtime would need to add coercions in a coherent way 
+- Relations for base types
+  - $int \leq float$
+  - $pos \leq int$
+  - $zero \leq int$
+  - Can make division ~int -> pos -> int~, so it only works on positive numbers and you don't divide by $0$
+Reflexive Transitive Closure
+- Subtypes are transitive
+When is $S_1 * S_2$ a subtype of $T_1 * T_2$?
+- Ex. Is $int * int \leq float * float$? Yes, just coerce both.
+- $int * float \leq float * float$? Yes.
+- $zero * int \leq float * float$? Yes.
+- $int * float \leq float * int$? No. Cannot coerce a float to an int. Tuples are sensitive to their order, order matters.
+co-variant: If $S_1 \leq T_1$ and $S_2 \leq T_2$, then $S_1 * S_2 \leq T_1 * T_2$
+*** Records
+Records are n-ary labeled tuples
+- ~type point = {x:int, y:int}~
+- Alternatively: ~{x:float, y:float}~
+- How are these two related?
+- Can I supply a point ~{x=2, y=3}~ whenever a point ~{x:2.0, y:3.0}~ is required? Yes
+  - This is looking at the depth of records, the types of each entry
+- let ~r~ have type ~{x:int}~
+  - ~r.x + 5~
+  - Can I supply a point ~{x:int, y:int}~ for ~r~?
+    - Yes, all that matters is that it has the right component. You can supply more components.
+- Can I supply a point ~{x:int, y:int}~ whenever a record ~{x:int}~ is required? Yes
+  - This is looking at the width of records, whether they have more entries or not
+- Does it matter whether we give ~x~ or ~y~ first in the record? No, we have the label of each component.
+  - We can permute records and it stays a subtype.
+*** Functions
+$S_1 \to S_2$ is a subtype of $T_1 \to T_2$ if we can provide a value of type $S_1 \to S_2$ whenever a value of type $T_1 \to T_2$ is required.
+- i.e. Can we provide a function $float \to int$ whenever a function $float \to float$ is required? Yes.
+Ex.
+#+BEGIN_SRC ocaml
+let areaSqr (r:float) = r *. r in
+    (*areaSqr:float -> float*)
+let fakeArea (r:float) = 2 in
+    (*fakeArea: float -> int*)
+areaSqrt (2.2) +. 3.3
+#+END_SRC
+Would ~fakeArea(2.2) +. 3.3~ still type check? Yes it would. ~float(fakeArea 2.2) +. 3.3~, need to coerce result of ~fakeArea~
+
+#+BEGIN_SRC ocaml
+let areaSqr (r:int) = r * r in
+    (*areaSqr:int -> int*)
+let fakeArea (r:float) = (truncate r) + 2 in
+    (*fakeArea: float -> int*)
+areaSqrt (2) + 3
+#+END_SRC
+Would ~fakeArea(2) + 3~ still type check given that $int \leq float$? Yes. ~fakeArea(float 2) + 3~, coercion is inside instead
+- So $float \to int \leq int \to int$ because $int \leq float$, contravariant, flips the order because you're using it as an input to a function, not the output. 
+Subtyping has to do with the use of variables (Not sets)! Functions are co-variant in the output and they are contravariant in the input!
+- $S_1 \to S_2 \leq T_1 \to T_2$ if $S_2 \leq T_2$ (co-variant) and $T_1 \leq S_1$ (contravariant)
