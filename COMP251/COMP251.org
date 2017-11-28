@@ -2164,3 +2164,79 @@ Add a new vertex $s$
 - This won't add a cycle
 Now there is a path from $s$ to any potential negative cycle and thus we can detect it.
 - Instead of the for loop in the slow fix, we connect $s$ to everything with cost $0$ as mentioned above and then check $n-1$ versus $n$.
+* Lecture 23 <2017-11-28 Tue>
+** Max Flow Problem
+(Will be the first two lectures of 360)
+- Def: A flow network is a directed graph $G=(V,E)$ such that
+  1. Every edge $e$ has some capacity $c_e \geq 0$
+  2. There is a source node $s\in V$
+  3. There is a sink $t\in V$
+$$(G=(V,E),s,t,\{c_e\}_{e\in E})$$
+Example
+[[./Images/i104.png]]
+Remark: To make the problem cleaner we make the following assumptions (these aren't essential assumptions, but they make things easier).
+1. No edge ends in _$S$_
+   - If any edge goes towards $S$, we can just remove it, it doesn't matter for the problem
+2. No edge leaves the sink _$t$_
+3. All capacities are integers.
+4. There is at least one edge connected to every vertex
+Every pipe gets some sort of traffic, want to assign a certain amount of flow per pipe.
+
+Def: An $s-t$ flow on this network is a function $f: E \to \mathbb{R}^{+}$ (Each edge gets assigned a positive real number) satisfying
+1. [capacity] $0 \leq f(e) \leq c_e, \forall e \in E$ (don't want to exceed capacity of the edge)
+2. [flow conservation] for every internal node $v\in V$ (not source or sink)
+$$ \underbrace{\sum_{e \ \text{into} \ v}f(e)}_{f^{in}(v)} = \underbrace{\sum_{e \ \text{leaves} \ v}f(e)}_{f^{out}(v)}$$
+i.e. the incoming flow is the same as the outgoing flow, no inner node generates or loses flow.
+[[./Images/i105.png]]
+- Def: The _value_ of a flow $f^{out}(s)$ (amount of flow generated at source, total flow leaving source. In the above example, it is $4$)
+---------
+The Max Flow Problem:
+- Given a flow network $(G,s,t,\{c_e\}_{e\in E})$
+- We want to find the maximum value of an $s-t-flow$
+- Very useful, many other problems can be modeled as flow networks, so you can use the solution of this problem for many other problems.
+- In our example, we cannot do better than $4$. Intuitively, we can see that we cannot pass more than $4$ from the left and right side of the following dotted line. We will prove this more formally later.
+[[./Images/i106.png]]
+---------
+Ford-Fulkerson Algorithm
+- _Basic idea:_ start from the all zero flow and at each step augment the flow by pushing more flow through an $s-t$ path that has some unused capacity.
+[[./Images/i107.png]]
+[[./Images/i108.png]]
+Problematic example:
+[[./Images/i109.png]]
+- _Def:_ [Residual graph] Given a flow network $(G,s,t\{c_e\}_{e \in E})$ and an $s-t-flow f:E \to \mathbb{R}^{+}$ the corresponding residual graph $G_f$ is defined as 
+  1. The notes of $G_f$ are the same as $G$.
+  2. For every edge $e = (u,v)$ with $f(e)<c_e$ we add the edge $e$ to $G_f$ and assign a residual capacity of $c_e - f(e)$ (you have an edge with unused capacity, so you assign the residual capacity to it)
+  [[./Images/i110.png]]
+  3. For every edge $e=(u,v)$ with $f(e)>0$ then we add the opposite edge $(v,u)$ in $G_f$ with residual capacity $f(e)$ (i.e. pushing back the flow)
+  [[./Images/i111.png]]
+Example.
+[[./Images/i112.png]]
+- _Def:_ [An Augmenting path in a residual graph] is a simple $s-t-path$ in $G_f$. We defined Bottleneck$(P,f)$ to be the _minimum residual capacity_ of any edge on $P$.
+- Rem: Bottleneck$(P,f)$ is the maximum amount of new flow that can be pushed through $P$ from $s$ to $t$
+*** Ford-Fulkerson Algorithm
+\begin{algorithmic}
+\State Initially set $f(e)=0, \forall e \in E$
+\State Construct $G_f$ (residual graph)
+\While {there is an $s-t$ path $P$ in $G_f$}
+       \State{$f' \gets \text{ augment}(P,f)$}
+       \State (i.e. increase the flow by Bottleneck$(P,f)$ using $P$)
+       \State Update $f$ to $f'$
+       \State Update $G_f$
+\EndWhile
+\end{algorithmic}
+Example.
+[[./Images/i113.png]]
+- The $3^{rd} G_f$ has no more $s-t$ paths. We now have the max flow.
+- But we still don't know everything. Why does this gives us the flow, let alone the max?
+- Why does this terminate?
+- What is the running time?
+- We will answer these questions now.
+
+Claim: The updates result in valid flows. ($f'$ is valid)
+
+Proof: We need to verify that both capacity and conservation conditions are respected.
+1. Capacity: The residual capacities are set so that after updating the flow we will not exceed the capacity 
+   - $f'(e) \leq f(e) + c_e - f(e) = c_e$
+     [[./Images/i114.png]]
+2. Conservation, where $a=$ Bottleneck
+[[./Images/i115.png]]
