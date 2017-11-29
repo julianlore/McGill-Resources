@@ -1,4 +1,4 @@
-% Created 2017-11-23 Thu 19:28
+% Created 2017-11-28 Tue 21:28
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -22,14 +22,14 @@
  pdftitle={},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 25.3.1 (Org mode 9.1.2)}, 
+ pdfcreator={Emacs 25.3.1 (Org mode 9.1.3)}, 
  pdflang={English}}
 \begin{document}
 
 \tableofcontents
 
 \section{Lecture 1 \textit{<2017-09-05 Tue>}}
-\label{sec:orgd22cd7a}
+\label{sec:orgea7b2b9}
 Logic \& Computability
 Prof. Dirk Schlimm
 \begin{itemize}
@@ -48,7 +48,7 @@ Prof. Dirk Schlimm
 This course complements the textbook, Godel, Escher Bach.
 
 \subsection{Homework}
-\label{sec:org69cd79f}
+\label{sec:orgfde37c2}
 is not graded, just checked if done.
 \begin{itemize}
 \item Why?
@@ -70,7 +70,7 @@ Some times there will be intentional mistakes on the board.
 There are no stupid questions, even if you ask the same question as the person before you. Perhaps the professor's answer was unclear.
 The most stupid question is the one not being asked.
 \subsection{Quizzes}
-\label{sec:orge692a37}
+\label{sec:org694ade3}
 \begin{itemize}
 \item 3 quizzes throughout this course
 \item Dates will be on the schedule on professor's website
@@ -83,7 +83,7 @@ The most stupid question is the one not being asked.
 Midterm is 25\%, Final is 40\%
 
 \subsection{Proofs}
-\label{sec:orgafa6e0f}
+\label{sec:org23e7a50}
 We will see lots of proofs, different kinds of proofs.
 \begin{itemize}
 \item Direct: Go from assumption towards the theorem
@@ -107,10 +107,10 @@ We will see lots of proofs, different kinds of proofs.
 So you can split a proof into subproofs of these kinds.
 
 \subsubsection{Example Proofs}
-\label{sec:orgc21cd19}
+\label{sec:org1196244}
 \begin{enumerate}
 \item Thm
-\label{sec:org3fc06d2}
+\label{sec:org4266094}
 \(\sqrt{2}\) is nor rational.
 \begin{itemize}
 \item Rational: Fractions: \(\frac{x}{y}\)
@@ -119,17 +119,17 @@ If you have a square with sides of length 1, the length of the diagonal is \(\sq
 Pythagoras proved this.
 \begin{enumerate}
 \item Def 1
-\label{sec:orgd2fbc7e}
+\label{sec:org06bf057}
 A natural number \(a\) is \uline{even} if and only if (iff) \(\exists\) a natural number \(b\), such that \(a=2b\).
 \item Lemma 1
-\label{sec:org4e5bc78}
+\label{sec:org2f882bf}
 For any number \(a\), \(a^2\) is even \uline{iff} \(a\) is even.
 \begin{itemize}
 \item Biconditional, since iff
 \end{itemize}
 \begin{enumerate}
 \item Proof:
-\label{sec:orgcf02908}
+\label{sec:org3aebead}
 \(\leftarrow\) Assume: \uline{\(a\) is even}.
 So there is: \(a=2b\) (by def. 1)
 
@@ -142,14 +142,14 @@ So there is: \(a^2=2b\) (by def. 1)
 \end{enumerate}
 
 \item Lemma 2
-\label{sec:orgc97eb12}
+\label{sec:orgf2e08b2}
 For any rational number \(x\), there are natural numbers \(a\) and \(b\), \uline{not both even}, s.t. \(x=\frac{a}{b}\)
 \begin{itemize}
 \item If they were both even, you could simplify the fraction by dividing by 2.
 \end{itemize}
 Proof omitted for this lemma.
 \item Proof of Thm:
-\label{sec:org76a9b4a}
+\label{sec:org84c9cec}
 Indirect proof. (Contradiction)
 Assume (for reductio/contradiction): \(\sqrt{2}\) is rational.
 By Lemma 2, \(\exists\) natural numbers \uline{\(a\) and \(b\) not both even} s.t. \(\sqrt{2}=\frac{a}{b}\)
@@ -171,14 +171,14 @@ So \(b^2\) is even (def. 1)
 Contradiction! Assumption is false, therefore \(\sqrt{2}\) is \uline{not} rational. \(\Box\)
 \end{enumerate}
 \item {\bfseries\sffamily TODO} Download Handout and read it
-\label{sec:org2c764c2}
+\label{sec:org3d9741f}
 \end{enumerate}
 \section{Lecture 2 \textit{<2017-09-07 Thu>}}
-\label{sec:org69a35a1}
+\label{sec:org0e42e74}
 Last class we talked about proofs \& types of proofs.
 Next week we'll be talking about sets and countability and comparing them all. Will talk about density of rationals and irrationals, to say which is bigger.
 \subsection{Things that are infinite}
-\label{sec:org7e5ee70}
+\label{sec:orgc5cc1aa}
 \begin{itemize}
 \item Natural numbers
 \item Rational numbers
@@ -186,7 +186,7 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \begin{enumerate}
 \item How do you prove things about infinitely large things?
-\label{sec:orge59c2a1}
+\label{sec:org3829d78}
 \begin{itemize}
 \item Counter example
 \begin{itemize}
@@ -202,7 +202,7 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \end{enumerate}
 \subsection{Mathematical induction}
-\label{sec:org8f810e0}
+\label{sec:org404c379}
 \begin{itemize}
 \item Inference (step):
 \begin{itemize}
@@ -211,21 +211,21 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \end{itemize}
 \subsubsection{Deduction:}
-\label{sec:org8bee806}
+\label{sec:org2956245}
 \begin{itemize}
 \item It is impossible for the premises of an inference step to be \uline{true} and the conclusion \uline{false}.
 \item The conclusion follows \uline{necessarily} from the premises. (reformulation of above)
 \end{itemize}
 \begin{enumerate}
 \item e.g.
-\label{sec:orgcfe9759}
+\label{sec:orga782aed}
 \(\frac{\text{if }A \text{ then }B \hspace{5 pt}A}{B}\)
 \begin{itemize}
 \item MODUS PONENS (type of deductive inference)
 \end{itemize}
 \end{enumerate}
 \subsubsection{Induction:}
-\label{sec:orgd00776f}
+\label{sec:org3964b96}
 \begin{itemize}
 \item The premises make the conclusion \uline{more likely}
 \item My cat is smart, my friend's cat is smart, my parent's cat is smart, so all cats are smart
@@ -234,14 +234,14 @@ Next week we'll be talking about sets and countability and comparing them all. W
 \end{itemize}
 \end{itemize}
 \subsubsection{Inductive or Deductive?}
-\label{sec:org82753dc}
+\label{sec:org184ad5a}
 \begin{enumerate}
 \item Claim
-\label{sec:org156dcd9}
+\label{sec:org0394d9c}
 Let \(n\) be the number of points on a circle. Then the number of regions obtained by pairwise connecting each point is \(R=2^{n-1}\)
 \begin{enumerate}
 \item Argument
-\label{sec:org2e2a8a3}
+\label{sec:org5e80dc2}
 \begin{center}
 \begin{tabular}{ll}
 \(n\) & \(R\)\\
@@ -279,9 +279,9 @@ Let \(n\) be the number of points on a circle. Then the number of regions obtain
 \end{enumerate}
 
 \subsection{Handout}
-\label{sec:org3ade0bb}
+\label{sec:org516eeea}
 \subsubsection{Recursive (inductive) definition:}
-\label{sec:org4ddd0e4}
+\label{sec:orgd8db899}
 \begin{enumerate}
 \item Base clause(s) defines basic elements.
 \item Inductive clause(s): How to build up complex elements from parts
@@ -289,7 +289,7 @@ Let \(n\) be the number of points on a circle. Then the number of regions obtain
 \end{enumerate}
 \begin{enumerate}
 \item E.g.
-\label{sec:orgf154807}
+\label{sec:org30207d0}
 \begin{enumerate}
 \item \(\mathbb{N}\)
 \begin{itemize}
@@ -323,7 +323,7 @@ Let \(n\) be the number of points on a circle. Then the number of regions obtain
 \end{itemize}
 \end{enumerate}
 \item Proof by mathematical induction
-\label{sec:org8a94e48}
+\label{sec:org42db741}
 \begin{enumerate}
 \item Base case: Show that the property holds of the basic elements.
 \item Inductive step:
@@ -342,7 +342,7 @@ What are the premises?
 \end{itemize}
 \end{itemize}
 \item Variant (strong/complete induction):
-\label{sec:org8fd0741}
+\label{sec:org95667a3}
 \begin{itemize}
 \item \uline{Ind. Step.}
 \begin{enumerate}
@@ -354,12 +354,12 @@ What are the premises?
 \end{itemize}
 \end{enumerate}
 \subsubsection{Theorem}
-\label{sec:org7fcbe90}
+\label{sec:orgafcc2b9}
 For any nat. number \(n\geq 1\), the sum \(\underbrace{1+2+\ldots+n}_{\sum_i=1^n i}=\frac{n(n+1)}{2}\)
 (If you do a proof for your homework or on an exam, always include many details. You can even use a template to structure your proofs the same way, useful for steps for induction.)
 \begin{enumerate}
 \item Proof (by math. ind)
-\label{sec:orgf1f5d6f}
+\label{sec:orgbf90bf2}
 \begin{enumerate}
 \item Base case: Show claim holds for \(n=1=\frac{1(1+1)}{2}\)
 \item Ind. step.
@@ -379,9 +379,9 @@ For any nat. number \(n\geq 1\), the sum \(\underbrace{1+2+\ldots+n}_{\sum_i=1^n
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 3 \textit{<2017-09-12 Tue>}}
-\label{sec:orga0bf96e}
+\label{sec:org802b60b}
 \subsection{Set theory}
-\label{sec:org383a3e2}
+\label{sec:org79e0fd7}
 All that is being said here is taken from the reading mathematical introduction to logic chapter zero.
 
 A \uline{set} is a thing with elements. We can present sets in two ways:
@@ -397,12 +397,12 @@ A \uline{set} is a thing with elements. We can present sets in two ways:
 \end{itemize}
 \end{itemize}
 \subsubsection{Ex}
-\label{sec:orge386c95}
+\label{sec:org7b69169}
 \(\mathbb{N}\): the set of natural numbers.
 
 \(D=\{x\in \mathbb{N}|x \text{ is prime}\}=\{2,3,5,7,11, \ldots\}\)
 \subsubsection{Definitions}
-\label{sec:orga1131f8}
+\label{sec:org2c86a85}
 \begin{itemize}
 \item \(A\subseteq B \iff \forall x, x\in A \implies x \in B\)
 \item \(A=B \iff (A\subseteq B) \wedge (B\subseteq A)\)
@@ -439,14 +439,14 @@ A \uline{set} is a thing with elements. We can present sets in two ways:
 \item Is \(\{\emptyset,a\}\subseteq\{a,4,z\}\)? No.
 \end{itemize}
 \subsection{Tuples:}
-\label{sec:orgfe325b4}
+\label{sec:org0e7ea3f}
 Like sets, but order matters.
 \begin{itemize}
 \item Ordered pair: \(\langle a,b \rangle = \{\{a\},\{a,b\}\}\)
 \item \(\langle a,4,z \rangle \neq \langle 4,a,z \rangle\)
 \end{itemize}
 \subsubsection{Cross-product}
-\label{sec:orgf543592}
+\label{sec:orgaf8d3ce}
 \(A \times B \iff \{\langle x,y \rangle|x \in A \wedge y\in B\}\)
 \begin{itemize}
 \item If \(A\) has \(n\) elements, \(B\) has \(m\) elements
@@ -458,7 +458,7 @@ Like sets, but order matters.
 \end{itemize}
 \end{itemize}
 \subsubsection{Relations}
-\label{sec:orgc4c300d}
+\label{sec:org87268ec}
 \begin{itemize}
 \item \(A=\{\text{John, Paul, George}\}\)
 \item \(B=\{\text{guitar, bass}\}\)
@@ -478,7 +478,7 @@ A \uline{relation} \(R\) on \(A\) and \(B\) is a subset of \(A\times B\).
  \rangle \in R\}\)
 \begin{enumerate}
 \item Functions
-\label{sec:org7717439}
+\label{sec:org835f351}
 A total \uline{function} \(f:A\to B\) is a binary relation \(R\), on \(A\) and \(B\) such that.
 \begin{itemize}
 \item It is \uline{single-valued}
@@ -492,7 +492,7 @@ A total \uline{function} \(f:A\to B\) is a binary relation \(R\), on \(A\) and \
 \end{center}
 \begin{enumerate}
 \item Definitions
-\label{sec:org36a7d17}
+\label{sec:orge123d55}
 \begin{itemize}
 \item A function is \uline{injective} (one-to-one), if each element in the range is mapped to by exactly one element.
 \begin{itemize}
@@ -517,9 +517,9 @@ A total \uline{function} \(f:A\to B\) is a binary relation \(R\), on \(A\) and \
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 4 \textit{<2017-09-14 Thu>}}
-\label{sec:org364598e}
+\label{sec:org566c9bb}
 \subsection{Recap}
-\label{sec:org04a66d7}
+\label{sec:orga9fdd03}
 We talked about sets last class, such as:
 \begin{itemize}
 \item \(\{1,4,z\}\)
@@ -542,9 +542,9 @@ Are there more students or chairs in this class?
 
 Cantor: \(|A|=|B| \iff |A| \leq |B|\) and \(|B|\leq |A| \iff\) there is a bijection between \(A\) and \(B\).
 \subsection{More on sets}
-\label{sec:org0ebbd05}
+\label{sec:org57ad4a4}
 \subsubsection{Cardinalities}
-\label{sec:orgc700a26}
+\label{sec:orgeb1c4da}
 A set D is \uline{finite} if its cardinality is a natural number.
 \begin{itemize}
 \item \(D \leftrightarrow \{1,\ldots,n\}\) (bijective function with natural numbers exists)
@@ -609,7 +609,7 @@ There are duplicates here though. So, instead of counting left to right, count d
 \item Is this countably infinite? No.
 \end{itemize}
 \subsubsection{Proof (by contradiction):}
-\label{sec:orgbb7b86c}
+\label{sec:org97d1707}
 Assume \(|\mathbb{N}|=|\mathbb{R}^{0.1}|\). 
 (\(\mathbb{R}^{0.1} = \{x \in \mathbb{R}| 0<x<1\}\).)
 
@@ -665,7 +665,7 @@ What is \(z_n\)?
 \end{itemize}
 \end{itemize}
 \section{Lecture 5 \textit{<2017-09-19 Tue>}}
-\label{sec:org12c42a7}
+\label{sec:org5f5c866}
 \begin{itemize}
 \item Quiz in one week
 \item 20 minutes, in class
@@ -677,7 +677,7 @@ What is \(z_n\)?
 \end{itemize}
 \end{itemize}
 \subsection{Recap}
-\label{sec:orgb508df7}
+\label{sec:org6fa21e4}
 Last class, we proved:
 (Size of Natural numbers) \(\aleph_0 < |\mathbb{R}|\)
 \(\implies\) Diagonalization
@@ -695,10 +695,10 @@ Last class, we proved:
 \end{itemize}
 
 \subsection{Cardinality}
-\label{sec:org61324bc}
+\label{sec:orga486411}
 Things that have the same cardinality:
 \subsubsection{Countable:}
-\label{sec:org395dc4c}
+\label{sec:orgb3622da}
 \(|\mathbb{N}|\):
 \begin{itemize}
 \item E
@@ -716,7 +716,7 @@ Things that have the same cardinality:
 \item If you can list them, they're countable
 \end{itemize}
 \subsubsection{Uncountable}
-\label{sec:org03a0b76}
+\label{sec:org7f27bb9}
 \(|\frak{P}(\mathbb{N})|\)
 \begin{itemize}
 \item \(\mathbb{C}\)
@@ -729,9 +729,9 @@ Things that have the same cardinality:
 
 \noindent\rule{\textwidth}{0.5pt}
 \subsection{Formal Systems (GEB CH. 1)}
-\label{sec:orgc8efbfe}
+\label{sec:org954509a}
 \subsubsection{Examples}
-\label{sec:orgaf1f790}
+\label{sec:org06c7bca}
 \begin{itemize}
 \item Programming languages
 \item Logic
@@ -780,7 +780,7 @@ Syntax & Semantics\\
 \end{itemize}
 
 \subsubsection{MIU-System:}
-\label{sec:org8082abf}
+\label{sec:orgc86da2a}
 Alphabet: MIU
 
 Strings (sequences of elements from the alphabet).
@@ -801,7 +801,7 @@ Rec. def:
 \end{itemize}
 \begin{enumerate}
 \item MIU-Theorems
-\label{sec:org83c5598}
+\label{sec:org80ef9cc}
 \begin{enumerate}
 \item Axiom: MI.
 \item Inference rules:
@@ -818,7 +818,7 @@ IV. xUUy \(\to\) xy
 \end{enumerate}
 \begin{enumerate}
 \item Def. Derivation
-\label{sec:org3bea408}
+\label{sec:orgdd22ab4}
 A \uline{derivation} is a sequence of strings such that each element is either an axiom or obtained by applying an inference rule to an element earlier in the sequence
 
 The last element in a derivation is a theorem.
@@ -832,7 +832,7 @@ The last element in a derivation is a theorem.
 \end{itemize}
 \end{itemize}
 \item Ex.
-\label{sec:org5934ac3}
+\label{sec:org3268e10}
 \begin{enumerate}
 \item MI is a derivation
 \item MIU by I on line 1.
@@ -841,7 +841,7 @@ The last element in a derivation is a theorem.
 \end{enumerate}
 These are all theorems since they're the last element of a derivation.
 \item Random theorems
-\label{sec:org30236d3}
+\label{sec:orgc8caebb}
 \begin{itemize}
 \item MIIII
 \item MIIIIU
@@ -852,7 +852,7 @@ These are all theorems since they're the last element of a derivation.
 \end{itemize}
 \end{enumerate}
 \item Reasoning
-\label{sec:orgc1e32f9}
+\label{sec:org08ccc1b}
 Reason inside (M-mode)
 \begin{itemize}
 \item Generate theorems "within" the formal system
@@ -873,7 +873,7 @@ Outside a system (I-mode)
 \end{itemize}
 \end{itemize}
 \item Bijection with Natural Numbers
-\label{sec:org52733c0}
+\label{sec:org9695bfd}
 MIU strings are countably infinite. You can construct a bijection like:
 \begin{enumerate}
 \item M
@@ -896,14 +896,14 @@ MIU theorems are also countably infinite? Why?
 \item Why not finite? Inference II, can keep expanding
 \end{itemize}
 \item Theorem
-\label{sec:org3573bd0}
+\label{sec:org5fd0f97}
 All MIU-theorems begin with M.
 \begin{itemize}
 \item This is a proof about the MIU-system, not within
 \end{itemize}
 \begin{enumerate}
 \item Proof
-\label{sec:orgc214d83}
+\label{sec:org1590c2d}
 By induction (strong induction) on the length of derivations: (number of steps to derive)
 \begin{itemize}
 \item Base case: Derivation of length 1: MI (good)
@@ -923,9 +923,9 @@ By induction (strong induction) on the length of derivations: (number of steps t
 \end{enumerate}
 \end{enumerate}
 \section{Lecture 6 \textit{<2017-09-21 Thu>}}
-\label{sec:org15c4887}
+\label{sec:org6e049e0}
 \subsection{Quiz prep}
-\label{sec:org0da8402}
+\label{sec:orgcea3d2b}
 \begin{itemize}
 \item What is derivation?
 \item What is a theorem?
@@ -935,7 +935,7 @@ By induction (strong induction) on the length of derivations: (number of steps t
 \item How do you prove something is inductive?
 \end{itemize}
 \subsection{Review}
-\label{sec:org0750f56}
+\label{sec:org713823f}
 \begin{itemize}
 \item Is U a MIU-theorem?
 \begin{itemize}
@@ -944,7 +944,7 @@ By induction (strong induction) on the length of derivations: (number of steps t
 \item Is MU a MIU-theorem?
 \end{itemize}
 \subsection{Decision Procedure}
-\label{sec:orgc10a82f}
+\label{sec:orgb88613c}
 Guarantees a \uline{yes} or a \uline{no} answer in a \uline{finite} amount of time
 \begin{itemize}
 \item A set/question that has a decision procedure is \uline{decidable}
@@ -970,7 +970,7 @@ Guarantees a \uline{yes} or a \uline{no} answer in a \uline{finite} amount of ti
 \end{itemize}
 \end{itemize}
 \subsection{pq-system}
-\label{sec:orge6bba4a}
+\label{sec:org07e86fc}
 \begin{itemize}
 \item Alphabet: p, q, -
 \item Axiom(s): xp-qx-
@@ -992,7 +992,7 @@ Guarantees a \uline{yes} or a \uline{no} answer in a \uline{finite} amount of ti
 \end{itemize}
 \end{itemize}
 \subsubsection{Interpretation:}
-\label{sec:org72014f3}
+\label{sec:orgadc452e}
 pq-system: p (plus) q (equals) \(\mbox{-}\) (1) \(\mbox{-}\mbox{-}\) (2) \(\mbox{-}\mbox{-} \mbox{-}\)(3)
 \begin{center}
 \begin{tabular}{llrrrll}
@@ -1032,7 +1032,7 @@ If an interpretation makes all axioms and thm true, it is called a \uline{model}
 \end{itemize}
 \end{itemize}
 \subsubsection{More Interpretations}
-\label{sec:org5f55d76}
+\label{sec:orge49268f}
 Change p to times. It's still an interpretation, but not a model. It's false, as all axioms and theorems must be true.
 \begin{itemize}
 \item Keep p to plus, but change all dashes to negative integers. Is it also a model?
@@ -1051,7 +1051,7 @@ pq-system: p (equals) q (taken from) \(\mbox{-}\) (2) \(\mbox{-}\mbox{-}\) (4) \
 \item Formal system can have many models, just depends on interpretation
 \end{itemize}
 \subsection{geq-system:}
-\label{sec:org72d98a9}
+\label{sec:org65526ae}
 \begin{itemize}
 \item Thms:
 \begin{itemize}
@@ -1082,11 +1082,11 @@ pq-system: p (equals) q (taken from) \(\mbox{-}\) (2) \(\mbox{-}\mbox{-}\) (4) \
 \end{itemize}
 \end{itemize}
 \subsection{Infinite Prime Numbers}
-\label{sec:org752625c}
+\label{sec:org9bd5cb7}
 Theorem: There are infinitely many prime numbers.
 
 \subsubsection{Proof (by contradiction):}
-\label{sec:org00491e8}
+\label{sec:orgc458a98}
 Assumption: There are \uline{finitely} many prime numbers:
 \begin{itemize}
 \item \(\{p_1, p_2, \ldots , p_n\}\)
@@ -1108,9 +1108,9 @@ Assumption: There are \uline{finitely} many prime numbers:
 \item So, assumption is false.
 \end{itemize}
 \section{Lecture 7 \textit{<2017-09-26 Tue>}}
-\label{sec:orgec161cb}
+\label{sec:orga163054}
 \subsection{Quiz review}
-\label{sec:org8a2932c}
+\label{sec:org568498c}
 \begin{itemize}
 \item Try to use diagonalization on rational numbers?
 \begin{itemize}
@@ -1146,7 +1146,7 @@ Assumption: There are \uline{finitely} many prime numbers:
 \end{itemize}
 \end{itemize}
 \subsection{Decision procedure}
-\label{sec:orgfad9be2}
+\label{sec:org70201c6}
 \begin{itemize}
 \item What does it mean for a set to be decidable?
 \begin{itemize}
@@ -1170,7 +1170,7 @@ C_x(n) = \begin{cases} 1 & \text{if }n\in X
 \end{equation*}
 Later we will see that decidable set \(\iff\) characteristic function computable.
 \subsection{FS for addition}
-\label{sec:org46427e3}
+\label{sec:org4a570b2}
 Write down properties of addition to try and come up with a formal system to fit that interpretation.
 
 Recursive definition of addition:
@@ -1194,7 +1194,7 @@ IR & If xpyqz is a theorem & x+(n+1)=\\
 \end{center}
 
 \subsection{FS for multiplication}
-\label{sec:org77720cb}
+\label{sec:org4088179}
 Want FS for multiplication (tq system)
 x t y q z
 \begin{itemize}
@@ -1229,13 +1229,13 @@ Cx is true if \(x\) is a composite number (not a prime)
 \end{itemize}
 \end{itemize}
 \subsection{Recursively enumerable set (r.e.)}
-\label{sec:orgdb18469}
+\label{sec:org360bc78}
 A recursively enumerable set can be generated as theorems of a formal system.
 \begin{itemize}
 \item Ex. Natural numbers
 \end{itemize}
 \subsection{Recursive set}
-\label{sec:org8e3fdea}
+\label{sec:org4fe979b}
 A set is recursive if it is r.e. and its complement is also r.e. Only want to talk about the complement in a clearly defined realm (universe).
 \begin{itemize}
 \item Well-formed expressions:
@@ -1249,16 +1249,16 @@ A set is recursive if it is r.e. and its complement is also r.e. Only want to ta
 \item Can a set be recursively enumerable but not recursive?
 \end{itemize}
 \section{Lecture 8 \textit{<2017-09-28 Thu>}}
-\label{sec:orgdec2daa}
+\label{sec:org0f0c208}
 \subsection{Theorems}
-\label{sec:org1972e10}
+\label{sec:org7610734}
 \(P\) is equivalent to \(Q\) relative to \(A_1\ldots A_n\):
 \begin{itemize}
 \item \(A_1 \ldots A_n, P\) prove \(Q\)
 \item \(A_1 \ldots A_n, Q\) prove \(P\)
 \end{itemize}
 \subsubsection{E.g.}
-\label{sec:orgb4add87}
+\label{sec:org95929ec}
 Relative to Euclid's axioms:
 
 Proclus' axiom
@@ -1287,7 +1287,7 @@ Parallel postulate is independent from the axioms of Euclid.
 
 \begin{enumerate}
 \item Playfail's axiom
-\label{sec:org43597c2}
+\label{sec:orga4e32ee}
 There exists exactly one parallel to a given line through a given point.
 \begin{itemize}
 \item What would it mean for this to be false?
@@ -1329,7 +1329,7 @@ Infinitely many parallel lines
 \end{enumerate}
 
 \subsection{PQ*-system}
-\label{sec:org10638bb}
+\label{sec:org20ca675}
 \begin{itemize}
 \item Ax. schema 1: xp\mbox{-}qx\mbox{-}
 \item IR: xpyqz \(\to\) xpy-qz-
@@ -1381,12 +1381,12 @@ Infinitely many parallel lines
 \end{itemize}
 \end{itemize}
 \subsection{Propositional Logic}
-\label{sec:orgfbe1365}
+\label{sec:org4d1868a}
 \begin{itemize}
 \item Today's presentation is harder for those who already know propositional logic, next week will be the standard presentation.
 \end{itemize}
 \subsubsection{Formula trees:}
-\label{sec:org4ca4b66}
+\label{sec:org178637c}
 \begin{itemize}
 \item Language: Propositional variables: \(P_0, P_1, P_2, \ldots\)
 \begin{itemize}
@@ -1400,7 +1400,7 @@ Infinitely many parallel lines
 \end{itemize}
 \begin{enumerate}
 \item Inductive Definition
-\label{sec:org960da60}
+\label{sec:org97b681d}
 \begin{enumerate}
 \item Base clause: A prop. variable is a formula tree
 \item Inductive clauses: If \(A,B\) are formula trees then \begin{center}
@@ -1409,13 +1409,13 @@ Infinitely many parallel lines
 \item Nothing else is a formula tree
 \end{enumerate}
 \item E.g.
-\label{sec:orgbe0e41f}
+\label{sec:org811e704}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i10.png}
 \end{center}
 The tree to the right has 5 subtrees (main connective is not a subtree of itself)
 \item Truth value assignment
-\label{sec:orgf15973e}
+\label{sec:org6a8b8b4}
 A \uline{truth value assignment} is a function from propositional variables to \(\{T, F\}\) (True, False). The \uline{truth value} of a formula tree A under the truth value assignment f is:
 \begin{itemize}
 \item Case 1: A is a propositional variable: f(A)
@@ -1455,9 +1455,9 @@ F & F & F & F & T\\
 \end{center}
 \end{enumerate}
 \section{Lecture 9 \textit{<2017-10-03 Tue>}}
-\label{sec:orgc3fe77c}
+\label{sec:orga5dbe1e}
 \subsection{Propositional Logic}
-\label{sec:org776f923}
+\label{sec:org855aeb0}
 Most of this is on handout 2b.
 
 Let's define logic as a formal system.
@@ -1468,7 +1468,7 @@ Let's define logic as a formal system.
 \end{itemize}
 
 \subsection{Well-formed formulas (wff)}
-\label{sec:orgf438d90}
+\label{sec:org56b7400}
 \begin{enumerate}
 \item Base clause: \(P_i\) is a wff (\(i \in \mathbb{N}\)) (called atomic)
 \item Inductive clause: If \(A\) and \(B\) are wffs, then so are:
@@ -1493,7 +1493,7 @@ E.g.
 \end{itemize}
 Convention: outer parens are omitted (except if asked for a well formed expression explicitly, as parentheses are required to comply with rules that give us the nice structure)
 \subsubsection{Interpretation}
-\label{sec:orgc9b661e}
+\label{sec:org656f37c}
 Propositional variables \(\to\) truth values: 
 \begin{center}
 \begin{tabular}{ll}
@@ -1508,7 +1508,7 @@ T & \(\perp\)\\
 (Bivalence)
 
 \subsubsection{Truth tables}
-\label{sec:org7b62472}
+\label{sec:org7027177}
 A,B (metavariables that stand for wff):
 \begin{center}
 \begin{tabular}{lllll}
@@ -1584,7 +1584,7 @@ For a wff with \(n\) prop. vars, the truth table has \(2^n\) lines.
 
 Is finding out if a proposition is a tautology decidable or not? Yes, just write out the truth table.
 \subsubsection{Inferences}
-\label{sec:orgd984a39}
+\label{sec:orgfb2798d}
 An inference is \textbf{valid} if it is impossible for all the premises to be true and the conclusion false at the same time.
 
 \begin{center}
@@ -1611,7 +1611,7 @@ Generalizing: \(A_1, \ldots A_n \models B\)
 \item \(\models\) B (tautology)
 \end{itemize}
 \subsubsection{Natural Deduction (Syntax)}
-\label{sec:orgc7261b8}
+\label{sec:org3988d5e}
 Introduced by Gentzen, 1934.
 
 \(\frac{\text{Premises}}{\text{Conclusion}}\)
@@ -1635,9 +1635,9 @@ Missing:
 \item \(\sim\) Elim
 \end{itemize}
 \section{Lecture 10 \textit{<2017-10-05 Thu>}}
-\label{sec:orgfa1df29}
+\label{sec:org0ed5636}
 \subsection{Natural Deduction}
-\label{sec:orgb36fada}
+\label{sec:orgbd8fe8b}
 \begin{itemize}
 \item Proof system for propositional logic
 \item In the land of syntax when we do this
@@ -1681,7 +1681,7 @@ Note that \(A, A \supset B \models B\) consists of semantics, not \textbf{syntax
 \item This is like a formal definition for a proof by cases
 \end{itemize}
 \subsection{Exercise}
-\label{sec:orgdaf5668}
+\label{sec:org69fa135}
 Prove: \(A\vee C, A \supset B, C \supset D \vdash_{ND} B \vee D\)
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i17.png}
@@ -1705,9 +1705,9 @@ RAA is a proof by contradiction.
 \end{itemize}
 Prove: \(\vdash_{ND}\sim A \supset (A \supset B)\)
 \section{Lecture 11 \textit{<2017-10-10 Tue>}}
-\label{sec:org1455f40}
+\label{sec:orgee2915a}
 \subsection{Recap}
-\label{sec:org41a8713}
+\label{sec:orgc131786}
 \begin{itemize}
 \item A, A \(\supset\) B \(\models\) B
 \begin{itemize}
@@ -1720,7 +1720,7 @@ Prove: \(\vdash_{ND}\sim A \supset (A \supset B)\)
 \end{itemize}
 \end{itemize}
 \subsection{Axiomatic Proof System}
-\label{sec:orgf689c97}
+\label{sec:org5efe99d}
 \begin{itemize}
 \item IR: From A and A \(\supset\) B, infer \(B\) (MODUS PONENS)
 \item Substitution rule: Any wff can be substituted for A, B, C
@@ -1760,9 +1760,9 @@ Prove: \(\vdash_{ND}\sim A \supset (A \supset B)\)
 \item \((A \supset B) \supset (A \supset C)\) MP 1,2
 \end{enumerate}
 \subsection{GEB proof system}
-\label{sec:org72ca491}
+\label{sec:org32e9b16}
 \subsubsection{Ex.}
-\label{sec:org937a133}
+\label{sec:orgf13c47d}
 \(\vdash_{ND} (A \wedge B) \supset (B \wedge A)\)
 \begin{itemize}
 \item \(\frac{\frac{A \wedge B}{B}\wedge Elim \ \frac{A \wedge B}{A} \wedge Elim}{\frac{B \wedge A}{(A \wedge B) \supset (B\wedge A)} \supset Intro}\wedge Intro\)
@@ -1781,7 +1781,7 @@ Prove: \(\vdash_{ND}\sim A \supset (A \supset B)\)
 \item Won't go over GEB system in class, not as interesting, but you can look it over in handout or in GEB.
 \end{itemize}
 \subsection{Relations of systems}
-\label{sec:org8300da2}
+\label{sec:org66defba}
 How do these 3 systems relate to each other?
 
 What we have so far: 
@@ -1821,7 +1821,7 @@ You can do this for all axioms and you'll get that they're equivalent. The fact 
 \noindent\rule{\textwidth}{0.5pt}
 How does the semantic consequence relate to the syntactic consequence?
 \subsubsection{Soundness Theorem}
-\label{sec:org9848dc2}
+\label{sec:orge7d3550}
 If \(\Gamma\) is a set of wff and \(A\) wff then:
 \begin{itemize}
 \item If \(\Gamma \vdash A\), then \(\Gamma \models A\)
@@ -1829,7 +1829,7 @@ If \(\Gamma\) is a set of wff and \(A\) wff then:
 \end{itemize}
 We also have if \(\vdash A\), then \(\models A\), i.e. if derivations with no or closed assumptions, then tautology, via soundness theorem.
 \subsubsection{Completeness Theorem}
-\label{sec:orge8755b2}
+\label{sec:orgcde4581}
 If \(\Gamma \models A\), then \(\Gamma \vdash A\)
 \begin{itemize}
 \item If \(A\) is a logical consequence of \(\Gamma\), then there is also a proof of \(A\) from \(\Gamma\)
@@ -1838,7 +1838,7 @@ Proof of these theorems done in PHIL 310 and MATH 318
 
 if \(\models A\), then \(\vdash A\), tautologies can be derivations with no or closed assumptions
 \section{Lecture 12 \textit{<2017-10-12 Thu>}}
-\label{sec:orgdfc9132}
+\label{sec:org8822e17}
 \begin{itemize}
 \item There will be a proof question on the quiz (natural deduction/axiomatic)
 \begin{itemize}
@@ -1847,7 +1847,7 @@ if \(\models A\), then \(\vdash A\), tautologies can be derivations with no or c
 \item Most important thing is terminology
 \end{itemize}
 \subsection{Recap}
-\label{sec:org705bf1d}
+\label{sec:org99ac403}
 \begin{itemize}
 \item Propositional logic
 \begin{itemize}
@@ -1869,7 +1869,7 @@ if \(\models A\), then \(\vdash A\), tautologies can be derivations with no or c
 \end{itemize}
 \end{itemize}
 \subsection{First Order Logic (FOL)}
-\label{sec:org932683d}
+\label{sec:orgb945271}
 Language \(\frak{L}\) of FOL:
 \begin{enumerate}
 \item Variables: \(X_0, X_1, X_2, \ldots\)
@@ -1896,7 +1896,7 @@ wff - T/F & wff - T/F\\
 \end{center}
 
 \subsubsection{Term}
-\label{sec:orgfd5a2e1}
+\label{sec:orgc961509}
 Def. A \uline{term} is 
 \begin{enumerate}
 \item A variable is a term
@@ -1906,7 +1906,7 @@ Def. A \uline{term} is
 
 Sometimes write \(t_1 f t_2\) for \(f(t_1,t_2)\) (infix notation for binary function symbols)
 \subsubsection{wff}
-\label{sec:orgbecfff9}
+\label{sec:org3999218}
 A \uline{wf-formula}
 \begin{enumerate}
 \item If \(P\) is an n-ary predicate symbol, \(t_1, \ldots, t_n\) are terms, then \(P(t_1, \ldots, t_n)\) is a wff. (atomic formula)
@@ -1921,14 +1921,14 @@ A \uline{wf-formula}
 \item Nothing else.
 \end{enumerate}
 \subsubsection{First Order Arithmetic (FOA)}
-\label{sec:orge3ca627}
+\label{sec:org83fd02b}
 \begin{itemize}
 \item Going to be using this a lot
 \end{itemize}
 To use FOL, you must specify the language \(\frak{L}\) which describes the function symbols.
 \begin{enumerate}
 \item Syntax
-\label{sec:org3bcdcb9}
+\label{sec:org28523a7}
 \begin{itemize}
 \item Fun symbols:
 \end{itemize}
@@ -1954,7 +1954,7 @@ Arity & 0 & 1 & 2 & 2\\
 \end{itemize}
 \end{itemize}
 \item Semantics
-\label{sec:org4bda286}
+\label{sec:orgc8cd4fc}
 Structure = <universe of discourse; designated elements from UD (constants); n-ary operations (fun symbols); n-ary relations (predicate symbols)>
 \begin{itemize}
 \item Structure depends on language you want to interpret. If your language has no constants, you won't need designated elements. If you have 5 fun symbols, you'll need 5 n-ary operations, etc.
@@ -1972,7 +1972,7 @@ Structure = <universe of discourse; designated elements from UD (constants); n-a
 \end{itemize}
 \end{itemize}
 \item Truth in a structure (Tarski 1933)
-\label{sec:org119df11}
+\label{sec:org12c6370}
 
 (T1) If x is a variable, then \(x^{\sigma}\) is given by the \uline{valuation} (interpretation that also interprets the variables, i.e. map \(x_1\), \(x_2\), etc.).
 
@@ -2017,9 +2017,9 @@ T & A^{\sigma(u/x)}=T \text{ for all }u \in UD
 \end{equation*}
 \end{enumerate}
 \section{Lecture 13 \textit{<2017-10-17 Tue>}}
-\label{sec:org049c3cf}
+\label{sec:org3bcb3d5}
 \subsection{Quiz Review}
-\label{sec:orgb226f3f}
+\label{sec:orga6947c3}
 \begin{itemize}
 \item Inductive definition of Strings
 \item Prime numbers recursive? Yes
@@ -2031,7 +2031,7 @@ T & A^{\sigma(u/x)}=T \text{ for all }u \in UD
 \item How do you know something can be proved by something? Use Completeness theorem and check truth table
 \end{itemize}
 \subsection{Tarski \& Quantifiers}
-\label{sec:org30bbad8}
+\label{sec:org0c6a22c}
 \begin{equation*}
   (\forall x: A)^{\sigma} =
   \begin{cases}
@@ -2111,7 +2111,7 @@ We see that just switching around quantifiers changes meaning completely. So we 
 \end{itemize}
 This was all in the land of semantics (we talked about truth). Now we'll go back to the land of syntax.
 \subsection{Syntax}
-\label{sec:orgf2dc034}
+\label{sec:orge132b07}
 Variable \(x\) is bound if it falls in the scope of a quantifier that has \(x\) as a variable of quantification. \(x\) is quantified in \(A\).
 $$\forall x : \overbrace{\underbrace{A}_{\text{scope}}}^{\text{$x$ is bound in $A$}}$$
 $$ \forall x_1 : \exists x_2 : (x_1 = x_2 + x_3)$$
@@ -2123,7 +2123,7 @@ The second \(x_1\) is free since it's not in the scope of the quantifier.
 $$ \forall x_1 : \exists x_2 : (x_1 = x_2 + x_3) \vee (\underbrace{x_1}_{\text{free}} = 0)$$
 In this case, both \(x_1\) are bound.
 \section{Lecture 14 \textit{<2017-10-19 Thu>}}
-\label{sec:org7734fc4}
+\label{sec:orgb2fba22}
 \begin{itemize}
 \item Good midterm question: What does \(\Gamma \models A\) mean in one sentence?
 \begin{itemize}
@@ -2143,7 +2143,7 @@ In this case, both \(x_1\) are bound.
 \end{itemize}
 \end{itemize}
 \subsection{FOA}
-\label{sec:org0e2ceb0}
+\label{sec:orgf66660d}
 If UD \(= \mathbb{N}\), Even(x) \(\implies\) even
 \begin{itemize}
 \item What does: \(\exists x \ Even(x)\) mean?
@@ -2181,7 +2181,7 @@ If UD \(= \mathbb{N}\), Even(x) \(\implies\) even
 \end{itemize}
 \end{itemize}
 \subsection{Substitution}
-\label{sec:org0a30bed}
+\label{sec:orgb79f518}
 Recall, a term is either a variable or a function symbol followed by the appropriate number of terms. 
 \begin{itemize}
 \item A term is \uline{closed} if it contains no variables.
@@ -2222,10 +2222,10 @@ Recall, a term is either a variable or a function symbol followed by the appropr
 \end{itemize}
 \end{itemize}
 \subsection{Proofs}
-\label{sec:org6d19da0}
+\label{sec:org0e5209d}
 Now we need a proof system for First Order Logic. Will see natural deduction in class, read about axiomatic and GEB on the handout.
 \subsubsection{Natural deduction calculus}
-\label{sec:org616d4f8}
+\label{sec:orgd6ca038}
 We need introduction and elimination rules for quantifiers. 
 \begin{prooftree}
 \AxiomC{A(a/x)}
@@ -2291,7 +2291,7 @@ For all \(x\), \(A(x)\) means that there exists \(x\) such that \(A(x)\)
 
 \begin{enumerate}
 \item Ex
-\label{sec:org76cca12}
+\label{sec:org56a6abc}
 \(\vdash \forall x: (A(x)\supset B)\supset (\exists x: A(x)\supset B)\)
 \begin{prooftree}
 \AxiomC{$[\exists x: A(x)]_1$}
@@ -2310,11 +2310,11 @@ For all \(x\), \(A(x)\) means that there exists \(x\) such that \(A(x)\)
 \end{prooftree}
 Complicated proof, won't have something like this on midterm (since just introduced these rules), but maybe final.
 \item FOL: Sound \& Complete
-\label{sec:org8907768}
+\label{sec:orgcf52834}
 Proved by Godel in 1930
 \end{enumerate}
 \section{Lecture 15 \textit{<2017-10-24 Tue>}}
-\label{sec:orgdd3f452}
+\label{sec:org21ac424}
 Reviewed quiz 2. 
 \begin{itemize}
 \item Recursive Definition
@@ -2341,9 +2341,9 @@ Formula made up of only terms and predicates
 \end{itemize}
 \end{itemize}
 \section{Lecture 16 \textit{<2017-10-31 Tue>}}
-\label{sec:org4d7317b}
+\label{sec:orgc7cef62}
 \subsection{Typographic Number Theory (TNT)/Dedekind Peano Arithmetic (DPA)/FOA}
-\label{sec:orgc379900}
+\label{sec:orgaaf1354}
 Why were people so concerned with the consistency of this?
 
 Say we start with geometry
@@ -2396,7 +2396,7 @@ TNT:
 \end{enumerate}
 \end{itemize}
 \subsubsection{Theorems}
-\label{sec:orgbee3c5e}
+\label{sec:org93b7a43}
 A \uline{theory} \(T\) is said to be wff, s.t. \(s \in T\) iff \(T \vdash S\) (closed under deduction)
 \begin{itemize}
 \item A theory \(T\) is \uline{axiomatic} if there exists a recursive set \(A_k\) st
@@ -2440,6 +2440,7 @@ Can we come up with something not derivable from a theory?
 \begin{itemize}
 \item \(n \in \mathbb{N}\)
 \end{itemize}
+
 \begin{tabular}{l|l l l}
     $+^*$ & $0$ & $n$ & $*$
     \\ \hline $0$ & $0$ & $0$ & $*$
@@ -2464,7 +2465,7 @@ Looking at the axioms:
 So these are in fact not all the axioms of TNT.
 
 \subsubsection{\(\omega-incomplete\)}
-\label{sec:orgae1283f}
+\label{sec:orgf80aa32}
 \begin{itemize}
 \item (1.-6.) \(\nvdash (0+0=0)\)
 \begin{itemize}
@@ -2483,9 +2484,9 @@ Called a schema because it can make countably infinite amount of axioms
 
 Now with all 6 axioms and the axiom schema we have TNT.
 \section{Lecture 17 \textit{<2017-11-02 Thu>}}
-\label{sec:org8d1ceff}
+\label{sec:org6bab802}
 \subsection{MIU}
-\label{sec:orge6a8289}
+\label{sec:org0679c86}
 Is MU a MIU theorem? Recall:
 
 I. xI -> xIU
@@ -2503,10 +2504,10 @@ Axiom: MI
 \item One way to answer this is find properties of these theorems
 \end{itemize}
 \subsubsection{Theorem}
-\label{sec:org797a684}
+\label{sec:orgfbee265}
 The number of I's in a MIU theorem is not a multiple of \(3\) (and \(0\) is a multiple of \(3\), so if this follows then MU is not a theorem)
 \subsubsection{Proof by strong induction}
-\label{sec:org13e3a69}
+\label{sec:org1523fc6}
 \begin{itemize}
 \item Let \(t\) be a theorem, obtained from a proof of length \(n\) (theorem at line \(n\) of our proof)
 \item IH. The I-count of all theorems in lines \(1-(n-1)\) is not a multiple of \(3\)
@@ -2525,7 +2526,7 @@ Conclusion: The claim holds.
 So we get the answer, to is MU a MIU-theorem -> No, because \(0\) is a multiple of \(3\). This here is a proof about proofs, which we'll be seeing a bit more of later with proofs about proofs in the TNT system.
 
 \subsection{G$\backslash$"odel numbering}
-\label{sec:org47d7fe6}
+\label{sec:org929b323}
 Continuing with the MIU system:
 \begin{itemize}
 \item We have the symbols
@@ -2607,9 +2608,9 @@ TNT-PROOF-PAIR(x,y): Predicate between a pair of numbers. True if x codes (is th
 
 TNT-PROOF(x): \(\exists y:TNT-PROOF-PAIR(y,x)\)
 \section{Lecture 18 \textit{<2017-11-07 Tue>}}
-\label{sec:orge562197}
+\label{sec:org0cb3334}
 \subsection{Turing Machines}
-\label{sec:org5b9565b}
+\label{sec:org37c297b}
 \begin{itemize}
 \item Formalizations of computability
 \begin{itemize}
@@ -2688,7 +2689,7 @@ TM2 =
 \end{center}
 \end{itemize}
 \subsubsection{TM as functions}
-\label{sec:org835c069}
+\label{sec:org043c1cb}
 TM as functions from \(\mathbb{N}\to \mathbb{N}\) (input is only \(1\) block of consecutive \(1\)'s)
 \begin{itemize}
 \item \begin{center}
@@ -2737,7 +2738,7 @@ How many functions are there from \(\mathbb{N} \to \mathbb{N}\)? Uncountably inf
 \item This means that not every function can be represented as a turing machine, i.e. some are not computable.
 \end{itemize}
 \subsection{The Halting Problem}
-\label{sec:org62362c6}
+\label{sec:org8eababf}
 We can enumerate all Turing Machines based off a fixed alphabet. So we can write: \(T_1, T_2, T_3, \ldots, T_n, \ldots\).
 \begin{itemize}
 \item \(T_n(m): T_n\) on input \(m\)
@@ -2755,7 +2756,7 @@ TM_k (y) =
 \end{cases}
 \end{equation*}
 \subsubsection{Claim}
-\label{sec:org5dec85a}
+\label{sec:orgb8dc871}
 This function is not computable. Then by Church-Turing thesis, a computer cannot compute this.
 
 Note that \(K\) is r.e.
@@ -2766,7 +2767,7 @@ Note that \(K\) is r.e.
 \end{itemize}
 
 \subsubsection{Proof (by contradiction)}
-\label{sec:org063b0a0}
+\label{sec:orgd922eb9}
 Assume \(T_H\) decides the set \(K\). i.e.
 \begin{equation*}
 T_H (x) =
@@ -2795,9 +2796,9 @@ Want to know output of \(T_G(n)\)
 
 This is diagonalization!
 \section{Lecture 19 \textit{<2017-11-09 Thu>}}
-\label{sec:org076d462}
+\label{sec:org246f051}
 \subsection{Reminder: Turing Machines \& Computers}
-\label{sec:orgf652e3f}
+\label{sec:org1cfb05d}
 \begin{center}
 \begin{tabular}{ll}
 TM & Computer\\
@@ -2818,7 +2819,7 @@ Turing Machines were supposed to be a formalization of "computability"
 \end{itemize}
 \end{itemize}
 \subsection{Class of functions}
-\label{sec:orgdb82668}
+\label{sec:org929f2f9}
 
 Inductive def of a class of functions: \(\mathbb{N}\to \mathbb{N}\)
 
@@ -2847,7 +2848,7 @@ Primitive Recursive Functions
 
 \noindent\rule{\textwidth}{0.5pt}
 \subsubsection{E.g}
-\label{sec:org3ace0b8}
+\label{sec:orgde3d1ba}
 \begin{enumerate}
 \item \(id(x) = x =P_1^1 (x)\)
 \item \(plus(0,x)=x\)
@@ -2935,10 +2936,10 @@ Therefore, \(g\) is \uline{not} primitive recursive.
 
 Primitive recursive functions are really nice and most if not all we've seen in our lives are primitive recursive.
 \subsection{Bloop-Programs}
-\label{sec:org4244a94}
+\label{sec:org0a53f10}
 Bloop -> Bounded loop. This is the definition used in GEB instead of defining primitive recursive functions like we just did
 \subsubsection{Ex}
-\label{sec:org3d7c1cb}
+\label{sec:org5dca61c}
 \begin{itemize}
 \item LOOP 4 TIMES
 \item BLOCK: BEGIN
@@ -2947,7 +2948,7 @@ Bloop -> Bounded loop. This is the definition used in GEB instead of defining pr
 \end{itemize}
 \href{http://www.cs.mcgill.ca/\~cs230/TisLoopy/index.html}{TisLoopy} from course webpage to compile Bloop-Programs and practice without having to define a primitive recursive function.
 \subsubsection{Syntax}
-\label{sec:org261b287}
+\label{sec:orgf021f01}
 \begin{verbatim}
 DEFINE PROCEDURE "MINUS" [M,N]:
 BLOCK 0: BEGIN
@@ -2971,9 +2972,9 @@ M & N & OUTPUT\\
 \end{tabular}
 \end{center}
 \section{Lecture 20 \textit{<2017-11-14 Tue>}}
-\label{sec:org926cfa0}
+\label{sec:org6557c15}
 \subsection{Bloop}
-\label{sec:org054a6a8}
+\label{sec:orge1fd0c8}
 Bloop = primitive recursive functions. What makes them nice?
 \begin{itemize}
 \item Computable
@@ -2996,7 +2997,7 @@ Recall that bloop has loops as follows:
 \item Both of the loop iterations are bounded.
 \end{itemize}
 \subsection{Floop}
-\label{sec:org3fbbe7e}
+\label{sec:orgc0c6678}
 Like Bloop but have a new block:
 
 MU-LOOP:
@@ -3009,7 +3010,7 @@ BLOCK:END
 Then we get programs, such that some terminate and some do not terminate (loop forever).
 
 \subsection{Bounded minimization}
-\label{sec:org822b781}
+\label{sec:orgb13839e}
 \(f(x) = \min y \leq n \overbrace{[h(x,y)=0]}^{\text{condition}}\)
 \begin{itemize}
 \item How to compute?
@@ -3030,7 +3031,7 @@ E.g. \(nextprime(x)\min y \leq (x! + 1)[x < y \text{ AND }prime(y)=1]\)
 \item \(listprimes(n+1)=nextprime(listprimes(n))\)
 \end{itemize}
 \subsection{Unbounded minimization}
-\label{sec:org041bd20}
+\label{sec:org61529bb}
 \(f(x)=\) the least \(y\), such that \(\overbrace{y+x=5}^{\text{condition}}\)
 \begin{center}
 \begin{tabular}{llllllll}
@@ -3077,7 +3078,7 @@ Can we make a Turing Machine that acts like this \(\mu\) operator?
 \item \(f(x) \uparrow \iff\) TM loops forever
 \end{itemize}
 \subsection{Partial recursive functions}
-\label{sec:org8d509c8}
+\label{sec:org8b079de}
 \begin{itemize}
 \item Primitive recursive functions
 \item \(\mu-\text{operator}\)
@@ -3151,10 +3152,10 @@ Because \(p(x)\) is partial recursive, it must occur in the enumeration such tha
 \item What is \(p(y)\)? \(p(y)=\varphi_y(y)\). It is undefined if \(f(y)=1\) and \(f(y)=1\) if \(\varphi_y(y)\) is defined. Contradiction (\(p(y)\) is defined and undefined at the same time). \lightning
 \end{itemize}
 \section{Lecture 21 \textit{<2017-11-16 Thu>}}
-\label{sec:org6e04196}
+\label{sec:orgf739883}
 Review of Turing Machines
 \subsection{Turing Machine on Handout 5}
-\label{sec:orgd05adb3}
+\label{sec:org9f95b3b}
 This machine doubles a string of \(1\)'s
 \begin{itemize}
 \item Doubling 1: \begin{center}
@@ -3165,7 +3166,7 @@ This machine doubles a string of \(1\)'s
 \end{center}
 \end{itemize}
 \subsection{Turing Machine for addition}
-\label{sec:org2097755}
+\label{sec:org8db5259}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i32.png}
 \end{center}
@@ -3177,7 +3178,7 @@ This machine doubles a string of \(1\)'s
 Try: \url{http://turingmachinesimulator.com/shared/tsgfopdqwb}
 
 \subsection{Turing Machine for multiplication}
-\label{sec:org2f5dd62}
+\label{sec:orgf8f8fc3}
 We're not actually going to make one, but what if we wanted to? We would reuse our Turing Machine for addition, don't reinvent the wheel from scratch each time. Note that:
 \begin{equation*}
 n \times m = 
@@ -3189,7 +3190,7 @@ n \times m =
 Can recursively add in order to multiply. 
 
 \subsection{The Halting Problem}
-\label{sec:org9bb27c2}
+\label{sec:org15887e0}
 This helps you understand the Halting Problem more. \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i34.png}
 \end{center}
@@ -3204,9 +3205,9 @@ This helps you understand the Halting Problem more. \begin{center}
 \end{itemize}
 \end{itemize}
 \section{Lecture 22 \textit{<2017-11-21 Tue>}}
-\label{sec:orgcfed8db}
+\label{sec:org932905e}
 \subsection{Quiz Review}
-\label{sec:org2ce64f1}
+\label{sec:org4b73fe0}
 \begin{itemize}
 \item Non logical symbols in FOA: \(0, S, +, \times\)
 \item Halting set: \(K=\{n\in \mathbb{N} | T_n(n) \text{ halts}\}\)
@@ -3218,7 +3219,7 @@ This helps you understand the Halting Problem more. \begin{center}
 \item \(\aleph_0\) Turing Machines/Primitive Recursive Functions
 \end{itemize}
 \subsection{Functions}
-\label{sec:orgd508e6d}
+\label{sec:org9d18d94}
 \begin{center}
 \begin{tabular}{lll}
 Prim. rec & BlooP & -\\
@@ -3227,7 +3228,7 @@ Rec. & terminating FlooP & TM always halt\\
 \end{tabular}
 \end{center}
 \subsection{Representability}
-\label{sec:org19516c7}
+\label{sec:orgdbf658c}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./Images/i35.png}
 \end{center}
@@ -3240,7 +3241,7 @@ A predicate is \uline{represented} in a FS:
 \end{enumerate}
 
 \subsubsection{Ex.}
-\label{sec:org6de6fa3}
+\label{sec:org37b3607}
 \uline{Express}: Evenness
 \begin{equation*}
 Even(x) = 
@@ -3256,17 +3257,17 @@ Represented in TNT:
 \item \(TNT \vdash \sim Even(S0)\)
 \end{itemize}
 \subsubsection{Thm}
-\label{sec:org32d2f4e}
+\label{sec:orgbeb3e3c}
 Any primitive recursive predicate (BlooP) is representable in FOA.
 \begin{itemize}
 \item Recall: What is a primitive recursive predicate? A predicate is primitive recursive if its characteristic function is primitive recursive
 \item \(Even(x) = \forall x : \exists y : \ldots\)
 \end{itemize}
 \subsubsection{Thm}
-\label{sec:org932f74a}
+\label{sec:org8353053}
 Any recursive predicate is representable in FOA
 \subsection{Theories of Arithmetic}
-\label{sec:org835aec0}
+\label{sec:orgbcc3bb5}
 (Handout 8)
 \begin{center}
 \begin{tabular}{llll}
@@ -3278,7 +3279,7 @@ Any recursive predicate is representable in FOA
 
 $$\Pi_0 \subset \Pi_1 \subset \Pi_2 \subset \Pi $$
 \subsection{Proof-Pairs}
-\label{sec:org5f0333d}
+\label{sec:org03dd4da}
 TNT-PROOF-PAIR(n,m), where \(n\) is the G$\backslash$"odel \# of a proof of \(m\) and \(m\) is the G$\backslash$"odel \# of the theorem
 
 The property of being a proof-pair is primitive recursive (it's like proof checking, just decompose it and see if it works): proof-pair(x,y)
@@ -3297,7 +3298,7 @@ Being a theorem-number:
 \end{itemize}
 \end{itemize}
 \subsection{Substitutions}
-\label{sec:org2598219}
+\label{sec:org6f7cef6}
 \begin{center}
 \begin{tabular}{ll}
 Formula & G$\backslash$"odel \#\\
@@ -3321,7 +3322,7 @@ SUB(x,y,z)
 
 ARITHMOQUINE(a,b) = SUB(a,a,b)
 \section{Lecture 23 \textit{<2017-11-23 Thu>}}
-\label{sec:orgd5e9284}
+\label{sec:orgfa75d1e}
 What is a theory? Set of sentences closed under deduction. \(x\in T \iff T \vdash x\), where \(T\) is a theory.
 
 A theory \(T\) is \uline{complete}, if for all sentences \(A\): either \(T \vdash A\) or \(T \vdash \sim A\)
@@ -3339,7 +3340,7 @@ ARITHMOQUINE(a,b) = SUB(a,a,b)
 \item \(a\) is a G$\backslash$"odel number of a formula with a free variable, the second \(a\) is the number that stands for a certain numeral and \(b\) is the G$\backslash$"odel number of the formula from the first \(a\), but with the free variable replaced by the numerable represented by the second \(a\)
 \end{itemize}
 \subsection{Ex}
-\label{sec:orgdd99f0c}
+\label{sec:orge7eaf9b}
 \(A(x)\) is \(\sim (Sx=0)\)
 \begin{itemize}
 \item We want to get the ARITHMOQUINE of this number
@@ -3417,7 +3418,7 @@ So we end up with: If TNT is consistent, then TNT is not complete! \textbf{G$\ba
 \item We did not need TNT directly, we could have used a weaker theory, like \(\Pi_1\)
 \end{itemize}
 \subsection{General Version of G$\backslash$"odel's First Incompleteness Theorem}
-\label{sec:orge6225f0}
+\label{sec:org661cc71}
 \(G1\): Every theory that includes \(\Pi_1\) is consistent (or else you prove everything, including \(G\)) and axiomatizable (has an axiom system, or else we wouldn't have anywhere to start, we need to be able to define what a proof is) is incomplete.
 \begin{itemize}
 \item How could you make \(G\) provable in TNT?
@@ -3431,5 +3432,103 @@ So we end up with: If TNT is consistent, then TNT is not complete! \textbf{G$\ba
 \end{itemize}
 \item As long as you're axiomatizable, you'll still be incomplete, no matter how much we try to extend TNT.
 \end{itemize}
+\end{itemize}
+\section{Lecture 24 \textit{<2017-11-28 Tue>}}
+\label{sec:org26c8539}
+\subsection{Summary of G1}
+\label{sec:org6dfd901}
+Consistent theory that is axiomatizable and includes \(\Pi_1\) is incomplete (can't prove everything)
+
+We've seen two ways of defining a consistent theory
+\begin{itemize}
+\item Syntactic definition:
+\begin{itemize}
+\item Recursive set \(A\) (axioms)
+\item Theory \(T = \{X | A \vdash X\}\)
+\end{itemize}
+\item Semantic definition:
+\begin{itemize}
+\item Structure \(\frak{M}\) (can be natural numbers or something like that)
+\item Th(\(\frak{M}\)) = \(\{X | X \text{ is true in }\frak{M}\}\)
+\item e.g. Th(\(\frak{N}\)) = \(\Omega\) (all the true statements about the natural numbers)
+\begin{itemize}
+\item Is this consistent? Yes. If there are natural numbers, a statement, i.e. \(SS0 = S0\) is either true or false, can't be both. Also note that if you are inconsistent, you can prove anything, i.e. everything is true (because from a contradiction you can get anything, natural deduction)
+\item Does it include \(\Pi_1\)? Yes. Since \(\Pi_1 \subset\) TNT and TNT is built for all of its true statements to be true for the natural numbers, then the statements of \(\Pi_1\) are true too.
+\item Complete, since it either has \(A\) or \(\sim A\) for each sentence.
+\item All true statements in FOA will be in \(\Omega\). All false statements' negations are true and in \(\Omega\).
+\item By \(G1\), \(\Omega\) cannot be axiomatizable (if you assume it's axiomatizable you get a contradiction)
+\item So we cannot come up with a system of axioms that contains all of \(\Omega\)
+\end{itemize}
+\end{itemize}
+\end{itemize}
+Recall, theories of arithmetic:
+$$\Pi_0 \subset \Pi_1 \subset \Pi_2/Q \subset \Pi/TNT/GPA \subset TNT+G \subset \ldots$$
+i.e. you can keep expanding by adding axioms. But since \(\Omega\) is not axiomatizable, you cannot reach it by constantly adding axioms, it is out of reach
+
+Can we prove the consistency of TNT? (Note that consistency is a syntactic property, it means you cannot \uline{deduce} both \uline{\(A\)} and \uline{\(\sim A\)}, for some \(A\))
+\subsubsection{Hilbert's Program}
+\label{sec:orgbb0307a}
+Assume some very small theory of arithmetic (finitary) and use it to show the consistency of TNT. Thus we have reduced the problem of consistency to this finitary problem (smaller problem).
+
+\noindent\rule{\textwidth}{0.5pt}
+Idea: Formalize "consistency"
+\begin{itemize}
+\item NEG\((x,y) \iff x\) is the G$\backslash$"odel \# of wff, \(y\) is the G$\backslash$"odel \# of \(\sim A\). These two numbers code an inconsistent pair.
+\item \(CONS_{TNT} = \forall x: \forall y: \forall z: \forall w \sim\) [NEG\((x,y) \wedge\) TNT-PROOF-PAIR\((z,x) \wedge\) TNT-PROOF-PAIR\((w,y)\)]
+\begin{itemize}
+\item i.e. There are no numbers such that there is a proof of \(x\) and a proof of \(y\) when \(x\) and \(y\) are negations.
+\item If this is true, then the system (TNT) is consistent, i.e.
+\item \(CONST_{TNT} \implies \sim(TNT \vdash A \wedge TNT \vdash \sim A)\)
+\end{itemize}
+\end{itemize}
+Alternatively,
+\begin{itemize}
+\item \(\sim(0 = 0)\) must not be provable in TNT
+\item \(CONS'_{TNT}=\sim \exists a:\) TNT-PROOF-PAIR(\(a,\overbrace{S\ldots 0}^{\text{Go \# of expression above}}\))
+\item \(CONS_{TNT}\) expresses: TNT is inconsistent
+\item Question: \(TNT \vdash CONS_{TNT}\)? No.
+\end{itemize}
+\subsubsection{Thm}
+\label{sec:org8313ccf}
+If TNT is consistent, then TNT \(\nvdash CONS_{TNT}\)
+\subsubsection{Proof}
+\label{sec:org425701c}
+By \(G1\), there is a sentence \(G\), such that TNT \(\nvdash\) G (i.e. \(G\) is not provable in TNT)
+\begin{itemize}
+\item So, if \(CONS_{TNT}\), then \(G\)
+\item One can show (proof omitted here, also note that in the proof we need TNT):
+\begin{itemize}
+\item \(TNT \nvdash CONS_{TNT} \supset G\)
+\end{itemize}
+\item Assume (for contradiction): \(TNT \nvdash CONS_{TNT}\)
+\begin{itemize}
+\item Apply Modus Ponens, getting \(TNT \nvdash G\) \lightning
+\end{itemize}
+\item Therefore our assumption was wrong, so \(TNT \nvdash CONS_{TNT}\). i.e. TNT cannot prove the formula that says it is consistent. Then clearly something that is smaller than TNT (like Hilbert's Program), cannot prove it either, so Hilbert's Program does not work.
+\end{itemize}
+\subsection{G2}
+\label{sec:orga3d210f}
+Any theory \(T\) that is:
+\begin{itemize}
+\item Consistent
+\item Axiomatic
+\item Includes \(\Pi\)(TNT)
+\end{itemize}
+Cannot prove \(CONS_{T}\) (which expresses that \(T\) is consistent). In other words, you cannot prove your own consistency. 
+
+Which axiomatic theory \(T\) can prove that TNT is consistent?
+\begin{itemize}
+\item \(TNT + CONS_{TNT}=TNT'\), but this can't prove that it itself is consistent.
+\item \(TNT' + CONS_{TNT'}=TNT''\)
+\item \ldots
+\end{itemize}
+We have to assume something stronger in order to prove TNT's consistency, but then the stronger things are even more doubtful. So we cannot prove that TNT is consistent without assuming consistency of a strong theory, which we cannot prove consistency for without assuming something even stronger and so on \ldots
+
+So we just assume that TNT is consistent, but we have no proof of that.
+\subsection{Church Thm}
+\label{sec:org7ef0246}
+FOL (all the theorems that follow from FOL) is undecidable.
+\begin{itemize}
+\item Is \(x\) a thm of the axioms of FOL? No computable procedure that gives you an answer.
 \end{itemize}
 \end{document}
