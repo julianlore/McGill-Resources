@@ -2122,3 +2122,67 @@ $G1$: Every theory that includes $\Pi_1$ is consistent (or else you prove everyt
     - But then you can do the same thing with this new system and get something similar, say $G'$
     - This will once again, be incomplete
   - As long as you're axiomatizable, you'll still be incomplete, no matter how much we try to extend TNT.
+* Lecture 24 <2017-11-28 Tue>
+** Summary of G1
+Consistent theory that is axiomatizable and includes $\Pi_1$ is incomplete (can't prove everything)
+
+We've seen two ways of defining a consistent theory
+- Syntactic definition:
+  - Recursive set $A$ (axioms)
+  - Theory $T = \{X | A \vdash X\}$
+- Semantic definition:
+  - Structure $\frak{M}$ (can be natural numbers or something like that)
+  - Th($\frak{M}$) = $\{X | X \text{ is true in }\frak{M}\}$
+  - e.g. Th($\frak{N}$) = $\Omega$ (all the true statements about the natural numbers)
+    - Is this consistent? Yes. If there are natural numbers, a statement, i.e. $SS0 = S0$ is either true or false, can't be both. Also note that if you are inconsistent, you can prove anything, i.e. everything is true (because from a contradiction you can get anything, natural deduction)
+    - Does it include $\Pi_1$? Yes. Since $\Pi_1 \subset$ TNT and TNT is built for all of its true statements to be true for the natural numbers, then the statements of $\Pi_1$ are true too.
+    - Complete, since it either has $A$ or $\sim A$ for each sentence.
+    - All true statements in FOA will be in $\Omega$. All false statements' negations are true and in $\Omega$.
+    - By $G1$, $\Omega$ cannot be axiomatizable (if you assume it's axiomatizable you get a contradiction)
+    - So we cannot come up with a system of axioms that contains all of $\Omega$
+Recall, theories of arithmetic:
+$$\Pi_0 \subset \Pi_1 \subset \Pi_2/Q \subset \Pi/TNT/GPA \subset TNT+G \subset \ldots$$
+i.e. you can keep expanding by adding axioms. But since $\Omega$ is not axiomatizable, you cannot reach it by constantly adding axioms, it is out of reach
+
+Can we prove the consistency of TNT? (Note that consistency is a syntactic property, it means you cannot _deduce_ both _$A$_ and _$\sim A$_, for some $A$)
+*** Hilbert's Program
+Assume some very small theory of arithmetic (finitary) and use it to show the consistency of TNT. Thus we have reduced the problem of consistency to this finitary problem (smaller problem).
+--------
+Idea: Formalize "consistency"
+- NEG$(x,y) \iff x$ is the G\"odel # of wff, $y$ is the G\"odel # of $\sim A$. These two numbers code an inconsistent pair.
+- $CONS_{TNT} = \forall x: \forall y: \forall z: \forall w \sim$ [NEG$(x,y) \wedge$ TNT-PROOF-PAIR$(z,x) \wedge$ TNT-PROOF-PAIR$(w,y)$]
+  - i.e. There are no numbers such that there is a proof of $x$ and a proof of $y$ when $x$ and $y$ are negations.
+  - If this is true, then the system (TNT) is consistent, i.e.
+  - $CONST_{TNT} \implies \sim(TNT \vdash A \wedge TNT \vdash \sim A)$
+Alternatively,
+- $\sim(0 = 0)$ must not be provable in TNT
+- $CONS'_{TNT}=\sim \exists a:$ TNT-PROOF-PAIR($a,\overbrace{S\ldots 0}^{\text{Go \# of expression above}}$)
+- $CONS_{TNT}$ expresses: TNT is inconsistent
+- Question: $TNT \vdash CONS_{TNT}$? No.
+*** Thm
+If TNT is consistent, then TNT $\nvdash CONS_{TNT}$
+*** Proof
+By $G1$, there is a sentence $G$, such that TNT $\nvdash$ G (i.e. $G$ is not provable in TNT)
+- So, if $CONS_{TNT}$, then $G$
+- One can show (proof omitted here, also note that in the proof we need TNT):
+  - $TNT \nvdash CONS_{TNT} \supset G$
+- Assume (for contradiction): $TNT \nvdash CONS_{TNT}$
+  - Apply Modus Ponens, getting $TNT \nvdash G$ \lightning
+- Therefore our assumption was wrong, so $TNT \nvdash CONS_{TNT}$. i.e. TNT cannot prove the formula that says it is consistent. Then clearly something that is smaller than TNT (like Hilbert's Program), cannot prove it either, so Hilbert's Program does not work.
+** G2
+Any theory $T$ that is:
+- Consistent
+- Axiomatic
+- Includes $\Pi$(TNT)
+Cannot prove $CONS_{T}$ (which expresses that $T$ is consistent). In other words, you cannot prove your own consistency. 
+
+Which axiomatic theory $T$ can prove that TNT is consistent?
+- $TNT + CONS_{TNT}=TNT'$, but this can't prove that it itself is consistent.
+- $TNT' + CONS_{TNT'}=TNT''$
+- \ldots
+We have to assume something stronger in order to prove TNT's consistency, but then the stronger things are even more doubtful. So we cannot prove that TNT is consistent without assuming consistency of a strong theory, which we cannot prove consistency for without assuming something even stronger and so on \ldots
+
+So we just assume that TNT is consistent, but we have no proof of that.
+** Church Thm
+FOL (all the theorems that follow from FOL) is undecidable.
+- Is $x$ a thm of the axioms of FOL? No computable procedure that gives you an answer.
