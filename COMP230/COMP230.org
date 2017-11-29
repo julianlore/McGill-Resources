@@ -1539,7 +1539,7 @@ Axiom: MI
 
  So we get the answer, to is MU a MIU-theorem -> No, because $0$ is a multiple of $3$. This here is a proof about proofs, which we'll be seeing a bit more of later with proofs about proofs in the TNT system.
 
-** G\"odel numbering
+** Gödel numbering
 Continuing with the MIU system:
 - We have the symbols
   - M->3
@@ -1554,7 +1554,7 @@ Now we can use these proofs for arbitrary strings
 $5$ can be represented as -> a) x1 -> x10 (typographical) ; b) A number whose remainder, when divided by 10 is 1, can be multiplied by 10.
 - Two ways of talking about it once we transform it into a number.
 
-So G\"odel Numbering allows us to go from a formal system to number theory. 
+So Gödel Numbering allows us to go from a formal system to number theory. 
 | Formal System -> | Number Theory          |
 |------------------+------------------------|
 | MIU              |                        |
@@ -1585,7 +1585,7 @@ How do we talk about the English language? "short" is short.
 - TNT-formula: $\forall a : \sim Sa = 0$ is a theorem of TNT
 - Go #: 626 262 636 223 123 262 111 666 is a TNT number -> $F(SS\ldots S0)$ is a TNT-thm
 - -> $\sim F(G)$ is a TNT-thm -> says that "I am not a TNT-thm"
-Can go from TNT to number theory to TNT. Reaching something different in the end will lead us to G\"odel's theorem
+Can go from TNT to number theory to TNT. Reaching something different in the end will lead us to Gödel's theorem
 
 In a TNT proof, every line can be mapped to a Godel # (since you can translate formulas into numbers) and then you can get a unique Godel number for an entire proof
 
@@ -2030,17 +2030,17 @@ $\Pi_0 \nvdash 0 \neq S0$
 
 $$\Pi_0 \subset \Pi_1 \subset \Pi_2 \subset \Pi $$
 ** Proof-Pairs
-TNT-PROOF-PAIR(n,m), where $n$ is the G\"odel # of a proof of $m$ and $m$ is the G\"odel # of the theorem
+TNT-PROOF-PAIR(n,m), where $n$ is the Gödel # of a proof of $m$ and $m$ is the Gödel # of the theorem
 
 The property of being a proof-pair is primitive recursive (it's like proof checking, just decompose it and see if it works): proof-pair(x,y)
 - This means that it's representable
   - $\implies$ There is a FOA-formula Bew(x,y) (German word Beweis = proof) that represents it.
 Being a theorem-number:
 - $theorem-number(x) = \exists y:proof-pair(y,x)$
-  - i.e. $x$ is a theorem number if it's a G\"odel number of a theorem
+  - i.e. $x$ is a theorem number if it's a Gödel number of a theorem
   - Is this primitive recursive? Not clear. You have to find a proof rather than check a proof.
 ** Substitutions
-| Formula                        | G\"odel #                   |
+| Formula                        | Gödel #                   |
 | $a=a$                          | 262 111 262                 |
 | $SS0=SS0$ (substitute by term) | 123 123 666 111 123 123 666 |
 SUB(formula with free variable, numeral (term), resulting formula) -> In our example, SUB(262 111 262, 2, 123 123 666 111 123 123 666)   
@@ -2059,17 +2059,17 @@ A theory $T$ is _complete_, if for all sentences $A$: either $T \vdash A$ or $T 
 
 What we will show next is that TNT is not complete (incomplete)!
 - Proof: Produce $G$, s.t. $TNT \nvdash G$ and $TNT \nvdash \sim G$ 
-- This is (more or less) G\"odel's First Incompleteness Theorem
+- This is (more or less) Gödel's First Incompleteness Theorem
   - Very important, perhaps the highlight of the course
 ARITHMOQUINE(a,b) = SUB(a,a,b)
-- $a$ is a G\"odel number of a formula with a free variable, the second $a$ is the number that stands for a certain numeral and $b$ is the G\"odel number of the formula from the first $a$, but with the free variable replaced by the numerable represented by the second $a$
+- $a$ is a Gödel number of a formula with a free variable, the second $a$ is the number that stands for a certain numeral and $b$ is the Gödel number of the formula from the first $a$, but with the free variable replaced by the numerable represented by the second $a$
 ** Ex
 $A(x)$ is $\sim (Sx=0)$
 - We want to get the ARITHMOQUINE of this number
-- G\"odel number is: $a = 223 362 123 262 111 666 323$
+- Gödel number is: $a = 223 362 123 262 111 666 323$
 - ARITHMOQUINE(a,b)
   - Take $A(a)$ => $\sim (S\underbrace{SS \ldots S}_{a-many}0 = 0)$
-    - Now take the G\"odel number of this and you get your $b$
+    - Now take the Gödel number of this and you get your $b$
 - Arithmoquine is certainly recursive and terminates. We can easily make a computer program to mimic it.
 More mathematically: Arithmoquine is usually called: d (diagonal function)
 
@@ -2089,11 +2089,11 @@ d(\underbrace{\#\alpha}_{\text{the Godel \# of $\alpha$}} =
 
 A number (ex. student id), can just be a number but it can represent a student.
 
-IS-TNT-AXIOM(x) => property of the number $x$ or property of the formula with G\"odel # x
+IS-TNT-AXIOM(x) => property of the number $x$ or property of the formula with Gödel # x
 - $\forall a : \exists b: \ldots x \ldots$
 
 G's aunt:
-- $\sim \exists a : \exists a': \underbrace{TNT-PROOF-PAIR(a,a')}_{a \text{ is a proof of }a'} \wedge \underbrace{ARITHMOQUINE(a'', a')}_{a' \text{ is the arithmoquinification of }a''} = F(a'')$ with G\"odel # $u$
+- $\sim \exists a : \exists a': \underbrace{TNT-PROOF-PAIR(a,a')}_{a \text{ is a proof of }a'} \wedge \underbrace{ARITHMOQUINE(a'', a')}_{a' \text{ is the arithmoquinification of }a''} = F(a'')$ with Gödel # $u$
   - Equation has one free variable, $a''$
   - Putting them together we get $a$ is a proof of the arithmoquinification of a''
 - Now G's aunt is:
@@ -2101,7 +2101,7 @@ G's aunt:
 Now we plug in $u$ as the free variable $a''$
 - $\sim \exists a : \exists a': TNT-PROOF-PAIR(a,a') \wedge ARITHMOQUINE (\underbrace{SS\ldots S 0}_{u \text{ many}},a') = F(u) = G$
 - This is now a sentence, no more free variables
-What is the G\"odel # of $G$? The arithmoquinification of $u$.
+What is the Gödel # of $G$? The arithmoquinification of $u$.
 - We have done the same thing we did earlier with the smaller example except for a longer formula.
 What does $G$ express? There is no TNT-proof of $\underbrace{\text{the arithmoquinification of }u}_{G}$.
 
@@ -2110,10 +2110,10 @@ What does $G$ express? There is no TNT-proof of $\underbrace{\text{the arithmoqu
 - => TNT $\nvdash G$
 - Is $\sim G$ a TNT-theorem? Assume TNT $\vdash \sim G$. So, $\sim G$ true, i.e. $G$ is provable in TNT. So TNT $\vdash G$ => TNT is inconsisten.
 - If TNT is consistent then TNT $\nvdash \sim G$
-So we end up with: If TNT is consistent, then TNT is not complete! *G\"odel's First Incompleteness Theorem*
+So we end up with: If TNT is consistent, then TNT is not complete! *Gödel's First Incompleteness Theorem*
 - TNT was important here to tell us that the functions we used (i.e. TNT-PROOF-PAIR) are representable
 - We did not need TNT directly, we could have used a weaker theory, like $\Pi_1$
-** General Version of G\"odel's First Incompleteness Theorem
+** General Version of Gödel's First Incompleteness Theorem
 $G1$: Every theory that includes $\Pi_1$ is consistent (or else you prove everything, including $G$) and axiomatizable (has an axiom system, or else we wouldn't have anywhere to start, we need to be able to define what a proof is) is incomplete.
 - How could you make $G$ provable in TNT?
   - Just turn it into an axiom
@@ -2149,7 +2149,7 @@ Can we prove the consistency of TNT? (Note that consistency is a syntactic prope
 Assume some very small theory of arithmetic (finitary) and use it to show the consistency of TNT. Thus we have reduced the problem of consistency to this finitary problem (smaller problem).
 --------
 Idea: Formalize "consistency"
-- NEG$(x,y) \iff x$ is the G\"odel # of wff, $y$ is the G\"odel # of $\sim A$. These two numbers code an inconsistent pair.
+- NEG$(x,y) \iff x$ is the Gödel # of wff, $y$ is the Gödel # of $\sim A$. These two numbers code an inconsistent pair.
 - $CONS_{TNT} = \forall x: \forall y: \forall z: \forall w \sim$ [NEG$(x,y) \wedge$ TNT-PROOF-PAIR$(z,x) \wedge$ TNT-PROOF-PAIR$(w,y)$]
   - i.e. There are no numbers such that there is a proof of $x$ and a proof of $y$ when $x$ and $y$ are negations.
   - If this is true, then the system (TNT) is consistent, i.e.
