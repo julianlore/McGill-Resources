@@ -2240,3 +2240,96 @@ Proof: We need to verify that both capacity and conservation conditions are resp
      [[./Images/i114.png]]
 2. Conservation, where $a=$ Bottleneck
 [[./Images/i115.png]]
+* Lecture 24 <2017-11-30 Thu>
+** Recall: Max Flow Problem
+[[./Images/i116.png]]
+We saw the Ford-Fulkerson Algorithm. We know that it will terminate and give us a flow. But why is it the maximum flow?
+- Value here is $2+1 = 3$
+--------
+_Def_: A cut in a flow network is a partition of vertices into two parts $(A,B)$ such that $s \in A$ and $t \in B$
+[[./Images/i117.png]]
+-------
+_Def_: [capacity] of a cut $(A,B)$ is defined as 
+$$ cap(A,B) = \sum_{uv \in E, u\in A, v\in B}C_{uv}$$
+Capacity of our example is $1+2 = 3$.
+
+Claim: Let $(A,B)$ be a cut.
+
+Thm:
+$$val(f) = f^{out}(A) - f^{in}(A)$$
+\begin{minipage}{.5\textwidth}
+\begin{align*}
+f^{out}(A) & = \sum_{uv \in E, u \in A, v \in B} f(uv)
+\end{align*}
+\end{minipage}
+\vline
+\begin{minipage}{.5\textwidth}
+\begin{align*}
+f^{in}(A) & = \sum_{uv \in E, u \in B, v \in A} f(uv)
+\end{align*}
+\end{minipage}
+Proof:
+$$val(f)=\sum_{u\in A} \left(f^{out}(u)-f^(in)(u)\right) $$
+- Why? By conservation property, this sum is $0$ for everything except for source. i.e.
+- 
+\begin{equation*}
+\left(f^{out}(u)-f^(in)(u)\right) = 
+\begin{cases}
+0 & \text{ if }u \neq s
+\\ val(f) & \text{ if } u=s 
+\end{cases}
+\end{equation*}
+\begin{align*}
+%\left(f^{out}(u)-f^(in)(u)\right) 
+= \sum_{u\in A}\left[\sum{uv \in E}f(uv)-\sum_{wu\in E}f(wu)\right]
+\end{align*}
+- [[./Images/i118.png]]
+  - $u_0v_0$ will contribute to sum as $f(u0v0) - f(u0v0)$
+  - $u_1v_1$ does not appear in the sum
+  - $u_2v_2$ will only appear on left side, i.e. positive, $f(u_2v_2)$
+  - $u_3v_3$ will only appear on right side, i.e. negative, $-f(u_3,v_3)$ 
+$$=\sum_{uv \in E, u \in A, v \in B}f(uv)-\sum_{wu \in E, w\in B, u \in A}f(wu)$$
+-------
+Taking $B=\{t\}, A = V - \{t\}$:
+$$\underbrace{f^{out}(A)}_{f^{in}(t)}-\underbrace{f^{in}(A)}_{0} = f^{in}(t)$$
+$$\implies f^{in} = val(f)$$
+
+Question: What is the relation between $f^{out}(A)$ and $cap(A,B)$?
+[[./Images/I119.png]]
+$$f^{out}(A)=\sum_{uv\in E,u \in A, v \in B} f(uv) \leq \sum_{uv \in E, u \in A, v \in B}c_{uv} = cap(A,B)$$
+-----
+$$val(f) = f^{out}(A) - f^{in}(A) \leq cap(A,B) - f^{in} \leq cap(A,B)$$
+Thm: Let $f$ be a flow and $(A,B)$ a cut. Then $val(f) \leq cap(A,B)$
+- In particular:
+$$\max flow \leq \min cut$$
+- In the earlier example, we found a cut with capacity $3$. Flow is bounded by $\min cut$, so we know it can't be better than $3$. To show that it can be at least $3$, just show a flow that is $3$. So showing a flow gives us a lower bound and then providing a cut gives an upper bound. If they are equal then we have equality.
+----------
+[[./Images/i120.png]]
+Proof [Ford-Fulkerson finds the max-flow]: When the algorithm terminates there are no $s-t$ paths in the residual graph $G_f$. Let $A^*$ be all the vertices that can be reached from $s$ in $G_f$ (run a DFS from $s$ to find it), and let $B^*$ be the rest of the vertices.
+- Note $s\in A^*$, and $t \in B^*$, i.e. we cannot reach $t$ and if we could we could augment the flow.
+[[./Images/i121.png]]
+If $e$ is an edge from $A^*$ to $B^*$ in the original graph $G$ then $c_e=f(e)$ as otherwise we would have the edge $e$ in the residual graph, and that is not possible as its endpoint must not be reachable from $s$. (contradiction)
+-------
+[[./Images/i122.png]]
+Similarly if $e$ is an edge from $B^*$ to $A^*$ in $G$ then $f(e)=0$ as otherwise we would have the opposite edge from $A^8$ to $B^*$ in $G_f$.
+------
+So $$val(f) = \underbrace{f^{out(A^*)}}_{cap(A^*,B^*)}-\underbrace{f^{in}(A^*)}_{0}$$
+$$f^{out}(A^*)=\sum_{u \in A^*, v\in B^*, uv \in E}f(uv) = \sum_{u \in A^*, v \in B^*, uv\in E}c_{uv}=cap(A^*,B^*)$$
+We proved $val(f) = cap(A^*,B^*)$. But we know that $\max flow \leq cap(A^*, B^*)$. $val(f) \leq \max flow \leq cap(A^*, B^*)$. $\implies val(f) = \max flow = cap(A^*,B^*) \square$
+
+We also knew $\max flow \leq \min cut$. 
+- $val(f) \leq \max flow \leq \min cut \leq cap(A^*,B^*)$
+- $\implies \max flow = \min cut$
+- Say this is an exam question. We proved it indirectly by using the algorithm to give us a cut in order to show they were equal.
+--------
+Question: How can we find a min-cut in a flow network? Run FF and when it terminates, run a DFS from $s$ in $G_f$ to find $A^*$. Now $(A^*, B^*)$ is a min-cut.
+*** Running time
+In FF, every time you run a DFS from $s$, try to find a s-t path in $G_f$.
+- Each iteration takes $O(m+n)$
+- Number of iterations $\leq \max-flow \leq n \times \text{largest capacity}$
+- # iterations $\leq \max-flow \leq \text{sum of all capacities leaving }s \leq n \times \text{largest capacity}$
+$\implies O(mnK)$ where $K$ is the largest capacity. Is this polynomial? No. Same issue as with knapsacks, as the algorithm depends linearly on $K$.
+- Not efficient as $\log_2 k$ bits is enough to store a capacity.
+[[./Images/i123.png]]
+Very slow: $2^{100} iterations$, but only requires $400$ bits to store. Can use BFS to find shortest s-t path.
+- Max flow will not be on the final exam (since it was not on any assignments) 
