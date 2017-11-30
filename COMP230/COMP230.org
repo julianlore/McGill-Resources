@@ -2186,3 +2186,165 @@ So we just assume that TNT is consistent, but we have no proof of that.
 ** Church Thm
 FOL (all the theorems that follow from FOL) is undecidable.
 - Is $x$ a thm of the axioms of FOL? No computable procedure that gives you an answer.
+* Lecture 25 <2017-11-30 Thu>
+Final exam will be more or less like the midterm
+- 12 questions
+- Lots of definitions
+Make sure you know the terms, i.e. theorem vs theory
+------
+Review
+** Logic
+What is logic?
+Given logic, you can get to the following branches:
+- Set theory
+- Proof theory (syntactic)
+- Model theory (semantic)
+- Recursion/computability theory
+We've covered all of these branches in this course
+- Who was the first logician?
+  - Aristotle
+- Propositional logic started in 1854
+  - George Boole (why it's also called Boolean Logic)
+- 1879, Frege invented First Order Logic
+- Set theory 1880s
+  - Cantor
+    - Died in insane asylum
+- 1900 Hilbert's Problems (one of which was consistency of arithmetic)
+- 1910-3
+  - Principia Mathematica written by Bertrand Russell and Whitehead
+- 1930 Gödel: Completeness of FOL (see below)
+- 1931 G1 & G2
+- 1936 Tarski : semantic consequences $\models$
+- 1936 Turing Machines
+- 1940: FOL is undecidable
+A lot more work done on syntax. Started off working on syntax and then semantics was looked at starting from Completeness of FOL.
+** Main Theorems of this course
+- Cantor's Theorem
+  - $|A|<|\frak{P}(A)|$
+- Completeness Theorem (Completeness of FOL included)
+  - If $\Gamma \models$, then $\Gamma \vdash A$ 
+- Soundness Theorem
+- G1: If a theory $T$ is
+  - Consistent
+  - Axiomatizable
+  - Includes $\Pi_1$
+  - Then it is incomplete
+- G2: If a theory $T$ is
+  - Consistent
+  - Axiomatizable
+  - Includes $\Pi/TNT/DPA$
+  - Then $T$ cannot prove its own consistency ($CONS_T)$
+- Church's Theorem
+  - FOL is undecidable because all theorems are recursively enumerable but not its complement
+** Proofs
+- By cases
+- By contradiction
+- By Mathematical Induction
+  - Required inductive/recursive definitions
+    - $\mathbb{N}$
+    - Factorials
+    - MIU theorems
+    - Formal Systems
+    - Proofs
+    - Sentences
+** Sets
+- Cardinality
+- Diagonalization
+  - Real numbers are uncountable using Cantor's theorem
+- Functions
+  - Injective
+  - Surjective
+  - Bijective
+    - Proving cardinalities are the same
+  - Total
+** Formal Systems
+- Started out with proof theory & syntax
+  - MIU
+  - pq
+  - tq
+  - Can have different systems depending on rules you give
+  - Originally introduced these 3 without any purpose
+  - Introduced axioms, proofs/derivation, theorems from these 3
+- Interpretations (semantics)
+  - Started giving meanings to the formal systems we introduced
+  - Various interpretations
+    - Can have different interpretations to the same system
+- Meta-reasoning
+  - Reason about these things
+  - Use proofs by (structural) induction
+  - Show that some property holds for all theorems of the system (which can show that something like MU is not a theorem)
+  - Soundness & completeness
+*** Propositional Logic
+Formal systems: (syntax)
+- Natural Deduction
+- Axiomatic
+- GEB
+Semantics:
+- Truth tables
+- Semantic consequence $\Gamma \models A$
+  - If everything in $\Gamma$ is true, then it is impossible for $A$ to be false
+  - Whenever the premises are true, then the formula is true
+Meta-reasoning
+- Soundness & completeness
+*** First Order Logic
+Syntax:
+- Axiomatic
+- Natural Deduction
+- GEB
+- Substitutions
+Semantics:
+- Structures
+  - Universe of Discourse, etc.
+- Interpretations
+- Valuations
+- Models
+- $\Gamma \models A$
+  - For every valuation or model, must be satisfied
+FOL is complete
+*** Computability Theory
+Syntax:
+- Turing Machines
+- Primitive recursive functions
+  - zero, successor, projector function or composition or primitive recursive schema
+  - Partial recursive functions
+  - Total partial recursive functions
+- BlooP/FlooP
+  - B stands for bounded
+  - F stands for free (not bounded)
+  - Terminator programs are FlooP programs that end
+Semantics
+- Limitation of Turing Machines: Halting Problem $x \in \{x | T_x(x)\}$
+- Decidable/decidability of sets
+  - A is decidable $\iff A$ is recursively enumerable and the complement of $A$ is also recursively enumerable
+  - If $A$ and it's complement are both recursively enumerable, then you can enumerate both and keep checking if something appears, i.e. you can decide whether that is in it
+- Recursive set
+- Recursively enumerable
+- If a set is recursively enumerable and its complement is recursively enumerable, then it is decidable (recursive)
+- If a set is decidable, then it is recursive and recursively enumerable and so is its complement
+Meta-reasoning
+- Church-Turing Thesis
+---------
+Goal of this course is to learn about formal systems and their limitations
+*** First Order Arithmetic
+Non-logical symbols
+- 0
+- S
+- +
+- *
+Syntax:
+- $\Pi_1/Q \subset \Pi/TNT \ldots \subset \Omega$
+  - Q is undecidable, meaning TNT is also undecidable
+  - All axiomatizable except $\Omega$
+  - $\Omega$ can only be defined semantically, not syntactically
+  - All of these are part of $\Omega$
+- Theory
+Semantics:
+- Limitation:
+  - Incompleteness Theorems: G1 & G2
+    - Gödel numbers
+    - Representable
+    - Proof-pair(x,y)
+    - Arithmoquinification
+Meta-reasoning
+- Complete theory (different meaning from completeness of formal systems)
+  - For each sentence, either $A$ or $\sim A$ is in the theory

@@ -1,4 +1,5 @@
-#+OPTIONS: ^:nil 
+#+OPTIONS: ^:nil
+#+LaTeX_HEADER: \usepackage{bussproofs} 
 * Lecture 1 <2017-09-12 Tue>
 This course is an introduction to the foundations and paradigms of programming languages.
 - 5 assignments, 5% each
@@ -1480,3 +1481,105 @@ Would ~fakeArea(2) + 3~ still type check given that $int \leq float$? Yes. ~fake
 - So $float \to int \leq int \to int$ because $int \leq float$, contravariant, flips the order because you're using it as an input to a function, not the output. 
 Subtyping has to do with the use of variables (Not sets)! Functions are co-variant in the output and they are contravariant in the input!
 - $S_1 \to S_2 \leq T_1 \to T_2$ if $S_2 \leq T_2$ (co-variant) and $T_1 \leq S_1$ (contravariant)
+* Lecture 34 <2017-11-30 Thu>
+** References  
+- Add new expression, add new expressions $e_1 := e_2, !e, ref e, ()$ and add new types $T ref, unit$
+To understand a feature we can look at examples.
+#+BEGIN_SRC ocaml
+let x = ref (2 + 3) in
+x := !x * 2
+#+END_SRC
+Recall:
+- What is the type of an assignment?
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash e_1 : T$ ref}
+\AxiomC{$\Gamma \vdash e_2 : T$}
+\BinaryInfC{$\Gamma \vdash e_1:=e2:$ unit}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash e : T$ ref}
+\UnaryInfC{$\Gamma \vdash !e:T$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash e : T$}
+\UnaryInfC{$\Gamma \vdash \text{ref }e: T$ ref}
+\end{prooftree}
+
+#+BEGIN_SRC ocaml
+let x = ref 5 in
+let y = ref x in
+#+END_SRC
+Here $x$ is an int ref, so $y$ is a (int ref)ref
+
+How do references work with subtyping?
+- Recall, subtyping:
+  - Base types are co-variant
+  - Products are contra-variant in the input
+  - Functions are co-variant in the output
+
+#+BEGIN_SRC ocaml
+let x = ref 5.0 in
+let y = ref (2 + 3) in
+!x * 3.14
+#+END_SRC
+Is it safe to write ~!y * 3.14~ instead of ~!x * 3.14~? i.e. Can we provide a ~int ref~ when a ~float ref~ is required. Yes, we can just downcast it. Seems to suggest:
+
+\begin{prooftree}
+\AxiomC{$S \leq T$}
+%\RightLabel{S-Ref}
+\UnaryInfC{$S \text{ ref} \leq T\text{ ref}$}
+\end{prooftree}
+
+But:
+#+BEGIN_SRC ocaml
+let x = ref 5.0 in
+let y = ref (2 + 3) in
+y := 4
+#+END_SRC
+Is it safe to write ~x := 4~ instead of ~y :=4~? Can we provide a ~float ref~ when a ~int ref~ is required? Yes, just upcast it. Seems to suggest: 
+
+\begin{prooftree}
+\AxiomC{$T \leq S$}
+%\RightLabel{S-Ref}
+\UnaryInfC{$S \text{ ref} \leq T\text{ ref}$}
+\end{prooftree}
+But this is the opposite of what we just suggested. So references are covariant and contravariant. This means they are invariant. We cannot use subtyping with references. Subtyping is static, so we can't change the subtyping based off what expression we are encountering, that would be very sensitive and difficult.
+- This is surprising, as in things like Java we do have subtyping with references?
+  - Subclassing is a form of subtyping
+  - Nominal Subtyping: User declares what type (class) extends a subtype (subclass)
+  - So in Java they have an unsound subtyping rule, but then during runtime they have an unsound check that checks if an assignment is valid
+    - Pay during runtime, have to keep types around and also check them during assignments
+  - Typing and runtime diverge -> Runtime errors
+  - In Java we upcast ourselves
+  - Upcast an int array to a floating point array
+  - Try to assign a floating point to this array will try to assign a floating point number into an int array
+** Functional vs Object Oriented
+Functional
+- Data and functions are decoupled (separate)
+#+BEGIN_SRC ocaml
+type people =
+    | Staff of ...
+    | Students of ...
+    | Profs of ...
+#+END_SRC
+- Easy to add new functionality
+  - Just write a new function that matches based on type of person, for example, raising tuition of students only
+Object Oriented
+- Data and functionality are coupled
+  - Just make a subclass
+- Easy to add new data
+Note that the O in OCaml stands for object oriented, so OCaml kind of mixes the two together (although we did not see any of the object part in this class)
+** Effect of programming langauges on software quality
+A Large-Scale Study of Programming Languages and Code Quality in Github (paper made in 2017)
+
+Summary of results:
+- Functional languages better than procedural languages
+- Disallowing implicit type conversion (coercion) is better
+  - No subtyping, i.e. what OCaml does
+  - Fewer errors
+- Static typing is better than dynamic
+- Managed memory usage is better than unmanaged
+  - C is unmanaged
+- The defect proneness of langauges is not associated with software domains (kind of problem we're solving)
