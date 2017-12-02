@@ -1583,3 +1583,81 @@ Summary of results:
 - Managed memory usage is better than unmanaged
   - C is unmanaged
 - The defect proneness of langauges is not associated with software domains (kind of problem we're solving)
+* Lecture 35 <2017-12-01 Fri>
+** Four main goals of COMP302
+1.| Provide a thorough introduction to fundamental concepts in programming languages
+- Know how to use and write higher order functions
+- Used to model object enclosures
+  - Like counter
+  - Tick
+  - Memoization
+  - Trap state
+- Exceptions
+  - Defer control
+  - Backtrack through a tree
+  - Coins and change problem
+- Continuations
+  - Alternative to exceptions
+  - Used for many things
+  - Form of higher order functions
+  - Used to get rid of exceptions
+  - Use to turn function into tail recursive
+  - Success continuations to accumulate a certain result
+  - Failure continuations to go back when we need it to stop
+- State
+  - 2 kinds of variables
+  - Bound variables, introduced in a let expression, function, pattern
+  - Global variable, introduced when introducing state with ref
+- Lazy programming
+  - Higher order functions used to delay evaluation like for the tail of a stream
+- Partial evaluation
+  - Played a roll in object enclosures to trap state
+- Modules
+  - Polymorphism
+Most languages support some kind of higher order functions, even Java, but not as powerful as OCaml
+2.| Show different ways to reason about programs
+- Type checking
+  - Should improve your understanding of what went wrong in your program
+  - Thinking about types is important even if you aren't using a static language
+  - Types help you improve features and understanding of programs
+- Induction
+  - Everyone should be able to do an induction proof, guaranteed to have one on the final
+- Operational semantics
+  - How does this evaluate?
+  - How do local variables and references come into play?
+  - What is the effect of a program?
+3.| Introduce fundamental principles in programming language design
+- How should we go about designing languages?
+- Grammar and parsing required
+  - Syntax of the language, allows you to understand it
+  - Syntax may differ from functional languages, but they are more or less the same
+  - Differ more in type checking and operational semantics
+  - Haskell has very similar syntax but different semantics, lazy language in how it executes
+- Operational semantics
+- Interpreters
+- Type checking
+- Polymorphism
+- Subtyping
+  - How do people implement subtyping into their language?
+    - What are the tradeoffs?
+4.| Expose students to a different way of thinking about problems
+- Helps to be exposed to different ways of thinking
+- Used OCaml in this course to do this
+- Could have been another language
+- Yes, we used a language to go through these concepts, but these concepts are very general
+---------
+** General Principles
+1. If you learn a new language, learn one that changes the way you think about programming. Or else it's just learning syntax.
+2. Simple and elegant solutions are much more effective, but complex solutions are easier to find and require less time, but in the end it is worth it
+** Exam
+- 8 questions
+- First question is how expressions are typed
+  - A bit like on the midterm
+  - ~fun x y -> if x * (-1) < 0 then (y,x) else (x,y)~
+    - What is the most general type of this expression?
+    - ~int -> int -> int * int~
+- Understand the difference between values and effects
+- Coin problem revisited
+  - Implemented using continuations this time
+- Lists and trees are bread and butter
+- Revisited count and made it tail recursive
