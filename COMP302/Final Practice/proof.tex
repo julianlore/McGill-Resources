@@ -1,0 +1,63 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\usepackage[margin=1 in,headheight=20pt]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{relsize}
+\usepackage{lastpage}
+\allowdisplaybreaks
+
+\theoremstyle{plain} 
+\newtheorem*{thm}{Theorem}
+
+\pagestyle{fancy}
+\lhead{COMP 302-001}
+\chead{practice-final.ml Induction Proof}
+\rhead{\today
+	\\ LORE, JULIAN}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+
+\begin{document}
+\onehalfspacing
+\begin{thm}
+  For all trees \texttt{t}, \texttt{size t + acc} $=$ \texttt{size\_acc
+  t acc}.
+\end{thm}
+\begin{proof}
+  By structural induction on the depth of \texttt{t}.
+  \begin{itemize}
+  \item \textbf{Base case}: \texttt{t = Leaf}
+    \begin{align*}
+      \texttt{size t + acc} &= \texttt{size Leaf + acc} &
+      \\ & \Rightarrow
+           \texttt{0 + acc} & \text{By definition of \texttt
+                        {size}}
+      \\ & = \texttt{acc}
+      \\ & \Leftarrow \texttt{size\_acc Leaf} & \text{By                           definition of \texttt{size\_acc}}
+      \\ & =
+           \texttt{size\_acc
+           t}
+    \end{align*}
+  \item \textbf{Step}: \texttt{t} $=$ \texttt{Node(l,x,r)} for some trees
+    \texttt{l},\texttt{r} and value \texttt{x}.
+    \\ \textbf{Inductive Hypothesis (1)}: \texttt{size l + acc} $=$
+    \texttt{size\_acc l acc}, for some tree \texttt{l}
+    \\ \textbf{Inductive Hypothesis (2)}: \texttt{size r + acc} $=$
+    \texttt{size\_acc r acc}, for some tree \texttt{r}
+      \begin{align*}
+        & \texttt{size\_acc t acc}
+        \\ & = \texttt{size\_acc Node(l,x,r) acc}
+        \\ & \Downarrow \texttt{size\_acc l (x + size\_acc r acc)} & \text{By                                                                  definition of                                                                   \texttt{size\_acc}}
+        \\ & = \texttt{size l + (x + size\_acc r acc)} & \text{By IH(1)}
+        \\ & = \texttt{size l + (x + size r + acc)} & \text{By IH(2)}
+        \\ & = \texttt{size l + x + size r + acc} & \text{By               associativity of \texttt{+}}
+        \\ & = \texttt{x + size l + size r + acc} & \text{By                 commutativity of \texttt{+}}
+        \\ & \Leftarrow \texttt{size Node(l,x,r) + acc} & \text{By definition of \texttt{size}}
+        \\ & = \texttt{size t + acc} &
+      \end{align*}
+  \end{itemize}
+\end{proof}
+\end{document}
