@@ -161,6 +161,8 @@ let rec change coins amt =
   
 let rec listToString = function
   | [] -> ""
+  (* Don't end with a comma *)
+  | h::[] -> (string_of_int h)
   | h::t -> (string_of_int h)^","^(listToString t)
 
 (* Tail recursive *)
@@ -168,9 +170,11 @@ let rec listToString' l =
   let rec aux l acc =
     match l with
     | [] -> acc
-    | h::t -> aux t (acc ^ "," ^ string_of_int (h)) in
+    (* Don't end with a comma *)
+    | h::[] -> (aux [] (acc ^ string_of_int (h)))
+    | h::t -> aux t (acc ^ string_of_int (h) ^ ",") in
   aux l ""
-            
+
 
 let change_top coins amt =
   try 
@@ -181,17 +185,20 @@ let change_top coins amt =
 
 (* Giving change with continuations *)
 let rec cchange (coins: int list) (amt:int) (fc: unit -> int list) =
-  if amt = 0 then []
-  else 
-    begin match coins with
-    | [] -> fc ()
-    | coin::cs ->
-       if coin > amt then
-         cchange cs amt fc
-       else
-         coin :: cchange coins (amt - coin) (fun () -> cchange cs amt fc)
-    end
-  
+  (* Add a success continuation as well *)
+  let rec aux coins amt fc sc = 
+    if amt = 0 then sc ()
+    else 
+      begin match coins with
+      | [] -> fc ()
+      | coin::cs ->
+         if coin > amt then
+           aux cs amt fc sc
+         else
+           aux coins (amt - coin) (fun () -> aux cs amt fc sc) (fun () -> (sc ()) @ [coin])
+      end
+                                                                in aux coins amt fc (fun () -> []);;
+
 let cchange_top coins amt = 
   try 
     let c = cchange coins amt (fun () -> raise Change) in
@@ -201,6 +208,8 @@ let cchange_top coins amt =
 cchange_top [2;5] 3;;
 cchange_top [2;5] 8;;
 cchange_top [25;10;5;2] 43;;
+change_top [5;3;2] 9;;
+cchange_top [5;3;2] 9;;
 
 (* Here is the behavior of change_top : 
 
@@ -236,7 +245,7 @@ Sorry, I cannot give change
 type 'a susp = Susp of (unit -> 'a)
 
 (* delay: *)
-let delay f = Susp(f)
+                                                                                             let delay f = Susp(f)
 
 (* force: *)
 let force (Susp f) = f ()
@@ -259,7 +268,7 @@ let nats = numsFrom 0
 (* ---------------------------------------------------- *)
 (* Inspect a stream up to n elements 
 
-                          *)
+ *)
 let rec take_str n s = match n with 
   | 0 -> []
   | n -> s.hd :: take_str (n-1) (force s.tl)
