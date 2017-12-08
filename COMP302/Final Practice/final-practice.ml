@@ -322,13 +322,18 @@ exception Error of string
    
  *)
 let make_lock  =
-  let lock = ref Open in
-  function
-  | Close -> if !lock = Open then lock := Close else raise (Failure "Can't set closed lock closed")
-  | Open -> if !lock = Close then lock := Open else raise (Failure "Can't set open lock opened")
+  (fun () ->
+    let lock = ref Open in
+    function
+    | Close -> if !lock = Open then lock := Close else raise (Failure "Can't set closed lock closed")
+    | Open -> if !lock = Close then lock := Open else raise (Failure "Can't set open lock opened"))
 
-let l = make_lock;;
+let l = make_lock ();;
 l Close;;
+(* Different lock *)
+let l2 = make_lock ();;
+l2 Close;; (* No exception, different lock that is open *)
+
 l Open;;
 (* l Open;; (\* Exception *\) *)
 (* ---------------------------------------------------- *)
