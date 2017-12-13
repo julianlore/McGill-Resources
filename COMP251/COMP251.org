@@ -8,7 +8,7 @@
 A set of step by step instructions
 1. Every step simple and precise
 2. Produces an answer in finite time (not run forever)
-This course will be very rigorous, lots of proofs, but it will take 2-3 months to formally define algorithms, so we'll just have to be satisfied with thsi definition.
+This course will be very rigorous, lots of proofs, but it will take 2-3 months to formally define algorithms, so we'll just have to be satisfied with this definition.
 Formalized in 1930's by Turing and Church.
 - Covered in COMP 330
 Even though the concept of an algorithm is very simple and intuitive, it's not very obvious to prove things.
@@ -247,7 +247,8 @@ We want to pick the max number of these tasks s.t. no two overlap. (Maximum book
   - where $v_i$ is the value we get from accomodating the $i^{th}$ offer.
 - $s_1,\ldots,s_n$
 - $f_1,\ldots,f_n$
-Want higher value, rather than most matchings
+Want higher value, rather than most matchings.
+
 Why is this harder to solve than the previous problem? Because the previous one is a special case of the first.
 - Reduction = reducing this problem to the previous to get an answer
 - Setting $v_1=\ldots=v_n=1$ solves the previous problem.
@@ -268,7 +269,7 @@ Find the largest independent set.
 - Common belief: $P\neq NP$
 - This is an example of a problem which is believed to be NP
 
-So that is essentially a small instruction about the types of problems we'll be seeing in this course. Next lecture we'll be formally going through running time.
+So that is essentially a small introduction about the types of problems we'll be seeing in this course. Next lecture we'll be formally going through running time.
 * Lecture 3 <2017-09-12 Tue>
 ** Running Time Analysis
 - We will be talking about running time of an algorithm.
@@ -311,7 +312,7 @@ Thinking back without knowledge of running time, what questions can we pose?
 - Better to just care about the worst case
 **** Worst case time analysis
 We measure the _running time_ against the worst input of a given _size_
-- Want to be inddependent of implementation:
+- Want to be independent of implementation:
   - We will count the number of "simple steps" (e.g. _If "$a>b$"_, $a:=b \times c$)
 *** Efficiency
 **** _Def:_ 
@@ -362,7 +363,7 @@ Running time:
 \end{align*}
 _Efficient_
 
-This much accuracy is _meaningless_: Each one of these commands consist of some more primitive commands and that can depend on your compiler, \ldots
+This much accuracy is _meaningless_: Each one of these commands consist of some more primitive commands and that can depend on your compiler, etc.
 - What matters is that this is quadratic.
 
 *** Big-O notation
@@ -403,7 +404,7 @@ $\forall n \geq 20 = n_0$
 # Lots of algorithms are:
 # - $O(n^2)$
 ** \Theta-notation:
-$f(n)\iff f(n) = O(g(n))$ and $f(n)=\Omega(g(n))$
+$f(n) \in \Theta (g(n)) \iff f(n) = O(g(n))$ and $f(n)=\Omega(g(n))$
 - Grows at the same rate as $g(n)$
 ---------------
 Alternatively:
@@ -419,7 +420,7 @@ Let $f(n)=a_d n^d + a_{d-1}n^{d-1}+\ldots+a_1 n + a_0, a_d>0$.
 Then $f(n)=\Theta(n^d)$
 *** Proof
 - $(f(n)=O(n^d)$
-  - $f(n)=a_d n^d + \ldots + a_1n + a_0 \leq \underbrace{(a_d+|a_{d-1}+\ldots+|a_0|)}_c n^d$, $\forall n\geq 1$
+  - $f(n)=a_d n^d + \ldots + a_1n + a_0 \leq \underbrace{(a_d+|a_{d-1}|+\ldots+|a_0|)}_c n^d$, $\forall n\geq 1$
   - E.g. $2n^2-5n+10 \leq (2+5+10)n^2$
 - $f(n)=\Omega(n^d)$
   - $a_d n^d + a_{d-1}n^{d-1}+\ldots + a_1 n + a_0 \geq C n^d$
@@ -515,13 +516,14 @@ Data structures we may use:
 | molecule            | atom                         | bond                        |
 *** Ways of implementing in a program
 **** Adjacency matrix
- $n$-by-$n$ matrix with $A_{uv} = 1$ if $(u,v)$ is an edge.
+ $n\text{-by-}n$ matrix with $A_{uv} = 1$ if $(u,v)$ is an edge.
  - Two representations of each edge.
  - Space proportional to $n^2$
  - Checking if $(u,v)$ is an edge takes $\Theta(1)$ time
  - Identifying all edges takes $\Theta(n^2)$ time
  - It's exactly symmetric
 **** Adjacency list
+
 Node-indexed array of lists
 - Two representations of each edge
 - Space is $\Theta(m+n)$ 
@@ -553,6 +555,7 @@ Let $G$ be an undirected graph on $n$ nodes. Any two of the following statements
   - Fewest hops in a communication network
 *** Breadth-first search
 **** BFS intuition
+     
 Explore outward from s in all possible directions, adding nodes one "layer" at a time. At most $n$ layers.
 **** BFS algorithm
 - $L_0=\{s\}$
@@ -560,12 +563,15 @@ Explore outward from s in all possible directions, adding nodes one "layer" at a
 - $L_2 =$ all nodes that do not belong to $L_0$ or $L_1$, and that have an edge to a node in $L_1$
 - $L_{i+1}=$ all nodes that do not belong to an earlier layer, and that have an edge to a node in $L_i$
 **** Theorem
+     
 For each $i, L_i$ consists of all nodes at distance exactly $i$ from $s$. There is a path from $s$ to $t$ iff $t$ appears in some layer.
 **** Property
+     
 Let $T$ be a BFS tree of $G=(V,E)$, and let $(x,y)$ be an edge of $G$. Then, the levels of $x$ and $y$ differ by at most $1$.
 
 **** Analysis
 ***** Theorem
+      
 The above implementation of BFS runs in $O(m+n)$ time if the graph is given by its adjacency representation.
 ***** Proof
 - Easy to prove $O(n^2)$ running time:
@@ -699,7 +705,7 @@ Also tells you length of shortest path from s to any vertex.
   \State BFS(G)
   \For {every vertex v in G}
   \If {v is unexplored}
-  \State Mark v as explorerd
+  \State Mark v as explored
   \State BFS.vertex(v)
   \State connected-comp$++$
   \EndIf
@@ -755,12 +761,13 @@ What data structure to use for graphs?
     \end{cases}
   \end{equation*}
   - Pros: very easy to see if u is connected to v
-  - Cons: IF the graph has few edges it is wasteful. $O(n^2)$ bits of memory.
+  - Cons: If the graph has few edges it is wasteful. $O(n^2)$ bits of memory.
 -------
-- For every vertex v we keep a list of all edges (u,v) incident to v
-- Pros: easy to find the neighbors
-  - Doesn't take much memory if the graph is sparse
-- Cons: Takes $O(n)$ to see if u is adjacent to v.
+- Adjacency List
+  - For every vertex v we keep a list of all edges (u,v) incident to v
+  - Pros: easy to find the neighbors
+    - Doesn't take much memory if the graph is sparse
+  - Cons: Takes $O(n)$ to see if u is adjacent to v.
 ** Bipartites
 An undirected graph is called _bipartite_ if we can _partition_ the vetices into two parts $R$ and $B$ such that all the edges are between $R$ and $B$
 [[./Images/i19.png]]
@@ -802,6 +809,7 @@ Every edge has an orientation.
 
 *** Data Structure:
 For every vertex keep two lists: the edge going out, the edges coming into that vertex
+
 Given two vertices, s and t, is there a path from s to t?
 - say s=a t=d
 - yes in the graph
@@ -884,6 +892,7 @@ Proof (by induction on $n$)
 - By inductive hypothesis, $G\setminus\{v\}$ has a topological ordering.
 - Place $v$ first in topological ordering: then append nodes of $G\setminus \{v\}$ in topological order. This is valid since $v$ has no incoming edges.
 **** Algorithm
+     
 To compute a topological ordering of $G$
 - Find a node $v$ with no incoming edges and order it first
 - Delete $v$ from $G$
@@ -1028,7 +1037,7 @@ What do we know? depth $\geq$ Output of algorithm d (just showed) $\geq$ optimal
   - Deadline: $d_1,\ldots,d_n$
 - Goal: We have a single processor. Ideally we want to schedule all tasks so that they all finish before their deadlines.
 Each task will be scheduled for some time $s_j = f_j-t_k$ to $f_j$ (to finish at $f_j$ we need to start at $f_j-t_k$).
-- Lateness $=$ $\max_j{f_j - d_j} (Time we finish - deadline for job)
+- Lateness $= \max_j{f_j - d_j}$ (Time we finish - deadline for job)
 - Goal: Minimize the lateness
 *** Greedy Template
 Sort the jobs according to some order and assign them to the processor according to this order.
@@ -1072,7 +1081,7 @@ Next class is the midterm, will be split into 2 rooms.
 - Recall: Minimize Lateness
   - Input: Jobs $(t_i, d_i), i=1,\ldots,n$, where $t_i$ is the process time and $d_i$ is the deadline.
   - In which order should we proceed them in order to _minimize_
-  - Lateness $=max_i f_i - d_i$
+  - Lateness $=\max_i \{f_i - d_i\}$
     - Where $f_i$ is the finishing time of job $i$
 -----------------------
 Greedy alg: Process these jobs in increasing order of their deadlines
@@ -1124,7 +1133,7 @@ Example: cache abc
   \\ 3 \checkmark c & ab\textbf{c}
   \\ 4 $\times$ d & abd & $c\gets d$
   \\ 5 \checkmark a & abd
-  \\ 6 \checkmark d & a \textbf{b} d
+  \\ 6 \checkmark d & a\textbf{b}d
   \\ 7 $\times$ e & aed & $b\gets e$
   \\ 8 \checkmark a & aed
   \\ 9 \checkmark d & aed
@@ -1154,7 +1163,7 @@ It will find shortest paths from $s$ to all the other nodes in one go.
 - Idea: We keep a list of all vertices (initially includes source)
 - We already know the lengths of the shortest paths from $s$ to all the explored vertices
 - At the next step we choose the vertex with smallest
-  $$\pi(v)=\min_{\ell=(u,v)_\text{u is explored}} d(s,u)+\ell e$$
+  $$\pi(v)=\min_\{\ell=(u,v)_\text{u is explored}\} d(s,u)+\ell e$$
 and mark that as explored and set $d(s,v)=\pi(v)$
 [[./Images/i37.png]]
 ----------------
@@ -1198,12 +1207,12 @@ Runtime of implementation
     - Might be costly to calculate one $\pi$, as we can have many incoming edges to a vertex, up to $m$ incoming edges
   - Taking their min
 [[./Images/i41.png]]
-When we add $v$ to $S$ we onlny need to update the $pi$ value for all $w \in S-v$ with $vw \in E$
+When we add $v$ to $S$ we only need to update the $\pi$ value for all $w \in S-v$ with $vw \in E$
 - If we use a binary heap to implement a priority queue for $\pi$ values then
 - Finding $\min \pi : O(\log n)$
   - (Extracting $\min$ from a binary heap)
-- Updating the key $(\pi-value)$ for all $w\in V-S with $vw \in E$: Updating each one at these $w$'s costs $O(\log n)$ (either heapify-up or heapify-down, depending on if we're increasing or lowering key)
-  - $n \log n$ since a vertex might have linear amount of outward eges to unvisited vertices
+- Updating the key $(\pi-value)$ for all $w\in V-S$ with $vw \in E$: Updating each one at these $w$'s costs $O(\log n)$ (either heapify-up or heapify-down, depending on if we're increasing or lowering key)
+  - $n \log n$ since a vertex might have linear amount of outward edges to unvisited vertices
 - Note that each edge $vw \in E$ is causing at most one of those updates. It will never be visited again. Therefore total # of these key updates is at most $m=|E|$
 
 [[./Images/i42.png]]
@@ -1237,7 +1246,7 @@ _Cut Property_: Let $S$ be a subset of nodes and _$e$_ be the minimum cost edge 
 _Proof_: Suppose not. Let $T$ be an MST that does not include _$e$_
 - Consider the path that connects $u$ to $v$ in $T$.
 [[./Images/i48.png]]
-Pick an edge on this path that goes from $S$ to $\overline{S}$ and replace it with $e$. Thus way we find another spanning tree with smaller cost. This contradicts the assumption that $T$ is a MST.
+Pick an edge on this path that goes from $S$ to $\overline{S}$ and replace it with $e$. This way we find another spanning tree with smaller cost. This contradicts the assumption that $T$ is a MST.
 - Why am I allowed to do this? Why doesn't it create a cycle?
   - Can this create a cycle? If adding $e$ made a cycle, then we had a cycle in the original $T$.
   - If there were two paths from $u$ to $v$ (such that adding $e$ makes a cycle), then $T$ already had a cycle.
@@ -1252,7 +1261,7 @@ _Prims_: Each time add the smallest edge from $T$ to the rest of the graph (star
 - Theorem: If all costs are different then there's a unique MST and Prims Alg finds it.
 - Pf: Consider a step of the alg. Let $S$ be the component of the current $T$.
 [[./Images/i51.png]]
-Prim's alg picks the smallest edge _$e$_ between $S$ and $\overline{S}$ and adds it to $T$. By cut property $e$ is in every MST. So our alg indeed only picks edges that are in every MST. This finishes` the proof of the theorem. 
+Prim's alg picks the smallest edge _$e$_ between $S$ and $\overline{S}$ and adds it to $T$. By cut property $e$ is in every MST. So our alg indeed only picks edges that are in every MST. This finishes the proof of the theorem. 
 ----------
 Implementation: We maintain $S$ (initially $S=\empty$)
 - For each $v \notin S$ maintain an attachment cost.
@@ -1265,7 +1274,7 @@ Running time of updating attachment costs once $v$ is added to $S$. Only vertice
 $$ dev(v) \times O(\log_n)$$
 - $\log_n$ for updating key in binary heap
 - So total running time:
-$$ \sum_{v \in V}deg(v) )(\log n) = O(\log (n))\times \sum_{v \in V} deg(v) = O(m \log n)$$
+$$ \sum_{v \in V}deg(v)(\log n) = O(\log (n))\times \sum_{v \in V} deg(v) = O(m \log n)$$
 * Lecture 14 <2017-10-26 Thu>
 ** Recall
 Minimum Spanning Tree Problem. (MST)
@@ -1274,7 +1283,7 @@ Minimum Spanning Tree Problem. (MST)
 - Goal: Find a _spanning_ tree in $G$ with minimum weight
 - _Cut Property_: If $S,\overline{S}$ is a "cut" in $G$ and _$e$_ is the cheapest edge between $S$ and $\overline{S}$ then _$e$_ is in every MST.
   - Shows that Prims algorithm is optimal
-- _Cycle Property_: IF $e$ has the max cost edge in a cycle $C$ then $e$ is not in any MST.
+- _Cycle Property_: If $e$ has the max cost edge in a cycle $C$ then $e$ is not in any MST.
 ** The Kruskal Alg (Proof of Correctness)
 Sort the edges from lowest cost to highest.
 - Add these edges one by one to the tree (skipping the ones that create a cycle)
