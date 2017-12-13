@@ -1271,7 +1271,7 @@ Implementation: We maintain $S$ (initially $S=\empty$)
 - Using a priority queue seems like a good idea.
 -----------
 Running time of updating attachment costs once $v$ is added to $S$. Only vertices in $\overline{S}$ with edges to $v$ need updates: There are $\leq deg(v)$ of these vertices $w$. If we use a binary heap to keep attachment costs then the updates have running time $deg(v)$.
-$$ dev(v) \times O(\log_n)$$
+$$ deg(v) \times O(\log_n)$$
 - $\log_n$ for updating key in binary heap
 - So total running time:
 $$ \sum_{v \in V}deg(v)(\log n) = O(\log (n))\times \sum_{v \in V} deg(v) = O(m \log n)$$
@@ -1300,14 +1300,13 @@ We will skip _$e$_ only if $e$ creates a cycle with the currently included edges
 ** Application
 A clustering problem. (Analyzing data, saying what is similar)
 
-_$k$-clustering problem_: Given $n$ points with pairwise distances $d(i,j)=d(j,i)\geq 0$ (distance between $i$ and $j$)
+_$k\text{-clustering problem}$_: Given $n$ points with pairwise distances $d(i,j)=d(j,i)\geq 0$ (distance between $i$ and $j$)
 - $d(i,j) = 0 \iff i=j$
 - Not necessarily geometric distances, may be similarities
   - Does not satisfy triangle inequality (or else it would be a metric)
-- Input: $d(i,j) \ \forall i,j$, a para
-meter $k \in \mathbb{N}$
+- Input: $d(i,j) \ \forall i,j$, a parameter $k \in \mathbb{N}$
 - Goal: "Partition" the set of points into $k$ sets so that the "spacing" is maximized where
-  - spacing = $\min_{i,j \\ \text{in different clusters}} d(i,j)$
+  - spacing = $\min_{i,j \ \text{in different clusters}} d(i,j)$
   - Ex. $k=3$
 [[./Images/i55.png]]
 [[./Images/i56.png]]
@@ -1324,9 +1323,9 @@ We are basically running the Kruskal algorithm until we have $k$ connected compo
 *** Remark
 Another way to think about this algorithm is that "we find the MST and then remove the $(k-1)$ most expensive edges
 *** Thm
-Let $C^{*}$ denote the clustering $C_1^*,\ldots C_k^{*}$ obtained by deleting the $(k-1)$ most expensive edges from the MST. Then $C^{*}$ is the $k$-cluster with largest spacing,
+Let $C^{*}$ denote the clustering $C_1^*,\ldots C_k^{*}$ obtained by deleting the $(k-1)$ most expensive edges from the MST. Then $C^{*}$ is the $k\text{-cluster}$ with largest spacing.
 *** Proof
-Let $C_1,\ldots,C_k$ be a different $k$-clustering.
+Let $C_1,\ldots,C_k$ be a different $k\text{-clustering}$.
 - Let $i$ and $j$ be two points that are in the same cluster in  $C^{*}$ but in different clusters in $C$.
 [[./Images/i59.png]]
 $$spacing \leq \ d(i,n)$$
@@ -1342,7 +1341,7 @@ Question: Consider a file that uses certain characters (say 32 characters). How 
 - Example: $c(a)=00000, c(b)=00001, \ldots , c(z)=11001, \ldots$
 Now given a string of characters we can "code" it and easily "decode" it back
 - $abb \stackrel{\text{code}}{\rightarrow} 000000000100001$
-- $00001,00000 \stackrel{\text{decode}{\rightarrow}} ba$
+- $00001,00000 \stackrel{\text{decode}}{\rightarrow} ba$
 ---------------
 _Efficiency_: Suppose that some letters in the file are way more frequent than the others
 - In this case it is more efficient to assign fewer number of bits to frequent characters and more to others
@@ -1406,7 +1405,7 @@ $$ 0.1 \times 3 + 0.2 \times 5 \implies 0.1 \times 5 + 0.2 \times 3$$
 - $f_a =0.4, f_b = 0.3, f_c = 0.1, f_d = 0.2$
 - At each step we take the two least frequent nodes and make them the children of a new node and assign the summation of the frequencies to this new word. (Bottom up construction)
 [[./Images/i64.png]]
-[[./Images/i65.png]]`
+[[./Images/i65.png]]
 * Lecture 16 <2017-11-02 Thu>
 ** Recall: Huffman Coding
 - Frequencies: $f_x = \frac{\# \text{ appearances of }x}{\# \text{ of characters}}$
@@ -1439,7 +1438,7 @@ The two least frequent letters $a,b$ are as in the picture.
 - ex: a b c c c a b -> [ab] [ab] c c c [a] [b]
 Let's rename the leaves $a,b$ from the optimal tree and assign [ab] to their parent (now a leaf)
 - Call the new code c'
-$$ABL(v)=\sum_x f_x \times |c(x)| vs ABL(c')=\sum_x f_x \times |c'(x)|$$
+$$ABL(v)=\sum_x f_x \times |c(x)| \text{ vs }ABL(c')=\sum_x f_x \times |c'(x)|$$
 - So $c(x)=c'(x)$ for all abl characters except $a,b$
 $$|c'([ab])|=|c(a)|-1=|c(b)|-1$$
 $$ABL(c')=ABL(c)-f_a-f_b$$
@@ -1463,7 +1462,7 @@ I.H. $ABL(\text{Huffman for []}) \leq ABL(c')$
 -------------
 Sort the letters of ALGORITHMS
 + ALGOR | ITHMS, Divide $O(1)$
-+ AGLOR | HIMS, recursive and sort params $2T(n/2)$
++ AGLOR | HIMS, recursively sort params $2T(n/2)$
 + AGHILMORST, merge $O(n)$
 $T(n)=2T(n/2)+O(n)$, recursive formula, how fast is it really?
 [[./Images/i69.png]]
@@ -1527,7 +1526,7 @@ Naive Combine:
 	\EndFor
 \EndFor
 \end{algorithmic}
-This is $\Theta(\left(\frac{n}{2}\right)) = \Theta(n^2)$, bad.
+This is $\Theta(\left(\frac{n}{2}\right)^2) = \Theta(n^2)$, bad.
 
 - $T(n)=2T(\frac{n}{2})+\Theta(n^2)$
 - $T(n)=\Theta(n^2)$, no improvement over brute force
@@ -1573,18 +1572,18 @@ Divide-and-conquer:
 Find a vertical line that separates the points into two equal size halves.
 Assumption: Points have distinct $x$ coordinates. 
 [[./Images/i75.png]]
-(sort the points according to their $x$ coordinates and find the middle point, $O(n\log n))
+(sort the points according to their $x$ coordinates and find the middle point, $O(n\log n)$)
 
 Conquer: Find the closest pair in each part recursively. $2T(\frac{n}{2})$
-Combine: Find the closes pair with each pair on one side of the line. Compare this to the pairs found in "conquer step" (distance between 2 sides we split). Return the best of the three.
+Combine: Find the closest pair with each pair on one side of the line. Compare this to the pairs found in "conquer step" (distance between 2 sides we split). Return the best of the three.
 [[./Images/i76.png]]
 Finding the closest pair with points in different parts: 
 - Naive approach: $\frac{n}{2}+\frac{n}{2}$
 - $T(n)=2T(\frac{n}{2})+\Theta(n^2) = \Theta(n^2)$, no improvement over brute-force.
-Observation: If $\delta$ is the best distance found in the recursion, we only need to consider a window of width $2\delta$ around the splitting line. Unfortunately all or a significant number of points can be in this $2\delta$-strip.
+Observation: If $\delta$ is the best distance found in the recursion, we only need to consider a window of width $2\delta$ around the splitting line. Unfortunately all or a significant number of points can be in this $2\delta\text{-strip}$.
 [[./Images/i77.png]]
 [[./Images/i78.png]]
-Suppose that the points are sorted according to their $y-coordinates$. Now for the point $P_i$ (blue point in picture) in the $2\delta-strip$
+Suppose that the points are sorted according to their $y\text{-coordinates}$. Now for the point $P_i$ (blue point in picture) in the $2\delta\text{-strip}$
 - Want to find $P_i, P_j$ with
   - $P_i$ one side $+ dist(P_i,P_j)$
   - $P_j$ other side
@@ -1689,7 +1688,7 @@ $$C_{ij}=\sum_{k=1}^{n}A_{ik}B_{kj}$$
 	\EndFor
 \EndFor
 \end{algorithmic}
-This is $O(n^3)$ if we assume that the matrix has a very simple form ($0$ and $1$s or if we're just counting number of multiplication rather the actual bits like before).
+This is $O(n^3)$ if we assume that the matrix has a very simple form ($0$ and $1\text{s}$ or if we're just counting number of multiplication rather the actual bits like before).
 *** Divide and Conquer
 Split $A,B$ into four $\frac{n}{2}\times \frac{n}{2}$ blocks
 $$ A = \begin{bmatrix*}[r] A_{00} & A_{01} \\ A_{10} & A_{11} \end{bmatrix*}, B = \begin{bmatrix*}[r] B_{00} & B_{01} \\ & B_{10} B_11 \end{bmatrix*}$$
@@ -1717,8 +1716,8 @@ C_{00} & C_{01} \\ C_{10} & C_{11}
 A_{00} & A_{01} \\ A_{10} & A_{11} 
 \end{bmatrix*} 
 \times 
-\begin{bmatrix*}
-[r]B_{00} & B_{01} \\ B_{10} & B_{11}
+\begin{bmatrix*}[r]
+B_{00} & B_{01} \\ B_{10} & B_{11}
 \end{bmatrix*}
 \end{align*}
 
@@ -1887,7 +1886,7 @@ Weren't able to solve this greedily, but we did come up with a recursive algorit
 Opt[i,u] = \max 
 \begin{cases}
 opt[i-1, u]
-\\ & \text{if } w_i\leq u \ v_i + opt[i-1, u-w_i]
+\\ v_i + opt[i-1, u-w_i] & \text{if } w_i\leq u 
 \end{cases}
 \end{equation*}
 $Opt[n,W]=$ Final answer
@@ -1937,7 +1936,7 @@ Secondary Structure: Is a set of pairs $S=\{(b_i,b_j), \ldots\}$ that satisfies 
 
 [No sharpturns]: If $(b_i,b_j), i<j$ is a pair then $i<j-4$ (at least distance $4$ between a pair)
 
-[No crossings]: We can't have $(b_i,b_j),(b_k,b_l)$ with $i<k<j<l
+[No crossings]: We can't have $(b_i,b_j),(b_k,b_l)$ with $i<k<j<l$
 [[./Images/i88.png]]
 RNA molecules tend to form a structure with maximum number of pairings
 - Example: $AUGUGGCCAU$
@@ -1951,9 +1950,9 @@ Attempt #1: Let $Opt[j]$ to be the optimal number of pairs until point $j$ : $b_
 - Case $1$: $b_j$ is not in any pair
   - $Opt[j] = Opt[j-1]$
 - Case $2$: $b_j$ is paired with $b_t$
-$$Opt[i,j] = 1 + Opt[1_t-1]+Opt[t+1,j-1]$$
+$$Opt[i,j] = 1 + Opt[i,t-1]+Opt[t+1,j-1]$$
 $$Opt[i,j] = \max \{Opt[i,t-1]+Opt[t+1,j-1]\}$$
-- Max is over all $t$ such that $(b_t,v_j) is a _legal_ pair.
+- Max is over all $t$ such that $(b_t,v_j)$ is a _legal_ pair.
   - $i \leq t < j-4$
   - $(b_t,b_j) \in \{AU, UA, CG, GC\}$
 $Opt[i,j] = 0$ if $i \geq j-4$
@@ -2000,8 +1999,8 @@ D[i-1, j] & i>0
 - $3^{rd}$ case, they are equal, use them both and add to length
 Base cases: 
 \begin{align*}
-D[0,j]=0 & \forall j=0 , \ldots , m
-\\ D[i,0]=0 & \forall i=0, \ldots, n
+D[0,j]=0 & \ \forall j=0 , \ldots , m
+\\ D[i,0]=0 & \ \forall i=0, \ldots, n
 \end{align*}
 Solution is: $D[n,m] =$ length of the longest common subsequence.
 *** Example 2
@@ -2027,7 +2026,7 @@ What if we want to get the actual sub-string? We can trace it back essentially.
   - $1+D[1,3] = 1+D[1,3] = 1+D[1,2] =1+D[1,1]=1+1+D[0,0]$
     - Previous character is $D[1,1]$
 - Now we get our sub-string: $ab$
-- Fill up $D[,]$ as it is described above.
+- Fill up $D[]$ as it is described above.
 \begin{algorithmic}
 \State FindString(i,j)
 \If {$a_i==b_k$ and $(D[i,j]=1+D[i-1,j-1])$}
@@ -2068,8 +2067,8 @@ D[i-1,j]+1 & (del(i))
 $4^{th}$ case is $D[i-1, j-1]+1$ since we have to add one operation but the two end letters are now the same like in the $3^{rd}$ case.
 - Base cases:
 \begin{align*}
-D[0,j] = j & \text{for }j=0,\ldots,m
-\\D[i,0] = i & \text{for }i=0,\ldots,n
+D[0,j] = j & \text{ for }j=0,\ldots,m
+\\D[i,0] = i & \text{ for }i=0,\ldots,n
 \end{align*}
 Either insert everything (first line) or delete everything (second line)
 ** Shortest Path with Negative Weights
@@ -2104,7 +2103,7 @@ D[v,0] =
 \end{cases}
 \end{equation*}
 Recursion
-- $D[v,i]=\min_{w:wv\in E}\{c_{wv}+D[w,i-1],D[v,i-1]\}
+- $D[v,i]=\min_{w:wv\in E}\{c_{wv}+D[w,i-1],D[v,i-1]\}$
   - Use the previous $i-1$ edges and then take the least expensive edge going to previous vertex
     [[./Images/i98.png]]
 ---------------------
