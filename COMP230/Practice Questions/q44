@@ -1,0 +1,18 @@
+; This program divides an input number by 2
+
+; Machine starts in state 0.
+
+; Start deleting every second 1, starting at the first index
+; State 0: 
+0 1 _ * 1          ; On a 1, blank and to state 1
+0 _ _ r 3	   ; On a blank, go to state 4 to start getting rid of gaps
+
+; State 1: just deleted a 1, go right
+1 _ _ r 2  	   ; Go to state 2
+
+; State 2: second 1 (or a blank)
+2 _ _ l 3  	   ; On a blank, go to state 3 to start getting rid of gaps
+2 1 1 r 0	   ; On a 1, skip it, go right and go to state 0, restarting pair
+
+; State 3: concatenate 1s with blank spaces in between
+3 1 _ * 4

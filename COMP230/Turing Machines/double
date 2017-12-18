@@ -1,0 +1,38 @@
+; This program starts on a 1 and doubles the 1
+; For every 1, this program writes 2 1s
+; The output string is separated by original string by one blank
+
+; Machine starts in state 0.
+
+; State 0: on the first 1
+0 1 _ * 1          ; Erase the 1
+
+; State 1: on the blank from 0 go right
+1 _ _ r 2  	   ; On a 1, blank and go to state 2
+
+; State 2: Pass all 1s, until we get to a blank
+2 1 1 r 2  	   ; Pass 1s
+2 _ _ r 3	   ; Go right and to state 3 after passing all 1s
+
+; State 3: Pass all 1s again
+3 1 1 r 3  	   ; Pass 1s
+3 _ _ * 4	   ; Blank -> state 4
+
+; State 4: Write 1 for all the blanks
+4 _ 1 * 4  	   ; Write 1s
+4 1 1 r 5	   ; Hit a 1
+
+; State 5: Write a 1 for a blank
+5 _ 1 * 6
+
+; State 6: Go left, back through al 1s
+6 1 1 l 6
+6 _ _ l 7
+
+; State 7: Go left, past all 1s again
+7 1 1 l 7
+7 _ _ r 8	   ; Beginning of sequence of 1s
+
+; State 8: Halt if blank, or restart loop
+8 _ _ r 9
+8 1 1 * 0
