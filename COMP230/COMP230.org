@@ -53,7 +53,7 @@ So you can split a proof into subproofs of these kinds.
 
 *** Example Proofs
 **** Thm
-$\sqrt{2}$ is nor rational.
+$\sqrt{2}$ is not rational.
 - Rational: Fractions: $\frac{x}{y}$
 If you have a square with sides of length 1, the length of the diagonal is $\sqrt{2}$
 Pythagoras proved this.
@@ -388,8 +388,7 @@ $\implies$ Diagonalization
 ** Cardinality
 Things that have the same cardinality:
 *** Countable:
-$|\mathbb{N}|$:
-- E
+- $|\mathbb{N}|$:
 - $\mathbb{Z}$
 - $\mathbb{Q}$
 - English words
@@ -535,7 +534,7 @@ By induction (strong induction) on the length of derivations: (number of steps t
 - (DIY)
 * Lecture 6 <2017-09-21 Thu>
 ** Quiz prep
-- What is derivation?
+- What is a derivation?
 - What is a theorem?
 - How many infinite cardinalities are there?
 - Can a set have the same cardinality as its power set?
@@ -646,7 +645,7 @@ Assumption: There are _finitely_ many prime numbers:
 - Adding something to a set of size $\aleph_0$
   - Size is still $\aleph_0$
 - What is a derivation?
-  - Sequence of formulas such that each element is an axiom or obtained from an axiom
+  - Sequence of formulas such that each element is an axiom or obtained from applying an inference rule on an earlier step
 - Theorem?
   - Last element in a derivation
 - When is a formal system complete?
@@ -2222,7 +2221,7 @@ A lot more work done on syntax. Started off working on syntax and then semantics
 - Cantor's Theorem
   - $|A|<|\frak{P}(A)|$
 - Completeness Theorem (Completeness of FOL included)
-  - If $\Gamma \models$, then $\Gamma \vdash A$ 
+  - If $\Gamma \models A$, then $\Gamma \vdash A$ 
 - Soundness Theorem
 - G1: If a theory $T$ is
   - Consistent
