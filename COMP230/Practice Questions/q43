@@ -1,0 +1,17 @@
+; This program starts on a 1 and, for every pair of 1s it finds, deletes the second 1
+; Does not halt
+
+
+; Machine starts in state 0.
+
+; State 0: on the first 1
+0 1 1 r 1          ; On a 1, go right and to state 1
+0 _ _ r 0	   ; On a blank, go right
+
+; State 1: already found a 1, this is the second number
+1 1 _ * 2  	   ; On a 1, blank and go to state 2
+1 _ _ r 0	   ; Found a blank -> Not a
+      		   ; pair, go right to state 0, restart
+
+; State 2: just erased the second number in a pair, go right to state 0 
+2 _ _ r 0  	   
