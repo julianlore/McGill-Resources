@@ -1928,7 +1928,7 @@ Define: $\psi_1(x)=\underbrace{\varphi_x(x)}_{\text{might be undefined}}+1$
 \end{cases}
 \end{equation*} 
 
-The Halting Problem for partial recursive functions is _not_ recursive: There is no recursive function that tells us whether $varphi_x(x)$ is defined or not. Assume:
+The Halting Problem for partial recursive functions is _not_ recursive: There is no recursive function that tells us whether $\varphi_x(x)$ is defined or not. Assume:
 \begin{equation*}
 f(x) \simeq 
 \begin{cases}
