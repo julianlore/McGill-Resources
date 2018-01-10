@@ -1,6 +1,6 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb}
+  lastpage, amssymb, algpseudocode}
 \usepackage[margin=1 in]{geometry}
 \allowdisplaybreaks
 %\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
@@ -83,7 +83,7 @@
                   \sum_{n=0}^k 2^n = ? = 2^{k+1}-1
                 \end{flalign*}
                 In binary, this is $\underbrace{1111\ldots
-                  1}_{\text{binary}}$. Note that this is a geometry sum
+                  1}_{\text{binary}}$. Note that this is a geometric sum
                 and that you should be able to calculate these.
                 \paragraph{Example 5}
                 $S=(a_1, a_2, \ldots, a_n)$ a sequence of integers. $E$ is
@@ -93,7 +93,7 @@
                   \\ \hline
                   \intertext{Example:}
                   S & = \{1,\underline{3},2,\underline{5},4\}
-                  \\ A & = ? = \sum_{i\in\{2,4\}a_i} = a_2 + a_4 = 3+5 = 8
+                  \\ A & = ? = \sum_{i\in\{2,4\}} a_i = a_2 + a_4 = 3+5 = 8
                 \end{flalign*}
                 \paragraph{Example 6}
                 $G=(V,E)$ an undirected graph. Suppose to every edge $uv$
@@ -103,7 +103,7 @@
                   \exists c \forall u \in v \sum_{uv \in E}c_{uv}=c
                 \end{flalign*}
                 There exists some number $c$, such that for every vertex
-                we chose, the sum of all edges containing this vertex is
+                we choose, the sum of all edges containing this vertex is
                 the same for all vertices.
                     \subparagraph{Example}~\\
                     \includegraphics[width=.7\textwidth]{i1.pdf} In this case, $c=3$.
@@ -111,7 +111,7 @@
                 $G=(V,E)$ undirected graph degree of every vertex is
                 $10$. Suppose to every vertex $v \in V$ a positive integer
                 $a_v$ is assigned.
-                \\ If $\sum_{v\in V}a_v = 5$ then what is $\sum_{u\in v}
+                \\ If $\sum_{v\in V}a_v = 5$ then what is $\sum_{u\in V}
                 \sum_{\substack{w\in V:\\ uw\in E}} a_w = ? =\sum_{w \in
                   V}10a_w = 10 \times 5 =50$. Each $a_w$
                 appears in the sum $10$ times since the degree of each
@@ -181,8 +181,169 @@
             \paragraph{Example}~\\
                 \includegraphics[width=.7\linewidth]{i3.pdf}
             \\ \underline{Def}: $Val(f) = \sum_{su\in E} f(su) =
-            f^{\text{out}}s$
+            f^{\text{out}}(s)$
             \\\noindent\rule{\textwidth}{0.5pt}
             Max Flow Problem: Given a flow network find a flow with
             largest possible value.
+    \section{01/10/18}
+        \subsection{Max Flow Problem (Continued)}
+        Recall: we want to process a flow network, essentially a
+        directed graph with a source and a sink.
+        \paragraph{A flow network}~\\
+        \includegraphics[width=.7\textwidth]{i4.pdf}
+        \\ \rule{\textwidth}{0.5pt}
+        $val(f)=f^{out}(s)$
+        \\ Max Flow Problem: Given a flow network find the maximum
+        value of the flow. $2$ is not the optimal value of the
+        example. We could change it to:
+        \\ \includegraphics[width=.7\textwidth]{i5.pdf}
+        \paragraph{Ford-Fulkerson Algorithm}
+        Try to find $s-t$ paths that have not used their capacity and
+        push more flow through them. There is a subtlety here
+        though, we may run into trouble, like in the following example:
+        \\ \includegraphics[width=\textwidth]{i6.pdf}
+        \\ Now we are stuck. This is \textbf{not optimal}. The
+        following is:
+        \\ \includegraphics[width=.3\textwidth]{i7.pdf}
+        \\ So we must change or else this algorithm won't work. We
+        don't want to go back and change the first step, even though
+        we are stuck. There is a way that we can change things. Say we
+        try to add on more unit of flow:
+        \\ \includegraphics[width=.3\textwidth]{i8.pdf}
+        \\ Essentially, the flow we added ``cancels'' the edge in the
+        middle and makes it go back. Formally:
+        \begin{enumerate}
+        \item Start from the all zero flow.
+        \item Find a ``path'' (not a real path since we can also
+          reverse directions) from $s-t$ such that the edges that are
+          in the forward direction have \textbf{unused capacity} (not
+          saturated) and the backward edges have \textbf{strictly positive}
+          flow on them. Add one unit to forward edges and subtract one
+          unit from backwards edges. Repeat this step until we cannot
+          find any more paths.
+        \end{enumerate}
+        \includegraphics[width=.5\textwidth]{i9.pdf}
+        \\ How do we implement this?
+        \paragraph{Def} [Residual graph] Given a flow network
+        $(G,s,t,\{c_e\})$ and an flow $f$ on $G$, the residual graph
+        $G_f$ is as follows (we are already in the middle of the
+        algorithm and this graph will tell us which edges are usable):
+        \begin{enumerate}
+        \item Nodes are the same as $G$.
+        \item For every edge $uv \in G$ with $f(uv)<c_{uv}$ (flow
+          strictly smaller than capacity), add the edge $uv$ with
+          residual capacity $\mathbf{c_{uv}-f(uv)}$ to $G_f$.
+        \item For every edge $uv \in G$ with $f(uv)>0$ add the
+          opposite edge $\underline{vu}$ with residual capacity $f(uv)$.
+        \end{enumerate}
+        \rule{\textwidth}{0.5 pt}
+        \paragraph{Example} ~ \\
+        \includegraphics[width=\textwidth]{i10.pdf}
+        \\ How do we use the residual graph? Just run a DFS on $G_f$
+        to find an $s-t$ path and use it to modify the original flow,
+        like so:
+        \\ \includegraphics[width=\textwidth]{i11.pdf}
+        \paragraph{Pseudocode for Ford-Fulkerson}
+        \begin{algorithmic}
+          \State Initially set $f(e)=0, \forall e \in E$
+          \State Construct $G_f$
+          \While{there is an $s-t$-path $P$ in $G_f$}
+            \State $f' \gets$Augment$(f,p)$, where Augment means
+            increase the flow using path $P$
+            \State update $f \gets f'$
+            \State update $G_f$
+         \EndWhile
+        \end{algorithmic}
+        How many units of flow can we push if we find the following
+        path in $G_f$?
+        \\ \includegraphics[width=.7\textwidth]{i12.pdf}
+        \\ The smallest weight, the bottleneck.
+        \begin{algorithmic}
+          \State Augment$(f,P)$
+          \State Find the bottleneck of $P$, which is the smallest
+          residual capacity on $P$.
+          \State For forward edges we add this number to their flow.
+          \State For backward edges we subtract.
+        \end{algorithmic}
+        \paragraph{Example}~
+        \\ \includegraphics[width=\textwidth]{i13.pdf}
+        \paragraph{Claim} FF always returns a valid flow (proof of
+        correctness).
+        \paragraph{Proof} Residual capacities are chosen so that
+        updating with Augment$(f,P)$ will never assign a number to an
+        edge that is larger than its capacity or smaller than
+        $0$. $\implies$ capacity condition is satisfied throughout the
+        algorithm.
+        \paragraph{Conservation Condition} $f^{in}(v)=f^{out}(v)$
+        \\ \includegraphics[width=.7\textwidth]{i14.pdf}
+        \\ In G:
+        \begin{itemize}
+        \item Case 1:
+        \\\includegraphics[width=.3\textwidth]{i15.pdf}
+          \begin{align*}
+            f^{in} \gets f^{in} + \alpha
+            \\ f^{out} \gets f^{out} + \alpha
+          \end{align*}
+          Still the same.
+        \item Case 2:
+        \\\includegraphics[width=.3\textwidth]{i16.pdf}
+          \begin{align*}
+            f^{in} \gets f^{in} + \alpha - \alpha
+            \\ f^{out} \gets f^{out}
+          \end{align*}
+          Nothing changed.
+        \item Case 3:
+        \\\includegraphics[width=.3\textwidth]{i17.pdf}
+          \begin{align*}
+            f^{in} \gets f^{in}
+            \\ f^{out} \gets f^{out}-\alpha+\alpha
+          \end{align*}
+          Still equal.
+        \item Case 4:
+        \\\includegraphics[width=.3\textwidth]{i18.pdf}
+          \begin{align*}
+            f^{in} \gets f^{in} - \alpha
+            \\ f^{out}\gets f^{out} - \alpha
+          \end{align*}
+          Equal.
+        \end{itemize}
+        In all cases $f^{in}(v)$ remains equal to $f^{out}(v)$. So we
+        have shown that the flow remains valid, but we still don't
+        know if it gives us the optimal solution or not.
+        \paragraph{Claim} The algorithm terminates.
+        \paragraph{Proof} At every iteration, the flow increases by at
+        least $1$ unit. It can never exceed the total sum of all the
+        capacities, so it has to terminate.
+        \paragraph{Running Time} Let $K$ be the largest capacity, $n$
+        the number of vertices, $m$ the number of edges. There are at
+        most $Km$ iterations. Finding an $s-t$-path:
+        $O(m+n)$ (each iteration requires a DFS in the residual graph
+        and an update). Augmenting: $(n)$.
+        \\ Since we assumed every vertex is adjacent to at least one
+        edge $\frac{n}{2}\leq m$ (with this assumption we can just
+        talk about $m$). This makes the DFS $O(m)$.
+        \\ The total running time:
+        $$O(K \times m \times m) = O(Km^2)$$
+        Unfortunately not that great if $K$ is a large number. We'll
+        try to improve this a little bit later.
+        \rule{\textwidth}{0.5pt}
+        \paragraph{Def} A cut ($s-t$-cut) in a flow network is a
+        partition $(A,B)$ of the vertices such that $s \in A, t\in B$.
+        \paragraph{Def} Capacity of this cut is the sum of the
+        capacities and edges going from $A$ to $B$.
+        \\ \includegraphics[width=.7\textwidth]{i19.pdf}
+        $$cap(A,B)=\sum_{\substack{uv\in E \\ u \in A \\ v \in B}} c_{uv}$$
+        \paragraph{Example}
+        ~\\\includegraphics[width=.7\textwidth]{i20.pdf}
+        \\ The capacity here is $3$. We see that we can't pass more
+        weight from $A$ to $B$, i.e. cuts intuitively tell us
+        something about the max flow.
+        \\ How many cuts are in this network?
+        \\ \includegraphics[width=.7\textwidth]{i21.pdf}
+        \\ $4$. There's no geometry in cuts, the only restriction is
+        that $s$ is in $A$ and $t$ is in $B$, doesn't matter how
+        network is drawn.
+        \\ A network with $n$ vertices has $2^{n-2}$
+        $(s,t)$-cuts. ($n-2$ vertices each with two choices: $2\times
+        2 \times \ldots \times 2=2^{n-2}$)
 \end{document}
