@@ -11,6 +11,9 @@
 }
 \usepackage{graphicx}
 \graphicspath{{Images/}}
+% Independent symbol
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
 \author{Julian Lore}
 \date{Last updated: \today}
 \title{MATH 324: Statistics}
@@ -159,7 +162,7 @@
         is to figure out how we quantify possible bias.
         \\ \rule{\textwidth}{0.5 pt}
         $$\varepsilon = |\overline{X}_n-\mu |$$
-        We can use Tchbyshev's inequality to put a bound on the
+        We can use Tchbycshev's inequality to put a bound on the
         error.
         \begin{flalign*}
         P(|X-\underbrace{E(X)}_{\mu_x}|>k\sqrt{\underbrace{Var(X)}_{\sigma_x^2}})
@@ -177,4 +180,211 @@
         Without knowing anything else about the distribution, this
         tells us that about $89\%$ of the population is within $3$
         times the variance of the mean.
+        \section{01/11/18}
+        Last lecture we learned about statistics, estimators and how
+        we can measure deviation from the target and the estimation.
+        \\ We had $n$ random variables: $x_1, \ldots, x_n, \mu
+        \rightarrow$ IQ in the population. We want to have a
+        scientific guess of the average IQ (there are many more
+        examples, like salary). Our $n$ random variables are $n$
+        random people chosen.
+        \\ We then arrive at $\overline{X}_n =
+        \frac{1}{n}\sum_{i=1}^nX_i$, a scientific guess mimicking
+        $\mu$ but in the sample population.
+        \\ How much deviation do we have? $|\overline{X}_n - \mu|$
+        \\ Since our observations are random, then $\overline{X}_n$
+        will also be random, i.e. $\overline{X}_n$ is a random
+        variable itself. Each person gives us a different deviation,
+        so we need a way to summarize all of this information, say,
+        the expected value.
+        $$ E[|\overline{X}_n - \mu |]$$
+        Another way to summarize it is with probability.
+        $$ P(|\overline{X}_n - \mu | > \varepsilon)$$
+        What is the chance that what we produce is not within
+        $\varepsilon$ of the target? Often times we want to bound
+        these things. What do you think might happen if instead of
+        taking a sample of $n=50$, we take $n=100$? As $n$ increases,
+        we should get closer to the target. But, the more samples I
+        take, the more it'll cost me. So we want to have a balance. We
+        want the distance from the target to be within some sort of
+        value.
+        $$P(| \overline{X}_n - \mu| > \varepsilon) \leq \delta$$
+        Take for example a spam filter. Something is either spam or
+        not spam. We start with messages and then start checking. We
+        want to know how many messages we should check, i.e. how big
+        our training set should be.
+        \\ We will use Tchbycshev's Inequality for this!
+        \subsection{Chebyshev/Tchbycshev's Inequality}
+        Let $X$ be a random variable. Suppose $h(x)$ is a positive
+        function (i.e. the range of this function consists of positive
+        values). We can show that
+        $$P(h(x) \geq \lambda) \leq \frac{E[h(x)]}{\lambda}$$ for any
+        $\lambda >0$, if $E[h(X)] \leq \infty$, i.e. it exists. This
+        is called \textbf{Markov's Inequality}
+        \\ When we say that the expected value of a random variable
+        exists, we mean $E[|X|] < \infty$. When we talk about
+        existence of a moment, we check the absolute value, but the
+        actual value does not have an absolute value, it is just
+        $E[X]$. Why? The trouble is when $X$ can take positive and
+        negative values and is not bound.
+        \begin{flalign*}
+          E[X] & = \sum_{i=1}^\infty x_i P(X=x_i) &
+        \end{flalign*}
+        What if we have infinite values that we can take?
+        \paragraph{Recall from Calculus}
+        $\sum_{n=1}^{\infty} \frac{(-1)^n}{n}<\infty$ is convergent,
+        but not absolutely convergent because $\sum_{n=1}^\infty
+        \left| \frac{(-1)^n}{n}\right| = \infty$. Riemann has a result
+        such that if a series is convergent but not absolutely
+        convergent (like the example just mentioned), then it can
+        converge to any real number (if we reorder the terms). Thus we
+        don't like this and must check for absolute convergence for
+        moments, or else the expected value will depend on the order
+        we consider the numbers in.
+        \\ Recall the theorem that says if we have a function of a
+        random variable, we don't need its distribution, we can
+        directly use the distribution of $X$. Note that integrals are
+        another form of sums, we can use similar notation with $x$ as
+        a subscript to denote ranging over all $x$.
+        \begin{flalign*}
+          E[h(x)] & = \int_{x} h(x)f_x(x) \ dx = \left(\int_{x : h(x) \geq \lambda} + \int_{x:h(x) < \lambda}h(x)f_x(x) \ dx\right) &
+          \intertext{(Note that the two integrals both apply on the
+            right side)}
+          & \geq \int_{x:h(x) \geq \lambda}h(x)f_x(x)\ dx \geq \lambda \int_{x: h(x) \geq \lambda} f_x(x)\ dx = \lambda P(h(x) \geq \lambda)
+        \end{flalign*}
+        So what did we get?
+        \begin{flalign*}
+          E[h(x)] & \geq \lambda P(h(x)\geq \lambda) &
+          \\ P(h(x) \geq \lambda) & \leq \frac{E[h(x)]}{\lambda}
+        \end{flalign*}
+        Now consider: $h(x) = (x-\mu)^2$. Then what do we have?
+        \begin{flalign*}
+          P(|x-\mu| \geq \lambda) &= P([x-\mu]^2 \geq \lambda)
+          \stackrel{\text{By Markov's Inequality}}{\leq}\frac{E[(x-\mu)^2]}{\lambda^2} &
+          \\ P(|x-\mu| \geq \lambda)&\leq \frac{Var(x)}{\lambda^2}
+          \intertext{Replace $\lambda$ by $k\sigma_x$ where $\sigma_x=\sqrt{Var(x)}$}
+          \intertext{$k$ is a constant, so we get:}
+          \\ P(|x-\mu| \geq k \sigma_x) &\leq \frac{Var(x)}{k^2\sigma_x^2}=\frac{Var(x)}{k^2 Var(x)} = \frac{1}{k^2}
+        \end{flalign*}
+        This is \textbf{Tchbycshev's Inequality}. For $k=3$ we have:
+        \begin{flalign*}
+          P(|x-\mu| \geq 3 \sigma_x) &\leq \frac{1}{9}
+          \\ P(|x-\mu| \leq 3\sigma_x)&\geq \frac{8}{9} \approx 88\%
+        \end{flalign*}
+        What does this say? For any random variable with $2$ moments,
+        88\% of the values fall within $3 \sigma_x$s from the center
+        of gravity (mean). This is a very crude lower bound that
+        required almost no assumptions, all we need is that $\mu =
+        E(x)$ and $\sigma_x^2 = Var(x)$ and the existence of the
+        second moment.
+        \\ Back to where we were before with $|\overline{X}_n - \mu|$:
+        \begin{flalign*}
+          P(|\overline{X}_n - \mu| > 3\sigma_{\overline{X}_n}) \leq \frac{1}{9} &
+        \end{flalign*}
+        Note that here, it must be true that $\mu =
+        E(\overline{X}_n)$. Is this true?
+        \begin{flalign*}
+          \overline{X}_n &= \frac{1}{n}\sum_{i=1}^n X_i &
+          \\ E[\overline{X}_n] &= E\left[\frac{1}{n}\sum_{i=1}^n X_i\right]
+          \intertext{Recall: $E[cY] = cE[Y]$, think of expected values
+            like integrals and sums, they have the same properties.}
+          \\ & = \frac{1}{n} E\left[\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i]
+          \intertext{Remember that $X_1, \ldots, X_n \sim F$,
+            i.e. they all have the same distribution! So $E[X_i]=\mu, i=1,2,\ldots,n$}
+          \\ & = \frac{1}{n}\sum_{i=1}^n \mu = \mu
+        \end{flalign*}
+        Now how do we use this in practice? If everyone is sent to the
+        population and asked to take a sample of size $10$ (the same
+        size for everyone) and everyone makes their own
+        $\overline{X}_n$, their own sample average and then we take
+        the average of all the sample averages and we obtain the
+        actual average of the population, i.e. this is an average of
+        averages (this is difficult though, as we need all the
+        possible averages of size $10$; in practice we only use one
+        sample, more on this later).
+        \paragraph{Example}
+        Suppose we have the following $0$-$1$ random variable
+        representing what people will vote for
+        \begin{equation}
+          X_i =
+          \begin{cases}
+            1 & \text{if NDP}
+            \\ 0 & \text{otherwise}
+          \end{cases}
+          \end{equation}
+          We know that $X_i \sim$ Bernoulli($p$), $p=P(X_i=1)$
+          \begin{flalign*}
+            X_1,\ldots,X_n \sim p=(P(X_i=1),i=1,2,\ldots,n) &
+          \end{flalign*}
+          \begin{flalign*}
+            \overline{X}_n = \frac{1}{n}\sum_{i=1}^n X_i = \hat{p}_n
+          \end{flalign*}
+          \paragraph{Side Note about Picking with Replacement}
+          \begin{flalign*}
+            P(X_2 = 1 | X_1 = 1) & = \frac{M-1}{N-1}
+          \end{flalign*}
+          (after taking $1$ in favor of NDP, where $N$ is total
+          population size and $M$ is total number of people in favor
+          of NDP) Using Total Probability Theorem we get:
+          \begin{flalign*}
+            P(X_2 = 1) & = P(X_2 = 1 | X_1 = 1)P(X_1 = 1) + P(X_2 = 1 | X_1 = 0)P(X_1 = 0)
+            \\ & = \frac{M-1}{N-1}\cdot \frac{M}{N}+\frac{M}{N-1}\left(1 - \frac{M}{N}\right) = \frac{M}{N}
+            \\ P(X_2 = 1)&=\frac{M}{N}
+            \\ P(X_2 = 1 | X_1 = 1)&=\frac{M-1}{N-1}
+          \end{flalign*}
+          These are identically distributed, but not independent, this
+          replacement is what differs hypergeometric from
+          binomial. But when the sample size is very large we can just
+          use binomial (also we don't ask someone who they're voting
+          for twice).
+          \\ \rule{\textwidth}{0.5pt}
+          Note we just showed that
+          \begin{flalign*}
+            P(|\overline{X}_n - \mu | > k \sigma_{\overline{X}_n}) &\leq \frac{1}{k^2}&
+            \intertext{Recall that if $X_i \sim$ Bernouilli($p$), then
+              $E[X_i]=p$}
+            P(|\overline{X}_n - \mu | \geq k \sigma_{\overline{X}_n}) & = P(|\hat{p}_n - p| > k\sigma_{\hat{p}_n})
+          \end{flalign*}
+          Recall that:
+          \begin{flalign*}
+            \sigma_{\overline{X}_n}^2 &= Var(\overline{X}_n) &
+            \\ Var(c Y) & = c^2 Var(Y)
+            \\ Var(X\pm Y) & = Var(X) + Var(Y) \pm 2 Cov(X,Y)
+          \end{flalign*}
+          If $Cov(X,Y)=0$, $Var(X \pm Y)=Var(X)+Var(Y)$. If $X$ and $Y$
+          are independent, $Cov(X,Y)=0$.
+          \begin{flalign*}
+            Cov(X,Y) & = E(XY) - E(X)E(Y) &
+            \\ X \text{ ind }Y \implies E[g(x)h(y)]&=E[g(x)]E[h(y)]
+            \\ X \text{ ind }Y \implies E(XY) &= E(X)E(Y) \text{
+              therefore }Cov(X,Y)=0
+          \end{flalign*}
+          Thus,
+          \begin{flalign*}
+            Var(\overline{X}_n)=Var(\frac{1}{n}\sum_{i=1}^n X_i) & = \frac{1}{n^2} Var (\sum_{i=1}^n X_i)
+          \end{flalign*}
+          So,
+          \begin{flalign*}
+            \frac{1}{n^2}Var\left(\sum{i=1}^n X_i\right) &
+            \stackrel{\text{Assuming that $X_i$s are ind}}{=} \frac{1}{n^2}\sum_{i=1}^n Var(X_i)
+            \intertext{Remember that $X_i \sim F$}
+            & \stackrel{\text{Assuming that $X_i$s have the same variance}}{=} \frac{1}{n^2}\cdot n Var(X_i) = \frac{Var(x)}{n}
+          \end{flalign*}
+          Thus we have:
+          \begin{flalign*}
+            Var(\overline{X}_n) = \frac{Var(X)}{n}
+          \end{flalign*}
+          i.e. variance gets smaller and smaller as the population
+          size increases, so $\overline{X}_n$ gets closer and closer
+          to its center.
+          \begin{flalign*}
+            Var(\hat{p}_n)& = Var(\overline{X}_n) = \frac{Var(X)}{n}
+            \intertext{Where $X \sim$ Bernouilli($p$), so $Var(X) = p(1-p)^n$}
+            Var(\hat{p}_n)& = \frac{p(1-p)}{n}
+            \\ P\left(|\hat{p}_n - p| > k \sqrt{\frac{p(1-p)}{n}}\right) & \leq \frac{1}{k^2}
+          \end{flalign*}
+          Now, back to the original problem:
+          $$P(|\hat{p}_n - p| > \varepsilon) \leq \delta$$ where
+          $\varepsilon, \delta$ are known (and small values). Next
+          class we will see how to choose values to satisfy this.
 \end{document}
