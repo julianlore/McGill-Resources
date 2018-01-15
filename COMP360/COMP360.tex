@@ -346,4 +346,145 @@
         \\ A network with $n$ vertices has $2^{n-2}$
         $(s,t)$-cuts. ($n-2$ vertices each with two choices: $2\times
         2 \times \ldots \times 2=2^{n-2}$)
+    \section{01/15/18}
+        \paragraph{Recall} \textbf{Cut:} Partition of the vertices
+        into two parts $A,B$ such that $s\in A, t \in B$.
+        \\ \includegraphics[width=.7\textwidth]{i22.pdf}
+        In this example, the capacity is $5+2$
+        $$Cap(A,B) = \sum_{\substack{uv \in E \\ u \in A \\ v \in B}}
+        C_{uv}$$
+        These capacities give us an upper bound on the maximum flow,
+        but we have to prove this, intuition isn't enough. So how do
+        we prove this?
+        \\ \rule{\textwidth}{0.5 pt}
+        \paragraph{Recall} For a flow $f:E \to \mathbb{R}^+$,
+        $$val(f) = \sum_{su\in E} f(su)$$
+        \includegraphics[width=.7\textwidth]{i23.pdf}
+        Why do we define it this way? Why not talk about the flow
+        going into the sink?
+        \\ \includegraphics[width=.7\textwidth]{i24.pdf}
+        In this example we see that $val=1+1=2$. We can also define a
+        flow going into $t$. In this case it would also be $2$. Are
+        they equal? Our intuition says yes, because none of the
+        intermediate nodes are adding or absorbing flow.
+        \\ \rule{\textwidth}{0.5pt}
+        \paragraph{Claim} For any $s-t$-cut $(A,B)$, 
+        $$val(f) = f^{out}(A) - f^{in}A = \sum_{\substack{uv \in E\\ u
+            \in A \\ v \in B}} - \sum_{\substack{uv \in E \\ u \in B
+            \\ v \in A}} f(uv)$$
+        In the example above, $f^{out}(A) = 1+1+0, f^{in}(A)=0$.
+        \\ \includegraphics[width=.7\textwidth]{i25.pdf}
+        $f^{out}(A)=1+2, f^{in}(A)=1$
+        \begin{flalign*}
+          val(f)&=\sum_{su\in E}f(su)=f^{out}(s) &
+          \\ val(f) & = \sum_{u \in A}f^{out}(u)-f^{in}(u)
+        \end{flalign*}
+        $f^{out}-f^{in}$ is always $0$, unless $u$ is $s$ or $t$, but
+        $t\notin A$.
+        \begin{flalign*}
+          \sum_{u \in A} \left( \left(\sum_{uv \in E}f(uw)\right) - \left(\sum_{vu \in E}f(vu)\right) \right)
+        \end{flalign*}
+        \includegraphics[width=.7\textwidth]{i26.pdf}
+        \begin{flalign*}
+          f^{out}(s) & = f(e_1)+f(e_6) &
+          \\ f^{in}(s)&=0
+          \\ f^{out}(a)&=f(e_4)
+          \\ f^{in}(a) &= f(e_6)+f(e_5)
+          \\
+          \\ \left(f(e_1)+f(e_6) - 0\right) + \left(f(e_4)-f(e_6)-f(e_5)\right) & = \underbrace{f(e_1) + f(e_4)}_{f^{out}(a)}-\underbrace{f(e_5)}_{f^{in}(a)}
+        \end{flalign*}
+        Why did this come out to $f^{out}-f^{in}$? 
+        \\ Looking back at the double sum above: If $e$ is an edge
+        with both endpoints in $B \implies f(e)$ is not in the sum
+        (since each term has at least one vertex in $A$). What if $e$
+        has both endpoints in $A$? It will appear in the positive and
+        negative sums, so they will cancel out, just like $e_6$ in our
+        example.
+        \paragraph{Observations}~
+        \\ \includegraphics[width=.7\textwidth]{i27.pdf} Because of
+        some cancellations here, we can simplify the sum:
+        \begin{flalign*}
+          \sum_{u \in A} \left(\sum_{uw \in E}f(uw) - \sum_{vu \in E}f(vu)\right)
+          \\ = \sum_{\substack{uv \in E \\ u \in A \\ v \in B}}f(uv) - \sum_{\substack{uv \in E\\u \in B \\ v \in A}} f(uv) = f^{out}(A) - f^{in}(A)
+        \end{flalign*}
+        This concludes the proof of the claim. \hfill $\square$
+        \\ Now why does $val(f) = f^{in}(t)$? Take the cut with
+        $B=\{t\}$.
+        \\ \includegraphics[width=.4\textwidth]{i28.pdf}
+        Then by the claim:
+        $$val(f) = \underbrace{f^{out}(A)}_{f^{in}(t)} -
+        \underbrace{f^{in}(A)}_0$$
+        \paragraph{Corollary to this claim} Let $(A,B)$ be a cut, $f$
+        be a flow. Then $val(f)\leq cap(A,B)$. i.e. the flow cannot
+        exceed the capacity of the cut, any arbitrary cut puts an
+        upper bound on the flow. How can we prove this using the
+        previous claim?
+        \paragraph{Proof}
+        \begin{flalign*}
+          val(f) & = f^{out}(A) - f^{in}(A) \leq f^{out}(A) = \sum_{\substack{u \in A \\ v \in B \\ uv \in E}}f(uv) \leq \sum_{\substack{u \in A \\ v \in B \\ uv \in E}}C_{uv} = cap(A,B)&
+        \end{flalign*}
+        In other words, the flow of each edge is bounded by the
+        capacity of each edge, but then this is just the definition of
+        the capacity of a cut. Now why is this corollary useful? Let's
+        look at an example.
+        \paragraph{Example} ~
+        \\ \includegraphics[width = 0.7\textwidth]{i29.pdf}
+        $cap(A,B)=1+2 = 3$ and $val=3 \implies$ max flow $= 3$. So if
+        we get a flow and are asked if this is the max flow or not,
+        either we find a flow with a better value to disprove it, or
+        find a cut such that the capacity is the same as the flow, to
+        prove that we can't do any better than that.
+        \paragraph{Proof of the fact that Ford-Fulkerson finds the max
+          flow} Recall:
+        \begin{algorithmic}
+          \State{FF: start with $f = 0$}
+          \While{$s-t$ path $p$ in $G_f$}
+            \State{Augment$(f,p)$}
+            \State{update $G_f$}
+          \EndWhile
+        \end{algorithmic}
+        Consider the point where Ford-Fulkerson terminates. Let $A^*$
+        be the set of the vertices that can be reached from $S$ in
+        the residual graph. Why is this a valid cut? Because at
+        termination, there are no more $s-t$ paths, so $t \notin A^*$.
+        \\ \includegraphics[width=0.7\textwidth]{i30.pdf}
+        \\ \includegraphics[width=0.7\textwidth]{i31.pdf}
+        There are no edges in $G_f$ from $A^*$ to $B^*$, or else the
+        endpoint vertex in $B^*$ would be in $A^*$, because $A^*$
+        consists of all the vertices we can reach from $s$. Thus:
+        if $uv$ is an edge in the original network with $u \in A^*, v
+        \in B^*$
+        \\ \includegraphics[width=0.7\textwidth]{i32.pdf}
+        $f(uv) = C_{uv}$, or else $uv$ edge would be in $G_f$.
+        \\ \includegraphics[width=0.7\textwidth]{i33.pdf}
+        $f(uv) = 0$, otherwise $vu$ would be in $G_f$.
+        Thus:
+        \begin{flalign*}
+          f^{in}(A^*) & = 0
+          \\ f^{out}(A^*) & = \sum_{\substack{u \in A^* \\ v \in B^* \\ uv \in E}} C_{uv} = cap(A^*,B^*)
+        \end{flalign*}
+        Therefore,
+        $$val(f) = f^{out}(A^*)-f^{in}(A^*) = cap(A^*,B^*)$$
+        So we showed that Ford-Fulkerson finds the cut that maximizes
+        the flow, i.e. Ford-Fulkerson gives us the optimal
+        solution. We have:
+        \begin{flalign*}
+          max-flow \leq cap(A^*,B^*) = val(f) \implies val(f) = max-flow
+        \end{flalign*}
+        \rule{\textwidth}{0.5pt}
+        We showed that Ford-Fulkerson finds max flow. That is, when it
+        terminates, $val(f) = max-flow$
+        \\ \rule{\textwidth}{0.5pt}
+        \paragraph{Problem} Given a flow network how can we find a
+        min-cut? Run Ford-Fulkerson and output $(A^*, B^*)$.
+        \begin{flalign*}
+          \underbrace{val(f)}_{\text{any flow }f} & \leq max-flow \leq min-cut \leq cap(A^*,B^*)
+        \end{flalign*}
+        When we run Ford-Fulkerson we find $f$ with
+        $val(f)=cap(A^*,B^*)$
+        $$\implies val(f) = \mathbf{max-flow = min-cut} =
+        cap(A^*,B*)$$
+        \includegraphics[width=0.7\textwidth]{i34.pdf}
+        \paragraph{Thm} For any flow network:
+        $$max-flow = min-cut$$
 \end{document}
