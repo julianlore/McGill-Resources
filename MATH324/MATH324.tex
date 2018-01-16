@@ -125,7 +125,7 @@
         the population. Consider the following situation:
         \\ $x_1, \ldots, x_n \sim N(\mu, 1)$ (usually interested in
         the normal distribution, binomial and poisson). Suppose this
-        is the IQ of high school graduates in Canada (the $x_i$ are
+        is the IQ of high school graduates in Canada (the $X_i$ are
         numbers). Why do we call this distribution normal? Because for
         a healthy population, most of the weight should be in the
         middle, just like the bell curve. The Normal distribution is
@@ -228,7 +228,7 @@
         $E[X]$. Why? The trouble is when $X$ can take positive and
         negative values and is not bound.
         \begin{flalign*}
-          E[X] & = \sum_{i=1}^\infty x_i P(X=x_i) &
+          E[X] & = \sum_{i=1}^\infty X_i P(X=x_i) &
         \end{flalign*}
         What if we have infinite values that we can take?
         \paragraph{Recall from Calculus}
@@ -365,7 +365,7 @@
           \end{flalign*}
           So,
           \begin{flalign*}
-            \frac{1}{n^2}Var\left(\sum{i=1}^n X_i\right) &
+            \frac{1}{n^2}Var\left(\sum_{i=1}^n X_i\right) &
             \stackrel{\text{Assuming that $X_i$s are ind}}{=} \frac{1}{n^2}\sum_{i=1}^n Var(X_i)
             \intertext{Remember that $X_i \sim F$}
             & \stackrel{\text{Assuming that $X_i$s have the same variance}}{=} \frac{1}{n^2}\cdot n Var(X_i) = \frac{Var(x)}{n}
@@ -387,4 +387,211 @@
           $$P(|\hat{p}_n - p| > \varepsilon) \leq \delta$$ where
           $\varepsilon, \delta$ are known (and small values). Next
           class we will see how to choose values to satisfy this.
+          \section{01/16/18}
+          \paragraph{Recall} Last class we were talking about
+          voting. We got to the point of estimating thousands of
+          votes. We want to estimate the amount of Canadians voting
+          NDP.
+          \begin{equation*}
+            X_i =
+            \begin{cases}
+              1 & \text{NDP}
+              \\ 0 & \text{otherwise}
+            \end{cases}
+          \end{equation*} $i=1,\ldots,n$
+          
+          $p(X_i = 1) = p, i=1,\ldots,n$, we want to estimate this. Why can we make
+          the assumption that this is $p$? If we chose someone
+          randomly, the probability that one of them is voting NDP is
+          $p$, the same for each sample. We try not to get samples
+          from the same family, so that the variables remain
+          independent, as they might have the same views. We use the
+          following notation to signify independence:
+          \begin{flalign*}
+            \independent_{i=1}^n X_i &
+            \\ \hat{p}_n & = \frac{1}{n}
+            \underbrace{\sum_{i=1}^{n}x_i}_{\substack{\text{Number of people}\\ \text{in
+                sample voting NDP}}} = \overline{X}_n
+            \\ \varepsilon & = |\hat{p}_n-p|
+            \\ p(|\hat{p}_n -p| > \overbrace{\delta}^{\text{given}}) & \leq \frac{E[|\hat{p}_n - p]^2}{\delta^2}
+            \\ E[|\hat{p}_n - p|^2] &
+            \\ E(\hat{p}_n) & = E\left[ \frac{1}{n} \sum_{i=1}^nX_i \right]
+            \\ & = \frac{1}{n}E\left[\sum_{i=1}^nX_i\right]
+            \\ & = \frac{1}{n} \sum_{i=1}^nE(X_i)
+            \\
+            \\ E(X_i) & = 1 \cdot p(X_i = 1) + 0 \cdot p(X_i = 0)
+            \\ & = 1 \cdot p + 0 \cdot (1-p)
+            \\ & = p \text{(Expected value of a Bernoulli variable)}
+            \\ \implies E(\hat{p}_n) & = \frac{1}{n} \sum_{i=1}^n p = \frac{1}{n}np = p
+            \intertext{Expectation of variable minus its expectation
+              squared is variance:}
+            E[|\hat{p}_n - p|^2] & = Var(\hat{p}_n)
+            \\ Var(\hat{p}_n) & = Var \left( \frac{1}{n} \sum_{i=1}^nX_i\right)
+            \\ & = \left(\frac{1}{n}\right)^2 Var \left(\sum_{i=1}^nX_i\right)
+            \\ Var \left(\sum_{i=1}^nX_i\right) & \stackrel{\text{Thm
+                5.12(b), p271}}{=} \sum_{i=1}^n Var(X_i)+2 {\sum \sum}_{i \leq i < j \leq n}Cov(X_i, X_j)
+            \intertext{Recall that $\independent_{i=1}^n X_i \implies
+              Cov(X_i,X_j) =0, \forall i\neq j$, so all the terms in
+              the double sum will be $0$.}
+            Var \left(\sum_{i=1}^n X_i\right) & = \sum_{i=1}^n Var(X_i)
+            \intertext{Now we must calculate the variance of $X_i$. We
+            already have the first moment:}
+          Var(X_i) & = E(X_i^2)-[\underbrace{E(X_i)}_p]^2
+          \\ E(X_i^2) &= 1^2 \cdot p(X_i = 1)+0^2 \cdot p(X_i=0)
+          \\ & = 1 \cdot p + 0 \cdot (1-p) = p
+          \\
+          \\ Var(X_i) & = p - [p]^2 = p-p^2 = p(1-p)
+          \\ Var \left(\sum_{i=1}^n X_i\right) & = \sum_{i=1}^n p(1-p)=np(1-p)
+          \\ Var(\hat{p}_n) & = \frac{1}{n^2}Var \left(\sum_{i=1}^n X_i\right) = \frac{1}{n^2}np(1-p) = \frac{p(1-p)}{n}
+          \intertext{Now, using Chebyshev's inequality:}
+          P(|\hat{p}_n-p|>\delta)& \leq \frac{E[|\hat{p}_n -p|^2]}{\delta^2} = \frac{Var(\hat{p}_n)}{\delta^2}
+          \\P(|\hat{p}_n-p|>\delta)& \leq \frac{E[|\hat{p}_n -p|^2]}{\delta^2} = \frac{p(1-p)}{n\delta^2}
+          \intertext{Is this useful? As $n$ tends to $\infty$, the
+            bound goes to $0$, meaning, no matter what $\delta$ you
+            choose here, the chance gets smaller and smaller, i.e. the
+          bigger $n$ gets, the more were on track, heading to the
+          right direction. But we don't know $p$, so how is this
+          useful? But we know something else:}
+        p(1-p) & \leq \frac{1}{4}
+        \intertext{Why?}
+        f(x) & = x(1-x)
+        \\ \frac{df}{dx} & = 1-2x=0 \implies x = \frac{1}{2}
+        \\ \frac{d^2f}{dx^2} & = -2
+        \intertext{Thus we get a concave function with $f
+          \left(\frac{1}{2}\right)$ as the max.}
+        f \left(\frac{1}{2}\right) & = \frac{1}{2} \left(1- \frac{1}{2}\right) = \frac{1}{4}
+        \\ p(|\hat{p}_n - p| > \delta)\leq \frac{1}{4n\delta^2}
+        \intertext{So now for any $\delta$ we can determine how far
+          off our estimate will be. Another application is sample size
+          determination with $\delta = 0.01$, we want the deviation
+          from the target to be less than $1\%$ and we don't want it
+          to fail (from being in the range)
+          more than $5\%$ of the time.}
+        \frac{1}{4n \delta^2} & = 0.05
+        \\ n &= \frac{1}{4(0.05)(0.01)^2}
+        \intertext{This is conservative, as we've put a bound without
+          knowing $p$ and now we know how many samples we should obtain.}
+      \end{flalign*}
+      The bounds like Chebyshev's are very crude inequalities with no
+      assumptions, when we have things like binary variables, we can
+      make more assumptions and get better bounds, won't need to take
+      as many samples. If we want to train a system (i.e. machine
+      learning or spam filtering), if it's not expensive we don't care
+      as much, but in other cases like sampling patients, we might
+      want to get better bounds so we can keep the cost lower.
+      \begin{flalign*}
+        p(|\overline{X}_n - \mu | > \delta) &
+        \intertext{We might want to minimize the distance between
+          $\overline{X}_n$ and $\mu$. In Euclidean space, we square
+          the difference for the distance.}
+        E[|\overline{X}_n - \mu|^2] &= MSE(\overline{X}_n) (\text{Mean Squared Error})
+        % \intertext{How do we measure this?}
+        % If we have uncountably infinite samples:
+        % x_k, y_k, \ \left\lVert x-y \right\rVert^2 & = \sum_{i=1}^k (x_i-y_i)^2
+        % \\ \int_{-\infty}^{\infty}(f(x)-g(x))^2 \ dx,
+        % \sum_{i=1}^\infty(x_i-y_i)^2
+        \intertext{Is it possible to decrease this error to $0$? Aside from
+          $n$ being very large (i.e. everyone in the population; a
+          census). It can be $0$ if $\mu = E(X)$, meaning that
+          $Var(X)=0$, i.e. it is the same everywhere.}
+        Var(X) & = E[(X-\mu_x)^2] 
+      \end{flalign*}
+      Now let's look at MSE more.
+      \begin{flalign*}
+        MSE(\hat{\theta}_n) & = E[(\hat{\theta}_n - \theta)^2]
+        \intertext{Where MSE is the estimator and $\theta$ is the estimand.}
+        & = E[\{(\hat{\theta}_n - E(\hat{\theta}_n))+E(\hat{\theta}_n - \theta)\}^2]
+        \\ & = E[(\hat{\theta}_n)^2 + (E(\hat{\theta}_n-\theta))^2 + 2(\hat{\theta}_n - E(\hat{\theta}_n-E(\hat{\theta}_n)))(E(\hat{\theta}_n - \theta))]
+        \\ & = E[(\hat{\theta}_n - E(\hat{\theta}_n)^2] + E[(E(\hat{\theta}_n)-\theta)^2] + 2 E[(\hat{\theta}_n - E(\hat{\theta}_n))(\overbrace{E(\hat{\theta}_n)}^{\text{constant}}-\overbrace{\theta}^{\text{constant}})]
+        \\ E(X- \mu_x) & = 0
+        \\ & = Var(\hat{\theta}_n) + [\underbrace{E(\hat{\theta}_n - \theta)}_{Bias(\hat{\theta}_n)}]^2
+      \end{flalign*}
+      Now what does Variance and Bias measure? Variance measures the
+      reliability, the larger the variance, the less reliable our data
+      is. If someone does the same type of experiment (in another
+      country, with the same exact procedure) as me and comes
+      up with another estimated value for the estimand, then this mean
+      we don't have much credibility. We want to minimize variance.
+      \\ What about bias? If $Bias(\hat{\theta}_n) = 0 \implies
+      \hat{\theta}_n$ is an unbiased estimator. If the average of the
+      estimator is equal to the target, then we say the estimator is
+      an unbiased estimator. Unbiased estimators aren't a big topic
+      but \textbf{bias is bad}. Say we want to know the salary of all
+      Canadians. If we see that every time we take a sample and we get
+      it over the target or under the target, then we see that we are
+      over/underestimating, so we need to make sure the bias is (if
+      possible) $0$. But sometimes we can allow for a bit of bias but
+      the variance goes down and makes the MSE go down dramatically as
+      a whole. Often we work with estimators that are biased, because
+      if we don't allow for a bit of bias, then the variance remains
+      very high and so does the MSE.
+      \paragraph{Unbiased estimator} $\hat{\theta}_n$ is said to be an
+      unbiased estimator of $\theta$ if $E(\hat{\theta}_n)=\theta$.
+      \paragraph{Example} $X_i \substack{\text{iid}}{\sim} N(\mu,
+      \sigma^2)$, $i=1,\ldots,n$ with $\mu$ and
+      $\sigma^2$ both unknown.
+      \begin{flalign*}
+        \overline{X}_n & = \frac{1}{n} \sum_{i=1}^n X_i \implies E(\overline{X_n}) = \mu &
+        % \intertext{i.e. if we want an unbiased estimator }
+        \\ Var(\overline{X}_n) & = \frac{1}{n} \sum_{i=1}^n Var(X_i) = \frac{n \sigma^2}{n^2}= \frac{\sigma^2}{n}
+        \\ MSE(\overline{X}_n) & = Var(\overline{X}_n) + [Bias(\overline{X}_n)]^2 = \frac{\sigma^2}{n} + 0^2 = \frac{\sigma^2}{n}
+        \intertext{i.e. for very large $n$ our results are unbiased.}
+      \end{flalign*}
+      Can we extend this example?
+      \\ \rule{\textwidth}{0.5pt}
+      Suppose $X_i, X_2, \ldots, X_n$ have the same mean $\mu$. Then
+      \begin{flalign*}
+        E(\overline{X}_n) & = E\left[ \frac{1}{n} \sum_{i=1}^n X_i \right] = \frac{1}{n} \sum_{i=1}^n \overbrace{E(X_i)}^{\mu} = \mu
+      \end{flalign*}
+      We don't need normalized variables, just need the same
+      distribution with the same mean, very little assumptions yet we
+      can tell that it is unbiased.
+      \\ Suppose further that $cov(X_i,X_j)=0, i\neq j$
+      \\ Then
+      \begin{flalign*}
+        Var(\overline{X}_n) & = Var \left(\frac{1}{n} \sum_{i=1}^nX_i\right)
+        \\ & = \frac{1}{n^2}\left\{\sum_{i=1}^nVar(X_i) + 2 {\sum \sum}_{1 \leq i \leq j \leq n}Cov(X_i,X_j)\right\}
+        \\ & = \frac{1}{n^2} \sum_{i=1}^nVar(X_i)
+        \intertext{Assume that $Var(X_i) = \sigma^2, i=1,\ldots,n$}
+        \text{Then }Var(\overline{X}_n) & = \frac{\sigma^2}{n}
+        \\ \text{Then }MSE(\overline{X}_n) & = \frac{\sigma^2}{n}
+        \intertext{where $\sigma^2 = Var(X_i), i=1,\ldots,n$. i.e. if
+          $X_i's$ have the same mean $\mu$ \& Variance $\sigma^2$ and
+          $Cov(X_i,X_j)=0,i\neq j$. Very minimal assumptions, yet we
+          know what $MSE$ is.}
+      \end{flalign*}
+      This is called \textbf{Stein's paradox}.
+      \begin{flalign*}
+        X \sim N(\mu_X,1), i=1,\ldots,n \to \overline{X}_n
+        \\ Y \sim N(\mu_Y,1), i=1,\ldots,n \to \overline{Y}_n
+        \\ Z \sim N(\mu_Z,1), i=1,\ldots,n \to \overline{Z}_n
+      \end{flalign*}
+      \paragraph{Admissibility} We say an estimator $\hat{\theta}_n$
+      is admissible if there is no other estimator $\tilde{\theta}$
+      such that (note that MSE is always a function of a parameter)
+      $$MSE(\tilde{\theta}) \leq MSE(\hat{\theta})$$
+      i.e. your estimator is always better than someone else's
+      estimator. Now the paradox here is that each pairwise pairs of these $3$
+      (vectors with $2$ components,
+      i.e. $(\overline{X}_n,\overline{Y}_n)$) random variables have
+      admissibility, but as soon as you
+      introduce all $3$ random variables, you no longer have
+      admissibility.
+      \\ \rule{\textwidth}{0.5pt}
+      \\ So we have shown that the MSE of $\overline{X}_n$ is unbiased
+      with minimal assumptions. But we talked about several
+      estimators. Are there any other estimators other than
+      $\overline{X}_n$? Actually, we have uncountably infinite
+      estimators. Suppose $X_i$ have the same mean $\mu$.
+      \begin{flalign*}
+        \tilde{X}_n & = \sum_{i=1}^n c_i X_i \text{ where }\sum_{i=1}^n c_i = 1
+        \\ E(\tilde{X}_n) & = E\left[\sum_{i=1}^n c_i X_i\right] = \sum_{i=1}^nE[c_iX_i] = \sum_{i=1}^n c_i E(X_i) = \sum_{i=1}^nc_i \mu = \mu \sum_{i=1}^nc_i = \mu
+      \end{flalign*}
+      \begin{flalign*}
+        MSE(\tilde{X}_n) & = Var(\tilde{X}_n)+\underbrace{Bias^2(\tilde{X}_n)}_0
+      \end{flalign*}
+      Next class we will show that we can minimize the variance if we
+      set $c_i = \frac{1}{n}$
+      \\ Min $MSE(\tilde{X}_n)$ with $c=(c_1,\ldots,c_n)$ such that
+      $\sum_{i=1}^nc_i = 1$
 \end{document}
