@@ -487,4 +487,170 @@
         \includegraphics[width=0.7\textwidth]{i34.pdf}
         \paragraph{Thm} For any flow network:
         $$max-flow = min-cut$$
-\end{document}
+        \section{01/17/18}
+        \paragraph{Recall}
+        \begin{itemize}
+        \item Ford-Fulkerson finds the max flow. 
+        \item $Max-flow=Min-cut$. Kind of unexpected/unintuitive that
+          they'd be equal. It's pretty intuitive that $min-cut$ is an
+          upper bound, but it's surprising that they are equal.
+        \item Ford-Fulkerson runs in $O(m^2K)$, where $m$ is the
+          number of edges, $K$ is the
+          largest capacity of an edge. Can be quite slow if the
+          largest capacity is big.
+        \item $val(f) =f^{out}(s)=f^{in}(t)=f^{out}(A)-f^{in}(A)$ for
+          all cuts $(A,B)$
+        \item Ford-Fulkerson can be used to find $min-cut$.
+          \\ \includegraphics[width=.9\textwidth]{i35.pdf}
+          Can't reach $t$ from $s$ at the end of the algorithm in the
+          residual graph.
+        \end{itemize}
+        \paragraph{Question} (Recall all capacities are integers) Is
+        it possible to have a $max-flow$ that assigns non-integer
+        values to some of the edges? (Remember that the flow function
+        is defined as $f:E \to \mathbb{R}^+$) Yes, it is possible:
+        \\ \includegraphics[width=.9\textwidth]{i36.pdf}
+        \paragraph{Question} Is there always an all integer
+        $max-flow$? Yes because Ford-Fulkerson always outputs integer
+        valued flows and we know that it finds $max-flow$. i.e. there
+        is at least one all integer $max-flow$, the one that can be
+        found by Ford-Fulkerson and we already proved that it gives
+        $max-flow$. If you try to prove this directly, it seems very
+        hard unless you come up with something like Ford-Fulkerson. So
+        we have obtained many important consequences and applications
+        from analyzing Ford-Fulkerson.
+        \paragraph{Remark} The running time $O(m^2K)$ is not efficient
+        when $K$ is a large number. Input size: $\Theta(m \log k)$,
+        since we have $m$ edges each that require as much as $\log k$
+        bits to write each number between $1-K$. (This is an
+        exponential time algorithm)
+        \\ \includegraphics[width=.9\textwidth]{i37.pdf} Running
+        Ford-Fulkerson on this graph would require $2^K$ path
+        augmentations, alternating between the red and blue path. So
+        we want to get rid of this and improve it.
+        \subsection{A Faster Ford-Fulkerson}
+        \paragraph{Possible Approaches}
+        \begin{enumerate}
+        \item Always pick the shortest path from $s$ to $t$. This will
+          work and leads to an efficient (polytime) algorithm. We will
+          not discuss it here. Pretty easy to implement too, just run
+          a BFS instead of a DFS.
+        \item Try to go with the paths that increase the flow by
+          larger numbers. In the above example, we see that the red
+          path only increases flow by $1$, instead of the top path
+          that can increase it by $K$. This is called the Fattest Path
+          approach, where we find an augmenting path with the largest
+          bottleneck. However, there is a bit of a problem here,
+          finding this path is a bit complicated and not fast. (There
+          is a way to implement it by modifying Dijkstra's, but not so
+          fast)
+          \\ The problem with the first proposed solution is that it
+          can't be analyzed easily (although it can be implemented
+          easily), whereas the second solution can be analyzed easily
+          but not easily implemented.
+        \end{enumerate}
+        We will do something similar:
+        \paragraph{High level description}
+        \begin{algorithmic}
+          \State Initially set $\Delta = 2^{\lceil \log_2 k \rceil}$,
+          that is $\Delta$ is the smallest power of $2$ that is at
+          least $K$. (e.g. $K=13 \implies \Delta = 16, K=17 \implies
+          \Delta = 32$)
+          \While{\underline{there are augmenting paths with
+            bottleneck$\geq\Delta$}} use them to augment the flow
+          \State When we run out of these we set $\Delta \gets
+          \frac{\Delta}{2}$
+          \State If $\Delta=1$ here (when we want to decrease it) then stop.
+          \EndWhile
+        \end{algorithmic}
+        How can we check the underlined condition, that there are
+        augmenting paths with bottleneck greater than $\Delta$?
+        \\ \includegraphics[width=.9\textwidth]{i38.pdf} with
+        $\Delta=4$.
+        \\In this case, when we build the residual graph we will
+        exclude edges that have weight less than $4$. Let
+        $G_f(\Delta)$ be the subgraph of $G_f$ consisting only of the
+        edges with residual cap $\geq \Delta$. We just need to find an
+        $s-t$ path in $G_f(\Delta)$.
+        \\ \includegraphics[width=.9\textwidth]{i39.pdf}
+        \\ Here bottleneck$\geq \Delta$, we can increase the flow by
+        $5$ here.
+        \\ We call this scaling.
+        \paragraph{Scaling Ford-Fulkerson}
+        \begin{algorithmic}
+          \State set $\Delta=2^{\lceil \log_2 k \rceil}$, where $K$ is
+          the largest capacity.
+          \State set $f=0$, construct $G_f$
+          \While{$\Delta \geq 1$}
+            \While{$\exists$ an $s-t$ path $P$ in $G_F(\Delta)$}
+                \State{Augment$(f,p)$}
+                \State{update $G_f$}
+            \EndWhile
+            \State $\Delta \gets \frac{\Delta}{2}$    
+          \EndWhile
+        \end{algorithmic}
+        \paragraph{Running Time}
+        \begin{itemize}
+        \item Checking if there exists an $s-t$ path: $O(m)$
+        \item Augmenting, $O(m)$
+        \item Updating $G_f$, $O(m)$
+        \end{itemize}
+        So we need to understand the number of iterations.
+        The other loop has $\lceil \log_@ K \rceil$ iterations. The
+        inner loop? (actually will be a bit of work to analyze this.)
+        How many times in the $\Delta-phase$?
+        \paragraph{Claim} Let $f$
+        be the flow at the end of the $\Delta$-phase (when no $s-t$
+        paths are in $G_f(\Delta)$). There is a cut $(A,B)$ such
+        that $$Max-flow \leq Cap(A,B) \leq val(f)+m\Delta$$
+        \paragraph{Proof} Let $A$ be the set of all nodes that can be
+        reached from $S$ in $G_f(\Delta)$ (very similar to $min-cuts$
+        before)
+        \\ \includegraphics[width=.9\textwidth]{i40.pdf}
+        \\ (No edge from $A$ to $B$ in $G_f(\Delta)$, otherwise $A$
+        would have been extended further)
+        \\ If $e$ is an edge from $A$ to $B$ in the original network:
+        \\ \includegraphics[width=.9\textwidth]{i41.pdf}
+        \begin{align*}
+          f(e) \geq c_e - \Delta
+          \\ c_e - f(e) < \Delta
+        \end{align*}
+        If $e$ goes from $B$ to $A$:
+        \\\includegraphics[width=.9\textwidth]{i41.pdf}
+        \begin{align*}
+          f(e) < \Delta
+        \end{align*}
+        Or else we could expand $A$.
+        \begin{align*}
+          val(f) & = f^{out}(A)-f^{in}(A) = \sum_{\substack{e \ from \\ A \ to \ B}} f(e)- \sum_{\substack{e \ from \\ B \ to \ A}}f(e)
+          \\ & \geq \sum_{\substack{e \ from \\A \ to \ B}} (c_e - \Delta) - \sum_{\substack{e \ from \\ B \ to \ A}}\Delta = \sum_{\substack{e \ from \\ A \ to \ B}}c_e - \sum_{\substack{e \ from \\ A \ to \ B \\ or \ B \ to \ A}} \Delta
+          \\ & = Cap(A,B) -m\Delta \implies val(f) \geq Cap(A,B)-m\delta 
+        \end{align*}
+        \hfill $\square$
+        So we showed $$val(f) \geq Cap(A,B)-m\Delta \geq max-flow -
+        m\Delta$$
+        Let's look at the flow at the end of the previous phase.
+        $$Val(f_{prev})\geq max-flow - 2\Delta m$$ (since we halved
+        $\Delta$)
+        \\ How many augmentations can we have in the $\Delta$-phase?
+        %Every time you increase the $max-flow$, you are increasing it
+        %by $\Delta$, and you cannot pass $2\Delta m$, so
+        We can have at most $2m$ augmentations in this phase because each one
+        increases the value by at least $\Delta$ and starting from
+        $max-flow-2m\Delta$ we cannot go above $max-flow$. So the
+        number of iterations of this is good as it only depends on
+        $m$.
+        \\ Back to the analysis, we figured out that the inner loop
+        has $\leq 2m$ iterations. So the total running time is:
+        \begin{align*}
+          O(\log_2 K \times m \times m) = O(m^2 \log K)
+        \end{align*}
+        Instead of $O(m^2K)$ of the naive Ford-Fulkerson. This is a
+        big improvement when $K$ is a huge number.
+        \\ One thing is left: Why does this algorithm find the
+        $max-flow$? Because when it terminates, $\Delta=1$ and it
+        means there are no more augmenting $s-t$ paths in the residual
+        graph.
+        \paragraph{Remark} This is a special instance of
+        Ford-Fulkerson $\implies$ it finds $max-flow$.
+      \end{document}
