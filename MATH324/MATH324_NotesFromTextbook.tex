@@ -1,0 +1,104 @@
+\documentclass[12 pt]{article}
+\usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
+  lastpage, amssymb}
+\usepackage[margin=1 in]{geometry}
+\allowdisplaybreaks
+%\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
+\hypersetup{
+	%colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=black,  %choose some color if you want links to stand out
+}
+\usepackage{graphicx}
+\graphicspath{{Images/}}
+
+\usepackage{amsthm}
+\newtheorem{thm}{Theorem}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+
+% Independent symbol
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\author{Julian Lore}
+\date{Last updated: \today}
+\title{MATH 324: Statistics}
+\pagestyle{fancy}
+\lhead{MATH 324}
+\chead{\leftmark}
+\rhead{Julian Lore}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\begin{document}
+	\onehalfspacing
+	\maketitle
+	Rough notes from Wackerly's Mathematical Statistics with
+        Applications (7\textsuperscript{th} edition).
+	\tableofcontents
+        \section*{Useful Information}
+        Some formulas from probability:
+        \begin{align*}
+          Var(X) & = E[(X-\mu)^2] = E[X^2] - (E[X])^2
+        \end{align*}
+        \setcounter{section}{7}
+        \section{Estimation}
+        \subsection{Introduction}
+        Point of statistics is to use sample information to infer data
+        about the population. Populations are characterized by numbers
+        (\textit{parameters}) and we often want to estimate the value
+        of parameter(s). Parameters include the proportion $p$,
+        population mean $\mu$, variance $\sigma^2$ and standard
+        deviation $\sigma$.
+        \begin{defn}
+          The parameter of interest in an experiment is called the
+          \textit{target parameter}.
+        \end{defn}
+        \begin{defn}
+          A \textit{point estimate} is a type of estimate where we use
+          a single value/point to estimate a parameter. If we estimate
+          a parameter by saying that it might fall between two
+          numbers, this is an \textit{interval estimate}. We can use
+          information from the sample to calculate these estimates,
+          which are done using an estimator.
+        \end{defn}
+        \begin{defn}
+          An \textit{estimator} is a rule, often expressed as a
+          formula, that tells how to calculate the value of an
+          estimate based on the measurements contained in a sample.
+        \end{defn}
+        \begin{defn}
+          \textit{Sample mean:}
+          $$\overline{X} = \frac{1}{n} \sum_{i=1}^n X_i$$ This is an
+          example point estimator of $\mu$.
+        \end{defn}
+        There can be different estimators for the same population
+        parameter. Some estimators are considered good and others are bad.
+        \subsection{The Bias and Mean Square Error of Point
+          Estimators}
+        We cannot measure how good a point estimation procedure is
+        with a single estimate, we need to observe the procedure many
+        times. We create a frequency distribution to measure the
+        goodness of a point estimator.
+        \paragraph{Point Estimators} For a population parameter
+        $\theta$, the estimator of $\theta$ is called $\hat{\theta}$.
+        \begin{defn}
+        Ideally, we'd want $E(\hat{\theta}) = \theta$. Point
+        estimators that satisfy this are called
+        \textit{unbiased}. Otherwise, they are called \textit{biased},
+        where the \textit{bias} is given by
+        $B(\hat{\theta})=E(\hat{\theta})-\theta$
+      \end{defn}
+      In addition, we'd also like the estimator $V(\hat{\theta})$ to
+      be as small as possible, since a smaller variance guarantees a
+      higher fraction of estimators to be ``close'' to $\theta$. If
+      two estimators are unbiased and everything else is equal other
+      than variance, we prefer the one with smaller variance.
+      \begin{defn}
+        Another way to characterize goodness of a point estimator is
+        via its \textit{mean square error},
+        $$MSE(\hat{\theta}) = E[(\hat{\theta}-\theta)^2]$$
+        Which is the average of the square of the distance between the
+        estimator and its target parameter. It can be shown that:
+        $$MSE(\hat{\theta})=V(\hat{\theta})+[B(\hat{\theta})]^2$$
+      \end{defn}
+\end{document}
