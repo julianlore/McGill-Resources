@@ -305,13 +305,13 @@
         \paragraph{Example}
         Suppose we have the following $0$-$1$ random variable
         representing what people will vote for
-        \begin{equation}
+        \begin{equation*}
           X_i =
           \begin{cases}
             1 & \text{if NDP}
             \\ 0 & \text{otherwise}
           \end{cases}
-          \end{equation}
+          \end{equation*}
           We know that $X_i \sim$ Bernoulli($p$), $p=P(X_i=1)$
           \begin{flalign*}
             X_1,\ldots,X_n \sim p=(P(X_i=1),i=1,2,\ldots,n) &
@@ -594,4 +594,205 @@
       set $c_i = \frac{1}{n}$
       \\ Min $MSE(\tilde{X}_n)$ with $c=(c_1,\ldots,c_n)$ such that
       $\sum_{i=1}^nc_i = 1$
+      \section{01/18/18}
+      \paragraph{Recall} We we're talking about number of estimators
+      and showed that there can be uncountably infinite estimators. So
+      the question was, how can we chose amongst uncountably infinite
+      estimators? So we assumed that we wanted to confine ourselves to
+      unbiased estimators. We then looked at sample average, which
+      gives equal weight to each sample. A familiar example is GPA,
+      which has weight based on the amount of credits the course
+      is. We normalize the sample average by making the sum add up to
+      $1$. We noticed that if all our observations have the same
+      average $\mu$, then so does our estimator. So how do we chose
+      our estimator?
+      \begin{flalign*}
+        \tilde{X}_{n,\vec{c}} & = \sum_{i=1}^n c_i x_i \text{ where $\vec{c}=(c_1,\ldots,c_n)$}
+      \end{flalign*}
+        $$\{\tilde{X}_{n,\vec{c}} : \vec{c} \in \mathbb{R}^n,
+        \sum_{i=1}^n c_i = 1\}$$
+        One of the things we used to check how good an estimator was
+        is MSE:
+        \begin{flalign*}
+          MSE(\vec{X}_{n,\vec{c}}) & = Var(\tilde{X}_{n,\vec{c}}) + \underbrace{[Bias(\tilde{X}_{n,\vec{c}})]^2}_{E(\tilde{X}_{n,\vec{c}}) - \mu}
+          \\ MSE(\tilde{X}_{n,\vec{c}}) & = Var(\tilde{X}_{n,\vec{c}})
+        \end{flalign*}
+        So we want:
+        \begin{equation}          
+        \min_{\vec{c} \in \mathbb{R}} Var (\tilde{X}_{n,\vec{c}})
+        \end{equation}
+        subject to $\sum_{i=1}^n c_i = 1$ (constraint)
+        \\ This is a generalization of problem $8.6$ on page $394$.
+        \\Suppose $X_i$'s have the same mean $\mu$ and variance
+        $\sigma^2$ and $Cov(X_i, X_j) = 0, i \neq j$ (i.e. they are orthogonal). Then the
+        % Change this to a ref to a label?
+        solution to $(1)$ is $\overline{X}_n$, i.e. $c_i =
+        \frac{1}{n}, i=1,\ldots,n$. Now how do we solve this? We can
+        use calculus to find a minimum. How many variables do we have
+        here? $n-1$ variables, as the last one is specified by the
+        constraint. The way we do this is with the Lagrange Method.
+
+        So we note that problem $(1)$ is equivalent to
+        \begin{equation}
+        \min_{\vec{c} \in \mathbb{R}}
+        \{Var(\tilde{X}_{n,\vec{c}})+\lambda \left(\sum_{i=1}^n c_i -
+          1\right)\}
+        \end{equation}
+        where $\lambda$ is the lagrange multiplier. How
+        do we show that these two mathematical programs are the same?
+        We show that if we find a $\vec{c^*}$ that minimizes $(1)$, it
+        must also minimize $(2)$ and vice versa. How
+        do we solve this?
+          \begin{flalign*}
+          Var(\tilde{X}_{n,\vec{c}}) & = Var \left(\sum_{i=1}^n c_i
+          X_i\right) \stackrel{\text{Thm
+            5.12(b), p271}}{=} \sum_{i=1}^n Var(c_i X_i)+2{\sum \sum}_{1 \leq i \leq j \leq n}Cov(c_iX_i, c_jX_j)
+        \\ & = \sum_{i=1}^n c_i^2 Var(X_i) + 2 {\sum \sum}_{1 \leq i \leq j \leq n} c_i c_j Cov(X_i,X_j)
+        \\ & = \sum_{i=1}^n c_i^2 \overbrace{Var(X_i)}^{\sigma^2} = \sigma^2 \sum_{i=1}^n c_i^2
+      \end{flalign*}
+      Now our problem $(2)$ is equivalent to
+      $$\min_{\vec{c}\in \mathbb{R}} \underbrace{\left\{\sigma^2 \sum_{i=1}^n
+        c_i^2 + \lambda \left(\sum_{i=1}^nc_i -1\right)\right\}}_{\varphi(\vec{c})}$$
+      \begin{flalign*}
+        \frac{\partial}{\partial c_i} \varphi (\vec{c}) &= 2 \sigma^2 c_i + \lambda, i=1,2,\ldots,n
+        \\ \frac{\partial}{\partial \lambda}\varphi(\vec{c}) & = \sum_{i=1}^n c_i - 1
+      \end{flalign*}
+      So now we equate them to $0$:
+      $$
+      \begin{cases}
+        \frac{\partial}{\partial c_i} \varphi_\lambda (\vec{c}) = 0, i=1, \ldots, n
+        \\ \frac{\partial}{\partial \lambda} \varphi_{\lambda}(\vec{c}) = 0 \to \sum_{i=1}^n c_i = 1
+      \end{cases}
+      $$
+      \begin{flalign*}
+        \frac{\partial}{\partial c_i} \varphi_\lambda(\vec{c}) & = 2 \sigma^2 c_i + \lambda = 0
+        \\ c_i & = - \frac{\lambda}{2 \sigma^2}, i=1,2,\ldots,n
+        \\ \frac{\partial \varphi_\lambda(\vec{c})}{\partial \lambda} & = \sum_{i=1}^n c_i - 1 = 0 \implies \sum_{i=1}^n - \frac{\lambda}{2 \sigma^2}=1
+        \\ \lambda & = \frac{1}{- \sum_{i=1}^n \frac{1}{2 \sigma^2}} = - \frac{2 \sigma^2}{n}
+      \end{flalign*}
+      $$
+      \begin{cases}
+        c_i = - \frac{\lambda}{2\sigma^2}, i=1,\ldots,n
+        \\ \lambda = - \frac{2 \sigma^2}{n}
+      \end{cases}
+      $$
+      \begin{flalign*}
+        \rightarrow c_i & = \frac{1}{n}, i=1,\ldots,n
+        \\ \vec{c} &=(c_1,c_2,\ldots,c_n)
+      \end{flalign*}
+      How do we know this is the minimum? We could take the second
+      derivative and look at the resulting matrix, but we won't be
+      going into details for that in this class.
+      \\ You don't need to check the matrix, but you should be able to
+      take partial derivatives to minimize something (might be less
+      variables, like $8.6$), add the constraint to the objective
+      function.
+      \\ Essentially what we did was minimize
+      $MSE(\tilde{X}_{n,\vec{c}})$. For any vector $\vec{c}$ we have an
+      estimator and this estimator has a distance, so we want to
+      minimize the distance by choosing the components of $\vec{c}$
+      subject to $\sum_{i=1}^nc_i = 1$ and we found that the solution
+      is the sample average where we give equal weight to each sample,
+      i.e.
+      $$\overline{X}_n = \frac{1}{n} \sum_{i=1}^n X_i$$ with $c_i =
+      \frac{1}{n}, i=1,\ldots,n$.
+      \\ So we have constrained ourselves to unbiased estimators that
+      are linear combinations: $\tilde{X}_{n,\vec{c}} = \sum_{i=1}^n
+      c_i X_i$
+      \\ How do we know that there isn't a better class of
+      distributions that aren't linear combinations? We will see
+      something in chapter $9$.
+      \\ \noindent \rule{\textwidth}{0.5pt}
+      So far we have looked at $E(X) = \mu$ for population
+      averages. But we can also look at other parameters that are
+      important to us, like variance.
+      \\ So we have a bunch of estimates and want to estimate the
+      variation. The estimation of this variation is very important.
+      $Var(X) = \sigma^2_x$, because sample size requires this and
+      greatly affects the amount of money required to conduct an
+      experiment. How can we solve this? Suppose we have a sample from
+      a population (no distribution assumption):
+      \begin{flalign*}
+        & X_1, \ldots, X_n &
+        \\ & E(X_i) = \mu, i=1,\ldots,n
+        \\ &Var(X_i) = \sigma^2, i=1,\ldots,n
+        \\ &Cov(X_i, X_j) = 0, i \neq j
+      \end{flalign*}
+      What would be a natural estimator for this variance?
+      \textbf{Sample variance.}
+      % \\ If we want to mimic the variance using our sample, we will
+      % use \textbf{plugin estimation}.
+      \begin{flalign*}
+        Var(X) & = E[(X-\mu)^2]
+        \\ S^2_{n,*} \text{ (sample variance)} & = \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2
+        \intertext{Do we have the following equality? This would imply
+        unbiasness.}
+      E[S^2_{n,*}] & \stackrel{?}{=} \sigma^2
+      \\ (X_i - \mu)^2 & = [(X_i - \overline{X}_n)+(\overline{X}_n- \mu)]^2
+      \\ (X_i - \mu)^2 & = (X_i - \overline{X}_n)^2 + (\overline{X}_n-\mu)^2 + 2(X_i-\overline{X}_n)(\overline{X}_n - \mu), i=1,\ldots,n
+      \\ \sum_{i=1}^n (X_i, \mu)^2 & = \sum_{i=1}^n(X_i - \overline{X}_n)^2 + \sum_{i=1}^n(\overline{X}_n - \mu)^2 + 2 \sum_{i=1}^n (X_i - \overline{X})(\overline{X}_n -\mu)
+      \\ & = \sum_{i=1}^n (X_i - \overline{X}_n)^2 + n(\overline{X}_n - \mu)^2 + 2 (\overline{X}_n - \mu)\underbrace{\sum_{i=1}^n (X_i - \overline{X}_n)}_{\sum_xi - n \overline{X}_n = 0}
+      \\ \sum_{i=1}^n (X_i - \mu )^2 & = \sum_{i=1}^n (X_i - \overline{X}_n)^2 + n(\overline{X}_n-\mu)^2 % Number this line
+      \\ E\left[\sum_{i=1}^n (X_i - \mu)^2\right] & = E\left[\sum_{i=1}^n(X_i - \overline{X}_n)^2\right] + E[n(\overline{X}_n - \mu)^2]
+      \\ \sum_{i=1}^n E (X_i - \mu)^2 & = E[n S^2{n,*}] + E[n(\overline{X}_n - \mu)^2]
+      \\ \sum_{i=1}^n \underbrace{Var(X_i)}_{\sigma^2} & = nE(S^2_{n,*})+nE[(\overline{X}_n - \mu)^2]
+      \\ n\sigma^2 &= nE(S^2_{n,*})+n \underbrace{E[(\overline{X}_n - \mu)^2]}_{Var(\overline{X}_n)}
+      \\ \sigma^2 & = E(S^2_{n,*}) + Var(\overline{X}_n)
+      \\ \sigma^2 & = E(S^2_{n,*}) + \frac{\sigma^2}{n}
+      \\ E(S^2_{n,*}) & = \sigma^2 \left(1-\frac{1}{n}\right)
+      \intertext{So is this unbiased? No! It's not equal to our
+        target. When $n$ gets really big, the other term will be
+        negligible, but what if we want something unbiased without
+        that condition? Multiply by the reciprocal!}
+      \frac{n}{n-1}E(S^2_{n,*}) & = \sigma^2
+      \\ E \left(\frac{n}{n-1} S^2_{n,*}\right) & = \sigma^2
+      \\
+      \\ S_n^2 & = \frac{n}{n-1} \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2
+      \\ & = \frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X}_n)^2
+    \end{flalign*}
+    So now we have something unbiased. But why is sample variance
+    happen to be biased? Why do we need $n-1$? What is causing us
+    trouble? $\overline{X}_n$. If we had $\mu$ instead, we wouldn't
+    have this problem.
+    \\ Consider the following as vectors:
+    \begin{flalign*}
+      V=Span\{X_i - \overline{X}_n, i=1,\ldots,n\}, \sum_{i=1}^n (X_i - \overline{X}_n) = 0
+    \end{flalign*}
+    Not all the vectors are linearly independent, so we lose $1$
+    degree of freedom, the reason why we have $n-1$. But now, if we
+    compare this with:
+    \begin{flalign*}
+      W=Span  \{X_i - \mu, i=1,\ldots,n\}
+      \\dim(V) = n-1, dim(W)=n
+    \end{flalign*}
+    The $X_i$ do not depend linearly on $\mu$, if you sum up all the
+    terms it won't be $0$, because $\mu$ is the population average,
+    not the sample average, we are just shifting by a constant $\mu$
+    and this will not affect covariance.
+    \\ \noindent \rule{\textwidth}{0.5pt}
+    So far we have looked at the parameters: $\mu, p, \sigma^2$.
+    \\ What happens if we have $2$ populations, i.e. men ($X_1,
+    \ldots, X_n$) with mean $\mu_M$ and women ($Y_1, \ldots, Y_n$)
+    with mean $\mu_W$. Say we want to
+    compare the salaries of men and women. We may have the salaries of
+    everyone in our university, but not everyone in Canada. So what's
+    a natural estimator for $\mu_M$ and $\mu_w$?
+    \begin{flalign*}
+      \overline{X}_M & = \frac{1}{m} \sum_{i=1}^m X_i
+      \\ \overline{Y}_W & = \frac{1}{n} \sum_{i=1}^n Y_i
+    \end{flalign*}
+    \paragraph{Exercise} Show that $E(\overline{X}_M - \overline{Y}_W)
+    = \mu_M - \mu_W$ (this should be immediately available to you from
+    what we've done). Note that we assume they are all coming from the same
+    population (i.e. they all have the same mean).
+    \\ Furthermore, also show:
+    \\ Suppose $Cov(X_i, X_j) = 0, Cov(Y_i, Y_j) = 0, i \neq j$
+    and $X$s and $Y$s are independent (don't really need this
+    condition, extra). Find $Var(\overline{X}_m - \overline{Y}_W)$
+    (these are all immediately available to you, just work through
+    them)
+    \\ The formula that will be useful to you (Thm $5.12$):
+    $$Var(aX+bY) = a^2 Var(X)+b^2 Var(Y) \pm 2 ab Cov(X,Y)$$
+    \\ The same idea applies if we want to see the proportion of
+    a kind of population that votes for someone and more applications.
 \end{document}
