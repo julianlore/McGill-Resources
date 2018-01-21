@@ -35,10 +35,33 @@
 	Rough notes from Wackerly's Mathematical Statistics with
         Applications (7\textsuperscript{th} edition).
 	\tableofcontents
-        \section*{Useful Information}
+        \section*{Information from Previous Chapters}
         Some formulas from probability:
         \begin{align*}
           Var(X) & = E[(X-\mu)^2] = E[X^2] - (E[X])^2
+        \end{align*}
+        \section*{6.7 Order Statistics}
+        $Y_i$, with $i=1,\ldots,n$ independent continuous random
+        variables. Denote ordered random variables by: $Y_{(1)} \leq
+        Y_{(2)} \leq \ldots \leq Y_{(n)}$. We can then define:
+        \begin{align*}
+          Y_{(1)} & = \min{(Y_1, Y_2, \ldots, Y_n)}
+          \\ Y_{(n)} & = \max{(Y_1, Y_2, \ldots, Y_n)}
+        \end{align*}
+        In order to find the pdf of $Y_{(1)}$ and $Y_{(n)}$, we use
+        the method of distribution functions.
+        \begin{align*}
+          F_{Y_{(n)}}(y) & = P(Y_{(n)} \leq y) = P(Y_1\leq y, Y_2 \leq y, \ldots, Y_n \leq y)
+          \\ &\stackrel{\text{ind}}{=}P(Y_1 \leq y)P(Y_2 \leq y)\ldots p(Y_n \leq y) = [F(y)]^n
+               \intertext{Derive for the density:}
+               g_{(n)}(y) & = n[F(y)]^{n-1}f(y)
+        \end{align*}
+        \noindent \rule{\textwidth}{0.5pt}
+        \begin{align*}
+          \\ F_{Y_{(1)}}(y) & = P(Y_{(1)} \leq 1) = 1 - P(Y_{(1)}>y) = 1 - 1 - P(Y_1>y, Y_2 > y, \ldots Y_n > y)
+          \\ &\stackrel{\text{ind}}{=} 1-[P(Y_1 > y)P(Y_2>y)\ldots P(Y_n)>y] = 1-[1-F(y)]^n
+               \intertext{Derive for the density:}
+               g_{(1)}(y) & = n[1-F(y)]^{n-1}f(y)
         \end{align*}
         \setcounter{section}{7}
         \section{Estimation}
