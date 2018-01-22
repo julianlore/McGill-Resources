@@ -469,30 +469,30 @@
         the flow, i.e. Ford-Fulkerson gives us the optimal
         solution. We have:
         \begin{flalign*}
-          max-flow \leq cap(A^*,B^*) = val(f) \implies val(f) = max-flow
+          max\hbox{-}flow \leq cap(A^*,B^*) = val(f) \implies val(f) = max\hbox{-}flow
         \end{flalign*}
         \rule{\textwidth}{0.5pt}
         We showed that Ford-Fulkerson finds max flow. That is, when it
-        terminates, $val(f) = max-flow$
+        terminates, $val(f) = max\hbox{-}flow$
         \\ \rule{\textwidth}{0.5pt}
         \paragraph{Problem} Given a flow network how can we find a
-        min-cut? Run Ford-Fulkerson and output $(A^*, B^*)$.
+        min\hbox{-}cut? Run Ford-Fulkerson and output $(A^*, B^*)$.
         \begin{flalign*}
-          \underbrace{val(f)}_{\text{any flow }f} & \leq max-flow \leq min-cut \leq cap(A^*,B^*)
+          \underbrace{val(f)}_{\text{any flow }f} & \leq max\hbox{-}flow \leq min\hbox{-}cut \leq cap(A^*,B^*)
         \end{flalign*}
         When we run Ford-Fulkerson we find $f$ with
         $val(f)=cap(A^*,B^*)$
-        $$\implies val(f) = \mathbf{max-flow = min-cut} =
+        $$\implies val(f) = \mathbf{max\hbox{-}flow = min\hbox{-}cut} =
         cap(A^*,B*)$$
         \includegraphics[width=0.7\textwidth]{i34.pdf}
         \paragraph{Thm} For any flow network:
-        $$max-flow = min-cut$$
+        $$max\hbox{-}flow = min\hbox{-}cut$$
         \section{01/17/18}
         \paragraph{Recall}
         \begin{itemize}
         \item Ford-Fulkerson finds the max flow. 
-        \item $Max-flow=Min-cut$. Kind of unexpected/unintuitive that
-          they'd be equal. It's pretty intuitive that $min-cut$ is an
+        \item $max\hbox{-}flow=min\hbox{-}cut$. Kind of unexpected/unintuitive that
+          they'd be equal. It's pretty intuitive that $min\hbox{-}cut$ is an
           upper bound, but it's surprising that they are equal.
         \item Ford-Fulkerson runs in $O(m^2K)$, where $m$ is the
           number of edges, $K$ is the
@@ -500,22 +500,22 @@
           largest capacity is big.
         \item $val(f) =f^{out}(s)=f^{in}(t)=f^{out}(A)-f^{in}(A)$ for
           all cuts $(A,B)$
-        \item Ford-Fulkerson can be used to find $min-cut$.
+        \item Ford-Fulkerson can be used to find $min\hbox{-}cut$.
           \\ \includegraphics[width=.9\textwidth]{i35.pdf}
           Can't reach $t$ from $s$ at the end of the algorithm in the
           residual graph.
         \end{itemize}
         \paragraph{Question} (Recall all capacities are integers) Is
-        it possible to have a $max-flow$ that assigns non-integer
+        it possible to have a $max\hbox{-}flow$ that assigns non-integer
         values to some of the edges? (Remember that the flow function
         is defined as $f:E \to \mathbb{R}^+$) Yes, it is possible:
         \\ \includegraphics[width=.9\textwidth]{i36.pdf}
         \paragraph{Question} Is there always an all integer
-        $max-flow$? Yes because Ford-Fulkerson always outputs integer
-        valued flows and we know that it finds $max-flow$. i.e. there
-        is at least one all integer $max-flow$, the one that can be
+        $max\hbox{-}flow$? Yes because Ford-Fulkerson always outputs integer
+        valued flows and we know that it finds $max\hbox{-}flow$. i.e. there
+        is at least one all integer $max\hbox{-}flow$, the one that can be
         found by Ford-Fulkerson and we already proved that it gives
-        $max-flow$. If you try to prove this directly, it seems very
+        $max\hbox{-}flow$. If you try to prove this directly, it seems very
         hard unless you come up with something like Ford-Fulkerson. So
         we have obtained many important consequences and applications
         from analyzing Ford-Fulkerson.
@@ -602,9 +602,9 @@
         \paragraph{Claim} Let $f$
         be the flow at the end of the $\Delta$-phase (when no $s-t$
         paths are in $G_f(\Delta)$). There is a cut $(A,B)$ such
-        that $$Max-flow \leq Cap(A,B) \leq val(f)+m\Delta$$
+        that $$max\hbox{-}flow \leq Cap(A,B) \leq val(f)+m\Delta$$
         \paragraph{Proof} Let $A$ be the set of all nodes that can be
-        reached from $S$ in $G_f(\Delta)$ (very similar to $min-cuts$
+        reached from $S$ in $G_f(\Delta)$ (very similar to $min\hbox{-}cuts$
         before)
         \\ \includegraphics[width=.9\textwidth]{i40.pdf}
         \\ (No edge from $A$ to $B$ in $G_f(\Delta)$, otherwise $A$
@@ -627,17 +627,17 @@
           \\ & = Cap(A,B) -m\Delta \implies val(f) \geq Cap(A,B)-m\delta 
         \end{align*}
         \hfill $\square$
-        So we showed $$val(f) \geq Cap(A,B)-m\Delta \geq max-flow -
+        So we showed $$val(f) \geq Cap(A,B)-m\Delta \geq max\hbox{-}flow -
         m\Delta$$
         Let's look at the flow at the end of the previous phase.
-        $$Val(f_{prev})\geq max-flow - 2\Delta m$$ (since we halved
+        $$Val(f_{prev})\geq max\hbox{-}flow - 2\Delta m$$ (since we halved
         $\Delta$)
         \\ How many augmentations can we have in the $\Delta$-phase?
-        %Every time you increase the $max-flow$, you are increasing it
+        %Every time you increase the $max\hbox{-}flow$, you are increasing it
         %by $\Delta$, and you cannot pass $2\Delta m$, so
         We can have at most $2m$ augmentations in this phase because each one
         increases the value by at least $\Delta$ and starting from
-        $max-flow-2m\Delta$ we cannot go above $max-flow$. So the
+        $max\hbox{-}flow-2m\Delta$ we cannot go above $max\hbox{-}flow$. So the
         number of iterations of this is good as it only depends on
         $m$.
         \\ Back to the analysis, we figured out that the inner loop
@@ -648,9 +648,161 @@
         Instead of $O(m^2K)$ of the naive Ford-Fulkerson. This is a
         big improvement when $K$ is a huge number.
         \\ One thing is left: Why does this algorithm find the
-        $max-flow$? Because when it terminates, $\Delta=1$ and it
+        $max\hbox{-}flow$? Because when it terminates, $\Delta=1$ and it
         means there are no more augmenting $s-t$ paths in the residual
         graph.
         \paragraph{Remark} This is a special instance of
-        Ford-Fulkerson $\implies$ it finds $max-flow$.
+        Ford-Fulkerson $\implies$ it finds $max\hbox{-}flow$.
+        \section{01/22/18}
+        \paragraph{Recall}
+        \begin{itemize}
+        \item Ford Fulkerson finds max\hbox{-}flow $O(m^2K)$.
+        \item \textbf{Scaling Ford Fulkerson} finds max\hbox{-}flow $O(m^2 \log k)$,
+          $k=$largest capacity.
+        \item $Max\hbox{-}flow=Min\hbox{-}cut$
+        \item There is a $max\hbox{-}flow$ that assigns integer flows
+          to all edges.
+          \\ \includegraphics[width=.9\textwidth]{i42.pdf}
+        \end{itemize}
+        \paragraph{Bipartite Graph} is an undirected graph such that
+        the vertices can be partitioned into two parts $X$ and $Y$
+        such that all the edges are between $X$ and $Y$.
+        \\ \includegraphics[width=.9\textwidth]{i43.pdf}
+        \paragraph{Examples}Is this bipartite? Yes. We can check by
+        just 2 coloring.
+        \\\includegraphics[width=.7\textwidth]{i44.pdf}
+        \\ What about the Peterson graph? No.
+        \\\includegraphics[width=.7\textwidth]{i45.pdf}
+        We can just color it until we reach a contradiction.
+
+        A graph is bipartite $\iff$ it does not have any odd
+        cycles. Trivially a bipartite graph does not have an odd
+        cycle: \\\includegraphics[width=.9\textwidth]{i46.pdf}
+        \subsection{Largest Matching Problem}
+        \paragraph{Def}A matching is a set of edges, no two of them
+        share an endpoint.
+        \paragraph{Def} A perfect matching is a matching that includes
+        all vertices.
+        \paragraph{Ex} The maximum matching of both of these graphs is
+        $2$:
+        \\ \includegraphics[width=.9\textwidth]{i47.pdf}
+        \\ Note that there is nothing geometric about a matching, it
+        does not matter how you draw the graph, the fact that the
+        edges ``cross'' over each other does not matter, like here:
+        \\ \includegraphics[width=.7\textwidth]{i48.pdf}
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        Given a bipartite graph with parts $X$ and $Y$, how can we
+        find the largest matching in $G$?
+        \paragraph{Ex} Maximum matching here is $4$:
+        \\ \includegraphics[width=.5\textwidth]{i49.pdf} Greedy
+        algorithms won't work here, so how should we solve this?
+
+        Why do we care about this problem? It has a very practical
+        application, you can imagine it as a pairing of objects or
+        something like pairing people with jobs, where every person
+        has specific traits for certain jobs and we want to give as
+        many people as possible a job, although each person can only
+        have one.
+
+        We want to use the max flow problem here. How will we do so?
+        \paragraph{Solution} We construct a flow network in the
+        following manner: 
+        \begin{enumerate}
+        \item We direct all the edges from $X$ to $Y$.
+        \item We add two new vertices called $s$ and $t$.
+        \item We put edges from $s$ to all vertices in $X$ and edges
+          from all vertices in $Y$ to $t$.
+        \item Assign capacity $1$ to all the edges.
+        \end{enumerate}
+        \includegraphics[width=.9\textwidth]{i50.pdf}
+        \paragraph{Claim} Max flow in this network $=$ max matching in
+        $G$.
+        \paragraph{Proof} First we show max matching $(M)$ is at least
+        max\hbox{-}flow.
+        \\ \includegraphics[width=.9\textwidth]{i51.pdf}
+        
+        We assign a flow of $1$ to all edges in $M$ and $0$ to all
+        other edges between $X$ and $Y$. For the edges starting from
+        $s$ or ending at $t$, the ones that go to vertices in $M$ get
+        a value of $1$ and the rest $0$.
+        \\ \includegraphics[width=.9\textwidth]{i52.pdf}
+
+        Why is this a valid flow? We aren't overloading capacities
+        (only assigning $0$ or $1$) and we conserve flow going out of
+        $s$ to flow going into $t$, since every edge in $M$ has $1$
+        vertex with an edge coming from $s$ and one with an edge going to $t$. The value of this
+        flow is $|M|$. This is because there are $|M|$ vertices in $X$
+        involved in $M$ and we assign $1$ to the edges from $s$ to
+        those vertices.
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        Now we want to do the opposite, convert the max\hbox{-}flow to
+        a matching.
+
+        Next we need to show that there is a matching of size
+        max\hbox{-}flow (assuming all edges are assigned either $1$ or
+        $0$ flow, making the existence of an integer value flow proved
+        last class important).
+
+        There is a max\hbox{-}flow with integer values. Thus all edges
+        will have a flow of $0$ or $1$ (the capacities are all $1$).
+
+        The edges between $X$ and $Y$ with $1$ unit of flow on them
+        form a matching.
+        \\ \includegraphics[width=.9\textwidth]{i53.pdf}
+
+        To summarize, we showed
+        $$|M| \leq max\hbox{-}flow$$ and $$max\hbox{-}flow =
+        \text{some matching} \leq \text{max matching} = |M| \implies
+        |M| = max\hbox{-}flow$$
+        \paragraph{Remark} Note that in the above proof we could
+        assign $\infty$ capacities (instead of $1$ to all) to edges
+        between $X$ and $Y$.
+        \\ \includegraphics[width=.9\textwidth]{i54.pdf}
+
+        The incoming flow of all vertices in $X$ will be at most $1$
+        so the edges between $X$ and $Y$ will never have any flow
+        $>1$. This will be useful when considering $min\hbox{-}cut$,
+        as it eliminates many cuts.
+
+        We know $max\hbox{-}flow=min\hbox{-}cut$. What does this mean
+        in this context? (matching)
+        \paragraph{Def}A vertex cover is a set of vertices such that
+        removing them will remove all the edges.
+        \\ \includegraphics[width=.7\textwidth]{i55.pdf}
+
+        Here, the red vertices form a vertex cover. How can we find
+        the smallest vertex cover? If we want to think of this
+        practically, we can think of the vertices as monitors such
+        that we can monitor all the connections/roads.
+        \paragraph{Thm} In every bipartite graph max matching $=$ min
+        vertex cover.
+
+        \paragraph{Remark} Note that if a graph has a matching of size
+        $k$, then ever vertex cover needs to pick at least one vertex
+        from each of these $k$ edges and thus is of size $\geq k$.
+        % Why can't the min vertex cover be strictly smaller? Well you
+        % need at least as many vertices as the matching, or else you'll
+        % leave out a pair of edges.
+        \paragraph{Remark} The equality is not true in general graphs.
+        \\ \includegraphics[width=.6\textwidth]{i56.pdf}
+        Here the max matching is $1$ but the minimum vertex cover is
+        $2$.
+        \\ \includegraphics[width=.9\textwidth]{i57.pdf}
+        Lets look at the min cut $(A,B)$ (it is not $\infty$, can
+        easily show one that isn't). Some vertices of $A$ are in $X$
+        ($A_1$), others are in $Y$ ($A_2$), etc.
+        \\ \includegraphics[width=.9\textwidth]{i58.pdf}
+
+        $A=\{s\}\cup A_1 \cup A_2, B=B_1 \cup B_2 \cup \{t\}$
+        \\ \includegraphics[width=.9\textwidth]{i59.pdf}
+
+        No edges from $A$ to $B$ with $\infty$ cap $\implies$ no edges
+        from $A_1$ to $B_2$. How can we use this to make a minimum
+        vertex cover?
+
+        Thus $B_1 \cup A_2$ is a vertex cover in $G$.
+        \\ \includegraphics[width=.9\textwidth]{i60.pdf}
+
+        The only edges that could remain are from $A_1$ to $B_2$, but
+        we just showed that those couldn't exist (to continue next class).
       \end{document}
