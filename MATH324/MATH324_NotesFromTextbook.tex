@@ -1,6 +1,6 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb}
+  lastpage, amssymb, tabularx}
 \usepackage[margin=1 in]{geometry}
 \allowdisplaybreaks
 %\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
@@ -40,7 +40,17 @@
         \begin{align*}
           Var(X) & = E[(X-\mu)^2] = E[X^2] - (E[X])^2
         \end{align*}
-        \section*{6.7 Order Statistics}
+        Distributions:
+        % Add the others later
+        \begin{center}
+          \begin{tabularx}{\textwidth}{c c c c c}
+            \hline Distribution & Probability Function & Mean &
+            Variance & Moment-Generating Function
+            \\ \hline Binomial & $p(y)=\binom{n}{y}p^y(1-p)^{n-y}$ &
+            $np$ & $np(1-p)$ & $[pe^t+(1-p)]^n$
+          \end{tabularx}
+        \end{center}
+        \subsection*{6.7 Order Statistics}
         $Y_i$, with $i=1,\ldots,n$ independent continuous random
         variables. Denote ordered random variables by: $Y_{(1)} \leq
         Y_{(2)} \leq \ldots \leq Y_{(n)}$. We can then define:
@@ -62,6 +72,10 @@
           \\ &\stackrel{\text{ind}}{=} 1-[P(Y_1 > y)P(Y_2>y)\ldots P(Y_n)>y] = 1-[1-F(y)]^n
                \intertext{Derive for the density:}
                g_{(1)}(y) & = n[1-F(y)]^{n-1}f(y)
+        \end{align*}
+        \section*{Other Useful Information}
+        \begin{align*}
+          E(\overline{Y}) & = E(Y)
         \end{align*}
         \setcounter{section}{7}
         \section{Estimation}
