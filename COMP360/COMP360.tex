@@ -805,4 +805,110 @@
 
         The only edges that could remain are from $A_1$ to $B_2$, but
         we just showed that those couldn't exist (to continue next class).
+        \section{01/24/18}
+        \paragraph{Recall} Matching in Bipartite graphs.
+        \\ \includegraphics[width=.9\textwidth]{i61.pdf}
+        \\ Ford Fulkerson can be used to find the largest matching in
+        a Bipartite graph.
+        \\ \includegraphics[width=.9\textwidth]{i62.pdf}
+        \paragraph{Vertex Cover} A set of vertices such that deleting
+        them will remove all the edges.
+        \\ \includegraphics[width=.9\textwidth]{i63.pdf}
+        \paragraph{Thm} For every bipartite graph $G$ we have
+        $$ \min\hbox{VC} = max\hbox{-}matching$$
+        \paragraph{Pf} Consider a $min\hbox{-}cut$ $(A,B)$ in the
+        constructed flow network.
+        \\ \includegraphics[width=.9\textwidth]{i64.pdf}
+        \\ $A=\{s\} \cup A_1 \cup A_2, B= \{t\} \cup B_1 \cup B_2$
+
+        No edges from $A_1$ to $B_2$ as otherwise the capacity at the
+        cut would be $\infty$. Thus $B_1 \cup A_2$ is a vertex cover
+        in the original graph. Its size is $|B_1|+|A_2|$. On the other
+        hand,
+        $$Cap(A,B) = \sum_{\substack{\text{edges from} \\ s\text{ to }B_1}} c_3
+        + \sum_{\substack{\text{from} \\ A_2\text{ to }t}} = |B_1| + |A_2|$$
+        We showed that there is a vertex cover $(B_1 \cup A_2)$ whose
+        size is equal to $min\hbox{-}cut$ $(A,B)$ ($min\hbox{-}VC \leq
+        min\hbox{-}cut$).
+
+        Next we will show that
+        $$min\hbox{-}cut \leq min\hbox{-}vc = |S| = |S_1| + |S_2|$$
+        Let $S$ be the smallest vertex cover.
+        \\ \includegraphics[width=.9\textwidth]{i65.pdf}
+
+        $S = S_1 \cup S_2, B=A^c$
+        
+        Let $A=(X-S_1)\cup S_2 \cup \{s\}$. $Cap(A,B)=
+        \underbrace{|S_1|}_{\text{edges from $S$ to $S_1$}} +
+        \underbrace{|S_2|}_{\text{edges from $S_2$ to $t$}}$
+
+        We conclude $$Max\hbox{-} flow = Min\hbox{-}Cut = Min\hbox{-}Vc = Max\hbox{-}Matching$$
+
+        \paragraph{Thm} (K\"onig) In a bipartite graph $Max\hbox{-}Matching =
+        Min\hbox{-}Cut$
+        \subsection{Disjoint Paths in directed graphs}
+        Input: A directed graph and two distinct nodes are marked as
+        $\underline{s}$ and $\underline{t}$.
+        \\ Goal: Find the maximum number of edge-disjoint paths from
+        $s$ to $t$.
+        \paragraph{Ex}~
+        \\ \includegraphics[width=.9\textwidth]{i67.pdf}
+
+        Could we just use BFS or DFS to find an s-t path? No, it
+        might chose the wrong edges like in this example:
+        \\ \includegraphics[width=.9\textwidth]{i68.pdf}
+
+        What if we chose the shortest path? That would also be
+        problematic:
+        \\ \includegraphics[width=.9\textwidth]{i69.pdf}
+
+        How do we solve this then? We assign capacity $1$ to all the
+        edges and run the Ford Fulkerson algorithm (note that we
+        explicitly specify using Ford Fulkerson so we get integer
+        values, not just max-flow).
+        \paragraph{Ex} ~
+        \\ \includegraphics[width=.9\textwidth]{i69.pdf}
+        So the max-flow here is $3$. How do we show there are $3$ edge-disjoint paths?
+
+        We solved the $max\hbox{-}flow$ using Ford Fulkerson and let
+        $k$ be the value of $max\hbox{-}flow$. We want to show that
+        there are $k$ edge-disjoint paths from $s$ to $t$.
+
+        Let's start with $k=1$. In this case we have a flow of
+        $1$. We want to find one $s\hbox{-}t$ path.
+
+        We start from $s$ and trace this one unit of flow. Every time
+        we enter an internal node (not source or sink) we can leave it
+        as $f^{in}=f^{out}$ for such nodes.
+        \\ \includegraphics[width=.9\textwidth]{i71.pdf}
+
+        We continue in this manner using only new edges, and
+        eventually we end up at $t$. The above is not a path though,
+        it is a walk as it visits the same vertex multiple times. By
+        removing the loops we obtain a path from $s$ to $t$.
+        \\ \includegraphics[width=.9\textwidth]{i72.pdf}
+
+        What about $k>1$? We can start from $s$ and trace a path to
+        $t$ as above.
+        \\ \includegraphics[width=.9\textwidth]{i73.pdf}
+
+        We remove this path and end up with a flow of $k-1$. We
+        continue this process. Every time we find a path and remove
+        it. (For $k$ steps. You could also just say we apply induction
+        here)
+
+        These paths are going to be edge-disjoint.
+
+        We proved that
+        $$\underbrace{Max\hbox{-}disjoint}_r \ paths \geq
+        \underbrace{Max\hbox{-}flow}_{k}$$
+        To prove equality, note that if we have $r$ edge-disjoint
+        paths then
+        \\ \includegraphics[width=.9\textwidth]{i74.pdf}
+
+        Here we have $r$ paths, we can just assign a flow of $1$ to
+        every edge in these paths to get a max-flow of value $r$.
+        $$\implies Max\hbox{-}flow \geq Max\hbox{-}disjoint \ paths$$
+        With the two inequalities, we have equality:
+        $$ Max \hbox{-}flow = Max\hbox{-}disjoint \ paths$$
       \end{document}
