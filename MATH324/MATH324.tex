@@ -795,4 +795,248 @@
     $$Var(aX+bY) = a^2 Var(X)+b^2 Var(Y) \pm 2 ab Cov(X,Y)$$
     \\ The same idea applies if we want to see the proportion of
     a kind of population that votes for someone and more applications.
+    \section{01/15/18}
+    \subsection{Confidence Intervals}
+    Statistics is inductive logic, meaning that we have a sample of
+    the whole population. Using this sample we want to make inference
+    about the whole population. This is unlike theorems that are
+    deductive, where we go to specifics from general things, we are
+    going up, generalizing the sample to the whole population.
+
+    Suppose we have $X_i \stackrel{iid}{\sim} N(\mu,1), i=1,\ldots,n$ (IQ of high
+    school graduates). We want to estimate the IQ for the whole
+    population of Canada.
+
+    We've learned that $\overline{X}_n = \frac{1}{n} \sum_{i=1}^n X_i$
+    is a reasonable point estimate. But we want to do an interval
+    estimate.
+
+    \paragraph{Pivotal quantity} A function of the observations $X_1,
+    \ldots, X_n$ and some unknown parameters, ideally just the
+    parameters of interest, such that the distribution of this
+    function does \textbf{NOT} depend on any unknown parameter.
+
+    What do we mean? What is the distribution of $\overline{X}_n$?
+    \\ $\overline{X}_n \sim N(\mu, \frac{1}{n})$. How do we get this?
+    Remember that we had different approaches to getting distributions
+    of a function of random variables.
+
+    \begin{itemize}
+    \item Transformation (essentially the change of
+    variables theorem from Calculus, when you integrate a function and
+    change the variable).
+    \item Method of distribution (try to relate the distribution to an
+      existing distribution)
+    \item Method of mgf (most suitable when we have iid samples and
+      want to find the distribution of the sum of random variables,
+      exactly what we have here with $\overline{X}_n$)
+    \end{itemize}
+    How does the method of mgf work?
+    \begin{flalign*}
+      S &= \sum_{i=1}^n X_i
+      \\ m_S(t) & = E[e^{tS}] = E \left[e^{t \sum_{i=1}^n X_i}\right] = E\left[ \prod_{i=1}^n e^{tX_i}\right]
+      \\ \text{Independence} \implies & = \prod_{i=1}^n E[e^{tX_i}] = \prod_{i=1}^n m_{X_i}(t)
+      \\ \text{Identically dist} \implies & = \prod_{i=1}^n m(t) = [m(t)]^n
+    \end{flalign*}
+    For example, if $X_i \stackrel{iid}{\sim} N(\mu, \sigma^2)$ then
+    \begin{flalign*}
+      m_{X_i}(t) & = \left[e^{\mu t + \frac{\sigma^2 t^2}{2}}\right]^n = e^{n\mu t + \frac{n \sigma^2 t^2}{2}}
+      \intertext{Now if we call $n\mu = \mu_*$ and $n\sigma^2 = \sigma^2_*$}
+      & = e^{\mu_* t + \frac{\sigma_*^2 t^2}{2}}
+      \intertext{Now this is the same mgf as a normal distribution with}
+      S & \sim N(\mu_*,\sigma_*^2) = N(n \mu,n\sigma^2)
+      \\ \overline{X}_n & = \frac{1}{n}S
+      \\ m_{\overline{X}_n}(t) & = E[e^{t\overline{X}_n}] = E[e^{t \frac{1}{n}S}] \stackrel{t \frac{1}{n} = t_*}{=} E[e^{t_*S}] = m_S(t_*) = e^{n\mu t_*+\frac{n\sigma^2 t_*^2}{2}}
+      \\ & = e^{n\mu \frac{t}{n} + \frac{n \sigma^2 \left(\frac{t}{n}\right)^2}{2}} = e^{\mu t + \frac{\sigma^2 t^2}{2n}}
+    \end{flalign*}
+    Now this tells us $\overline{X}_n \sim N\left(\mu,
+      \frac{\sigma^2}{n}\right)$ if $X_i
+    \stackrel{iid}{\sim}N(\mu,\sigma^2)$.
+
+    In our example, $\sigma^2 = 1$, so $\overline{X}_n \sim
+    N(\mu,\frac{1}{n})$. Standardizing we get:
+    $$Z = \underbrace{\frac{\overline{X}_n -
+        \mu}{\sqrt{\frac{1}{n}}}}_{\text{Pivotal quantity}} \sim
+    N(0,1)$$
+    This distribution itself does not depend on any unknown parameter,
+    it is just the standard normal distribution. All standardizations
+    of normal distributions make them into pivotal quantities.
+
+    So we know that:
+    \begin{flalign*}
+      P(|Z| \leq 1.96) & = 0.95
+      \intertext{Now let's try and plug in for $Z$:}
+      P \left(\left|\frac{\overline{X}_n - \mu}{\sqrt{\frac{1}{n}}}\right| \leq 1.96\right) & = 0.95
+      \\ P\left(\overline{X}_n - 1.96\sqrt{\frac{1}{n}} \leq \mu \leq \overline{X}_n + 1.96 \sqrt{\frac{1}{n}}\right) & = 0.95
+      \intertext{This gives me an interval estimate that $\mu$ falls
+        between these two limits with $95\%$ confidence. Why were we
+        able to do this? Because $Z$ is a pivotal quantity so we could
+      just use the table. If $Z$ depended on unknown parameters we
+      would need to find them. So we have found an upper and lower
+      bound with a given confidence.}
+  \end{flalign*}
+  Now, we can generalize this.
+  $\left(\overline{X}_n \pm 1.96 \sqrt{\frac{1}{n}}\right)$ is
+  called a $95\%$ confidence interval, for the unknown $\mu$. In
+  real life application we have one sample and one average. So we
+  plug in values and get the two bounds, say: $(125, 135)$. Someone
+  might come in and ask us how we can associate probability to this
+  interval, either the average is in \text{text}here or not, so what do we
+  mean by $95\%$ confidence? Notice that the probability statement
+  we had above means that, if we dispatch many students to test
+  students and come up with confidence intervals just like we did
+  and write them all on pieces of paper. Then we randomly select one
+  of the papers from the bag, then we are $95\%$ sure that the
+  interval given \textbf{covers the truth}.
+  
+  Let's see how we can generalize this. In general, we have large sample
+  confidence intervals. When we started this example, we assumed that
+  the observations are coming from a Normal distribution, but in
+  practice, we don't know if something is normally distributed. This
+  allowed us to normalize $\overline{X}_n$. So if the $X_i$ weren't
+  normally distributed, all of this would fail.
+
+  But we know that, from Central Limit Theorem (most celebrated result
+  in all of probability \& statistics, in baby form): If $X_i$'s are
+  independent, have the same mean $\mu$ and variance $\sigma^2$, then
+  $\frac{\overline{X}_n -
+    \mu}{\frac{\sigma}{\sqrt{n}}}\stackrel{approx}{\sim}N(0,1)$ for
+  large $n$. Note, we \textbf{do not} need to know the distribution of
+  $X_i$. This is a pivotal quantity. In many applications, we might
+  only be interested in $\mu$, but we have another unknown parameter,
+  $\sigma$ sitting here. We could do the same calculation as above and
+  get:
+  $$ \left(\overline{X}_n \pm 1.96 \sqrt{\frac{\sigma^2}{n}}\right)
+  \text{ is $95\%$ CI}$$
+  \begin{flalign*}
+    \left(\overline{X}_n \pm 1.96 \frac{\sigma}{\sqrt{n}}\right)
+  \end{flalign*}
+  But how do we get rid of $\sigma$? We can replace it by the sample
+  $\sigma$, i.e.
+  $$\left(\overline{X}_n \pm 1.96 \frac{S}{\sqrt{n}}\right)$$
+  Note that we are still assuming very large $n$ (how large is very
+  large will not be addressed in this class).
+
+  What justifies replacing $\sigma$ with $S$? Since we have a large
+  sample, then $S$ is going to be close enough to $\sigma$. This is
+  called \textbf{consistency} (to be discussed in the next
+  chapter). But what justifies replacing a parameter by a consistent
+  estimator?
+
+  Essentially, what we are saying is:
+  $$\frac{\overline{X}_n - \mu}{\frac{S}{\sqrt{n}}}
+  \stackrel{approx}{\sim}N(0,1)$$ But CLT only works with
+  $\sigma$. Intuitively we say it works when $S$ is sufficiently close
+  to $\sigma$.
+
+  \begin{flalign*}
+    \frac{\overline{X}_n - \mu}{\frac{S}{\sqrt{n}}} & = \frac{\sigma}{S} \cdot \frac{\overline{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}}
+  \end{flalign*}
+  We have a theorem from Cramer, telling us that if we have a ratio of
+  parameters that converge to $1$ and a distribution converging to
+  Normal, then the whole thing converges to Normal.
+
+  So we can use:
+  $$\left(\overline{X}_n \pm 1.96 \frac{S}{\sqrt{n}}\right)
+  \text{ $95\%$ CI}$$
+  So if we need other confidence intervals:
+  \begin{flalign*}
+    \left(\overline{X}_n \pm Z_{\frac{\alpha}{2}}
+      \frac{s}{\sqrt{n}}\right) & \text{ } 100(1-\alpha)\% \text{ CI}
+  \end{flalign*}
+  \includegraphics[width=.5\textwidth]{i2.pdf}
+
+  Note that this is just for $\overline{X}_n$. What if we have
+  something different?
+
+  If $n$ is large and $\theta$ is a parameter of interest, then
+  $$\frac{\hat{\theta}_n - \theta}{\sqrt{Var(\hat{\theta}_n)}} \stackrel{approx}{\sim}N(0,1)$$
+  where $\hat{\theta}_n$ is an MLE (Maximum Likelihood Estimator,
+  which we'll see in a future chapter)
+
+  For example, if $X_i \sim Ber(p)$, i.e. $X_i =
+  \begin{cases}
+    1 & p \\ 0 & 1-p
+  \end{cases}
+  $ and $E(X_i) = p$, then $\overline{X}_n = \frac{1}{n}
+  \sum_{i=1}^nX_i = \hat{p}_n$. So we want to estimate $\hat{p}_n$.
+  \begin{flalign*}
+    \frac{\hat{p}_n - p}{\sqrt{\frac{p(1-p)}{n}}}
+    \sim N(0,1)
+    \\ \hat{p}_n \pm 1.96 \sqrt{\frac{p(1-p)}{n}}
+  \end{flalign*}
+  But once again, we don't know what $p$ is and it is not useful! So
+  we can either:
+  \begin{itemize}
+  \item Replace $p$ by $\hat{p}_n$
+  \item Or, take the conservative approach and replace $p(1-p)$ by
+    $\frac{1}{4}$ (remember that this is the max value the it can
+    take, as seen earlier)
+    \\ $f(x)=x(1-x) \to f'(x) = 1-2x = 0 \implies x=\frac{1}{2},
+    f''(x)= -2, f(\frac{1}{2}) = \frac{1}{4}$, a max. Since we are
+    replacing by the max, we are accounting for the worse situation,
+    so it gives us a large confidence interval (which is why it is
+    conservative). These are the types of intervals that we hear about
+    before elections. When they are talking about chance they are
+    talking about $\hat{p}_n$, when talking about how accurate it is,
+    they are referring to the $\pm$ part and when saying it is right
+    $19$ out of $20$ times, they are talking about the $\%$ of the CI.
+
+    Now suppose we are interested in estimating the variance $\theta =
+    p(1-p)$ (not interested in estimating $p$). What would be a
+    natural estimator?
+    \begin{flalign*}
+      \hat{\theta}_n & = \hat{p}_n (1-\hat{p}_n)
+      \\ \frac{\hat{\theta}_n - \theta}{\sqrt{Var(\hat{\theta}_n)}} & \sim N(0,1)
+      \intertext{We then have the general recipe:}
+      \hat{\theta}_n \pm Z_{\frac{\alpha}{2}}
+      \sqrt{Var(\hat{\theta}_n)} \text{ is }100(1-\alpha)\% \text{ CI}
+    \end{flalign*}
+    The only thing we need is a right estimator that gives us this
+    asymptotic normality and then we are in business! As long as our
+    $\hat{\theta}_n$ can provide asymptotic normality for large $n$,
+    then wen can have this. Most of the estimators in the textbook
+    follow this pattern.
+  \end{itemize}
+  \noindent \rule{\textwidth}{0.5pt}
+  \subsection{Small Sample Size} There are some cases we can solve and
+  some that we cannot. The case of interest that we can solve, is the
+  normal case. We are focusing a lot on normal distributions because
+  we will see later that many things relate to the normal
+  distribution, like comparing control groups on placebo and not on placebo.
+  $X_i \stackrel{iid}{\sim} N(\mu, \sigma^2), i=1,\ldots,n$ where
+  $n$ is ``small''. Here $\mu$ is of interest but $\sigma^2$ is a
+  nuisance.
+  
+  We learned that $\frac{\overline{X}_n -
+    \mu}{\frac{\sigma}{\sqrt{n}}} \stackrel{\text{Exact}}{\sim}
+  N(0,1)$. So we can use this as a pivotal quantity to come up with a
+  confidence interval for $\mu$. But we still have the $\sigma$ here
+  that is a nuisance. Before we replaced $\sigma$ by $S$, but that was
+  well justified because our sample size was large. But that's the
+  best thing we have, so we'll use it. But can we say it is normally
+  distributed? We were only able to say that earlier because we had a
+  large distribution. So what might happen?
+  $$\frac{\overline{X}_n - \mu}{\frac{S}{\sqrt{n}}} \sim T_{n-1}$$
+  This will be similar to the $X_i$, i.e. normally distributed and it
+  will still have a bell curve. But what about the tails? The
+  uncertainty of $S$ means that the tails will die out more slowly.
+
+  If $X_i \stackrel{iid}{\sim} N(\mu, \sigma^2), i=1,\ldots,n$, then
+  $$\frac{\overline{X}_n - \mu}{\frac{S}{\sqrt{n}}} \sim T_{n-1}$$
+  where $S^2 = \perp_{n-1} \sum_{i=1}^n (X_i - \overline{X}_n)$
+
+  What is the $T$ distribution?
+  $\frac{N(0,1)}{\sqrt{\frac{\chi^2_\nu}{\nu}}}$ where $N(0,1)
+  \independent \chi^2_\nu$ and $\nu$ denotes the degrees of
+  freedom. How does this relate to what we have?
+  \begin{flalign*}
+    \frac{(\overline{X}_n - \mu)}{\frac{\sigma}{\sqrt{n}}}/\left(\left(\frac{\sigma}{\sqrt{n}}\right)^{-1} \sqrt{\frac{S^2}{n}}\right) &
+    \intertext{Where the numerator is }\sim N(0,1)
+    \\ & = \frac{\frac{\overline{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}}}{\sqrt{\frac{S^2}{\sigma^2}}}
+  \end{flalign*}
+  \begin{flalign*}
+    \sqrt{\frac{S^2}{\sigma^2}} & = \sqrt{\frac{\sum_{i=1}^n \left(\frac{X_i - \overline{X}_n}{\sigma}\right)^2}{n-1}}
+    \\ \sum_{i=1}^n \left( \frac{X_i - \overline{X_n}}{\sigma}\right)^2 & \sim \chi_{n-1}^2
+  \end{flalign*}
 \end{document}
