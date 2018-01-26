@@ -164,5 +164,41 @@
       p_2$ & $\sqrt{\frac{p_1q_1}{n_1}+\frac{p_2q_2}{n_2}}$
       \\ \hline
     \end{tabular}\\
-    Note, these are all \textbf{unbiased} estimators.
+    Note, these are all \textbf{unbiased} estimators. Note that the expected
+    values and standard errors for $\overline{Y}$ and $\overline{Y}_1
+    - \overline{Y}_2$ are valid for any distribution of the population
+    and all four estimators are approximately normal for large $n$
+    (see CLT).
+    \begin{defn}
+      The sample variances,
+      $$S^2 = \dfrac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n-1}$$
+      $$S'^2 = \dfrac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n}$$
+      are unbiased ($S^2$) and biased ($S'^2$) estimators for $\sigma^2$.
+    \end{defn}
+    \subsection{Evaluating the Goodness of a Point Estimator}
+    \begin{defn}
+      The \textit{error of estimation} $\varepsilon$ is the distance
+      between an estimator and its target parameter:
+      $$\varepsilon = |\hat{\theta} - \theta|$$
+    \end{defn}
+    Note that $\hat{\theta}$ is a random variable, so the error of
+    estimation is a random quantity and thus we can make probability
+    statements about it (rather than saying exactly how big it is for
+    some estimate).
+
+    The probability $P(\varepsilon < b)$ represents the fraction of
+    times, in repeated sampling that $\hat{\theta}$ falls within $b$
+    units of $\theta$.
+
+    Sometimes we want to find a value of $b$ such that $P(\varepsilon
+    < b) =$ some value, say $0.90$.
+
+    If $\hat{\theta}$ is unbiased we can find a bound on $\varepsilon$
+    by expressing $b$ as a multiple of the standard error. Take for
+    example, $b=k \sigma_{\hat{\theta}}$, where $k \geq 1$, then by
+    Tchebysheff's we know that $P(\varepsilon < k
+    \sigma_{\hat{\theta}}) \geq 1 -
+    \frac{1}{k^2}$. $b=2\sigma_{\hat{\theta}}$ is a good approximate
+    bound on $\varepsilon$ in practice. By Tchebysheff we know that
+    $P(\varepsilon < 2\sigma_{\hat{\theta}}) \geq .75$.
 \end{document}
