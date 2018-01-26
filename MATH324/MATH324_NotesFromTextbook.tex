@@ -138,4 +138,31 @@
         estimator and its target parameter. It can be shown that:
         $$MSE(\hat{\theta})=V(\hat{\theta})+[B(\hat{\theta})]^2$$
       \end{defn}
+      \subsection{Some Common Unbiased Point Estimators}
+      \begin{defn}
+        $\sigma_{\hat{\theta}}^2$ denotes the variance of the sampling
+        distribution of the estimator $\hat{\theta}$. The standard
+        deviation $\sigma_{\hat{\theta}} =
+        \sqrt{\sigma_{\hat{\theta}}^2}$ is called the \textit{standard
+        error} of the estimator $\hat{\theta}$.
+    \end{defn}
+    \paragraph{Common Point Estimators} If random samples are
+    independent we have:
+    \\
+    \begin{tabular}{|c c c c c|}
+      \hline Target Parameter $\theta$ & Sample Size(s) & Point
+      Estimator $\hat{\theta}$ & $E(\hat{\theta})$ & Standard Error
+      $\sigma_{\hat{\theta}}$
+      \\ \hline $\mu$ & $n$ & $\overline{Y}$ & $\mu$ &
+      $\frac{\sigma}{\sqrt{n}}$
+      \\ $p$ & $n$ & $\hat{p} = \frac{Y}{n}$ & $p$ &
+      $\sqrt{\frac{pq}{n}}$
+      \\ $\mu_1 - \mu_2$ & $n_1, n_2$ & $\overline{Y}_1 -
+      \overline{Y}_2$ & $\mu_1 - \mu_2$ &
+      $\sqrt{\frac{\sigma_1^2}{n_1}+ \frac{\sigma_2^2}{n_2}}$
+      \\ $p_1 - p_2$ & $n_1,n_2$ & $\hat{p}_1 - \hat{p}_2$ & $p_1 -
+      p_2$ & $\sqrt{\frac{p_1q_1}{n_1}+\frac{p_2q_2}{n_2}}$
+      \\ \hline
+    \end{tabular}\\
+    Note, these are all \textbf{unbiased} estimators.
 \end{document}
