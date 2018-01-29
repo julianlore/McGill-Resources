@@ -911,4 +911,123 @@
         $$\implies Max\hbox{-}flow \geq Max\hbox{-}disjoint \ paths$$
         With the two inequalities, we have equality:
         $$ Max \hbox{-}flow = Max\hbox{-}disjoint \ paths$$
+        \section{01/29/18}
+        \paragraph{Edge disjoint paths in directed graphs}
+        ~ \\ \includegraphics[width=.9\textwidth]{i75.pdf}
+
+        We proved last class that we can convert this problem into a
+        flow network with capacities $1$. There were two directions:
+        \begin{align*}
+          max\hbox{-}flow & \geq
+                            \# \text{ paths }
+                            \intertext{(easy, use the paths to
+                            direct the flow)}
+          max\hbox{-}flow & \leq \# \text{ paths }
+                            \intertext{(we start from the
+                            flow and trace one path and then
+                            remove all the edges of this path. Repeat)}
+        \end{align*}
+        Can we solve the same problem in undirected graphs?
+        \\ \includegraphics[width=.9\textwidth]{i76.pdf}
+        
+        Goal: Find the max \# of edge disjoint $s\hbox{-}t$ paths.
+
+        We can replace every edge with two directed edges going in
+        opposite directions.
+        \\ \includegraphics[width=.9\textwidth]{i77.pdf}
+
+        Now we can try to find max \# of edge-disjoint paths in thi
+        directed graph using Ford Fulkerson. What kind of problems may
+        arise here? This will give us the same number of edge-disjoint
+        paths, but they may reuse edges in the original graph, i.e.
+        \\ \includegraphics[width=.9\textwidth]{i78.pdf}
+        \\ \includegraphics[width=.9\textwidth]{i79.pdf}
+
+        After running Ford Fulkerson if we have:
+        \\ \includegraphics[width=.9\textwidth]{i80.pdf}
+        
+        This does not change the value of flow. So we still have a
+        $max\hbox{flow}$. Using this flow will avoid using shared
+        edges in the undirected graph.
+
+        We will be doing a lot more reduction like this, going from a
+        general problem we learned and applying it to specific
+        cases.
+        \subsection{Multi Source - Multi - Sink Flow}
+        Similar to the original $max\hbox{-}flow$ problem except we
+        now might have several sources and several sinks.
+        \paragraph{Ex} ~
+        \\ \includegraphics[width=.9\textwidth]{i81.pdf}
+
+        We want to generate the max \# of units of flow at the sources.
+        \\ \includegraphics[width=.9\textwidth]{i82.pdf}
+
+        Solution: Add one source $s$ and one sink $t$. Connect $s$ to
+        all the original sources with edges with $\infty$-cap and
+        connect the original sinks to $t$ with $\infty$-cap edges.
+
+        The $max\hbox{-}flow$ on this new network will give us the
+        desired solution.
+        \subsection{Baseball Elimination Problem}
+        \begin{itemize}
+        \item We have a tournament.
+        \item Currently we are in the middle and each team has some
+          points and some remaining matches.
+        \item We are interested in a specific team \underline{A}.
+        \item Does $A$ have any chance of ending with the highest
+          score (possibly in a tie)?
+        \end{itemize}
+        \includegraphics[width=.9\textwidth]{i83.pdf}
+
+        The edges show the remaining matches. Here we show that it is
+        impossible for $A$ to come out on top:
+        \\ \includegraphics[width=.9\textwidth]{i84.pdf}
+
+        We see that even if we make $A$ win both of its games, at
+        least one of the teams encircled will end up with $>70$
+        points, because if $C$ doesn't get past $70$ then it must lose
+        both its matches and the winner among $B$ and $D$ will have
+        $71$. $\implies A$ is eliminated.
+        \begin{align*}
+          70 + 69 + 69 + 3 & \leq \text{final points between }B,C,D
+          \\ \frac{70+69+69+3}{3} & > 70 \implies \text{ at least one
+                                    will have $> 70$ pts}
+        \end{align*}
+        Will this always work though?
+        \\ \includegraphics[width=.9\textwidth]{i85.pdf}
+
+        $$\frac{69+70+69+40+5}{4} < 70$$
+        Nevertheless $A$ is still eliminated! However focusing only on
+        $B,C,D$ the argument still work:
+        $$\frac{70 +  69 + 69 + 3}{3} > 70$$
+        Is this always the case? Can I always find teams such that the
+        average of their scores after factoring winning is greater
+        than my team?
+
+        Let $M$ be the total points $A$ will have if it wins all its
+        remaining matches. If $A$ is eliminated then is it true that
+        we can find a set $T$ of teams such that
+        $$\dfrac{\left(sum_{x \in T}P_x\right) + k}{|T|}>M?$$
+        Where $k$ is the number of remaining matches between teams in
+        $T$ and $P_x$ is the points of $x$.
+
+        We want to show that this is true.
+
+        How can we decide whether $A$ is eliminated?
+        \begin{enumerate}
+        \item Let $M$ be the max number of points $A$ can collect if
+          it wins all the remaining matches. $M = P_A + deg(A)$. So
+          now we are done dealing with $A$ and can look at the rest of
+          the graph.
+        \item Construct the following flow network: For every edge
+          $uv$ put a vertex $uv$ in. If $M-P_x$ is negative then this
+          is impossible, $A$ is already eliminated.
+          \\ \includegraphics[width=.9\textwidth]{i86.pdf}
+        \item Add a source. Connect it to all $uv$ with capacity $1$
+          edges. Add edges $uv \hbox{-}u$ and $uv\hbox{-}v$ with
+          $\infty$-cap. Add edges $u\hbox{-}t$.
+        \item We solve the $max\hbox{-}flow$ if its value equals to
+          the outgoing capacity of $s \implies A$ is not
+          eliminated. Otherwise it is.
+        \end{enumerate}
       \end{document}
