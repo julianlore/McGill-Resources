@@ -1039,4 +1039,248 @@
     \sqrt{\frac{S^2}{\sigma^2}} & = \sqrt{\frac{\sum_{i=1}^n \left(\frac{X_i - \overline{X}_n}{\sigma}\right)^2}{n-1}}
     \\ \sum_{i=1}^n \left( \frac{X_i - \overline{X_n}}{\sigma}\right)^2 & \sim \chi_{n-1}^2
   \end{flalign*}
+  \section{01/30/18}
+  \paragraph{Recall}
+  When it comes to confidence intervals, the main tool is
+  \textbf{pivotal quantities}. So whatever we did using large or small
+  samples, was to come up with a pivotal quantity. In large samples,
+  we used Central Limit Theorem. For small samples, the case that we
+  studied assumed that observations came from a Normal distribution
+  and so we used normality assumption in order to come up with a
+  pivotal quantity. What happens when we go beyond Normal
+  distribution? There is a general approach to get a pivotal quantity
+  that covers all continuous random variables, but in practice it is
+  only useful if we can find the distribution function of the variable
+  of interest, but it is only useful if its easy to acquire. We will
+  present the recipe today, which is sometimes successful and
+  sometimes unsuccessful. Pivotal quantities are case by case, vary by
+  distribution. This is already in the notes on myCourses:
+
+  Say we have $X_1, \ldots, X_n \sim F (cdf) \to f (pdf)$. Suppose
+  this is information from Revenue Canada and we made a histogram of
+  the range of salaries and we fit a distribution over several years
+  (this is our pdf). Now for this year, we'll be taking random people
+  $(x_i)$ from Canada who have filled out their tax forms.
+
+  Probability Integral Transform is a simple result that is very
+  useful, especially in simulation. What it says is that if $X(\text{continuous}) \sim F
+  \implies \underbrace{F(X)}_{Y} \sim Unif(0,1)$. I.e. apply $F$ on a
+  continuous distribution and get another distribution, a uniform
+  distribution on $(0,1)$. So how can we use this? If we can generate
+  observations on a uniform distribution, then we can generate results for
+  any continuous distribution by applying $F^{-1}$, (since $F$ is a
+  monotone decreasing function it has an inverse) and then we get $X$s
+  that are distributed like $X$, although uniform randomness is very
+  difficult to achieve.
+
+  \begin{flalign*}
+    X \sim N(0,1)
+    \\ f_X(x) & = \frac{1}{\sqrt{2 \pi}}e^{\frac{-x^2}{2}}, -\infty < x < + \infty
+    \\ F_X(x) & = \int_{-\infty}^x f_x(t) \ dt = \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi}}e^{-\frac{t^2}{2}} \ dt
+    \intertext{This is a monotone function, but its inverse is very
+      hard to find. What we do is generate uniform random numbers to
+      approximate this and then get normal distribution. Try this at home:}
+    X \sim F & Y = F(x)
+    \intertext{You will see that the distribution of $Y$ is
+      uniform. Use the method of transformation here (look in Chapter
+      6). Now our result is:}
+    X ~ F & \implies \underbrace{Y = F(X) \sim Unif(0,1)}_{PIT} \implies -2 \log Y \sim \chi^2_2
+    \\ X_i \stackrel{iid}{\sim} F, & i=1,\ldots, n
+    \\ Y_i & = F(X_i) \stackrel{iid}{\sim} Unif(0,1), i=1,2,\ldots,n
+    \\ V_i & = -2 \log Y_i \stackrel{iid}{\sim} \chi_2^2, i=1,\ldots,n
+    \\
+  \end{flalign*}
+  \begin{equation}
+    \sum_{i=1}^nV_i \sim \chi_{2n}^2
+  \end{equation}
+    {This can easily be gotten to via the method of mgf. If
+      $F$ has any unknown parameters, it will still be present in
+      $V_i$. So $\sum_{i=1}^n V_i$ will depend on $X_i$s and
+      parameters of $F$, but its distribution doesn't, so this is a
+      pivotal quantity.}
+  \paragraph{Ex} $X_i \stackrel{iid}{\sim} Exp(\lambda),
+  i=1,2,\ldots,n$
+  \begin{flalign*}
+    f_X(x) & =
+    \begin{cases}
+      \lambda e^{-\lambda x} & x>0
+      \\ 0 & x \leq 0
+    \end{cases} \lambda >0
+    \\ F_X(x) & = \int_{-\infty}^{x} f_X(t) \ dt = \int_0^x \lambda e ^{-\lambda t} \ dt
+    \\ & = -e^{-\lambda t}|_0^x = 1-e^{-\lambda x}
+  \end{flalign*}
+  The dual to (3):
+  \begin{flalign*}
+    \sum_{i=1}^nW_i \sim \chi_{2n}^2
+  \end{flalign*}
+  where $W_i = -2 \log (1-Y_i)$. This is because, if $U \sim Unif
+  (0,1)$ then $1-U \sim Unif(0,1)$. This is useful because we often
+  want $1-F$, because the probability of $F$ is that something is less
+  than something, so $1-F$ means that the value is past a certain
+  point, i.e. this is good for the survivor function, checking the
+  chances that someone survives past something.
+  \begin{flalign*}
+    F_X(x) & =
+    \begin{cases}
+      0 & \text{if }x \leq 0
+      \\ 1-e^{-\lambda x} & \text{if }x>0
+    \end{cases}
+    \\ S_X(x) = 1-F_X(x) & =
+    \begin{cases}
+      1 & \text{if }x \leq 0
+      \\ e^{-\lambda x} & \text{if }x>0
+    \end{cases}
+    \\ \sum_{i=1}^n W_i & = \sum_{i=1}^n - 2 \log [1-F(X_i)]
+    \\ & = \sum_{i=1}^n - 2 \log e^{-\lambda X_i}
+    \\ & = 2 \lambda \sum_{i=1}^n X_i = 2 \lambda n \overline{X}_n
+    \\
+    \\ 2 \lambda n \overline{X}_n & = \sum_{i=1}^n W_i \sim \chi_{2n}^2
+  \end{flalign*}
+  This is a pivotal quantity. So we can use this for a confidence
+  interval of lambda.
+
+  Using the $\chi^2$ table (Appendix 3, p850-851), we can find:
+  \begin{flalign*}
+    \chi_{2n,0.025}^2 \& \chi_{2n, 0.975}^2
+    \\ P \left(\chi_{2n,0.975}^2 < 2 \lambda n \overline{X}_n < \chi_{2n,0.025}^2\right) & = 95\% = 0.95
+    \\ P \left(\frac{\chi_{2n,0.975}^2}{2 n \overline{X}_n} < \lambda < \frac{\chi_{2n,0.025}^2}{2 n \overline{X}_n}\right) & = 95\% = 0.95
+  \end{flalign*}
+  So: $ \left(\frac{\chi_{2n,0.975}^2}{2n \overline{X}_n} ,
+    \frac{\chi_{2n, 0.025}}{2 n \overline{X}_n}\right)$ is a $95\%$
+  C.I. for $\lambda.$
+  \\ \includegraphics[width=.9\textwidth]{i3.pdf}
+  \subsection{Sample Size Determination} Say we want to predict the
+  results of an election. We want to be, say $99\%$ sure of the
+  results (why not $100\%$? because then we'd need infinite samples).
+
+  \begin{flalign*}
+    X_i & =
+    \begin{cases}
+      1 & \text{NDP}
+      \\ 0 & \text{otherwise}
+    \end{cases}
+    , i=1,\ldots,n
+    \\ p(X_i = 1) & = p
+    \\ X_i \stackrel{iid}{\sim} & Bernoulli(p), i=1,\ldots,n
+    \\ \hat{p}_n & = \frac{1}{n} \sum_{i=1}^n X_i
+    \intertext{We want $|\hat{p}_n - p| \leq 0.01$ with $95\%$. We
+      can use Chebyshev's for this, but since Chebyshev's makes very
+      little assumptions, the bound is very crude. We want a tighter
+      bound. So we can use CLT: }
+    \hat{p}_n \pm \underbrace{1.96 \sqrt{\frac{p(1-p)}{n}}}_{B}
+    \intertext{This is called a symmetric confidence interval, since
+      it is centered around a point. Normal distribution is symmetric,
+    $\chi$ is not. If it is symmetric, we can talk about length or
+    half length, if it isn't we talk about the whole length.}
+     \text{(e.g. 0.01)} \to B & = 1.96 \sqrt{\frac{p(1-p)}{n}}
+    \intertext{Say we want it in terms of $100(1-\alpha)\%$:}
+    B & = Z_{\frac{\alpha}{`2}} \sqrt{\frac{p(1-p)}{n}}
+  \end{flalign*}
+  We obtain:
+  \begin{equation*}
+    n = \frac{p(1-p)(Z_{\frac{\alpha}{2}})^2}{B^2}
+  \end{equation*}
+  We have the following 2 options:
+  \begin{itemize}
+  \item Replace $p$ by $\hat{p}_n$ (a prior estimate, although often
+    we don't have an estimate).
+  \item Replace $p(1-p)$ by $\frac{1}{4}$ (conservative approach).
+  \end{itemize}
+  So then we get:
+  \begin{equation*}
+    n = \frac{Z_{\frac{\alpha}{2}}^2}{4B^2}
+  \end{equation*}
+  (we round up $n$ if it is not an integer) This gives us a sample
+  size! This is a proportion estimate for the sample size for Bernoulli.
+  \paragraph{Ex} $B=0.01, \alpha = 0.05$
+  \begin{flalign*}
+    n & = \frac{(1.96)^2}{4(0.01)^2} =9604 \approx 10,000
+  \end{flalign*}
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  Now, generalizing:
+
+  C.I. for $\mu$:
+  \begin{flalign*}
+    \overline{X}_n \pm \underbrace{Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n}}}_{B}
+    \\ B & = Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n}}
+    \\ n & = \frac{Z_{\frac{\alpha}{2}}^2 \sigma^2}{B^2} \text{ for }\mu
+  \end{flalign*}
+  Here we can't just maximize $\sigma$, so we do pilot studies, where
+  we try to justify the need for a study, so we receive a little bit
+  of money to make a small study, to get an idea of some of the
+  parameters, like $\sigma$ in this case and then we use this
+  parameter to get a bit of information on other parameters so that we
+  can apply for the real study. Now determining the sample size goes
+  back to confidence intervals.
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  Other variables:
+  \begin{equation}
+    \frac{\hat{\theta}_n - \theta }{\sqrt{Var(\hat{\theta}_n)}}
+    \stackrel{app}{\sim} N (0,1) \text{ for large }n
+  \end{equation}
+  Here $\hat{\theta}_n$ is the MLE (will see in the future) and
+  $\theta$ is the estimand.
+  \begin{flalign*}
+    \hat{\theta}_n \pm Z_{\frac{\alpha}{2}} \sqrt{Var(\hat{\theta}_n)}
+    \intertext{$100(1-\alpha)\%$ C.I. for $\theta$}
+    B = Z_{\frac{\alpha}{2}} \sqrt{Var(\hat{\theta}_n)}
+  \end{flalign*}
+  So we get:
+  \begin{itemize}
+  \item Bernoulli $Var(\hat{\theta}_n) = \frac{p(1-p)}{n}$
+  \item $\mu$ $Var(\overline{X}_n) = \frac{\sigma^2}{n}$
+  \end{itemize}
+  These are based on a large sample. What if we have a small sample
+  size? As long as we have the confidence interval, if it is symmetric
+  we can bound by half length, if it isn't we can bound by the whole
+  length.
+
+  Normal case:
+  \begin{flalign*}
+    \overline{X}_n \pm t_{\frac{\alpha}{2}, (n-1)} \frac{\sigma}{\sqrt{}}
+    \\ B = t_{\frac{\alpha}{2}, (n-1)} \frac{s}{\sqrt{n}}
+  \end{flalign*}
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  So far we've talked about one population. So what happens if we have
+  two populations? Say we have men and women and want to estimate
+  average salary.
+  \begin{flalign*}
+    \frac{\hat{\theta}_n - \theta}{\sqrt{Var(\hat{\theta}_n)}} \sim N(0,1)
+  \end{flalign*}
+  How do we use this if we have more than one sample, say $X_1,
+  \ldots, X_m$ (men, $\overline{X}_m$) and $Y_1, \ldots, Y_n$ (women, $
+  \overline{Y}_n$). Say we want to estimate $\theta = \mu_M -
+  \mu_W$. Then $\hat{\theta} = \overline{X}_m - \overline{Y}_n$. Now,
+  using the formula above, we get:
+  \begin{flalign*}
+    \frac{(\overline{X}_m - \overline{Y}_m) - (\mu_M - \mu_W)}{\sqrt{Var(\overline{X}_m - \overline{Y}_m)}}
+  \end{flalign*}
+  So the general recipe is:
+  
+  Pivotal quantity -> confidence interval -> margin of error -> sample
+  size
+
+  \begin{flalign*}
+    Var(\overline{X}_m - \overline{Y}_n) & = Var(\overline{X}_m) + Var(\overline{Y}_n) - 2Cov(\overline{X}_m, \overline{Y}_n)
+    \intertext{Assuming that $X$s \& $Y$s are independent (note that
+      we don't need independence, just orthogonality such that $Cov$
+      is $0$, independence is much stronger). Then $Cov(\overline{X}_m
+      , \overline{Y}_n) = 0$}
+    Var(\overline{X}_m - \overline{Y}_n) & = Var(\overline{X}_n) + Var(\overline{Y}_n) = \frac{\sigma_M^2}{m} + \frac{\sigma_W^2}{n}
+    \\ \frac{(\overline{X}_m - \overline{Y}_n) - (\mu_M -
+      \mu_W)}{\sqrt{\frac{\sigma_M^2}{m}}+ \frac{\sigma_W^2}{n}}
+    \stackrel{approx}{\sim} N(0,1) \text{ for large }m \& n
+    \\ (\overline{X}_m - \overline{Y}_n) & \pm Z_{\frac{\alpha}{2}} \sqrt{\frac{\sigma_M^2}{m}+ \frac{\sigma_W^2}{n}}
+      \intertext{is a $100(1-\alpha)\%$ C.I. for $\mu_M-\mu_w$}
+      B & = Z_{\frac{\alpha}{2}} \sqrt{\frac{\sigma_M^2}{m}+ \frac{\sigma_W^2}{n}}
+        \\ \left(\frac{B}{Z_{\frac{\alpha}{2}}}\right)^2 & = \frac{\sigma_M^2}{m} + \frac{\sigma_W^2}{n}
+        \intertext{So we have one equation with $2$ unknowns. What
+          should we do? Set them equal! What is the rational for
+          setting them equal? Cost. If $u=km$, we can solve:}
+        \left(\frac{B}{Z_{\frac{\alpha}{2}}}\right)^2 & = \frac{1}{m} \left(\sigma_M^2 + \frac{\sigma_W^2}{k}\right)
+        \\ m & = \frac{\sigma_M^2 + \frac{\sigma^2_W}{k}} {\left(\frac{B}{Z_{\frac{\alpha}{2}}}\right)^2}
+  \end{flalign*}
+  With proportions $\sigma_M^2 = p_M(1-p_M)$ can replace with
+  $\frac{1}{u}$, much simpler:
+  $$\rightarrow \frac{1+\frac{1}{k}}{ \left(\frac{B}{Z_{\frac{\alpha}{2}}}\right)^2}$$
 \end{document}
