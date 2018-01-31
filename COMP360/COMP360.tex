@@ -1030,4 +1030,111 @@
           the outgoing capacity of $s \implies A$ is not
           eliminated. Otherwise it is.
         \end{enumerate}
+        \section{01/31/18}
+        \subsection{Baseball Elimination}
+        \includegraphics[width=.9\textwidth]{i87.pdf}
+
+        The problem we want to solve is whether every team can have at
+        most $M$ points (not over) and we found a clever way to model
+        this problem with a flow network. We give edges toward $t$ the
+        capacity $1-P_i$, for example $1=M-P_B =
+        70-69$ in the above.
+
+        Solve $max\hbox{-}flow$. If it is equal to \# remaining
+        matches $\implies$ not eliminated.
+        \\ \includegraphics[width=.9\textwidth]{i88.pdf}
+
+        So we see in the example that it is not possible that $A$ is
+        not eliminated, since the $max\hbox{-}flow$ is $4$.
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        We know $max\hbox{-}flow=min\hbox{-}cut$. What does
+        $min\hbox{-}cut$ tell us?
+
+        What can we say about $min\hbox{-}cut$?
+        \begin{itemize}
+        \item $Min\hbox{-}cut \neq \infty$ (we already have $A=\{s\},
+          B=\{s\}^c$)
+        \item Consider $min\hbox{-}cut(A,B)$. If $xy\in A \implies
+          x\in A, y \in A$ (or else the capacity would be $\infty$)
+          \\ \includegraphics[width=.9\textwidth]{i89.pdf}
+          \\ \includegraphics[width=.9\textwidth]{i90.pdf}
+          \\ \includegraphics[width=.9\textwidth]{i91.pdf}
+
+          Let $T$ be the set of teams in $A$ from cut$(A,B)$
+          \begin{align*}
+            Cap(A,B) & = sum_{x \in T} (M-P_x) + \text{number of
+                       matches $xy$ with at least one of $x$ or $y$
+                       not in $T$ }
+            \\& = max\hbox{-}flow
+            \intertext{Call this number of matches $K$}
+          \end{align*}
+          What do we know about $max\hbox{-}flow?$
+          \begin{itemize}
+          \item If $max\hbox{-}flow < \# \text{ of edges }\implies
+            \text{our team is eliminated}$.
+          \end{itemize}
+          \begin{align*}
+            Max\hbox{-}flow & = Cap(A,B) = M \times |T| - sum_{x \in T} + K
+            \\ & \iff M \times |T| - \sum_{x \in T}P_x+K < \# \text{
+                 of edges}
+            \\ \iff & M \times |T| < \# \text{ edges in $T$}+\sum_{x
+                      \in T} p_x
+            \\ \iff & M < \frac{\# \text{ edges in $T$} + \sum_{x \in
+                      T}p_x}{|T|}
+          \end{align*}
+          This proves the theorem: If our team is eliminated
+          $\implies$ there exists a set of teams $T$ that provides a
+          proof:
+          \begin{equation*}
+          M < \frac{\# \text{ edges in $T$} + \sum_{x \in T}p_x}{|T|}
+          \end{equation*}
+        \end{itemize}
+        \subsection{Project Selection}
+        \begin{itemize}
+        \item We are given a set of projects.
+        \item Each project $x$ has a revenue $P_x =
+          \begin{cases}
+            \text{provides a profit} & \text{if }P_x > 0
+            \\\text{Provides a loss} & \text{if }P_x < 0
+          \end{cases}
+          $
+        \item Some projects are prerequisites for other projects.
+        \item An edge $x \to y$ means that $y$ is a prerequisite for
+          $x$ (if we choose $x$ we also have to choose $y$).
+          \textbf{Goal:} Select a subset of projects that respects all
+          the prerequisites and maximizes the total revenue.
+        \end{itemize}
+        \paragraph{Ex}
+        ~\\\includegraphics[width=.9\textwidth]{i92.pdf}
+
+        So we want to maximize profit.
+        \begin{itemize}
+        \item We will use $min\hbox{-}cut$.
+        \item We assign $\infty$ capacity to all the edges. This way
+          if a project $x$ is in part $A$ of a $min\hbox{-}cut$ and we
+          have the prereq $x \to y$ then $y$ also has to be in $A$
+          (i.e. you cannot cut any of the infinite edges linking
+          prerequisites).
+        \item We add a source $s$, a sink $t$, edges from $s$ to $x$
+          for projects with $P_x > 0$ (capacity $P_x$), edges from $x$
+          with $P_x < 0$ to $t$ with cap $|P_x|$
+        \end{itemize}
+        \includegraphics[width=.9\textwidth]{i93.pdf}
+        \\ \includegraphics[width=.9\textwidth]{i94.pdf}
+
+        Let $(A,B)$ be a $min\hbox{-}cut$ and let $M=sum_{x:P_x >
+          0}P_x$
+        \\ \includegraphics[width=.9\textwidth]{i95.pdf}
+        \begin{align*}
+          Cap(A,B) & = ? = \sum_{\substack{x \in B \\ P_X > 0}} P_x + \sum_{\substack{x \in A \\ P_x < 0}} |P_x| = \sum_{\substack{x \in A \\ P_x < 0}} -P_x + \sum_{\substack{x \notin A \\ P_x > 0}}P_x = \sum_{\substack{x \in A \\ P_x < 0}} - P_x + \left(M - \sum_{\substack{x \in A \\ P_x >0}} P_x\right)
+          \\ & = M - \sum_{x \in A} P_x
+        \end{align*}
+        \begin{itemize}
+        \item We also know that the projects in $A$ respect the prereq condition.
+        \end{itemize}
+        $min\hbox{-}cut$ is minimizing the term above, which maximizes
+        the negative sum. So in order to max our profit, we choose
+        all the jobs in $A$.
+        
+        The total profit we can make $= \sum_{x \in A}P_x$
       \end{document}
