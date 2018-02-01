@@ -1283,4 +1283,256 @@
   With proportions $\sigma_M^2 = p_M(1-p_M)$ can replace with
   $\frac{1}{u}$, much simpler:
   $$\rightarrow \frac{1+\frac{1}{k}}{ \left(\frac{B}{Z_{\frac{\alpha}{2}}}\right)^2}$$
+  \section{02/01/18}
+  Today we are starting \textbf{Chapter 9}.
+  \subsection{Relative Efficiency}
+  We learned that we can have many point estimates and we discussed
+  estimator errors with Chebyshev's inequality as well as MSE, etc. We
+  noticed that MSE could be split into 2 parts, bias and variance. So
+  perhaps a reasonable property for an estimator would be that we want
+  it to be unbiased. But we also saw that unbiased estimators are not
+  unique, so which do we chose? We came to the point with two unbiased
+  estimators and decided that the one with the \textbf{smaller
+    variance} is better. Now we want to quantify this deviation by
+  looking at the difference in variances of unbiased estimators, or
+  the ratio. For us, ratios and differences are the same (if you take
+  logarithm of a ratio you get differences). We do prefer to work with
+  ratios though.
+  \paragraph{Def} The \textit{relative efficiency} of two \textbf{unbiased
+    estimators}, $\hat{\theta}_1$ and $ \hat{\theta}_2$, is defined to
+  be
+  $$eff(\hat{\theta}_1,\hat{\theta}_2) =
+  \frac{Var(\hat{\theta}_2)}{Var(\hat{\theta})_1}$$
+  Note that we can also extend this to bias estimators, looking at MSEs
+  instead. But there is a reason that we are using unbiased
+  estimators. For a fixed sample size $n$, we may have biased
+  estimators, but for large $n$, as $n$ increases, we require
+  unbiasedness.
+
+  The reason we look at the ratio:
+
+  Suppose we have an unfair coin, with $P(head)=0.6, P(tail)=0.4$. If
+  you toss this over and over again, you'll see that the ratio of
+  heads and tails should be bounded, converge to some number. But for
+  difference, it won't converge, because the difference increases more
+  and more to infinity.
+
+  Recall determining sample size. We looked at the margin of error,
+  the part we'd get in the confidence interval. If we want to compare
+  two different procedures/estimators.
+
+  Recall that we had $Var(\overline{X}_n) = \frac{\sigma^2}{n}$. If we
+  have a symmetric distribution we can replace $\overline{X_n}$ by
+  $Var(median_n) = \frac{\sigma^2}{\ldots 1.6 n}$. So using a
+  procedure that uses the median requires say, $1.6$ times the sample size
+  to get the same information, much more costly. So the ratio tells us
+  about the ratio between two estimators and which one requires a
+  larger sample size for the same information.
+  \paragraph{Ex. 9.1, p446}
+  $Y_i \stackrel{iid}{\sim}Unif(0,\theta), i=1,2,\ldots,n$, where
+  $\theta$ is what we want to estimate. Now consider the following $2$
+  estimators:
+  \begin{align*}
+    \hat{\theta}_1 & = 2 \overline{Y}_n
+    \\ \hat{\theta}_2 & = \left(\frac{n+1}{n}\right) Y_{(n)}
+  \end{align*}
+  where $Y_{(n)}=\max\{Y_1, \ldots, Y_n\}$. Which one intuitively
+  seems better? Try to look at the extreme cases, like when $n=1$ or
+  $n$ is very large. When $n$ is very large, $\hat{\theta}_2$ gets
+  larger and larger and since $\theta$ is the upper bound, it will get
+  closer and closer to $\theta$, but it still remains slightly under,
+  which is why we multiply by $\frac{n+1}{n}$ to increase it
+  slightly.
+  \begin{align*}
+    \hat{\theta}_1:  E(\hat{\theta}_1) & = E(2 \overline{Y}_n) = 2E(\overline{Y}_n) = 2E \left(\frac{1}{n} \sum_{i=1}^n Y_i\right)
+    \\ & = \frac{2}{n} E \left(\sum_{i=1}^n Y_i\right) = \frac{2}{n} \sum_{i=1}^n E(Y_i)
+         \intertext{Because $Y$ is a symmetric distribution, the mean
+         is the median:}
+    \\ & = \frac{2}{n} \cdot \sum_{i=1}^n \frac{\theta}{2} = \theta
+    \\ Var(\hat{\theta}_1) & = Var(2\overline{Y}_n) = \frac{4Var(Y)}{n}
+    \\ Var(Y) & = E(Y^2) - \underbrace{[E(Y)]^2}_{\frac{\alpha}{2}}
+    \\ E(Y^2) & = \int_{-\infty}^{\infty} y^2 f_Y (y) \ dy = \int_0^{\theta} y^2 \frac{1}{\theta} \ dy = \frac{1}{\theta} \int_0^\theta y^2 \ dy
+    \\ & = \frac{1}{\theta} \cdot \frac{1}{y} y^3\bigg\vert_{0}^{\theta} = \frac{\theta^3}{3\theta} = \frac{\theta^2}{3}
+    \\ Var(Y) & = \frac{\theta^2}{3} - \frac{\theta^2}{4} = \frac{\theta^2}{12}
+                \intertext{Plugging in:}
+                Var(\hat{\theta}_1) & = \frac{4 \cdot \frac{\theta^2}{12}}{n} = \frac{\theta^2}{3n}
+    \\
+    \\ \hat{\theta}_2: F_{Y_{(n)}} & = P(Y_{(n)} \leq t) = P(Y_1 \leq t, Y_2 \leq 2. \ldots, Y_n \leq t)
+    \\ & = \prod_{i=1}^n P(Y_i \leq t) = \prod_{i=1}^n F_{Y_i}(t) = [F_Y(t)]^n
+    \\ F_{Y_{(n)}}(t) & = [F_Y(t)]^n
+    \\ \delta_{Y_{(n)}} (t) & = \frac{d}{dt}F_{Y_{(n)}}(t) = \frac{d}{dt}[F_Y(t)]^n
+    \\ & = nf_Y(t)(F_Y(t))^{n-1}
+    \\ f_{Y_{(n)}}(t) & =
+                        \begin{cases}
+                          n \frac{1}{\theta}
+                          \left(\frac{t}{\theta}\right)^{n-1} &
+                          \text{if }0 < t < \theta
+                          \\ 0 & \text{otherwise}
+                        \end{cases}
+    \\ E(\hat{\theta}_2) & = E\left[ \left(\frac{n+1}{n}\right)Y_{(n)} \right] = \left(\frac{n+1}{n}\right)E[Y_{(n)}]
+    \\ & = \left(\frac{n+1}{n}\right)\int_0^{\theta} y \underbrace{n \cdot \frac{1}{\theta} \left(\frac{y}{\theta}\right)^{n-1}}_{f_{Y_{(n)}}(y)} \ dy
+    \\ & = \left(\frac{n+1}{n}\right) \cdot \frac{n}{\theta^n} \int_0^{\theta} y^n \ dy
+    \\ & = \left(\frac{n+1}{n}\right) \cdot \frac{n}{\theta^n} \left[\frac{1}{n+1}y^{n+1}\right]_0^{\theta}
+    \\ & = \left(\frac{n+1}{n}\right) \cdot \frac{n}{\theta^n} \cdot \frac{\theta^{n+1}}{n+1}= \theta
+    \\ E(\hat{\theta}_2) & = \theta
+                           \intertext{$\hat{\theta}_2$ is an unbiased
+                           estimator of $\theta$.}
+    \\ Var(\hat{\theta}_2) & = E(\hat{\theta}_2^2) - [\underbrace{E(\hat{\theta}_1)}_\theta]^2
+    \\ E(\hat{\theta}_2^2) & = \int_0^\theta \left(\frac{n+1}{n}\right)^2 y^2 \delta_{Y_{(n)}} \ dy
+    \\ & = \left(\frac{n+1}{n}\right)^2 \int_0^{\theta} y^2 \cdot n \cdot \frac{1}{\theta} \left(\frac{y}{\theta}\right)^{n-1} \ dy
+    \\ & = \left(\frac{n+1}{n}\right)^2 \frac{n}{\theta^n} \int_0^\theta y^{n+1} \ dy
+    \\ & = \left(\frac{n+1}{n}\right)^2 \cdot \frac{n}{\theta^n} \left[\frac{1}{n+2}y^{n+2}\right]_0^{\theta}
+    \\ & = \left(\frac{n+1}{n}\right)^2 \frac{n}{\theta^n}\frac{\theta^{n+2}}{n+2}
+    \\ & = \frac{(n+1)^2}{n(1+2)}\cdot \theta^2
+    \\ Var(\hat{\theta}_2^2) & = \frac{(n+1)^2}{n(n+1)}\cdot \theta^2 - \theta^2
+    \\ & = \theta^2 \left[\frac{(n+1)^2 - n(n+2)}{n(n+1)}\right]
+    \\ & = \frac{\theta^2}{n(n+2)}
+         \intertext{So what do we have?}
+         Var(\hat{\theta}_1) & = \frac{\theta^2}{3n}
+    \\ Var(\hat{\theta}_2) & = \frac{\theta^2}{n(n+2)}
+    \\ eff(\hat{\theta}_1, \hat{\theta}_2) & = \frac{Var(\hat{\theta}_2)}{Var(\hat{\theta}_1)}
+    \\ & = \frac{\frac{\theta^2}{n(n+2)}}{\frac{\theta^2}{3n}} = \frac{3}{n+2}
+    \\ \frac{3}{n+2} & \leq 1 \text{ if }n>1, \frac{3}{n+2} < 1
+    \\ n \to \infty & \frac{3}{n+2} \to \infty
+                      \intertext{So the meaning of this ratio is that
+                      as $n$ increases, the efficiency of procedure
+                      $1$ decreases compared to the efficiency of
+                      procedure $2$. It's definitely better to use the
+                      second procedure to estimate $\theta$.}
+  \end{align*}
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  \subsection{Consistency}
+  Minimum requirement an estimator should have. More rigorously:
+  \paragraph{Def} We say $\hat{\theta}_n$ (subscript meaning it was
+  based on $n$ observations) is a \textit{consistent estimator} of
+  $\theta$ if $\hat{\theta}_n \stackrel{P}{\to} \theta$ as
+  $n\to\infty$.
+
+  Recall that converges with probability ($\stackrel{P}{\to}$) means:
+  $$\lim_{n\to\infty}P(|\hat{\theta}_n - \theta| > \varepsilon) = 0,
+  \forall \varepsilon > 0$$
+  i.e. the more and more elements we have, the more our estimates will
+  converge to the actual value.
+
+  Recall:
+  \begin{align*}
+    \lim_{n \to \infty} a_n = a
+    \\ \forall \varepsilon >0, \exists N(\varepsilon) \implies |a_n -
+    a| < \varepsilon \text{ if }n \geq N(\varepsilon)
+  \end{align*}
+  What does this say? It means we can get as close as $a$ as we'd like
+  by increasing $n$.
+
+  But this isn't the same with random variables, because they have
+  \textbf{random fluctuations}! For example, if we had a fair coin,
+  we'd try flipping many many times in order to try to induct that the
+  probability is $0.5$, but after many many trials, say $10000$, we
+  may only have $4820$ heads or something of the like. i.e. we
+  increased the sample size but we noticed an even bigger deviation
+  and this happens in practice because of randomness. So what is the
+  complement of converges with probability?
+  $$\lim_{n \to \infty} P(|\hat{\theta}_n - \theta| < \varepsilon) =
+  1, \forall \varepsilon >0$$
+  So this may not happen with certainty (because of random
+  fluctuations, but the complement will converge to $1$).
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  \paragraph{Ex}
+  $X_i \sim Ber(p)$
+  \\ $X_i =
+  \begin{cases}
+    1 & p
+    \\ 0 & 1-p
+  \end{cases}, i=1,\ldots,n
+  $.
+
+  What justifies us in using $\hat{p}_n = \frac{1}{n} \sum_{i=1}^n
+  X_i$? We said we were mimicking that proportion in the
+  population. Now we want to formalize this. To establish that
+  $\hat{p}_n$ is on the right track:
+  \begin{align*}
+    \lim_{n \to \infty} P(|\hat{p}_n - p| > \varepsilon) = 0, \forall \varepsilon > 0
+    \intertext{What's our big hammer here? Chebychev's inequality. Can
+    we use that here? Recall: }
+    P(|X- E(x)| > k\sigma) \leq \frac{1}{k^2}
+    \intertext{Our random variable $X$, is $\hat{p}_n$. The mean of
+    $\hat{p}_n$ is $p$. Now $\varepsilon$ plays the role of our
+    $k\sigma$, i.e.}
+    E(\hat{p}_n) &= p
+    \\ \varepsilon &= k \sqrt{var(\hat{p}_n)}
+    \\ Var(\hat{p}_n) &= \frac{p(1-p)}{n}
+    \\ k & = \frac{\varepsilon}{\sqrt{Var(\hat{p}_n)}}
+           \intertext{So if we want to use Chebychev's:}
+           P(|\hat{p}_n - p| > \varepsilon) & \leq \frac{1}{\left[\frac{\varepsilon}{\sqrt{Var(\hat{p}_n)}}\right]^2}
+    \\ P(|\hat{p}_n-p| > \varepsilon) & \leq \frac{ \left(\frac{p(1-p)}{n}\right)}{\varepsilon^2}
+    \\ p(1-p) \leq \frac{1}{4} \implies & = \frac{p(1-p)}{n \varepsilon^2}
+    \\ & \leq \frac{1}{4n\varepsilon^2} \to 0, \text{ as }n \to \infty, \forall \varepsilon >0
+         \intertext{So we have obtained:}
+         P(|\hat{p}_n - p| > \varepsilon) & \leq \frac{1}{4n\varepsilon^2}
+                                            \intertext{So what if we
+                                            want to decrease
+                                            $\varepsilon$ as $n$ increases?}
+                                            \varepsilon_n & = \frac{\log n}{\sqrt{n}}
+    \\ P\left(|\hat{p}_n - p | > \frac{\log n}{\sqrt{n}}\right) & \leq
+                                                                  \frac{1}{4n
+                                                                  \left(\frac{\log
+                                                                  n}{\sqrt{n}}\right)^2}
+                                                                  \leq
+                                                                  \frac{1}{4
+                                                                  \log
+                                                                  n}
+                                                                  \to
+                                                                  0,
+                                                                  \text{
+                                                                  as }n\to\infty
+                                                                  \intertext{So
+                                                                  this
+                                                                  tells
+                                                                  us
+                                                                  the
+                                                                  rate
+                                                                  at
+                                                                  which
+                                                                  we
+                                                                  can
+                                                                  decrease
+                                                                  $\varepsilon$. This
+                                                                  brings
+                                                                  us
+                                                                  closer
+                                                                  to
+                                                                  the
+                                                                  definition
+                                                                  of
+                                                                  limits
+                                                                  from
+                                                                  Calculus
+                                                                  from
+                                                                  numbers.}
+  \end{align*}
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  So we can use Chebyshev's inequality to establish consistency for
+  many estimators.
+
+  Suppose $X_1, \ldots, X_n$ have the same mean $\mu$ and variance
+  $\sigma^2$. Suppose further that $Cov(X_i, X_j) = 0, i \neq j$. Then
+  $$\overline{X}_n \stackrel{P}{\to} \mu$$
+  which we can easily show using Chebyshev's inequality as well.
+  \begin{align*}
+    P(|\overline{X}_n - \mu| > \varepsilon)
+    \intertext{Recall that Chebyshev's:}
+    P(|X - E(X)| > k \sqrt{Var(x)}) \leq \frac{1}{k^2}
+  \end{align*}
+  So $\overline{X}_n \to X, \mu \to E(x), \varepsilon \to k \sqrt{Var(x)}$
+    \begin{align*}
+      \varepsilon & = k\sqrt{Var(\overline{X}_n)}
+      \\ k & = \frac{\varepsilon}{\sqrt{Var(\overline{X}_n)}}
+      \\ Var(\overline{X}_n) & = \frac{\sigma^2}{n}
+      \\ P(|\overline{X}_n - \mu| > \varepsilon) & \leq \frac{1}{ \left(\frac{\varepsilon}{\sqrt{\frac{\sigma^2}{n}}}\right)^2}
+      \\ & = \frac{\sigma^2}{n \varepsilon^2} \to 0, \text{ as }n \to
+           \infty, \text{ as long as }\sigma^2 \text{ finite}
+    \end{align*}
+    But can we also say:
+    $$S_n^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X}_n)^2
+    \stackrel{P}{\to} \sigma^2$$
+    No, there is much more difficulty with this, which we'll see next class.
 \end{document}
