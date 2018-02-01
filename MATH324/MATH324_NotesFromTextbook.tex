@@ -297,4 +297,33 @@
     \\100(1-\alpha)\% \text{ upper bound for }\theta = \hat{\theta}+z_{\alpha}\sigma_{\hat{\theta}}
     \\ \implies 100(1-2\alpha)\%\theta = \hat{\theta}\pm z_{\alpha}\sigma_{\hat{\theta}}
   \end{align*}
+  The important formula of this section is
+  $$\hat{\theta} \pm z_{\frac{\alpha}{2}}\sigma_{\hat{\theta}}$$
+  When $\theta = \mu, \hat{\theta} = \overline{Y}$ and
+  $\sigma_{\hat{\theta}}^2 = \frac{\sigma^2}{n}$, then $\sigma^2$
+  should be used if known, but if it is not known and $n$ is large, we
+  can use $s^2$ instead. Similarly for $\sigma_1^2$ and
+  $\sigma_2^2$, for $\theta = \mu_1 - \mu_2$. For $\theta = p$, we can
+  replace $p$ by $\hat{p}$ for large $n$ (to be justified in Section 9.3).
+  \subsection{Selecting the Sample Size}
+  We want to obtain information at minimum cost. Note that the sample
+  size $n$ controls the amount of relevant information in a
+  sample. How many measurements should we include in our sample? We
+  first need to know how much information we'd like to
+  obtain. Specifically, how \textbf{accurate} should the estimate be?
+
+  For example, if we'd like to estimate $\mu$ within $5$ units with
+  probability $.95$: since approximately $95\%$ of the sample means
+  will lie within $2\sigma_{\overline{Y}}$ of $\mu$, then we want
+  $$2 \sigma_{\overline{Y}} = 5 \implies \frac{2\sigma}{\sqrt{n}} = 5
+  \implies n = \frac{4\sigma^2}{25}$$
+  \subsection{Small-Sample Confidence Intervals for $\mu$ and
+    $\mu_1-\mu_2$}
+  We assume in this section that our sample has a normal
+  distribution. We want to approximate the population mean when we
+  don't know the variance or the sample size is too small to apply
+  large-sample techniques. But we can use:
+\begin{flalign*}
+  T & = \frac{\overline{Y}-\mu}{\frac{S}{\sqrt{n}}}
+\end{flalign*}
 \end{document}
