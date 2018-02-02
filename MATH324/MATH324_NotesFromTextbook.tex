@@ -326,4 +326,66 @@
 \begin{flalign*}
   T & = \frac{\overline{Y}-\mu}{\frac{S}{\sqrt{n}}}
 \end{flalign*}
+which has a $t$ distribution with $(n-1)$ df. $T$ is a pivotal
+quantity for $\mu$ and we can get:
+$$P(-t_{\frac{\alpha}{2}} \leq T \leq t_{\frac{\alpha}{2}}) = 1 -
+\alpha$$
+The $t$ distribution is similar to the normal distribution, except the
+tails are thicker.
+
+\paragraph{Important Parameters and Confidence Intervals}
+~\\
+\begin{tabular}{{c c}}
+  Parameter & Confidence Interval
+  \\ \hline $\mu$ & $\overline{Y} \pm t_{\frac{\alpha}{2}} \left(\frac{S}{\sqrt{n}}\right), df = n - 1$
+  \\ $\mu_1 - \mu_2$ & $(\overline{Y}_1 - \overline{Y}_2 \pm t_{\frac{\alpha}{2}}S_p \sqrt{\frac{1}{n_1}+\frac{1}{n_2}}), df=n_1 + n_2 - 2$
+\end{tabular}
+Where $S_p^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}$
+
+Note that as $n$ gets large, so does $df$ and eventually, the $t$
+distribution can be approximated by the standard normal distribution
+(the small $n$ intervals become nearly equivalent to large $n$ samples
+when $df > 30$).
+\subsection{Confidence Intervals for $\sigma^2$}
+Recall that $$\frac{\sum_{i=1}^n (Y_i -
+  \overline{Y})^2}{\sigma^2}=\frac{(n-1)S^2}{\sigma^2} =
+\frac{(n-1)S^2}{\sigma^2}$$ has a $\chi^2$ distribution with $n-1$
+df.
+
+Using the pivotal method, we get:
+$$P \left[\chi_L^2 \leq \frac{(n-1)S^2}{\sigma^2} \leq \chi_U^2\right]
+= 1 - \alpha $$
+Since the $\chi^2$ density function is not symmetric, we get to chose
+$\chi_L^2$ and $\chi_U^2$. We usually choose points that cut off equal
+tail areas:
+$$P \left[\chi_{1-(\frac{\alpha}{2})}^2 \leq \frac{(n-1)S^2}{\sigma^2} \leq \chi_{\left(\frac{\alpha}{2}\right)}^2\right]
+= 1 - \alpha $$
+Obtaining:
+$$P \left[\frac{(n-1)S^2}{\chi^2_{\frac{\alpha}{2}}} \leq \sigma^2
+  \leq
+  \frac{(n-1)S^2}{\chi^2_{1-\left(\frac{\alpha}{2}\right)}}\right] = 1- \alpha$$
+\paragraph{$100(1-\alpha)\%$ Confidence Interval for $\sigma^2$}
+$$
+\left(
+  \frac{(n-1)S^2}{\chi^2_{\frac{\alpha}{2}}}, \frac{(n-1)S^2}{\chi^2_{1-
+      \left(
+        \frac{\alpha}{2}
+      \right)}}
+\right)$$
+\subsection{Summary}
+The main objective of most statistical investigations is to make
+inferences about population parameters based on sample data. These
+inferences are often estimated (point or interval estimates). Unbiased
+estimators with small variances are preferred. Goodness of unbiased
+$\hat{\theta}$ is measured via $\sigma_{\hat{\theta}}$ because error
+of estimation is usually smaller than $2\sigma_{\hat{\theta}}$. The
+MSE is small if the variance and bias is small.
+
+Interval estimates of many parameters like $\mu$ and $p$ can be
+derived from the normal distribution for large $n$ because of CLT. If
+$n$ is small, we must assume normality of the population and use the
+$t$ distribution for confidence intervals.
+
+IF sample measurements are from a normal distribution, we can get a
+confidence interval for $\sigma^2$ through the $\chi^2$ distribution. 
 \end{document}
