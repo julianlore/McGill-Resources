@@ -1137,4 +1137,228 @@
         all the jobs in $A$.
         
         The total profit we can make $= \sum_{x \in A}P_x$
+        \section{02/05/18}
+        \subsection{Linear Programming}
+        What is linear programming? So far we've done many
+        optimization problems, where we have many constraints that we
+        have to satisfy and what we wanted to do is optimize the
+        function (max flow, maximum matching, min cut, etc.).
+
+        A linear program is a special class of optimization problems:
+        optimizing a linear function in a certain number of variables
+        over a set of linear constraints.
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        Why do we care about this?
+        \begin{itemize}
+        \item Many optimization problems can be modeled as Linear
+          Programs
+        \item $40$'s: A very practical algorithm (called simplex)
+          discovered for solving LP's. \textit{Theoretically it is not
+            an efficient algorithm (exponential time), but in practice
+            it's almost always very fast.}
+        \item $79$ (Leonid Khachiyan) Proved that LP's can be solved in
+          polynomial time (Ellipsoid algorithm, worst case is better
+          than Simplex, but overall slower)
+        \end{itemize}
+        \noindent \rule{\textwidth}{0.5pt}
+        A linear program has
+        \begin{enumerate}
+        \item A set of variables: $x_1, \ldots, x_n$ that can take
+          \textbf{real} values.
+        \item A set of linear constraints each of the form
+          \begin{align*}
+            \alpha_1 x_1 + \alpha_2 x_2 + \ldots + \alpha_n x_n & = \beta
+            \\\alpha_1 x_1 + \alpha_2 x_2 + \ldots + \alpha_n x_n & \leq \beta
+            \\\alpha_1 x_1 + \alpha_2 x_2 + \ldots + \alpha_n x_n & \geq \beta
+          \end{align*}
+          where $\alpha_1, \ldots, \alpha_n, \beta$ are (fixed) real
+          numbers. Note that we cannot have strict inequalities,
+          because then we will never be able to optimize the problem,
+          it'll be an open problem which we can keep making better and
+          better.
+        \item A linear objective function that we want to
+          \textbf{minimize} or \textbf{maximize}.
+          $$c_1 x_1 + c_2 x_2 + \ldots + c_n x_n$$
+          where $c_1, \ldots, c_n$ are real numbers.
+        \end{enumerate}
+        It would be good to follow these steps whenever you are trying
+        to formula something as a linear programming problem and/or if
+        you are given a linear programming problem, especially if
+        written in an abstract way.
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        \paragraph{Example}
+        \begin{itemize}
+        \item Variables $x_1, x_2, x_3$
+        \item $\max 2x_1 +5x_2 - x_3$ (objective function)
+        \item Subject to (s.t.)
+          \begin{align*}
+            x_1 + x_2 + x_3 &\leq 5
+            \\ 2x_1 + 6x_2 - x_3 &\leq 1
+            \\ -x_1 - 2x_2 - x_3 & = 2
+          \end{align*}
+          (constraints)
+        \end{itemize}
+        \paragraph{Example}
+        \begin{itemize}
+        \item variables $x_1 + x_2$
+        \item $\min x_1 + x_2$
+        \item s.t.
+          \begin{align*}
+            x_1 + 2x_2 & \geq 1
+            \\ x_1 - x_2 & = 5
+            \\ x_2 \geq 0
+          \end{align*}
+          (note this is still a linear program, the last equation has
+          $0x_1$ omitted, the $\alpha$'s don't need to be nonzero)
+        \end{itemize}
+        \paragraph{Example}
+        \begin{itemize}
+        \item variables $x_1, x_2, x_3$
+        \item $\max x_1 + x_2 + x_3$
+        \item s.t.
+          \begin{align*}
+            x_1 + 2x_2 & \leq 1
+            \\ 2x_1 + x_2 & \leq 1
+            \\ x_3 & = 1
+            \\ x_1 & \geq 0
+            \\ x_2 & \geq 0
+          \end{align*}
+        \end{itemize}
+        $x_1 = \frac{1}{3}, x_2 = \frac{1}{3}, x_3 = 1$ gives
+        $\frac{5}{3}$. It's easy to convince someone that the
+        maximization is at least some number, just give them an
+        example like this. But how do we prove to someone that this is
+        the best? What happens if we add the first two constraints? We
+        get $3x_1 + 3x_2 \leq 2$. More rigorously we can do the
+        following:
+        \begin{align*}
+          1 \times (x_1 + 2x_2 &\leq 1)
+          \\ 1 \times (2x_1 + x_2 &\leq 1)
+          \\ 3 \times (x_3 & = 1)
+        \end{align*}
+        We get: 
+        \begin{align*}
+          3x_1 + 3x_2 + 3x_3 & \leq 5
+          \\ \iff x_1 + x_2 + x_3 & \leq \frac{5}{3}
+        \end{align*}
+        We will see a big theorem that tells us we can always do
+        this. Note, we are showing that the maximum is at least
+        $\frac{5}{3}$ and then we are showing that the maximum cannot
+        be larger than $\frac{5}{3}$, in other words, this is similar
+        to showing $max\hbox{-}flow$ and $min\hbox{-}cut$.
+        \paragraph{Example} We have a small firm producing bookcases
+        and tables.
+        \\
+        \begin{tabular}{l | l | l | l}
+          & Cutting time & Assembly & Finishing time
+          \\ \hline Bookcase & $\frac{6}{5}$ hr & $1$ hr & $\frac{3}{2}$ hr
+          \\ Table & $1$ hr & $\frac{1}{2}$ hr & $2$ hr
+        \end{tabular}
+        We have people working for us following:
+        \begin{itemize}
+        \item $72$ hr cutting time
+        \item $50$ hr assembly
+        \item $120$ hr finishing time
+        \end{itemize}
+        We can sell:
+        \begin{itemize}
+        \item A bookcase $\$80$
+        \item A table $\$55$
+        \end{itemize}
+        Goal: maximize profit. How many tables and bookcases should we
+        build?
+        \begin{itemize}
+        \item Variables: $x_1$ number of tables and $x_2$ number of
+          bookcases (these are our unknowns, what we are trying to
+          solve for)
+        \item Objective: $\max 55x_1 + 80x_2$
+        \item Constraints:
+          \begin{align*}
+            x_1 + \frac{6}{5}x_2 & \leq 72 \text{ (cutting)}
+            \\ \frac{1}{2}x_1 + x_2 & \leq 50 \text{ (assembly)}
+            \\ 2x_1 + \frac{3}{2}x_2 & \leq 120 \text{ (finishing)}
+            \\ x_1 & \geq 0 \text{\hspace{20 pt}(Can't make negative number of tables}
+            \\ x_2 & \geq 0 \text{\hspace{20 pt} or bookcases)}
+          \end{align*}
+        \end{itemize}
+        Remark: We wish to add that $x_1, x_2$ are integers but adding
+        that is not allowed in LP's (we cannot solve such optimization
+        problems efficiently).
+
+        If we solve the linear program
+        \begin{align*}
+          \max 55x_1 + 80x_2
+            \\ \frac{1}{2}x_1 + x_2 & \leq 50
+            \\ 2x_1 + \frac{3}{2}x_2 & \leq 120 
+            \\ x_1 & \geq 0 
+            \\ x_2 & \geq 0
+        \end{align*}
+        We get $x_1 = 30, x_2 = 35$. Fortunately in this case the
+        optimal solution is integer (in practice we'd round them to
+        integers if required).
+        \paragraph{Example}
+        \begin{itemize}
+        \item Two factories $P_1, P_2$
+        \item Four products $A,B,C,D$
+        \end{itemize}
+        \begin{tabular}{l | l l l}
+          &$P_!$ (prod/day)& $P_2$ (prod/day)& total demand
+          \\ \hline $A$ & $200$ & $100$ &$1000$
+          \\ $B$ & $60$ & $200$ & $800$
+          \\ $C$ & $90$ & $150$ & $900$
+          \\ $D$ & $130$ & $80$ & $1500$
+        \end{tabular} Cost of running $P_1$: $\$800/day$, $P_2:
+        \$1100/day$
+        \begin{itemize}
+        \item Goal: meet the demands minimize the cost.
+        \item How many days of $P_1$? $x_1$
+          \\ How many days of $P_2$? $x_2$
+        \item Constraints:
+          \begin{align*}
+            A: 200x_1 + 100 x_2 & \geq 1000
+          \\B: 60 x_1 + 200 x_2 & \geq 800
+          \\ C: 90x_2 + 150 x_2 & \geq 900
+            \\ D: 130 x_1 + 80x_2 & \geq 1500
+            \\ x_1 & \geq 0
+            \\ x_2 & \geq 0
+          \end{align*}
+          Solution: $x_1 = 11.132, x_2 = 0.66$. $obj=96320.75$
+        \end{itemize}
+        
+         \noindent \rule{\textwidth}{0.5pt}
+        Model the following problem as a linear program:
+
+        ``Find the max flow in this network''
+        \\ \includegraphics[width=.9\textwidth]{i96.pdf}
+        \begin{itemize}
+        \item Variables: $f_{sa}, f_{sb}, f_{ab}, f_{at}, f_{bt} $
+        \item Objective: $\max f_{sa} + f_{ab}$
+        \item Constraints:
+          \begin{align*}
+            f_{sa} & \geq 0
+            \\ f_{sb} & \geq 0
+            \\ f_{ab} & \geq 0
+            \\ f_{at} & \geq 0
+            \\ f_{bt} & \geq 0
+          \end{align*}
+          (positive flow)
+          \begin{align*}
+            f_{sa} & \leq 5
+            \\ f_{sb} & \leq 2
+            \\ f_{ab} & \leq 1
+            \\ f_{at} & \leq 4
+            \\ f_{bt} & \leq 6 
+          \end{align*}
+          (capacity condition)
+          \begin{align*}
+            f_{sa} - f_{at} - f_{ab} & = 0
+            \\ f_{sb} + f_{ab} - f_{bt} & = 0
+          \end{align*}
+          (conservation conditions)
+        \end{itemize}
+        So the fact that we can solve max flow in polynomial time
+        follows from the fact that we can solve linear programs in
+        polynomial time.
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        Max flow problem is a special case of linear programs.
       \end{document}
