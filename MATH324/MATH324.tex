@@ -1535,4 +1535,217 @@
     $$S_n^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X}_n)^2
     \stackrel{P}{\to} \sigma^2$$
     No, there is much more difficulty with this, which we'll see next class.
+    \section{02/06/18}
+    \subsection{Consistency}
+    Last class we discussed consistency and went over a few examples,
+    played a bit with $\varepsilon$ and convergent probability. We
+    then extended the consistency result for sample proportions to
+    sample averages for estimating the population average. Then we
+    wanted to start discussing the consistency of population variance,
+    although we noted that the usual big hammer (Chebyshev's/Markov's
+    Inequality) would be harder to use.
+
+    $\hat{p}_n \stackrel{p}{\to} p \to p = P(X=1)$
+
+    This essentially justifies using relative frequency as an estimate
+    to $p$. As we repeat our experiments more and more, the relative
+    frequency $\hat{p}_n$ gets closer and closer to $p$. The whole
+    theorem was trying to find an upper bound of the difference
+    between relative frequency and $p$, using Chebyshev's Inequality
+    (a special case of Markov's).
+    \begin{flalign*}
+      P(\left|\hat{p}_n - p\right| > \varepsilon)      
+    \end{flalign*}
+    \begin{align}
+      P(\left|\hat{p}_n - p\right| > \varepsilon) & = P( \left|\hat{p}_n - p\right|^2 > \varepsilon^2) \nonumber
+      \\ & \stackrel{\text{Markov's}}{\leq} \frac{E[\left|\hat{p}_n - p\right|^2]}{\varepsilon^2}
+    \end{align}
+    Recall: If $g$ is a non-negative function and $X$ a r.v., then
+    $$P(g(X)\geq \lambda) \leq \frac{E[g(X)]}{\lambda}, \lambda > 0$$
+    To apply Markov's inequality to obtain (5), $g(x) = (x -
+    E(x))^2$. Now replace $X$ by $\hat{p}_n$. Note that $E(\hat{p}_n)
+    = p$. Why did we square before applying Markov's? Because it is
+    easier to compute variance with.
+    \begin{flalign*}
+      E[(\hat{p}_n - p)^2] & = Var(\hat{p}_n) = \frac{p(1-p)}{n}
+      \\ p(\left|\hat{p}_n - p\right| > \varepsilon) & = p(\left|\hat{p}_n - p\right|^2 > \varepsilon^2)
+      \\ & \leq \frac{E[\left|\hat{p}_n - p\right|^2]}{\varepsilon^2}
+      = \frac{p(1-p)}{n \varepsilon^2} \to 0, \text{ as }n \to \infty, \forall \varepsilon>0
+    \end{flalign*}
+    This means the variance approaches $0$, so the estimator gets
+    closer and closer to its center, what its trying to estimate.
+
+    \paragraph{Theorem} (Thm 9.1, p450)
+    \\ Suppose $\hat{\theta}_n$ is an estimate for $\theta$ and
+    $MSE=(\hat{\theta}) \to 0$ as $n \to \infty$. Then $\hat{\theta}_n
+    \stackrel{P}{\to} \theta$ meaning that $\hat{\theta}_n$ is a
+    consistent estimator of $e$.
+    \paragraph{Proof}
+    \begin{flalign*}
+      P(\left|\hat{\theta}_n - \theta\right| > \varepsilon) & = P( \left|\hat{\theta}_n - \theta\right|^2 > \varepsilon)
+      \\ & \stackrel{\text{Markov's}}{\leq} \frac{E[\left|\hat{\theta}_n - \theta\right|^2]}{\varepsilon^2}
+      \\ & = \frac{MSE(\hat{\theta}_n)}{\varepsilon^2} \to 0 
+    \end{flalign*}
+    So $\hat{\theta}_n \stackrel{P}{\to} \theta$.
+
+    \paragraph{Corollary} Suppose $\hat{\theta}_n$ is an unbiased
+    estimator of $\theta$ such that $Var(\hat{\theta}_n) \to 0$ as $n
+    \to \infty$. Then $\hat{\theta}_n \stackrel{P}{\to} \theta$,
+    i.e. $\hat{\theta}_n$ is a consistent estimator of $\theta$.
+    \paragraph{Recall} Proportion: $$Var(\hat{p}_n) = \frac{p(1-p)}{n}
+    \to 0, \text{ as }n \to \infty$$
+    Sample average: $$Var(\overline{X}_n) = \frac{\sigma_X^2}{n} \to
+    0, \text{ as }n \to \infty$$
+    \begin{flalign*}
+      E(\hat{p}_n) & = p
+      \\ E(\overline{X}_n) & = \mu_X
+      \\ MSE(\hat{p}_n) & = Var(\hat{p}_n)
+      \\ MSE(\overline{X}_n) & = Var(\overline{X}_n)
+    \end{flalign*}
+    \paragraph{Recall}
+    \begin{equation}
+    MSE(\hat{\theta}_n) = Var(\hat{\theta}_n) +
+    \underbrace{Bias^2(\hat{\theta}_n)}_{(E(\hat{\theta}_n) -
+      \theta)^2}
+    \end{equation}
+    \paragraph{Corollary 2} Suppose $\hat{\theta}_n$ is asymptotically
+    unbiased for $\theta$, i.e. $\lim_{n \to \infty} E(\hat{\theta}_n)
+    = \theta$, and  $Var(\hat{\theta}_n) \to 0$ as $n \to \infty$,
+    then $\hat{\theta}_n \stackrel{P}{\to} \theta$,
+    i.e. $\hat{\theta}_n$ i a consistent estimator of $\theta$.
+
+    Using (6):
+    \begin{flalign*}
+      \lim_{n \to \infty} MSE(\hat{\theta}_n) & = \lim_{n \to \infty} Var(\hat{\theta}_n) + \underbrace{\lim_{n\to\infty}Bias^2(\hat{\theta}_n)}_{0} = \lim_{n\to\infty} Var(\hat{\theta}_n) = 0
+    \end{flalign*}
+    \noindent \rule{\textwidth}{0.5pt}
+    Suppose $X_1, \ldots, X_n$ for a random sample (i.e. independent
+    and identically distributed) from a population
+    with mean $\mu$ and variance $\sigma^2$. We want to estimate
+    $\sigma^2$. We learned that perhaps a reasonable estimator is:
+    \begin{flalign*}
+      S^2 & = \frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X_n})^2
+      \\ E(S^2) & = \sigma^2
+    \end{flalign*}
+    But we need to divide by $n-1$.
+    \begin{flalign*}
+      S_{n_1 *}^2 &= \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2 = \left(1 - \frac{1}{n}\right)S_n^2
+      \\ E(S_{n,*}^2) & = \left(1- \frac{1}{n}\right)E(S_n^2) = \left(1 - \frac{1}{n}\right) \sigma^2
+    \end{flalign*}
+    i.e. $S_{n,*}^2$ is biased, but it will be our maximum likelihood
+    estimator later.
+
+    Can we show:
+    $$S_n^2 \stackrel{P}{\to} \sigma^2 ?$$
+    \begin{flalign*}
+      P(\left|S_n^2 - \sigma^2\right| > \varepsilon) & = P(\left|S_n^2 - \sigma^2\right| > \varepsilon)
+      \\ & \leq \frac{E[(S_n^2 - \sigma^2)]}{\varepsilon^2}
+      \\ & = \frac{Var(S_n^2)}{\varepsilon^2}
+    \end{flalign*}
+    Note that all of these depend heavily on the second moment and
+    give us difficulty. They require variance, but Kolmogarov's
+    Theorem doesn't and makes it important/hard to prove.
+    \subsection{Kolmogarov's Theorem (Law of Large Numbers)}
+    Suppose $X_1, \ldots, X_n$ is a random sample with population mean
+    $\mu$. Then $\overline{X}_n \stackrel{P}{\to} \mu = E(X)$.
+    \begin{flalign*}
+      S_{n,*}^2 & = \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2
+      \\ & = \underbrace{\frac{1}{n}\sum_{i=1}^nX_i^2}_{E(X^2)} - \overline{X}_n^2
+    \end{flalign*}
+    Now $X_1, \ldots, X_n \ iid $ and $X_1^k, \ldots, X_n^k \ iid \to
+    E(X^k)$
+    \begin{flalign*}
+      \frac{1}{n} \sum_{i=1}^n\underbrace{X_i^k}_{Y_i} & \to E(X^k)
+      \\ \frac{1}{n} \sum_{i=1}^nX_i^k & = \frac{1}{n} \sum_{i=1}^nY_i = \overline{Y}_n
+    \end{flalign*}
+    Using Kolmogarov's theorem:
+    \begin{align}
+      \frac{1}{n}\sum_{i=1}^n X_i^2 \to E(X^2)
+      \\ \overline{X}_n \stackrel{P}{\to} E(X)
+      \\ (?) \overline{X}_i^2 \to [E(X)]^2
+    \end{align}
+    \\ \noindent \rule{\textwidth}{0.5pt}
+    Thm 9.7, page 451
+
+    If $\hat{\theta}_n \stackrel{P}{\to} \theta$, then
+    $\hat{\phi}_n \stackrel{P}{\to} \phi$. Then
+    \begin{enumerate}[a)]
+    \item $\hat{\theta}_n\hat{\phi}_n \to \theta \phi$
+    \item $ \hat{\theta}_n \pm \hat{\phi}_n \to \theta \pm \phi$
+    \item $\frac{\hat{\theta}_n}{\hat{\phi}_n} \to
+      \frac{\theta}{\phi}$, provided that $\hat{\phi}_n \neq 0$ and
+      $\phi \neq 0$.
+    \item $g(\hat{\theta}_n) \to g(\theta)$ if $g$ is a continuous
+      function.
+    \end{enumerate}
+    This is called the continuous mapping theorem.
+
+    Then (9) follows from $9.2(d)$, the continuous mapping theorem.
+    $$\hat{\theta}_n \stackrel{P}{\to} \theta: P(\left|\hat{\theta}_n
+      - \theta\right| > \varepsilon) \to 0, as h \to \infty, \forall
+    \varepsilon>0$$
+    Step (8): $\overline{X}_n^2 \to [E(X)]^2$
+    \\ Step (9): Using $9.2(b)$
+    $$\frac{1}{n} \sum_{i=1}^n X_i^2 - \overline{X}_n^2 \to
+    \underbrace{E(X^2)-[E(X)]^2}_{Var(X)=\sigma^2}$$
+    So $S_{n,*}^2 \stackrel{P}{\to} \sigma^2$
+
+    Question:
+    $$S_{n,*}^2 = \frac{1}{n} \sum_{i=1}^n \underbrace{(X_i -
+      \overline{X}_n)^2}_{Z_i} = \frac{1}{n} \sum_{i=1}^nZ_i$$
+    Why can't we use Kolmogarov's theorem directly here? They are not
+    independent.
+    \begin{flalign*}
+      Z_i & = (X_i - \overline{X}_n)^2
+      \\ \sum_{i=1}^n (X_i - \overline{X}_n) & = 0
+    \end{flalign*}
+    Consistency means being right-headed, if you have an estimator
+    that is not consistent, throw it out.
+
+    Now suppose that you get the whole population (magically somehow),
+    can you hit the target parameter? This is the minimum requirement,
+    consistency.
+
+    Recall that before our goal was to get the ``best'' estimator, the
+    one that is closest to the target. Sufficiency paves the way to that.
+    \subsection{Sufficiency}
+    Sufficiency was first introduced by Fisher, at first for
+    compression.
+    \paragraph{Likelihood Inference}~
+    \\ \includegraphics[width=.9\textwidth]{i4.pdf}
+
+    For example: $f(x) = \frac{1}{\sqrt{2\pi}
+      \sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$, where $x$ is
+    observable and $\mu$ and $\sigma$ are unobservable.
+
+    Lets say that $\sigma$ is known and $\mu$ is unknown. How do we
+    quantify this information? What will compressing the data do? If
+    we compress, we also want to be able to decompress to get the
+    original data. It's a bit too much to expect to get the exact
+    original data after decompressing, so maybe we can lower our
+    expectations.
+
+    \begin{flalign*}
+      \vec{x} & = (X_1, \ldots, X_n)
+      \\ \vec{y} & = (Y_1, \ldots, Y_n)
+      \intertext{Now suppose $T$ is the compressed value as follows:}
+      T & = T(X_1, \ldots, X_n)
+      \\ T: & \mathbb{R}^n \to \mathbb{R}^m
+      \intertext{We want $m < n$, or else we aren't compressing
+        anything. We want to work with a smaller dimension, the
+        smaller the $m$ the better.}
+    \end{flalign*}
+    We say that $\vec{X} \ \& \ \vec{Y}$ are T-similar if
+    $$P_{\vec{X}|T}(\vec{u} | t_1 \theta) = P_{\vec{Y}|T}(\vec{u}|t_1
+    \theta), \forall \vec{u}$$
+    Given compressed values, we want to come back to something similar
+    (T-similar) if not the same. They are similar, we cannot tell the
+    difference, we come up with something equally likely.
+
+    A realization of $\vec{X}$ and a realization of $\vec{Y}$ are
+    T-similar if
+    \begin{enumerate}[a)]
+    \item $\vec{X} \ \& \ \vec{Y}$ are T-Similar
+    \item $T(\vec{X}) = T(\vec{Y})$
+    \end{enumerate}
 \end{document}
