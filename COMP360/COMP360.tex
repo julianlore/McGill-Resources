@@ -1361,4 +1361,165 @@
         polynomial time.
         \\ \noindent \rule{\textwidth}{0.5pt}
         Max flow problem is a special case of linear programs.
-      \end{document}
+        \section{02/07/18}
+        \subsection{Modeling Problems as Linear Programs}
+        \paragraph{Max flow}
+        ~ \\ \includegraphics[width=.9\textwidth]{i97.pdf}
+        \\Variables:
+        \begin{itemize}
+        \item $f_{sa}$
+        \item $f_{sb}$
+        \item $f_{ab}$
+        \item $f_{ab}$
+        \item $f_{bt}$
+        \end{itemize}
+        Objective: $\max f_{sa}+f_{sb}$\\
+        Constraints: 
+        \begin{itemize}
+        \item $f_{sa} \leq 5$, $f_{sa} \geq 0$
+        \item $f_{sb} \leq 1$, $f_{sb} \geq 0$
+        \item $f_{ab} \leq 1$, $f_{ab} \geq 0$
+        \item $f_{at} \leq 3$, $f_{at} \geq 0$
+        \item $f_{bt} \leq 2$, $f_{bt} \geq 0$
+        \item $f_{sa}-f_{ab}-f_{at} = 0$
+        \item $f_{sb}+f_{ab}-f_{bt} = 0$
+        \end{itemize}
+        \paragraph{Example}
+        Suppose some edges also have lower bounds. 
+        That is an edge $e$ with lower bound $l_e$ requires that the
+        flow on $e$ has to be at least $l_e$. This can be formulated
+        as an LP. E.g.
+        \\ \includegraphics[width=.9\textwidth]{i98.pdf}
+
+        \begin{itemize}
+        \item $\max f_{sa}$
+        \item $f_{sa} \leq 5$, $f_{sa} \geq 2$
+        \item $f_{at} \leq 2$, $f_{at} \geq 1$
+        \item $f_{ab} \leq 1$, $f_{ab} \geq 1$
+        \item $f_{bt} \leq 5$, $f_{bt} \geq 0$
+        \item $f_{sa}-f_{at}-f_{bt} = 0$
+        \item $f_{ab} - f_{bt} = 0$
+        \end{itemize}
+
+        We can add costs to edges. Every edge $e$ has cost $d_e$. That
+        is passing $f_e$ unit of flow through the edge costs $d_e
+        \times f_e$. What is max flow with cost at most
+        $d$, when $d$ is given to us. (think of $d$ like a budget)
+        \\ \includegraphics[width=.9\textwidth]{i97.pdf}
+        $d = 4$\\
+        Costs:
+        \begin{tabular}{l|l}
+          $d_{sa}$& $10$
+          \\ $d_{sb}$ & $1$
+          \\ $d_{ab}$ & $1$
+          \\ $d_{at}$ & $2$
+          \\ $d_{bt}$ & $1$
+        \end{tabular}
+        \\ Vars: $f_{sa}, f_{ab}, f_{at}, f_{bt}, f_{sb}$
+        \\ $\max f_{sa}+f_{sb}$
+        \\ Subject to
+        \begin{itemize}
+        \item $f_{sa} \leq 5$
+        \item \ldots
+        \item $f_{sb} \leq 1$
+        \item $f_{sa} \geq 0$
+        \item \ldots
+        \item $f_{bt} \geq 0$
+        \item $f_{sa}-f_{ab}-f_{at} = 0$
+        \item $f_{sb}+f_{ab}-f_{bt} = 0$
+        \item $\sum_{\text{edge }e}f_e \cdot d_e \leq 4$
+        \end{itemize}
+        \paragraph{Ex} We have a network and highways between cities,
+        given to us as an undirected graph. We are given a positive
+        number $\alpha \geq 0$. We want to store some amount of supply
+        in each city so that the sum of supply in each city and its
+        neighboring cities is at least $\alpha$. What is the minimum
+        total supply that we need to meet this condition?
+        \paragraph{Ex} $\alpha = 6$
+        \\ \includegraphics[width=.9\textwidth]{i99.pdf}
+
+        vars: $x_a, x_b, x_ck x_d, x_e$ corresponding to the supply in
+        cities $a,b,c,d,e$.
+        \\ $\min x_a + x_b + x_c + x_d + x_e$
+        \\ Subject to
+        \begin{align*}
+          x_a + x_b + x_c & \geq 6, x_a \geq 0
+          \\x_b + x_a + x_c + x_d & \geq 6, x_b \geq 0
+          \\x_c + x_a + x_b & \geq 6, x_c \geq 0
+          \\x_d + x_b + x_e & \geq 6, x_d \geq 0
+          \\ x_e + x_d & \geq 6, x_e \geq 0
+        \end{align*}
+        \noindent \rule{\textwidth}{0.5pt}
+        For a general graph $G=(V,E)$ we can write this as:
+        \\ Variables: $\forall v \in V$ we have a variables $x_v$.
+        \\ $\min sum_{v \in V}x_v$
+        \\ s.t.
+        \begin{align*}
+          x_v + \sum_{u:uv\in E} x_u & \geq \alpha, \forall v \in V
+          \\ x_v & \geq 0, \forall v \in V
+        \end{align*}
+        This gives us $2|V|$ constraints.
+        \noindent \rule{\textwidth}{0.5pt}
+        \paragraph{Geometric Interpretation} Consider the following
+        LP.
+
+        \begin{align*}
+          \max x_1+x_2
+          \\ x_1 + 2x_2  & \leq 1
+          \\ 2x_1 + x_2 & \leq 1
+          \\ x_1, x_2 & \geq 0
+        \end{align*}
+        Every potential solution $x_1, x_2$ gives us a point $(x_1,
+        x_2)$ on the plane.`
+        What does the constraint $x_1 + 2x_2 \leq 1$ tell us? What
+        about the other constraints?
+        \\ \includegraphics[width=.9\textwidth]{i100.pdf}
+        The above is the set of points that satisfy all the
+        constraints. This is called the feasible region. It is the set
+        of all points that satisfy all the constraints. (feasible
+        solutions).
+        \paragraph{Remark} Here every constrain with an inequality
+        gives us a half space, which is the set of points that satisfy
+        that constraint. The feasible region is the intersection of them.
+        \paragraph{Ex} Draw the feasible region for the following
+        constraints:
+        \\
+        \begin{tabular}{l l}
+          $x_1 \geq 0$& $x_2 - x_1 \geq -1$
+          \\ $x_2 \geq 0$ & $x_2 - x_1 \leq 1$
+        \end{tabular}
+        \\ \includegraphics[width=.9\textwidth]{i101.pdf}
+        Here the feasible region is unbounded.
+
+        \paragraph{Ex}
+        \begin{tabular}{l l}
+          $x_1 \geq 0$& $x_2 - x_1 \geq 2$
+          \\ $x_2 \geq 0$ & $x_2 - x_1 \leq 1$
+        \end{tabular}
+        \\ \includegraphics[width=.9\textwidth]{i104.pdf}
+        \\\noindent \rule{\textwidth}{0.5pt}
+        Three possible cases for feasible regions:
+        \begin{itemize}
+        \item Bounded
+        \item Unbounded
+        \item Empty
+        \end{itemize}
+        \paragraph{First example} $\max x_1 + x_2$?
+        \begin{align*}
+          \max x_1+x_2
+          \\ x_1 + 2x_2  & \leq 1
+          \\ 2x_1 + x_2 & \leq 1
+          \\ x_1, x_2 & \geq 0
+        \end{align*}
+        Try $x_1 + x_2 = \alpha$.
+        \\
+        \includegraphics[width=.7\textwidth]{i102.pdf}
+        \\ \includegraphics[width=.7\textwidth]{i103.pdf}
+
+        We got a line that intersects with the boundary of the
+        feasible region.
+        
+        Midterm on Wednesday, covers everything up to today, mainly
+        max flow, little bit of linear programming formulation and
+        maybe some geometric interpretation.
+        \end{document}
