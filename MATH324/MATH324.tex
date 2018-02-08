@@ -1682,7 +1682,7 @@
 
     Then (9) follows from $9.2(d)$, the continuous mapping theorem.
     $$\hat{\theta}_n \stackrel{P}{\to} \theta: P(\left|\hat{\theta}_n
-      - \theta\right| > \varepsilon) \to 0, as h \to \infty, \forall
+      - \theta\right| > \varepsilon) \to 0, as \ n \to \infty, \forall
     \varepsilon>0$$
     Step (8): $\overline{X}_n^2 \to [E(X)]^2$
     \\ Step (9): Using $9.2(b)$
@@ -1748,4 +1748,207 @@
     \item $\vec{X} \ \& \ \vec{Y}$ are T-Similar
     \item $T(\vec{X}) = T(\vec{Y})$
     \end{enumerate}
+    \section{02/08/18}
+    \subsection{Sufficiency}
+    We were discussing sufficiency last class. We said how sufficiency
+    is essentially just compression. 
+
+    Say we have a vector: $\vec{X}= (X_1, \ldots, X_n)$. We have
+    observable and unobservable things.
+    \\ \includegraphics[width=.9\textwidth]{i5.pdf}
+
+    We want to use the observable
+    things to find the true values of the observable parameters,
+    i.e. $\theta$, given that we have $f_{\theta} =
+    \frac{1}{\sqrt{2\pi}}e^{-\frac{(x-\theta)^2}{2}}, X \sim N(\theta,1)$
+
+    We want to compress this data and be able to decompress it to get
+    the original data, but since these are random variables we want to
+    get something similar, since getting the exact same thing back is
+    asking for a bit too much. So we defined:
+
+    $\vec{X}, \vec{Y}$ (random variables) are T-similar if
+    $$P_{\vec{X}|T = t}(\vec{u} | T = t) = P_{\vec{Y}|T = t}(\vec{u}|T
+    = t), \forall t$$
+
+    $\vec{x}, \vec{y}$ are realizations of $\vec{X}, \vec{Y}$,
+    $T(\vec{x}) = T(\vec{y})$.
+    \paragraph{Def} A statistic $T_n = T(X_1, \ldots, X_N)$ is called
+    a sufficient statistic for a parameter $\theta$ if
+    \begin{enumerate}[a)]
+    \item $T_n$ can preserve all ``information'' in $\vec{X} = (X_1,
+      \ldots, X_n)$ pertinent to $\theta$.
+    \item For any given value of $T_n$, say $t$, we can generate a
+      $T_n$-similar sample of $x$'s. (this regeneration is decompression)
+    \end{enumerate}
+    Say we have $P(X_1 = x_1, \ldots, X_n = x_n | T_n = t)$ and we
+    want to generate the original values, say $x_1^*, \ldots,
+    x_n^*$. What do I need for this? We need the distribution to not
+    depend on any unknown parameters, say $\theta$. The information
+    from $f_\theta(x)$ has been absorbed enough by $T$ such that we
+    don't need $\theta$ to work with anymore, we can just use $T$
+    instead.
+
+    \paragraph{Ex} $X_i \stackrel{iid}{\sim} Bernoulli(p), i = 1, 2, \ldots, n$
+    \begin{flalign*}
+    P(X_i = 1)& =p, p(X_i = 0) = 1-p
+    \\ p(x) & = p(X=x) = p^{\alpha}(1-p)^{1-p}, x = 0,1
+    \\ T_{n} & = T(X_1, \ldots, X_n) = \sum_{i=1}^n X_i
+    \\ P(\overbrace{X_1 = x_1, \ldots, X_n = x_n}^{A} | \overbrace{T_n = t}^{B})
+    \\ & =
+    \begin{cases}
+      \frac{P(X_1 = x_1, \ldots, x_n = x_n, Tn=t)}{P(T_n = t)} &
+      \text{if }t=\sum_{i=1}^n X_i
+      \\ 0 & \text{if }t \neq \sum_{i=1}^nX_i
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \frac{P(X_i = x_1, \ldots, X_n = x_n)}{P(T_n=t)} & \text{if }t = \sum_{i=1}^nX_i
+      \\ 0 & \text{o.w}
+    \end{cases}
+    \\T_n & = \sum_{i=1}^n X_i \sim Bin(n,p)
+    \\ P(T_n = t) & = \binom{n}{t} p^t(1-p)^{n-t}, t=0,\ldots,n
+    \\ & =
+    \begin{cases}
+      \frac{\prod_{i=1}^n P(X_i = x)}{\binom{n}{t}p^t(1-p)^{p-t}} &
+      \text{if }t = \sum_{i=1}^n X_i
+      \\ 0 & \text{o.w.}
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \frac{\prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}}{\binom{n}{t}p^t(1-p)^{p-t}} &
+      \text{if }t = \sum_{i=1}^n X_i
+      \\ 0 & \text{o.w.}
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \frac{p^{\sum_{i=1}^n x_i}(1-p)^{n- \sum_{i=1}^n x_i}}{\binom{n}{t}p^t(1-p)^{p-t}} &
+      \text{if }t = \sum_{i=1}^n X_i
+      \\ 0 & \text{o.w.}
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \frac{1}{\binom{n}{t}} & \text{if }t = \sum_{i=1}^n x_i
+      \\ 0 & \text{o.w}
+    \end{cases}
+  \end{flalign*}
+  The parameter $p$ that was unknown has been eliminated and thus we
+  see that $t$ is sufficient.
+
+  $\frak{A}_t = \{(X_1, \ldots, X_n) : \sum_{i=1}^nx_i = t\}$, now
+  this contains $n$-tuples that are $T$-similar and sum up to the same
+  value as $t$. Then we can choose one of these at random to decide
+  which to use.
+  \paragraph{Ex} $X_i \stackrel{iid}{\sim} Po(\lambda), i=1,\ldots,b$,
+  $P(X=x) = \frac{e^{-\lambda}\lambda^x}{x!}$
+  \begin{flalign*}
+    T_n = & \sum_{i=1}^n X_i \sim Po(n \lambda)
+    \\ P(X_1 = x_1, \ldots, X_n = x_n | T_n = t) & =
+    \begin{cases}
+      \frac{P(X_1 = x_1, \ldots, X_n = x_n)}{P(T_n = t)} & \text{if }t = \sum_{i=1}^n X_i
+      \\ 0 & \text{o.w}
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \frac{\prod_{i=1}^n
+        e^{-\lambda}\lambda^{x_y}/(x_i!)}{e^{-n\lambda}(n\lambda)^t/t!}
+      & \text{if }t = \sum_{i=1}^n X_i
+      \\ 0 & \text{o.w}
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \frac{e^{-n\lambda} \lambda^{\sum_{i=1}^n x_i}/(\prod_{i=1}^n
+        x_i!)}{e^{-n\lambda}n^t \lambda^t/t!} & \text{if }t = \sum_{i=1}^n x_i
+      \\ 0 & \text{o.w}
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \frac{t!}{\prod_{i=1}^n x_i!} \left(\frac{1}{n}\right)^t &
+      \text{if }t = \sum_{i=1}^n X_i
+      \\ 0 & \text{o.w}
+    \end{cases}
+    \\ & =
+    \begin{cases}
+      \binom{t}{x_1,\ldots,x_n} \prod_{i=1}^n
+      \left(\frac{1}{n}\right)^{x_i} & \text{if }t = \sum_{i=1}^n X_i
+      \\ 0 & \text{o.w}
+    \end{cases}
+  \end{flalign*}
+  As you can see, there is no $\lambda$ anymore in here. So if we want
+  to mimic the population we can use this and generate a sample via a
+  multinomial distribution, so this is once again a sufficient statistic.
+  \noindent
+  \\\rule{\textwidth}{0.5pt}
+  Note that this is the multinomial distribution! Recall:
+  \begin{flalign*}
+    (X_1, \ldots, X_k) & \sim \text{Multinomial}(n,p_1,\ldots,p_k)
+    \\ \text{if }P(X_1 = x_1, \ldots, X_k = x_k) & = \binom{n}{x_1, \ldots, x_k} \prod_{i=1}^k p_i^{x_i}
+  \end{flalign*}
+  We have $\sum_{i=1}^n X_i = n$ $\sum_{k=1}^np_i = 1$
+  \begin{flalign*}
+    \binom{n}{x_1, \ldots, x_k} & = \frac{n!}{x_1!x_2!\ldots x_k!}
+    \\ \binom{n}{x, n-x} & = \binom{n}{\lambda} = \frac{n!}{x! (n-x)!}
+  \end{flalign*}
+  \noindent \rule{\textwidth}{0.5pt}
+  \paragraph{Def} 9.4, p460, \textbf{Likelihood} suppose $y_1, \ldots,
+  y_n$ are realizations of $Y_1, \ldots, Y_n$ whose distribution
+  depends on an unknown parameter $\theta$. Thus the likelihood of
+  $y_1, \ldots, y_n$ is defined to be
+  $$\frak{L}(\theta : y_{11}, \ldots, y_n) = P_{\theta}(Y_1 = y_1,
+  \ldots, Y_n =y_n)$$
+  \paragraph{Ex} $X_i \stackrel{iid}{\sim} Bernoulli(p)$
+  \begin{flalign*}
+    \frak{L}(p, x_1, \ldots, x_n) & = P(X_1 = x_1, \ldots, X_n = x_n)
+    \\ \text{iid} & = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i} = p^{\sum_{i=1}^n x_i}(1-p)^{n - \sum_{i=1}^n x_i}
+  \end{flalign*}
+  \paragraph{Ex} $X_i \stackrel{iid}{\sim}N(\mu, \sigma^2)$
+  \begin{flalign*}
+    \frak{L}(\mu, \sigma^2, x_1, \ldots, x_n) & = f_{\mu, \sigma^2}(x_1, \ldots, x_n) = \prod_{i=1}^n f_{u,\sigma^2}(x_i)
+    \\ & = \prod_{i=1}^n \frac{1}{\sqrt{2 \pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}} = \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n e^{-\frac{t}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2}
+  \end{flalign*}
+  \paragraph{Ex.} $X_i \stackrel{iid}{\sim}Po(\lambda), i=1,\ldots,n$
+  \begin{flalign*}
+    \frak{L}(\lambda, x_1, \ldots, x_n) & = P_\lambda (X_i = x_i, \ldots, X_n = x_n)
+    \\ \text{iid} & = \prod_{i=1}^n \frac{e^{-\lambda}\lambda^{x_i}}{x_i!}
+    \\ & = \frac{e^{-n \lambda}\lambda^{\sum_{i=1}^n x_i}}{\prod_{i=1}^n x_i!}
+  \end{flalign*}
+  \subsection{Fisher-Neyman Theorem}
+  Thm 9.4, p 461
+
+  \textbf{Factorization Theorem}
+  \paragraph{Theorem} A statistic $T = T(Y_1, \ldots, Y_n)$ is
+  sufficient for the parameters of the distribution of $Y_1, \ldots,
+  Y_n$ \underline{if and only if}
+  $$\frak{L}(\theta, y_1, \ldots, y_n) = g(t, \theta)h(y_1,
+  \ldots,y_n)$$ for any realization $(y_1, \ldots, y_n)$ \& $t$, where
+  $t = T(y_1, \ldots, y_n)$
+  \paragraph{Ex.} $X_i \stackrel{iid}{\sim} Bernoulli(p)$
+  $$\frak{L}(p, x_1, \ldots, x_n) = p^{\sum_{i=1}^nx_i
+    (1-p)^{n-\sum_{i=1}^nx_i}} =
+  \left(\frac{p}{1-p}\right)^{\sum_{i=1}^nx_i} = (1-p)^n$$
+  Where $p^{\sum_{i=1}^nx_i (1-p)^{n-\sum_{i=1}^nx_i}}$ can be
+  $g(t,p)$, where $t = \sum_{i=1}^nx_i$, $h(x_1, \ldots, x_n) \equiv
+  1$.
+  \paragraph{Ex.} $X_i \stackrel{iid}{\sim} Po(\lambda)$
+  $$\frak{L}(\lambda, x_1, \ldots, x_n) =
+  \frac{e^{-n\lambda}\lambda^{\sum_{i=1}^nx_i}}{\prod_{i=1}^n x_i!} =
+  \underbrace{ \left(e^{-n\lambda}\lambda^{\sum_{i=1}^nx_i}\right)
+  }_{g(t,\lambda)} \underbrace{ \left(\frac{1}{\prod_{i=1}^{n}
+        x_i!}\right)}_{h(x_1,\ldots,x_n)}$$ where again
+  $t=\sum_{i=1}^nx_i$. Note that the kernel is important, the part we
+  cannot factorize unknown parameters from observations. $h$ is just a
+  function of the random observations.
+  \paragraph{Ex.} $X_i \stackrel{iid}{\sim}N(\mu,\sigma^2)$
+  $$\frak{L}(\mu,\sigma^2, x_1, \ldots, x_n) =
+  \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n
+  e^{-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-p)^2}$$
+  \begin{flalign*}
+    \sum_{i=1}^n (x_i - \mu)^2 & = \sum_{i=1}^nx_i^2 - 2\mu \sum_{i=1}^nx_i + n \mu^2
+    \\\implies \frak{L}(\mu, \sigma^2, x_1, \ldots, x_n) & =
+    \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n
+    \underbrace{e^{-\frac{\sum_{i=1}^nx_i^2}{2\sigma^2}}e^{\frac{2 \mu
+          \sum_{i=1}^nx_i}{2\sigma^2}}}_{\text{kernel}}\underbrace{e^{-\frac{n\mu^2}{2\sigma^2}}}_{\text{
+        just a function of params}}
+    \\ T & = \left(\sum_{i=1}^n x_i, \sum_{i=1}^n x_i^2\right)
+  \end{flalign*}
 \end{document}
