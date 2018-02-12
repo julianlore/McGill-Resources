@@ -208,7 +208,7 @@
         \\ So we must change or else this algorithm won't work. We
         don't want to go back and change the first step, even though
         we are stuck. There is a way that we can change things. Say we
-        try to add on more unit of flow:
+        try to add one more unit of flow:
         \\ \includegraphics[width=.3\textwidth]{i8.pdf}
         \\ Essentially, the flow we added ``cancels'' the edge in the
         middle and makes it go back. Formally:
@@ -327,6 +327,7 @@
         Unfortunately not that great if $K$ is a large number. We'll
         try to improve this a little bit later.
         \rule{\textwidth}{0.5pt}
+        \subsection{Cuts}
         \paragraph{Def} A cut ($s-t$-cut) in a flow network is a
         partition $(A,B)$ of the vertices such that $s \in A, t\in B$.
         \paragraph{Def} Capacity of this cut is the sum of the
@@ -369,14 +370,14 @@
         intermediate nodes are adding or absorbing flow.
         \\ \rule{\textwidth}{0.5pt}
         \paragraph{Claim} For any $s-t$-cut $(A,B)$, 
-        $$val(f) = f^{out}(A) - f^{in}A = \sum_{\substack{uv \in E\\ u
-            \in A \\ v \in B}} - \sum_{\substack{uv \in E \\ u \in B
+        $$val(f) = f^{out}(A) - f^{in}(A) = \sum_{\substack{uv \in E\\ u
+            \in A \\ v \in B}}f(uv) - \sum_{\substack{uv \in E \\ u \in B
             \\ v \in A}} f(uv)$$
         In the example above, $f^{out}(A) = 1+1+0, f^{in}(A)=0$.
         \\ \includegraphics[width=.7\textwidth]{i25.pdf}
-        $f^{out}(A)=1+2, f^{in}(A)=1$
         \begin{flalign*}
-          val(f)&=\sum_{su\in E}f(su)=f^{out}(s) &
+          f^{out}(A)&=1+2, f^{in}(A)=1
+          \\ val(f)&=\sum_{su\in E}f(su)=f^{out}(s) &
           \\ val(f) & = \sum_{u \in A}f^{out}(u)-f^{in}(u)
         \end{flalign*}
         $f^{out}-f^{in}$ is always $0$, unless $u$ is $s$ or $t$, but
@@ -455,7 +456,7 @@
         if $uv$ is an edge in the original network with $u \in A^*, v
         \in B^*$
         \\ \includegraphics[width=0.7\textwidth]{i32.pdf}
-        $f(uv) = C_{uv}$, or else $uv$ edge would be in $G_f$.
+        $f(uv) = C_{uv}$, or else the edge $uv$ would be in $G_f$.
         \\ \includegraphics[width=0.7\textwidth]{i33.pdf}
         $f(uv) = 0$, otherwise $vu$ would be in $G_f$.
         Thus:
@@ -471,10 +472,10 @@
         \begin{flalign*}
           max\hbox{-}flow \leq cap(A^*,B^*) = val(f) \implies val(f) = max\hbox{-}flow
         \end{flalign*}
-        \rule{\textwidth}{0.5pt}
-        We showed that Ford-Fulkerson finds max flow. That is, when it
-        terminates, $val(f) = max\hbox{-}flow$
-        \\ \rule{\textwidth}{0.5pt}
+        % \rule{\textwidth}{0.5pt}
+        % We showed that Ford-Fulkerson finds max flow. That is, when it
+        % terminates, $val(f) = max\hbox{-}flow$
+        % \\ \rule{\textwidth}{0.5pt}
         \paragraph{Problem} Given a flow network how can we find a
         min\hbox{-}cut? Run Ford-Fulkerson and output $(A^*, B^*)$.
         \begin{flalign*}
@@ -657,8 +658,8 @@
         \paragraph{Recall}
         \begin{itemize}
         \item Ford Fulkerson finds max\hbox{-}flow $O(m^2K)$.
-        \item \textbf{Scaling Ford Fulkerson} finds max\hbox{-}flow $O(m^2 \log k)$,
-          $k=$largest capacity.
+        \item \textbf{Scaling Ford Fulkerson} finds max\hbox{-}flow $O(m^2 \log K)$,
+          $K=$largest capacity.
         \item $Max\hbox{-}flow=Min\hbox{-}cut$
         \item There is a $max\hbox{-}flow$ that assigns integer flows
           to all edges.
@@ -778,7 +779,7 @@
         vertex cover.
 
         \paragraph{Remark} Note that if a graph has a matching of size
-        $k$, then ever vertex cover needs to pick at least one vertex
+        $k$, then every vertex cover needs to pick at least one vertex
         from each of these $k$ edges and thus is of size $\geq k$.
         % Why can't the min vertex cover be strictly smaller? Well you
         % need at least as many vertices as the matching, or else you'll
@@ -800,7 +801,7 @@
         from $A_1$ to $B_2$. How can we use this to make a minimum
         vertex cover?
 
-        Thus $B_1 \cup A_2$ is a vertex cover in $G$.
+        $B_1 \cup A_2$ is a vertex cover in $G$.
         \\ \includegraphics[width=.9\textwidth]{i60.pdf}
 
         The only edges that could remain are from $A_1$ to $B_2$, but
@@ -947,7 +948,7 @@
         \\ \includegraphics[width=.9\textwidth]{i80.pdf}
         
         This does not change the value of flow. So we still have a
-        $max\hbox{flow}$. Using this flow will avoid using shared
+        $max\hbox{-}flow$. Using this flow will avoid using shared
         edges in the undirected graph.
 
         We will be doing a lot more reduction like this, going from a
@@ -998,7 +999,7 @@
 
         $$\frac{69+70+69+40+5}{4} < 70$$
         Nevertheless $A$ is still eliminated! However focusing only on
-        $B,C,D$ the argument still work:
+        $B,C,D$ the argument still works:
         $$\frac{70 +  69 + 69 + 3}{3} > 70$$
         Is this always the case? Can I always find teams such that the
         average of their scores after factoring winning is greater
@@ -1007,7 +1008,7 @@
         Let $M$ be the total points $A$ will have if it wins all its
         remaining matches. If $A$ is eliminated then is it true that
         we can find a set $T$ of teams such that
-        $$\dfrac{\left(sum_{x \in T}P_x\right) + k}{|T|}>M?$$
+        $$\dfrac{\left(\sum_{x \in T}P_x\right) + k}{|T|}>M?$$
         Where $k$ is the number of remaining matches between teams in
         $T$ and $P_x$ is the points of $x$.
 
@@ -1074,7 +1075,7 @@
             \text{our team is eliminated}$.
           \end{itemize}
           \begin{align*}
-            Max\hbox{-}flow & = Cap(A,B) = M \times |T| - sum_{x \in T} + K
+            Max\hbox{-}flow & = Cap(A,B) = M \times |T| - \sum_{x \in T} + K
             \\ & \iff M \times |T| - \sum_{x \in T}P_x+K < \# \text{
                  of edges}
             \\ \iff & M \times |T| < \# \text{ edges in $T$}+\sum_{x
@@ -1200,7 +1201,7 @@
         \end{itemize}
         \paragraph{Example}
         \begin{itemize}
-        \item variables $x_1 + x_2$
+        \item variables $x_1,x_2$
         \item $\min x_1 + x_2$
         \item s.t.
           \begin{align*}
@@ -1460,7 +1461,7 @@
         \end{align*}
         This gives us $2|V|$ constraints.
         \noindent \rule{\textwidth}{0.5pt}
-        \paragraph{Geometric Interpretation} Consider the following
+        \subsection{Geometric Interpretation of LP's} Consider the following
         LP.
 
         \begin{align*}
@@ -1522,4 +1523,242 @@
         Midterm on Wednesday, covers everything up to today, mainly
         max flow, little bit of linear programming formulation and
         maybe some geometric interpretation.
-        \end{document}
+        \section{02/12/18}
+        \paragraph{Recall} Geometric Interpretation of LP's.
+        \begin{align*}
+          \max\ & x_1 + x_2
+          \\ & x_1 + 2x_2 \leq 1
+          \\ & 2x_1 + x_2 \leq 1
+          \\ & x_1, x_2 \geq 0
+        \end{align*}
+        \includegraphics[width=.9\textwidth]{i105.pdf}
+
+        Each constraint gives us a half plane, a line such that the
+        points that satisfy the inequality must be above or below the
+        line. We then get a feasible region, i.e. the area where all
+        points satisfy the constraints. We then want to maximize or
+        minimize the variables.
+        $$x_1 + x_2 = \alpha ?$$
+        So we are interested in finding a point that is in the
+        feasible region that gives us the largest value for $x_1 + x_2
+        = \alpha$
+        \\\includegraphics[width=.9\textwidth]{i106.pdf}
+
+        Feasible region: The set of all solutions that satisfy all the
+        constraints.
+
+        It can be:
+        \begin{enumerate}
+        \item Empty.
+        \item Unbounded.
+        \item It is a bounded region inside a convex polygon.
+        \end{enumerate}
+        Convex: The line segment between any two points in the region
+        falls into the region.
+        \\ \includegraphics[width=.9\textwidth]{i107.pdf}
+
+        Let's try and solve the same LP in a more systematic way.
+        \begin{align}
+          \max\ & x_1 + x_2 \nonumber
+          \\ & x_1 + 2x_2 \leq 1
+          \\ & 2x_1 + x_2 \leq 1
+          \\ & x_1 \geq 0
+          \\ & x_2 \geq 0
+        \end{align}
+        \includegraphics[width=.9\textwidth]{i108.pdf}
+        
+        The line $x_1 + x_2 = \frac{1}{5}$ intersects the feasible
+        region, but we can still move the line up. Every two
+        inequalities gives us a vertex of the polygon when we equate
+        them.
+
+        So we start with two inequalities and then replace one of them
+        to get to another point to see if we can get better. With a
+        convex polygon, we can just keep getting closer to the optimal
+        answer, not like with non convex polygons, where we might go
+        up and then down and have a local optimum. From $2,1$, in
+        either direction we go we will decrease, so we know that we
+        are at the maximum because the polygon is convex. This is
+        essentially the idea behind the simplex algorithm.
+        
+        \paragraph{Def} A linear program is in standard form if it is
+        in one of the following forms
+        \begin{align*}
+          \max \ & c_1x_1 + \ldots + c_n x_n
+          \\ \text{s.t.} \ & a_{11}x_1 + \ldots + a_{1n}x_n \leq b_1
+          \\ & a_{21}x_1 + \ldots + a_{2n}x_n \leq b_2
+          \\ & \ldots
+          \\ & a_{m1}x_1 + \ldots + a_{mn}x_n \leq b_m
+          \\ & x_1, \ldots, x_n \geq 0
+        \end{align*}
+        \noindent \rule{\textwidth}{0.5pt}
+        \begin{align*}
+          \min \ & c_1x_1 + \ldots + c_n x_n
+          \\ \text{s.t.} \ & a_{11}x_1 + \ldots + a_{1n}x_n \geq b_1
+          \\ & a_{21}x_1 + \ldots + a_{2n}x_n \geq b_2
+          \\ & \ldots
+          \\ & a_{m1}x_1 + \ldots + a_{mn}x_n \geq b_m
+          \\ & x_1, \ldots, x_n \geq 0
+        \end{align*}
+        \paragraph{Ex}
+        \begin{align*}
+          \max\ & x_1 + x_2
+          \\ & x_1 + 2x_2 \leq 1
+          \\ & 2x_1 + x_2 \leq 1
+          \\ & x_1, x_2 \geq 0
+        \end{align*}
+        is in standard form.
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        Can we convert every linear program to standard form?
+        \begin{align*}
+          \max \ x_1 + x_2 + 2x_3 &
+          \\ x_1 + 6x_2 + x_3 & \leq 10 \ &\checkmark
+          \\ x_1 - x_2 + x_3 & \geq 1 \ &\times
+          \\ x_1 + 2x_2 - 3_x & = -2 \ &\times
+          \\ x_1 & \geq 0 \ &\checkmark
+          \\ x_3 & \leq 0 \ &\times
+        \end{align*}
+        We are also missing $x_2 \geq 0$.
+
+        How to fix?
+        \begin{align*}
+          \max \ x_1 + x_2 + 2x_3 & 
+          \\ x_1 + 6x_2 + x_3 & \leq 10
+          \\ -x_1 + x_2 - x_3 & \leq -1 \iff x_1 - x_2 + x_3 \geq 1 \times (-1)
+          \\
+          \begin{cases}
+            x_1 + 2x_2 - x_3 \leq -2
+            \\ -x_1 - 2x_2 + x_3 \leq 2
+          \end{cases} & \iff
+          x_1 + 2x_2 - 3_x = -2 
+          \\ x_1 & \geq 0  
+          \\ x_3 & \leq 0  
+        \end{align*}
+        Use a new variable, $x_3' = -x_3$
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        \begin{align*}
+          \max \ x_1 + x_2 - 2x_3' & 
+          \\ x_1 + 6x_2 - x_3' & \leq 10
+          \\ -x_1 + x_2 + x_3' & \leq -1
+          \\ x_1 + 2x_2 + x_3' & \leq -2
+          \\ -x_1 - 2x_2 - x_3' & \leq 2
+          \\ x_1 & \geq 0  
+          \\ x_3' & \geq 0  
+        \end{align*}
+        Finally we introduce two new variables $x_2', x_2''$ and add
+        the constraints $x_2' \geq 0, x_2'' \geq 0$ and replace all
+        occurrences of $x_2$ with $(x_2'-x_2'')$.
+        \begin{align*}
+          \max \ x_1 + x_2'-x_2'' - 2x_3' & 
+          \\ x_1 + 6x_2' - 6x_2'' - x_3' & \leq 10
+          \\ -x_1 + 6x_2'-6x_2'' + x_3' & \leq -1
+          \\ x_1 + 2x_2' - 2x_2'' + x_3' & \leq -2
+          \\ -x_1 - 2x_2' + 2x_2'' - x_3' & \leq 2
+          \\ x_1, x_3, x_2', x_2'' & \geq 0  
+        \end{align*}
+        We like the standard form because we can write them in a very efficient,
+        linear algebra way.
+        \begin{align*}
+          c & =
+              \begin{bmatrix}
+                c_1
+                \\ \ldots
+                \\ c_n
+              \end{bmatrix}
+          \\ A & =
+                 \begin{bmatrix}
+                   a_{11} & \ldots & a_{1n}
+                   \\ \ldots
+                   \\ a_{m1} & \ldots & a_{mn}
+                 \end{bmatrix}
+          \\ b & =
+                 \begin{bmatrix}
+                   b_1
+                   \\ \ldots
+                   \\ b_m
+                 \end{bmatrix}
+          \\ x & =
+                 \begin{bmatrix}
+                   x_1
+                   \\ \ldots
+                   \\ x_m
+                 \end{bmatrix}
+        \end{align*}
+        So we want:
+        \begin{align*}
+          \max \ c^Tx & \text{(or $\langle c,x \rangle$)}
+          \\ A\vec{x} &\leq \vec{b}
+          \\ \vec{x} &\geq 0
+        \end{align*}
+        \\ \noindent \rule{\textwidth}{0.5pt}
+        \begin{align*}
+          \min \ c^Tx & 
+          \\ A\vec{x} &\geq \vec{b}
+          \\ \vec{x} &\geq 0
+        \end{align*}
+        \subsection{Duality}
+        (Very important concept)
+        \\ Consider the following LP (in standard form).
+        $$\begin{matrix}
+          \max \ &x_1 + &2x_2 + &x_3 + &x_4 &
+          \\ &x_1 + &2x_2 + &x_3 && \leq 2
+          \\ &&x_2 + &&x_4 &\leq 1
+          \\ &x_1 &+&2x_3 && \leq 1
+          \\ &x_1,&x_2,&x_3, &x_4 &\geq 0
+        \end{matrix}$$
+        Suppose the LP solver finds a solution $x_1 = 1, x_2 =
+        \frac{1}{2}, x_3 = 0, x_4 = \frac{1}{2} \implies x_1 +2x_2 +
+        x_3 + x_4 = \frac{5}{2}$. How can we convince
+        ourselves that this is optimal (without solving the LP by
+        ourselves).
+
+        Can we use these constraints to arrive at $x_1 + 2x_2 + x_3 +
+        x_4 \leq \frac{5}{2}$? We can multiply the constraints by
+        positive numbers and add them up.
+
+        We can get
+          $$(y_1 + y_3)x_1 + (2y_1 + y_2)x_2 + (y_1 + 2y_3)x_3 + y_2
+          x_4 \leq 2y_1 + y_2 + y_3$$
+          We want
+          $$x_1 + 2x_2 + x_3 + x_4 \underline{\leq} (y_1 + y_3)x_1 + (2y_1 +
+          y_2)x_2 + (y_1 + 2y_3)x_3 + y_2x_4 \leq 2y_1 + y_2 + y_3$$
+
+          What do we need to know about $y_1, y_2, y_3$ to guarantee
+          that the first inequality?
+
+          We have already assumed that $y_1,y_2,y_3 \geq 0$ (or else they
+          might have flipped the signs of the inequalities that we
+          multiplied by).
+
+          We also need
+          \begin{align*}
+            y_1 + y_3 & \geq 1
+            \\ 2y_1 + y_2 & \geq 2
+            \\ y_1 + 2y_3 & \geq 1
+            \\ y_2 & \geq 1
+          \end{align*}
+          If we satisfy all these then we will have the upper bound
+          $2y_1+y_2 + y_3$. So to get the best upper bound we need to
+          solve
+          \begin{align*}
+            \min \ 2y_1 + y_2 + y_3 &
+            \\ y_1 + y_3 & \geq 1
+            \\ 2y_1 + y_2 & \geq 2
+            \\ y_1 + 2y_3 & \geq 1
+            \\ y_2 & \geq 1
+            \\ y_1, y_2, y_3 & \geq 0
+          \end{align*}
+          The solution is:
+          \begin{align*}
+            y_1 & = \frac{1}{2}
+            \\ y_2 & = 1
+            \\ y_3 & = \frac{1}{2}
+          \end{align*}
+          $\implies 2y_1 + y_2 + y_3 = \frac{5}{2}$
+
+          What is this? A linear program in standard form. So we tried
+          to prove that a linear program in standard form could not be
+          larger than something and we ended up with another linear
+          program in standard form, so these two things are the
+          \textbf{dual} of each other.
+      \end{document}
