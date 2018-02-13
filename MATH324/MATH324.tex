@@ -1951,4 +1951,166 @@
         just a function of params}}
     \\ T & = \left(\sum_{i=1}^n x_i, \sum_{i=1}^n x_i^2\right)
   \end{flalign*}
+  \section{02/13/18}
+  Why did we introduce sufficiency? How do we use this?
+  \subsection{The Rao-Blackwell Theorem}
+  (Thm 9.5, p464)
+  \\ Let $\hat{\theta}$ be an unbiased estimator of an unknown
+  parameter $\theta$ such that $Var(\hat{\theta}) < \infty$ (i.e. it
+  exists). If $T$ is a sufficient statistic for $\theta$, then
+  \begin{enumerate}[a)]
+  \item $\hat{\theta}^* = E(\hat{\theta} | T)$ is also an unbiased
+    estimator for $\theta$.
+  \item $var(\hat{\theta}^*)\leq Var(\hat{\theta})$.
+  \end{enumerate}
+  Why is this so remarkable? Remember at the beginning of chapter 8 we
+  wanted to come up with an estimator for $\theta$ and we measured the
+  goodness via bias and MSE. With an unbiased estimator, bias
+  disappears so MSE is just variance and the estimator with smaller
+  variance is closer to the target. So if we can find the unbiased estimator
+  with the smallest variance, then we have the best among the class of
+  estimators. This theorem is important because it says if we
+  condition on a sufficient statistic, then we can find another
+  estimator that is closer to the target.
+  \paragraph{Proof} (Simply an application of Thm 5.14 (p286) and Thm
+  5.15 (p287))
+  \\ Thm 5.14:
+  \begin{equation}
+    \label{eq:5.14}
+    E(X) = E\{E(X|Y)\}
+  \end{equation}
+  Note that:
+  \begin{align*}
+    E(X|Y=y) & = \int_x x f_{X|Y} (x|y) \ dx
+  \end{align*}
+  gives you a function in terms of $y$, so we can take the expectation
+  of this as well.
+  \begin{align*}
+    E\{E(X|Y)\} & = \int_y \underbrace{\int_x x f_{X|Y}(x|y) \ dx}_{E(X|Y=y)}f(y) \ dy
+    \\ & = \int_x \int_y x \underbrace{f_{X|Y} (x|y) f(y)}_{f_{X,Y}(x,y)} \ dy \ dx
+    \\ & = \int_x \int_y x f_{X,Y}(x,y) \ dy \ dx
+    \\ & = \int_x x \underbrace{(\int_y f_{X,Y}(x,y) \ dy)}_{f_X(x)} \ dx
+    \\ & = \int_x x f_X(x) \ dx = E(X)
+  \end{align*}
+  
+  Do you know why conditioning is important in the first place? First
+  of all, if we have a big area and we're wondering about the truth in
+  the big area, it's much harder to find what we want than if we're
+  looking at smaller areas and then we can glue them all together,
+  using the law of total probability.
+
+  So, using \ref{eq:5.14} for part a):
+  \begin{enumerate}[a)]
+  \item 
+  \begin{align*}
+    E(\hat{\theta}^*) & = \underbrace{E\{E(\hat{\theta} | T)\}}_{E(\hat{\theta})} = E(\hat{\theta})
+  \end{align*}
+  $\hat{\theta}$ is unbiased $\implies$
+  \begin{align*}
+    E(\hat{\theta}) & = \theta \text{ for any }\theta
+    \\ E(\hat{\theta}^*) & = \theta \text{ for any }\theta
+  \end{align*}
+\item Thm 5.15
+  \begin{align}
+    \label{eq:5.15}
+    V(X) & = V\{E(X|Y)\} + E\{V(X|Y)\}
+    \\ \hat{\theta} & = E(\hat{\theta} | T) \nonumber
+    \\ V(\hat{\theta}^*) & = V\{E(\hat{\theta}|T)\} \nonumber
+                           \intertext{Using \ref{eq:5.15}} \nonumber
+                    & = V(\hat{\theta}) - \underbrace{E \underbrace{\{V(\hat{\theta}|T)\}}_{\geq 0}}_{\geq 0} \nonumber
+    \\ \implies V(\hat{\theta}^*) & = V(\hat{\theta}) \nonumber
+    \\ E(\hat{\theta}_n|T) & = \int \hat{\theta} f_{\hat{\theta}|T} \nonumber
+  \end{align}
+\end{enumerate}
+\noindent \rule{\textwidth}{0.5pt}
+\paragraph{Completeness (Lehmann \& Schefe)}
+
+Suppose $X$ is a r.v. with pdf $f_\theta$. The r.v. $X$ is called
+complete if
+\begin{align*}
+  E_\theta [g(x)] & = \int_x g(x) f_\theta (x) \ dx = 0, \forall \theta
+  \\ \implies g(x) & \equiv 0 \ \forall x
+  \\ Ax & = 0
+\end{align*}
+\paragraph{To find MVUE (minimum variance and unbiased estimator):}
+\begin{enumerate}
+\item Find an unbiased estimator of your estimand.
+\item Find a sufficient statistic using Fisher-Newmann Theorem.
+\item Find conditional expectation, $\hat{\theta}^* = E(\hat{\theta}|T)$
+\end{enumerate}
+$\hat{\theta}^*$ is the MVUE.
+\paragraph{Ex 1} $X_i \stackrel{iid}{\sim}Bernoulli(p), i=1,\ldots,n$
+\\ Example 9.6, p466
+\begin{align*}
+  \frak{L}(p ; x_1, \ldots, x_n) & = P_p(X_1 = x_1, \ldots, X_n = x_n)
+  \\ & = \prod_{i=1}^{n} p^{x_i}(1-p)^{1-x_i} = p^{\sum_{i=1}^n x_i}(1-p)^{n - \sum_{i=1}^n x_i}
+  \\ T & = \sum_{i=1}^n X_i \text{ is sufficient}
+  \\ g(t ; p) & = p^{\sum_{i=1}^n x_i}(1-p)^{n - \sum_{i=1}^n x_i}
+  \\ h(x_1,\ldots,x_n) & = 1
+  \\ E(T) & = E \left(\sum_{i=1}^n X_i\right) = \sum_{i=1}^n \underbrace{E(X_i)}_{p} = np
+  \\ E \left(\frac{T}{n}\right) & = p
+\end{align*}
+So $\frac{T}{n}$ is the MVUE.
+\paragraph{Ex 2} $X_i \stackrel{iid}{\sim}N(\mu, \sigma^2),
+i=1,2,\ldots,n$
+\\ Ex. 9.8, p467
+\begin{align*}
+  \frak{L} (\mu, \sigma^2 ; x_1, \ldots, x_n) & = f_{\mu,\sigma^2}(x_1, \ldots, x_n) = \prod_{i=1}^{n} f_{\mu, \sigma^2} f(x_i) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi }\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}
+  \\ & = \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n exp\{-\frac{1}{2\sigma^2} \left[\sum_{i=1}^n x_i^2 - 2\mu \sum_{i=1}^nx_i + n \mu^2\right]\}
+  \\ T & = \left(\sum_{i=1}^n X_i, \sum_{i=1}^n X_i^2 \right)
+  \\ E \left(X_i\right) & = \sum_{i=1}^n E(X_i) = n \mu
+  \\ \frac{\sum_{i=1}^n X_i}{n} & = \overline{X}_n \text{ is the MVUE
+                                  of }\mu
+  \\ S^2 & = \frac{1}{n-1} \left[\sum_{i=1}^n X_i^2 - n \overline{X}_n\right]
+  \\ E(S^2) & = \sigma^2
+              \intertext{$S^2$ is a function of $T=(\sum_{i=1}^n X_i,
+              \sum_{i=1}^n X_i^2)$}
+              \intertext{Then $S^2$ is the MVUE of $\sigma^2$}
+\end{align*}
+\paragraph{Ex 3.} $Y_i \stackrel{iid}{\sim} Weibull (m=2, \theta),
+i=1,\ldots,n$
+\\ Ex. 9.7 p466-7
+\begin{align*}
+  f_\theta(y) & =
+                \begin{cases}
+                  \left(\frac{2y}{\theta}e^{-\frac{y^2}{\theta}}\right) & y>0
+                  \\ 0 & \text{otherwise}
+                \end{cases}
+                         \intertext{MVUE of $\theta$?}
+                         \frak{L}(\theta ; y_1, \ldots, y_n) & = \prod_{i=1}^{n} \left(\frac{2y_i}{\theta}\right)e^{-\frac{y_i^2}{\theta}} = \left(\frac{2}{\theta}\right)^n \prod_{i=1}^{n} y_i e^{-\frac{1}{\theta}\sum_{i=1}^n y_i^2}
+  \\ g(t ; \theta) & = \left(\frac{z}{\theta}\right)^n e^{\frac{1}{\theta}t}
+  \\ h(y_1, \ldots, y_n) & = \prod_{i=1}^{n} Y_i
+  \\ t & = \sum_{i=1}^n y_i^2, \underbrace{T = \sum_{i=1}^nY_i^2}_{\text{Sufficient}}
+  \\ W_i & = Y_i^2, i=1, \ldots, n \implies Y = \sqrt{w}
+  \\ f_W(w) & = f_Y(\sqrt{w}) \left|\frac{d\sqrt{w}}{dw}\right| \text{
+              (recall, derivative is $original/new$, i.e. \textbf{ON})}
+  \\ & =
+       \begin{cases}
+         \left(\frac{2\sqrt{w}}{\theta}\right)e^{-\frac{(\sqrt{w})^2}{\theta}}\frac{1}{2\sqrt{w}} & w > 0
+         \\ 0 & \text{otherwise}
+       \end{cases}
+  \\ & =
+       \begin{cases}
+         \frac{1}{\theta}e^{-\frac{w}{\theta}} & w>0
+         \\ 0 & \text{otherwise}
+       \end{cases}
+  \\ W & \sim Exp(\theta)
+  \\ E(W) & = \theta
+  \\ T & = \sum_{i=1}^n Y_i^2, E(T) = E \left(\sum_{i=1}^n Y_i^2\right) = E(\sum_{i=1}^nW_i) = \sum_{i=1}^n E(W_i) = n\theta
+  \\ E \left(\frac{T}{n}\right) & = \theta
+\end{align*}
+So $\frac{T}{n}$ is MVUE for $\theta$.
+\paragraph{Ex. 9.10, p468} (Read at home)
+\subsection{Methods of Estimation}
+\begin{enumerate}
+\item Method of moments (best method for most of the textbook problems)
+\item Maximum likelihood approach (common method of approximation we
+  use every day, MLE)
+  \begin{align*}
+    \hat{\theta}_n & \stackrel{P}{\to} \theta
+    \\ \sqrt{n}(\hat{\theta}_n - \theta) &\stackrel{D}{\to} N(0, I^{-1}(\theta))
+                     \intertext{Where $D$ means it converges into distribution.}
+    \frac{\hat{\theta}_n-\theta}{S_{\hat{\theta}_n}} & \stackrel{app}{\sim} N(0,1)
+  \end{align*}
+\end{enumerate}
 \end{document}

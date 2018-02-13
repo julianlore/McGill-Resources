@@ -114,6 +114,11 @@
           \\ Var(aX) & = a^2Var(X)
           \\ Var(aX+bY) & = a^2Var(X)+b^2Var(Y) + 2 abCov(X,Y)
           \\ Var(aX-bY) & = a^2Var(X)+b^2Var(Y) - 2 abCov(X,Y)
+          \\ \frac{(n-1)S^2}{\sigma^2} & =
+                                           \frac{1}{\sigma^2}\sum_{i=1}^n(Y_i
+                                           - \overline{Y})^2 \sim
+                                           \chi^2_{n-1} \text{
+                                           (Theorem 7.3)}
         \end{align*}
         \setcounter{section}{7}
         \section{Estimation}
@@ -392,6 +397,6 @@ derived from the normal distribution for large $n$ because of CLT. If
 $n$ is small, we must assume normality of the population and use the
 $t$ distribution for confidence intervals.
 
-IF sample measurements are from a normal distribution, we can get a
+If sample measurements are from a normal distribution, we can get a
 confidence interval for $\sigma^2$ through the $\chi^2$ distribution. 
 \end{document}
