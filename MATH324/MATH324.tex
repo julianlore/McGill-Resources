@@ -2113,4 +2113,191 @@ So $\frac{T}{n}$ is MVUE for $\theta$.
     \frac{\hat{\theta}_n-\theta}{S_{\hat{\theta}_n}} & \stackrel{app}{\sim} N(0,1)
   \end{align*}
 \end{enumerate}
+\section{02/15/18}
+\subsection{MLE}
+Method of Maximum Likelihood (p477)
+\begin{align*}
+  \hat{\theta}_{ML} & = argmax\ \frak{L}(\theta ; y_1, \ldots, y_n)
+\end{align*}
+\begin{enumerate}[Step 1:]
+\item $Y_1 = y_1, \ldots, Y_m = y_m$
+  \\ $\frak{L}(\theta ; y_1, \ldots, y_m)$
+\item Find the maximizer of $\frak{L}(\theta ; y_1, \ldots, y_n)$
+  
+  Why maximize the likelihood? What does likelihood do for us?
+  Likelihood is the only link we have between unobservables (like the
+  average salary of Canadians) and observables. So why did Fisher want
+  to maximize likelihood, not minimize? So what we have is a bunch of
+  observations. These should be typical observations, observations
+  that anyone else could also observe. So these observations should
+  happen most frequently. If we look at the observations as a function
+  of the unknown parameters (likelihood), we want to see what makes
+  this a common observation. In short, what we have observed is what
+  we should have expected to observe.
+\end{enumerate}
+\paragraph{Ex} $X_i \stackrel{iid}{\sim} Bernoulli(p), i=1,2,\ldots,n$
+\begin{align*}
+  P(X=x) & = p^x(1-p)^{1-x}
+  \\ \frak{L}(p ; x_1, \ldots, x_n) & = p^{\sum_{i=1}^n x_i}(1-p)^{n-\sum_{i=1}^nx_i}
+                                      \intertext{The little $x_i$'s
+                                      are values we have observed, so
+                                      this is a function of $p$.}
+                                      \frak{l}(p; x_1, \ldots, x_n) & = \log \frak{L}(p ; x_1, \ldots, x_n)
+  \intertext{Note
+  that
+  $\log$
+  is
+  a
+  monotone increasing
+  function,
+  so
+  it
+  has
+  the
+  same
+  maximizer
+  as
+                                                                      $\frak{L}$}
+  \\ & = \left(\sum_{i=1}^nx_i\right) \log p + (n-\sum_{i=1}^n x_i)\log(1-p)
+  \\ \frac{d\frak{l}}{dp} & = \frac{\sum_{i=1}^n x_i}{p}- \frac{n - \sum_{i=1}^n x_i}{1-p}, \ t=\sum_{i=1}^nx_i
+  \\ \frac{t}{\hat{p}} - \frac{n-t}{1-\hat{p}} & = 0
+  \\ \frac{t}{\hat{p}} & = \frac{n-t}{1-\hat{p}} \implies \frac{t}{n-t} = \frac{p}{1-\hat{p}}
+  \\ \frac{t/n}{1-t/n} & = \frac{\hat{p}}{1-\hat{p}} \implies \hat{p} = \frac{t}{n}=\frac{\sum_{i=1}^nx_i}{n}
+  \\ \hat{p} & = \frac{\sum_{i=1}^n}{n}
+  \\ \frac{d^2 \ell}{d p^2} & = -\frac{\sum_{i=1}^n}{p^2} - \frac{n - \sum_{i=1}^nx_i}{(1-p)^2} - \frac{n - \sum_{i=1}^n x_i}{(1-p)^2} < 0
+\end{align*}
+$\hat{p}$ is a maximizer. (might be expected to find a maximizer
+ourselves, but only for single variable unknowns).
+\paragraph{Ex} $X_i \stackrel{iid}{\sim} N(\mu,\sigma^2),
+i=1,\ldots,n$
+\begin{align*}
+  \frak{L}(\mu, \sigma^2 ; x_1, \ldots, x_n) & = \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n exp\{-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\}
+  \\ \ell (\mu, \sigma^2 ; x_1 , \ldots, x_n) & = \log \frak{L}(\mu, \sigma^2 ; x_1, \ldots, x_n)
+  \\ & = -n \log \sqrt{2\pi} - n \frac{1}{2} \log \sigma^2 - \frac{1}{2\sigma^2} + \sum_{i=1}^n (x_i - \mu)^2
+  \\ \frac{\partial \ell (\mu, \sigma^2)}{\partial \mu} & = - \frac{1}{2\sigma^2} \sum_{i=1}^n - 2 (x_i - \mu)
+  \\ \frac{\partial \ell (\mu, \sigma^2)}{\partial \mu} & = -\frac{n}{2\sigma^2} - \frac{1}{2\sigma^4} \sum_{i=1}^n (x_i - \mu)^2
+  \\
+&  \begin{cases}
+  - \frac{1}{2\sigma^2}\sum_{i=1}^n - 2 (x_i - \hat{\mu} = 0)
+  \\ - \frac{n}{2\hat{\sigma}^2} + \frac{1}{2\hat{\sigma}^4} \sum_{i=1}^n (x_i - \hat{\mu})^2 = 0
+  \end{cases}
+  \intertext{From eq 1}
+  \sum_{i=1}^n (x_i - \hat{\mu}) & = 0 \implies \sum_{i=1}^n x_i - n \hat{\mu} = 0
+  \\ \implies \hat{\mu} & = \frac{1}{n} \sum_{i=1}^n x_i = \overline{X}_n
+                          \intertext{Plug in $2^{nd}$ eq}
+                          -\frac{n}{2\hat{\sigma^2}} + \frac{1}{2\hat{\sigma}^4} \sum_{i=1}^n (x_i - \overline{x})^2 & = 0
+  \\ \frac{1}{2\hat{\sigma}^4} \sum_{i=1}^n (x_i - \hat{\mu})^2 & = \frac{n}{2\hat{\sigma}^2}
+  \\ \hat{\sigma^2} & = \frac{1}{n} \sum_{i=1}^n (x_u - \hat{\mu})^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \overline{x})^2
+\end{align*}
+So we have:
+\begin{align*}
+  \hat{\mu} & = \overline{x}
+  \\ \hat{\sigma^2} & = \frac{1}{n} \sum_{i=1}^n (x_i - \overline{x})^2
+\end{align*}
+\paragraph{Ex} $X_i \stackrel{iid}{\sim}Unif(0,\theta), i=1,2, \ldots,
+n$
+\begin{align*}
+  \delta_x(x) & =
+                \begin{cases}
+                  \frac{1}{\theta} & \text{if }0 < x < \theta
+                  \\ 0 & \text{otherwise}
+                \end{cases}
+  \\ \frak{L}(\theta ; x_1, \ldots, x_n) & = \prod_{i=1}^{n} \delta(x_i) = \prod_{i=1}^{n} \frac{1}{\theta} = \frac{1}{\theta^n}
+  \\ f_X(x) & = \frac{1}{\theta}I_{(0,\theta)}(x)
+  \\ I_{(0, \theta)}(x) & =
+                          \begin{cases}
+                            1 & \text{if }x \in (0, \theta)
+                            \\ 0 & \text{otherwise}
+                          \end{cases}
+  \\ \frak{L}(\theta; x_1, \ldots, x_n) & = \prod_{i=1}^{n} \frac{1}{\theta} I_{(0, \theta)}(x_i)
+  \\ & = \frac{1}{\theta^n} \prod_{i=1}^{n}I_{(0,\theta)}(x_i)
+  \\ & 0 < x_i < \theta, i=1,\ldots,n
+  \\ & 0 < \max_{1\leq i \leq n} x_i < \theta
+  \\ \prod_{i=1}^{n} I_{(0, \theta)}(x_i) & = I_{(0,\theta)}(\max_{1 \leq i \leq n} x_i)
+  \\ \frak{L}(\theta ; x_1, \ldots, x_n) & = \frac{1}{\theta^n}I_{(0.\theta)}(\max_{1 \leq i \leq n} x_i)
+                                           \intertext{$\max_{1\leq i\leq n}x_i$ is a sufficient statistic for $\theta$.}
+                                           \hat{\theta} & = \max_{1
+                                                          \leq i \leq
+                                                          n}x_i \text{
+                                                          since } \max_{1 \leq i \leq n}x_i < \theta
+\end{align*}
+So this one was a bit tricky, don't always have to take the
+derivatives, sometimes have to do other things. Note that, with the
+capture recapture problem where we estimate the population with the
+hypergeometric distribution, we cannot take derivatives because the
+population is not continuous, it's a discrete distribution.
+
+So we can show:
+\begin{itemize}
+\item Consistency: $\hat{\theta}_{ML}$ is a consistent estimator.
+\item Asymptotic normality: $\sqrt{n}(\hat{\theta}_{ML} - \theta)
+  \stackrel{app}{\sim}N(0,\Sigma)$, where $\Sigma$ is the inverse of
+  the information matrix.
+\item Asymptotic efficiency (around $\theta$, $\hat{\theta}_{ML}$ has
+  the smallest variance)
+\item Invariance: If $\hat{\theta}_{ML}$ is the Maximum Likelihood
+  Estimator of $\theta$ then $g(\hat{\theta}_{ML})$ is the MLE of
+  $g(\theta)$. This is great because if we find MLE of $\theta$ then
+  we know MLE for any function of $\theta$.
+\end{itemize}
+Recall, in $Bernoulli(p)$, $\hat{p}_n$ UMVUE for $p$. So MLE for
+$p(1-p)$ is simply $\hat{p}_n(1-\hat{p}_n)$.
+\\ \noindent \rule{\textwidth}{0.5pt}
+\subsection{Method of Moments} (The other method that was used more in
+the past)
+\\ Say we have a bunch of observations coming from some distribution $f$
+: $X_1, \ldots, X_n\sim f$
+\begin{align*}
+  \mu_k & = E(X^k) < \infty, k=1,2,\ldots,r
+\end{align*}
+If you have $r$ parameters, you use the following equations to find
+your parameters:
+$$m_k = \mu_k, k = 1,2,\ldots,r$$ where $m_k = \frac{1}{n}\sum_{i=1}^n
+x_i^k$.
+\paragraph{Ex} $X_i \stackrel{iid}{\sim} \Gamma (\alpha,\beta),
+i=1,\ldots,n$
+\begin{align*}
+  \mu_1 & = \alpha \beta
+  \\ \mu_2 & = E(X^2) = Var(X) + [E(X)]^2
+  \\ & = \alpha\beta^2 + [\alpha\beta]^2
+  \\ & = \alpha \beta^2 + \alpha^2 \beta^2
+  \\ &
+       \begin{cases}
+         \alpha \beta = \frac{1}{n}\sum_{i=1}^nx_i \implies \alpha = \frac{\overline{X}_n}{\beta}
+         \\ \alpha \beta^2 = \alpha^2 \beta^2 = \frac{1}{n}\sum_{i=1}^nx_i^2 \implies \alpha\beta(\beta+\alpha \beta)
+       \end{cases}
+  \intertext{So we have $2$ equations and $2$ unknowns.}
+  \beta^2 (\alpha + \alpha^2) & = \frac{1}{n} \sum_{i=1}^n x_i^2
+  \\ \beta & = \dfrac{\frac{1}{n}\sum_{i=1}^nX_i^2}{\overline{X}_n}-\overline{X}_n
+  \\ \alpha & = \dfrac{\overline{X}_n}{\beta} = \dfrac{\overline{X}_n}{\frac{\frac{1}{n}\sum_{i=1}^nx_i^2}{\overline{X}_n}-\overline{X}_n}
+%   \\ \beta^2 & = \dfrac{\frac{1}{n}\sum_{i=1}^nx_i^2}{\frac{\overline{X}_n}{\beta}+\frac{\overline{X}_n^2}{\beta^2}}
+\end{align*}
+Could also have worked out this example with:
+\begin{align*}
+  &\begin{cases}
+    \mu = \overline{X} = \alpha\beta
+    \\ Var(X) = S^2 = \alpha\beta^2
+  \end{cases}
+  \\ \beta & =\frac{\alpha\beta^2}{\alpha\beta} = \dfrac{\frac{1}{n}\sum_{i=1}^n(x_i-\overline{x})^2}{\overline{X}}
+  \\ \alpha \beta & = \overline{X} \implies \alpha = \dfrac{\overline{X}}{\frac{1}{n}\sum_{i=1}^n(x_i-\overline{x})^2}
+\end{align*}
+In general, we always use MLE (method of moments was used earlier when
+we didn't have the computing power to use MLE).
+\\ \noindent \rule{\textwidth}{0.5pt}
+\subsection{Information}
+\begin{align*}
+  f_\theta (x) & = \frac{1}{\sqrt{2\pi}}e^{-\frac{(x-\theta)^2}{2}}
+\end{align*}
+Say we ha
+ve two observations, $f_{\theta}(2)$ and $f_{\theta}(5)$,
+                 then the only unknown will be $\theta$:
+                 \\ \includegraphics[width=.9\textwidth]{i6.pdf}
+                 
+Which of these can have more information about the unknown parameter
+$\theta$? The second one, as the first one is not sensitive to changes
+in $\theta$. The more bumpy the function is the more it shows that the
+changes in $\theta$ are reflected. So we can guess that this has lots
+to do with derivatives. Now, we use the expected value to summarize
+the information:
+$$-E \left[\frac{\partial^2\log_2f_{\theta}(x)}{\partial \theta^2}\right] = E \left[\left\{\frac{\partial \log \delta_\theta(x)}{\partial \theta}\right\}^2\right] $$
 \end{document}
