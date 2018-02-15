@@ -597,7 +597,7 @@
         \item Updating $G_f$, $O(m)$
         \end{itemize}
         So we need to understand the number of iterations.
-        The other loop has $\lceil \log_2 K \rceil$ iterations. The
+        The outer loop has $\lceil \log_2 K \rceil$ iterations. The
         inner loop? (actually will be a bit of work to analyze this.)
         How many times in the $\Delta-phase$?
         \paragraph{Claim} Let $f$
@@ -605,7 +605,7 @@
         paths are in $G_f(\Delta)$). There is a cut $(A,B)$ such
         that $$max\hbox{-}flow \leq Cap(A,B) \leq val(f)+m\Delta$$
         \paragraph{Proof} Let $A$ be the set of all nodes that can be
-        reached from $S$ in $G_f(\Delta)$ (very similar to $min\hbox{-}cuts$
+        reached from $s$ in $G_f(\Delta)$ (very similar to $min\hbox{-}cuts$
         before)
         \\ \includegraphics[width=.9\textwidth]{i40.pdf}
         \\ (No edge from $A$ to $B$ in $G_f(\Delta)$, otherwise $A$
@@ -826,8 +826,8 @@
         cut would be $\infty$. Thus $B_1 \cup A_2$ is a vertex cover
         in the original graph. Its size is $|B_1|+|A_2|$. On the other
         hand,
-        $$Cap(A,B) = \sum_{\substack{\text{edges from} \\ s\text{ to }B_1}} c_3
-        + \sum_{\substack{\text{from} \\ A_2\text{ to }t}} = |B_1| + |A_2|$$
+        $$Cap(A,B) = \sum_{\substack{\text{edges from} \\ s\text{ to }B_1}} c_{sv}
+        + \sum_{\substack{\text{edges from} \\ A_2\text{ to }t}} c_{vt}= |B_1| + |A_2|$$
         We showed that there is a vertex cover $(B_1 \cup A_2)$ whose
         size is equal to $min\hbox{-}cut$ $(A,B)$ ($min\hbox{-}VC \leq
         min\hbox{-}cut$).
@@ -937,7 +937,7 @@
         opposite directions.
         \\ \includegraphics[width=.9\textwidth]{i77.pdf}
 
-        Now we can try to find max \# of edge-disjoint paths in thi
+        Now we can try to find max \# of edge-disjoint paths in this
         directed graph using Ford Fulkerson. What kind of problems may
         arise here? This will give us the same number of edge-disjoint
         paths, but they may reuse edges in the original graph, i.e.
@@ -1038,7 +1038,7 @@
         The problem we want to solve is whether every team can have at
         most $M$ points (not over) and we found a clever way to model
         this problem with a flow network. We give edges toward $t$ the
-        capacity $1-P_i$, for example $1=M-P_B =
+        capacity $M-P_i$, for example $1=M-P_B =
         70-69$ in the above.
 
         Solve $max\hbox{-}flow$. If it is equal to \# remaining
@@ -1063,7 +1063,7 @@
 
           Let $T$ be the set of teams in $A$ from cut$(A,B)$
           \begin{align*}
-            Cap(A,B) & = sum_{x \in T} (M-P_x) + \text{number of
+            Cap(A,B) & = \sum_{x \in T} (M-P_x) + \text{number of
                        matches $xy$ with at least one of $x$ or $y$
                        not in $T$ }
             \\& = max\hbox{-}flow
@@ -1075,7 +1075,7 @@
             \text{our team is eliminated}$.
           \end{itemize}
           \begin{align*}
-            Max\hbox{-}flow & = Cap(A,B) = M \times |T| - \sum_{x \in T} + K
+            Max\hbox{-}flow & = Cap(A,B) = M \times |T| - \sum_{x \in T}P_x + K
             \\ & \iff M \times |T| - \sum_{x \in T}P_x+K < \# \text{
                  of edges}
             \\ \iff & M \times |T| < \# \text{ edges in $T$}+\sum_{x
@@ -1123,11 +1123,11 @@
         \includegraphics[width=.9\textwidth]{i93.pdf}
         \\ \includegraphics[width=.9\textwidth]{i94.pdf}
 
-        Let $(A,B)$ be a $min\hbox{-}cut$ and let $M=sum_{x:P_x >
+        Let $(A,B)$ be a $min\hbox{-}cut$ and let $M=\sum_{x:P_x >
           0}P_x$
         \\ \includegraphics[width=.9\textwidth]{i95.pdf}
         \begin{align*}
-          Cap(A,B) & = ? = \sum_{\substack{x \in B \\ P_X > 0}} P_x + \sum_{\substack{x \in A \\ P_x < 0}} |P_x| = \sum_{\substack{x \in A \\ P_x < 0}} -P_x + \sum_{\substack{x \notin A \\ P_x > 0}}P_x = \sum_{\substack{x \in A \\ P_x < 0}} - P_x + \left(M - \sum_{\substack{x \in A \\ P_x >0}} P_x\right)
+          Cap(A,B) & = ? = \sum_{\substack{x \in B \\ P_x > 0}} P_x + \sum_{\substack{x \in A \\ P_x < 0}} |P_x| = \sum_{\substack{x \in A \\ P_x < 0}} -P_x + \sum_{\substack{x \notin A \\ P_x > 0}}P_x = \sum_{\substack{x \in A \\ P_x < 0}} - P_x + \left(M - \sum_{\substack{x \in A \\ P_x >0}} P_x\right)
           \\ & = M - \sum_{x \in A} P_x
         \end{align*}
         \begin{itemize}
@@ -1183,14 +1183,14 @@
           where $c_1, \ldots, c_n$ are real numbers.
         \end{enumerate}
         It would be good to follow these steps whenever you are trying
-        to formula something as a linear programming problem and/or if
+        to formulate something as a linear programming problem and/or if
         you are given a linear programming problem, especially if
         written in an abstract way.
         \\ \noindent \rule{\textwidth}{0.5pt}
         \paragraph{Example}
         \begin{itemize}
         \item Variables $x_1, x_2, x_3$
-        \item $\max 2x_1 +5x_2 - x_3$ (objective function)
+        \item $\max \ 2x_1 +5x_2 - x_3$ (objective function)
         \item Subject to (s.t.)
           \begin{align*}
             x_1 + x_2 + x_3 &\leq 5
@@ -1207,7 +1207,7 @@
           \begin{align*}
             x_1 + 2x_2 & \geq 1
             \\ x_1 - x_2 & = 5
-            \\ x_2 \geq 0
+            \\ x_2 & \geq 0
           \end{align*}
           (note this is still a linear program, the last equation has
           $0x_1$ omitted, the $\alpha$'s don't need to be nonzero)
@@ -1453,25 +1453,25 @@
         \noindent \rule{\textwidth}{0.5pt}
         For a general graph $G=(V,E)$ we can write this as:
         \\ Variables: $\forall v \in V$ we have a variables $x_v$.
-        \\ $\min sum_{v \in V}x_v$
+        \\ $\min \sum_{v \in V}x_v$
         \\ s.t.
         \begin{align*}
           x_v + \sum_{u:uv\in E} x_u & \geq \alpha, \forall v \in V
           \\ x_v & \geq 0, \forall v \in V
         \end{align*}
         This gives us $2|V|$ constraints.
-        \noindent \rule{\textwidth}{0.5pt}
+        \\\noindent \rule{\textwidth}{0.5pt}
         \subsection{Geometric Interpretation of LP's} Consider the following
         LP.
 
         \begin{align*}
-          \max x_1+x_2
+          \max \ x_1+x_2
           \\ x_1 + 2x_2  & \leq 1
           \\ 2x_1 + x_2 & \leq 1
           \\ x_1, x_2 & \geq 0
         \end{align*}
         Every potential solution $x_1, x_2$ gives us a point $(x_1,
-        x_2)$ on the plane.`
+        x_2)$ on the plane.
         What does the constraint $x_1 + 2x_2 \leq 1$ tell us? What
         about the other constraints?
         \\ \includegraphics[width=.9\textwidth]{i100.pdf}
