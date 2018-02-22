@@ -20,6 +20,9 @@
 \rhead{Julian Lore}
 \cfoot{Page \thepage \ of \pageref{LastPage}}
 \newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\newenvironment{rcases}
+  {\left.\begin{aligned}}
+  {\end{aligned}\right\rbrace}
 \begin{document}
 	\onehalfspacing
 	\maketitle
@@ -1724,7 +1727,7 @@
           y_2)x_2 + (y_1 + 2y_3)x_3 + y_2x_4 \leq 2y_1 + y_2 + y_3$$
 
           What do we need to know about $y_1, y_2, y_3$ to guarantee
-          that the first inequality?
+          the first inequality?
 
           We have already assumed that $y_1,y_2,y_3 \geq 0$ (or else they
           might have flipped the signs of the inequalities that we
@@ -1761,4 +1764,279 @@
           larger than something and we ended up with another linear
           program in standard form, so these two things are the
           \textbf{dual} of each other.
-      \end{document}
+          \section{02/19/18}
+          \subsection{Duality}
+          $$\begin{matrix}
+            \max & x_1 & + & 2x_2 & + & x_3 & + & x_4
+            \\ & x_1 & + & 2x_2 & + & x_3 & & & \leq 2
+            \\ &&& x_2 & + &&& x_4 & \leq 1
+            \\ & x_1 & + & & & 2x_3 &&& \leq 1
+          \end{matrix}$$
+          $$x_4,x_1,x_2,x_3 \geq 0$$
+          Is $x_1 = 1 , x_2 = \frac{1}{2}, x_3 = 0, x_4 = \frac{1}{2}$
+          optimal? (objective $= \frac{5}{2}$)
+
+          We know the solution $\geq \frac{5}{2}$.
+
+          We want to show $x_1 + 2x_2 + x_3 + x_4 \leq \frac{5}{2}$if
+          the constraints are satisfied.
+
+          We can deduce new constraints, e.g.
+          \begin{align*}
+            \begin{rcases}
+              \begin{matrix}
+                x_1 & + & 2x_2 & + & x_3 && \leq 2
+                \\ && x_2 &+ & & & x_4 & \leq 1
+              \end{matrix}
+            \end{rcases} \implies x_1 + 3x_2 + x_3 + x_4 \leq 3
+          \end{align*}
+          e.g.
+          \begin{align*}
+            x_2 + x_4 & \leq 1
+            \\ (x_1 + 2x_3 & \leq 1) \times 3
+            \\ = 3x_1 + x_2 + 6x_3 + x_4 & \leq 4
+          \end{align*}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \begin{align*}
+            y_1 \times (x_1 + 2x_2 + x_3 & \leq 2)
+            \\ y_2 \times (x_2 + x_4 &\leq 1)
+            \\ y_3 \times (x_1 + 2x_3 & \leq 1)
+          \end{align*}
+                                        {\noindent \rule{\textwidth}{0.5pt}}
+          \begin{align*}
+            (y_1 + y_3)x_1 + (2y_1+y_2)x_2 + (y_1 +2y_3)x_3 + y_2x_4 & \leq 2y_1 + y_2 + y_3
+          \end{align*}
+          Provided that $y_1,y_2,y_3 \geq 0$
+
+          We want to show $$x_1 + 2x_2 + x_3 + x_4 \leq \frac{5}{2}$$
+          If we find $y_1, y_2, y_3 \geq 0$ so that
+          \begin{align*}
+            y_1 + y_3 & \geq 1
+            \\ 2y_1 + y_2 & \geq 2
+            \\ y_1 + 2y_3 & \geq 1
+            \\ y_2 & \geq 1
+            \\\text{and }2y_1+y_2+y_3 & = \frac{5}{2} \implies \text{ done!}
+          \end{align*}
+          In that case
+          \begin{align*}
+            x_1 + 2x_2 + x_3 + x_4 & \leq (y_1 + y_3)x_1 + (2y_1 + y_2)x_2 + (y_1 + 2y_3)x_3 + y_2x_4
+            \\ & \leq 2y_1 + y_2 + y_3
+          \end{align*}
+          The best upper-bound we can get here is
+          \begin{align*}
+            \min \ 2y_1 + y_2 + y_3 \ & \text{vs} & \max \ x_1 + 2x_2 + x_3 + x_4
+            \\ s.t. \ y_1 + y_3 \geq 1 & & s.t. \ x_1 + 2x_2 + x_3 \leq 2
+            \\ 2y_1 + y_2 \geq 2 & & x_2 + x_4 \leq 1
+            \\ y_1+2y_3 \geq 1 & & x_1 +2x_3 \leq 1
+            \\ y_2 \geq 1 & & x_1, x_2, x_3, x_4
+            \\ y_1,y_2,y_3 \geq 0
+          \end{align*}
+          We showed $opt(Primal \ LP) \leq opt(Dual\ LP)$.
+
+          $y_1= \frac{1}{2}, y_2 = 1, y_3 = \frac{1}{2} \implies
+          Opt(Dual \ LP) \leq \frac{5}{2}$
+          \\ \includegraphics[width=.9\textwidth]{i109.pdf}
+          \paragraph{Rem} If we find solutions with exact same value
+          for primal and dual then the value is optimal for both of
+          them.
+          \paragraph{Dual for standard LP's}
+          \begin{align*}
+            \max \ c_1 x_1 + \ldots + c_n x_n &
+            \\ s.t. \ y_1 \times (\ a_{11}x_1 + a_{12}x_2+\ldots + a_{1n}x_{n} & \leq b_1)
+            \\ y_2 \times( a_{21}x_1 + a_{22}x_2+\ldots + a_{2n}x_{n} & \leq b_2)
+            \\ \cdots
+            \\ y_m \times (a_{m1}x_1 + a_{m2}x_2+\ldots + a_{mn}x_{n} & \leq b_m)
+            \\ x_1, x_2, \ldots, x_n & \geq 0
+          \end{align*}
+          \noindent \rule{\textwidth}{0.5pt}
+          \begin{align*}
+            \min \ b_1y_1 + b_2y_2 + \ldots + b_my_m &
+            \\ x_1 \to \underbrace{a_{11}y_1 + a_{21}y_2 + \ldots +
+            a_{m1}y_m}_{\text{coeff of $x_1$ in LHS}} & \leq b_1
+            \\ x_2 \to a_{12}y_1 + a_{22}y_2 + \ldots + a_{m2}y_m & \leq b_2
+            \\ \ldots
+            \\ x_n \to a_{1n}y_1 + a_{2n}y_2 + \ldots + a_{mn}y_m & \leq b_n
+          \end{align*}
+          \begin{align*}
+            \max \ c_1x_1 + \ldots + c_n x_n \ &  & \min \ b_1y_1 + \ldots + b_m y_m
+                                                    \\ a_{11}x_1 + \ldots + a_{n1}x_n \leq b_1 & & a_{11}y_1 + \ldots + a_{m1}y_m \geq c_1
+            \\ \ldots & & \ldots
+            \\ a_{1m}x_1 + \ldots + a_{nm}x_n \leq b_1 & & a_{1n}y_1 + \ldots + a_{mn}y_m \geq c_1
+            \\ x_1, \ldots, x_n \geq 0 & & y_1, \ldots, y_m \geq 0
+          \end{align*}
+          Remark: value of every feasible solution to primal $\leq$
+          value of every feasible solution to dual.
+          \paragraph{Q:} If primal is unbounded $\implies$ Dual is
+          infeasible and vice versa.
+          \paragraph{Thm (Weak Duality)}
+          \begin{enumerate}
+          \item If primal is unbounded $\implies$ Dual is infeasible.
+          \item If Dual is unbounded $\implies$ primal is infeasible.
+          \item If both primal and dual are feasible and bounded
+            $\implies$
+            $$Opt(\underbrace{Primal}_{\max}) \leq
+            Opt(\underbrace{Dual}_{\min})$$
+            Similar to $$max\hbox{-}flow \leq \min\hbox{-}cut$$
+          \end{enumerate}
+          \begin{align*}
+            \max \ x_1 + 5x_2 - x_3 &
+            \\ 3x_1 + x_2 & \leq 1 \gets y_1
+            \\ 4x_2 - x_3 & \leq 5 \gets y_2
+            \\ x_1, x_2, x_3 & \geq 0
+          \end{align*}
+          Dual:
+          \begin{align*}
+            \min \ y_1 + 5y_2 &
+            \\ 3y_1 & \geq 1
+            \\ y_1 + 4y_2 & \geq 5
+            \\ -y_2 & \geq -1
+            \\ y_1, y_2 & \geq 0
+          \end{align*}
+          Writing the dual without converting to standard form.
+          \begin{align*}
+            \max \ x_1 + 2x_2 + 3x_3  &\hspace{80 pt} \min \ y_1 + 4y_2 + 3y_3
+            \\ s.t. \ y_1 (x_1 - x_2 - x_3  \leq 1)  & \hspace{32 pt}\Leftrightarrow \hspace{32 pt}
+                                        y_1 \geq 0
+            \\ y_2(5x_1 + x_2 + 2x_3 \geq 0) & \hspace{32 pt} \Leftrightarrow \hspace{32 pt} y_2 \leq 0
+            \\ y_3(3x_1 + 2x_2 - x_3 = 3) & \hspace{32 pt} \Leftrightarrow \hspace{32 pt} y_3
+                                                              \text{ free} 
+            \\ x_1 \geq 0 &\hspace{32 pt} \Leftrightarrow \hspace{32 pt} y_1+5y_2+3y_3 \geq 1
+            \\ x_2 \leq 0 & \hspace{32 pt} \Leftrightarrow \hspace{32 pt} -y_1 + y_2 + 2y_3 \leq 2 
+            \\ x_3 \text{ free} &\hspace{32 pt} \Leftrightarrow \hspace{32 pt}  -y_1 + 2y_2 - y_3 = 3 
+            % Original order below, rearranged to align arrows
+            % \max \ x_1 + 2x_2 + 3x_3  & & \min \ y_1 + 4y_2 + 3y_3
+            % \\ s.t. \ y_1 (x_1 - x_2 - x_3  \leq 1)  & & y_1 + 5y_2 +
+            %                                              3y_3 \geq 1
+            %                                              
+            % \\ y_2(5x_1 + x_2 + 2x_3 \geq 0) && -y_1 + y_2 + 2y_3 \leq
+            %                                     2 
+            % \\ y_3(3x_1 + 2x_2 - x_3 = 3) && y_1 \geq 0 
+            % \\ x_1 \geq 0 & & y_1 \geq 0
+            % \\ x_2 \leq 0 && y)2 \leq 0
+            % \\ x_3 \text{ free}
+          \end{align*}
+          So we have: \\
+          standard $\Leftrightarrow$ positive
+          \\ nonstandard $\Leftrightarrow$ negative
+          \\ equality $\Leftrightarrow$ free
+          \paragraph{Thm (Strong Duality)}: If Primal and dual are
+          both feasible $$\implies Opt(Primal) = Opt(Dual)$$
+          \section{02/21/18}
+          \subsection{Max-flow and duality}
+          \begin{align*}
+            &\max \sum_{su\in E} f_{su} \gets (f^{out}(s))
+            \\ &\text{st }f_{uv} \leq c_{uv}, \forall uv \in E
+            \\ &\sum_{vu\in E}f_{vu} - \sum_{uw \in E}f_{uw} = 0, \forall u \in V-\{s,t\}
+            \\ &f_{uv} \geq 0, \forall uv \in E
+          \end{align*}
+          Note that this linear program is written in an ugly way, we
+          want to write it in a clearer way such that the dual will
+          be easier to understand. So we add an edge with infinite
+          capacity from $t$ to $s$ such that we can treat all vertices
+          the same way:
+          \\ \includegraphics[width=.9\textwidth]{i110.pdf}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \begin{align*}
+            &\max f_{ts}
+            \\ &f_{uv} \leq c_{uv}, \forall uv\in E \ (x_{uv}, \text{capacity})
+            \\ &\sum_{vu \in E'}f_{vu} - \sum_{uw \in E'}f_{uw}=0, \forall u \in V \ (y_u,\text{conservation})
+            \\ &f_{uv} \geq 0, \forall uv\in E'
+          \end{align*}, where $E'$ consists of the edges $E$ and the
+          newly added $ts$ edge.
+          \\
+          Dual: Vars: $x_{uv} \forall uv \in E, y_u, \forall u \in V$
+          \begin{align*}
+            & \min \sum_{uv \in E}c_{uv}x_{uv}
+            \\ & y_s - y_t \geq 1 , (\text{constraints for }f_{ts})
+            \\ & x_{uv} + y_v - y_u \geq 0, \forall uv v\in E (\text{constraints for}f_{uv})
+            \\ & x_{uv} \geq 0, \forall uv\in E
+            \\ & y_{u} \ \text{free }\forall u
+          \end{align*}
+          Now what does this tell us?
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          Let $(A,B)$ be an $s\hbox{-}t\hbox{-}$cut. Consider the
+          solution:
+          \begin{align*}
+            x_{uv} & =
+                     \begin{cases}
+                       1 & u\in A, v \in B
+                       \\ 0 & \text{otherwise}
+                     \end{cases}
+                             \\ y_s & = 1, y_t = 0, y_u =
+                                      \begin{cases}
+                                        1 & u \in A
+                                        \\ 0 & u\in B
+                                      \end{cases}
+          \end{align*}
+          $$x_{uv} + y_v-y_u \geq 0, \forall uv \in E?$$
+                                      %                                       Missing
+          This shows $Opt(Dual) \leq Min\hbox{-}cut$
+
+          By strong duality
+          $$Max\hbox{-}flow=Opt(Dual) \leq Min\hbox{-}cut$$
+          \subsection{Complementary Slackness}
+          \begin{align*}
+            \max c_1x_1 + \ldots + c_nx_n&
+            \\ \text{s.t. }a_{11}x_1 + \ldots + a_{1n}x_n & \leq b_1 \ (y_1)
+            \\ \ldots & \ldots
+            \\ a_{m1}x_1 + \ldots + a_{mn}x_n & \leq b_m \ (y_m)
+            \\ x_1, \ldots, x_n & \geq 0
+          \end{align*}
+          \noindent \rule{\textwidth}{0.5pt}
+          \begin{align*}
+            \min b_1y_1 + \ldots + b_ny_n&
+            \\ \text{s.t. }a_{11}y_1 + \ldots + a_{1m}y_m & \leq b_1 \ (x_1)
+            \\ \ldots & \ldots
+            \\ a_{m1}y_1 + \ldots + a_{mn}y_m & \leq b_m \ (x_n)
+            \\ y_1, \ldots, y_m & \geq 0
+          \end{align*}
+          Let $(x_1^*, \ldots, x_n^*), (y_1^*, \ldots, y_m^*)$ be optimal
+          solutions to primal and dual respectively.
+          $$Opt(Primal)=Cost(x_1^*, \ldots, x_n^*)=Cost(y_1^*, \ldots,
+          y_m^*)=Opt(Dual)$$
+          Suppose $a_{11}x_1^*+\ldots + a_{1n}x_n^* < b_1$. What do we
+          know about $y_i^*$? It is equal to $0$ (that way we managed
+          to turn inequalities into equalities), because:
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          Say we have: 
+          \begin{align*}
+            (x_1^* + x_2^* & < 5) y_1^*
+            \\ (5x_1^* - x_2^* & = 4) y_2^*
+                                 \intertext{Add them up:}
+            \\ \text{objective function} \stackrel{?}{=} & 5y_1^* + 4y_2^*
+          \end{align*}
+          This is only possible if $y_1^*$ is $0$. This is the
+          complementary slackness theorem.
+          \paragraph{Complementary Slackness Theorem}
+          ~\\ If $y_i^* > 0 \implies a_{i1}x_1^*+\ldots+a_{in}x_n^* = b_i$
+          \\ If $x_j^* > 0 \implies a_{11}y_1^*+\ldots+a_{mj}y_m^* =
+          c_i$
+          \begin{align*}
+            \max 2x_1 + 4x_2 + 3x_3 + x_4 &
+            \\ 3x_1 + x_2 + x_3 + 4x_4 & \leq 12
+            \\ x_1 - 3x_2 + 2x_3 + 3x_4 & \leq 7
+            \\ 2x_1 + x_2 + 3x_3 - x_4 & \leq 10
+            \\ x_1, x_2, x_3, x_4 & \geq 0
+            \\ \min 12y_1 + 7y_2 + 10y_3 &
+            \\ 3y_1 + y_2 + 2y_3 & \geq 2
+            \\ y_1 - 3y_2 + y_3 & \geq 4
+            \\ y_1 + 2y_2 + 3y_3 & \geq 3
+            \\ 4y_1 + 3y_2 - y_3 & \geq 1
+            \\ y_1, y_2, y_3 & \geq 0
+          \end{align*}
+          Show that $x_1^* =0, x_2^* = 10.4, x_3^* = 0, x_4^* = 0.4$
+          is an optimal solution to primal.
+          $$ Cost = 4 \times 10.4 + 0.4 = 42$$
+          We have slack in 2nd constraint
+          \begin{align*}
+            x_1^* - 3x_2^* + 2x_3^* + 3x_4^* & = -30 < 7
+            \\ y_1^*, y_2^* = 0, y_3^*
+            \\
+            \begin{rcases}
+              y_1^* - 3y_2^* + y_3^* = 4
+              \\ 4y_1^* + 3y_2^* - y_3^* = 1
+            \end{rcases}
+            & \implies y_1^* = 1, y_3^* = 3
+          \end{align*}
+          $$12y_1^* + 7y_2^* + 10y_3^* = 42$$
+        \end{document}
