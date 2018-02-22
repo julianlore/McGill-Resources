@@ -1,6 +1,6 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb}
+  lastpage, amssymb, mathtools}
 \usepackage[margin=1 in]{geometry}
 \allowdisplaybreaks
 %\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
@@ -2469,4 +2469,179 @@ Suppose we want $\alpha = P(\text{Type I error} \leq 0.05)$
   \\ \frac{\hat{p}_{ML} - 0.1}{\sqrt{0.1(1-0.1)/n}} & = \frac{\hat{p}_{ML}-0.1}{\sqrt{\frac{(0.1)(0.9)}{15}}}
   \\ \frac{\hat{p}_{ML} - 0.1}{\sqrt{0.1(0.9)/15}} & > 1.65
 \end{flalign*}
+\section{02/22/18}
+\subsection{TSH (Large Sample Case)}
+We arrived at the fundamentals of testing statistical hypotheses:
+\begin{itemize}
+\item $H_0$
+\item $H_A$
+\item Test statistic
+\item Rejection Region
+\end{itemize}
+The two types of errors:
+\begin{itemize}
+\item Type I (rejecting $H_0$ when it is true), $\alpha = P(\text{Type
+    I error}) = P(\text{Rejecting $H_0$ when $H_0$ true})$
+\item Type II (accepting $H_0$ when it is false), $\beta =
+  P(\text{Type II error}) = P(\text{Accepting $H_0$ when $H_0$ false
+  })$
+\end{itemize}
+\begin{flalign*}
+  H_0: \theta = \theta_0
+  \\
+  \begin{cases}
+    H_A: \theta > \theta_0
+    \\ H_A: \theta < \theta_0
+    \\ H_A: \theta \neq \theta_0
+  \end{cases}
+\end{flalign*}
+Where the first two are one sided and the last one is two sided.
+
+Let's say $\theta$ is the population mean $\mu$.
+\begin{itemize}
+\item A good estimator for $\theta$ based on the observations: $\theta
+  = \mu \to \hat{\theta} = \overline{X}_n$
+\item $\overline{X}_n - \mu \to \mu_0$ under $H_0$ (so we look at what
+  we can estimate with the data and what our hypothesis was and how
+  close they are, whether or not the hypothesis was reasonable or not)
+\item Of course, it is easier for us if we standardize this,
+  i.e. $\frac{\overline{X}_n - \mu}{\sigma_{\overline{X}_n}}$. We say
+  it is worse for the null hypothesis when these two are far from each
+  other, but what do we mean by far? This fraction will be our test
+  statistic, we divide to get rid of the scale in variance, it is
+  \textbf{scale invariant}, the units cancel out.
+\item Rejection Region $
+  \begin{cases}
+    \{Z: Z>K\} & \text{if }H_A:\theta > \theta_0
+    \\ \{Z: Z<K\} & \text{if }H_A:\theta < \theta_0
+    \\ \{Z: |Z|>K\} & \text{if }H_A:\theta \neq \theta_0
+  \end{cases}
+$
+\end{itemize}
+So we have: 
+\begin{flalign*}
+  \dfrac{\text{good estimator} - \text{Value of the
+      parameter under $H_0$}}{\text{Std dev of the estimator $H$ under
+      $H_0$}}
+\end{flalign*}
+\paragraph{Ex. 10.5, p497} $n=36, \overline{X}_{36} = 17,
+S^2_{36-1}=9, \alpha = 0.05, H_0 = \mu = 15, H_A: \mu > 15, \alpha =
+0.05$.
+
+Test statistic:
+\begin{flalign*}
+  Z & = \frac{\overline{X}_n-15}{\sigma_{\overline{X}_n}}
+  = \frac{\overline{X}_n-15}{\sigma_{\frac{\sigma}{\sqrt{n}}}}
+  = \frac{\overline{X}_n-15}{\sigma_{\frac{3}{\sqrt{36}}}}
+    = \frac{\overline{X}_n-15}{\frac{1}{2}}
+    \\ & = 2(\overline{X}_n - 15)
+    \\ RR & = \{Z:Z>K\}
+    \\ \alpha & = P_{H_0}(RR) & = P(\text{Rejecting $H_0$ when $H_0$ is true })
+    \\ P\{Z> K\} & = 0.05
+  \end{flalign*}
+  \includegraphics[width=.9\textwidth]{i7.pdf}
+  \begin{flalign*}
+    P_{H_0} (Z > 1.645) & = 0.01
+    \\ \overline{X}_{36} & = \frac{\overline{X}_n - 15}{\frac{1}{2}}
+    \\ \frac{17-15}{\frac{1}{2}} & = 4
+  \end{flalign*}
+  $H_0$ is rejected since $4>1.645$.
+  \paragraph{Ex. 10.6, p498} $\alpha = 0.01, n= 100, \# \text{
+    defectives }15, n =100$.
+  $H_o: p = 0.1, H_A: p>0.1$.
+  \begin{flalign*}
+    \hat{p}_{ML} &
+    = \hat{p}_n
+    = \frac{1}{n} \sum_{i=1}^n X_i
+    = \frac{1}{100} \sum_{i=1}^{100} X_i
+    = \frac{1}{100} \times 15 = 0.15
+    \\ X_i & =
+    \begin{cases}
+      1 & \text{if i$^{th}$ item is defective}
+      \\ 0 & \text{otherwise}
+    \end{cases}
+    \\ Z & = \frac{\hat{p}_{ML} - 0.1}{\sigma_{\hat{p}_{ML}}}
+    = \frac{\hat{p}_{ML} - 0.1}{\sqrt{\frac{p(1-p)}{n}}}
+  \intertext{$p$ should be replaced by $0.1 (H_0: p_0=1)$}
+Z & = 
+  \frac{\hat{p}_{ML}-0.1}{\sqrt{\frac{0.1(1-0.1)}{100}}}
+  \\ RR & = \{Z: Z>K\}
+  \\ P_{H_0} \{Z>K\} & = 0.01
+  \intertext{Table 4, App 3 gives $K=2.33$}
+  \intertext{Note, using CLT, $Z \sim N(0,1)$}
+  \intertext{The observed $\hat{p}_{ML} = 0.15$}
+  Z_{obs} & = \frac{0.15 - 0.1}{\sqrt{\frac{0.1 \cdot 0.9}{100}}} = \frac{5}{3} = 1.667
+  \\ 1.667 & < 2.33 \implies \text{ cannot reject }H_0
+\end{flalign*}
+  \paragraph{Ex. 10.8, p508} $H_0: \mu = 15, H_A: \mu = 16$ Find
+  $\beta$, $\overline{X}_{36} = 17, S^2 = 9, \alpha = 0.05$.
+  \begin{flalign*}
+    RR & = \{Z:Z>1.645\}
+    \\ \beta & = P(\text{Type II error}) = P(\text{Accept $H_0$ when
+      $H_0$ is false})
+    \\ Z & = \frac{\overline{X}_n - \mu_A}{\frac{\sigma}{\sqrt{n}}}
+    = \frac{\overline{X}_n - 16}{\frac{3}{\sqrt{36}}}
+    \\
+    \\ \frac{\overline{X}_n - 15}{\frac{3}{\sqrt{36}}}> 1.645
+    \\ RR:  \overline{X}_n & > 1.645 \cdot \frac{3}{\sqrt{36}} + 15 \approx 15.823
+  \end{flalign*}
+  Accepts $H_0\implies P_{H_A}(\overline{X}_n \leq 15.823)$
+  \begin{flalign*}
+    \beta & = P_{H_A}(\overline{X}_n \leq 15.823)
+    = P_{H_A} \left(\frac{\overline{X}_n-16}{\frac{3}{\sqrt{36}}} < \frac{15.823-16}{\frac{3}{\sqrt{36}}}\right)
+    \\ & = P_{H_A} (Z \leq -0.36) \approx 0.36
+  \end{flalign*}
+  Type I error was controlled to be $5\%$, but we see that type II
+  error is quite high. The question is, can we choose sample size such
+  that we can also control type II error?
+  \paragraph{Choosing the sample size such that we can control Type II
+    error at a given level}
+  $H_0: \mu = \mu_0, H_A: \mu = \mu_A$
+  \begin{flalign*}
+    \alpha & = P_{\mu_0}(\overline{X}_n > K) = P_{\mu_0} \left(\frac{\overline{X}_n - \mu_0}{\frac{\sigma}{\sqrt{n}}} > \frac{K - \mu_0}{\frac{\sigma}{\sqrt{n}}}\right)
+    \\ & = P_{\mu_0}(Z > Z_{\alpha})
+    \\ \beta & = P_{\mu_A}(\overline{X}_n \leq K) = P_{\mu_A} \left(\frac{\overline{X}_n - \mu_A}{\frac{\sigma}{\sqrt{n}}} \leq \frac{K - \mu_A}{\frac{\sigma}{\sqrt{n}}}\right)
+    \\ & = P_{\mu_A}(Z < - Z_{\beta})
+  \end{flalign*}
+  \begin{flalign*}
+    \begin{drcases}
+      \frac{K - \mu_0}{\frac{\sigma}{\sqrt{n}}} = Z_{\alpha}
+      \\
+      \frac{K - \mu_A}{\frac{\sigma}{\sqrt{n}}} = -Z_{\beta}
+    \end{drcases}
+    \implies K = \mu_0 + Z_{\alpha} \frac{\sigma}{\sqrt{n} = \mu_A - Z_{\beta}} \frac{\sigma}{\sqrt{n}}
+    \\ \mu_A - \mu_0 = \frac{\sigma}{\sqrt{n}}(Z_{\alpha}+ Z_{\beta})
+    \\ n = \frac{(Z_\alpha + Z_\beta)^2 \sigma^2}{(\mu_A - \mu_0)^2}
+  \end{flalign*}
+  \paragraph{Ex. 10.9} $H_0: \mu = 15, H_A: \mu = 16$. Want $\alpha =
+  \beta = 0.05$
+  \begin{flalign*}
+    Z_\alpha & = 1.645 = Z_{\beta}, \sigma^2 \to 9
+    \\ n & = \frac{(1.645+1.645)^2(9)}{(16-15)^2} = 97.4 \approx 98
+  \end{flalign*}
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  \subsection{p-Value (Fisher's perspective)}
+  The view that was presented was the Neyman-Pearson approach.
+  % \paragraph{Neyman-Pearson Approach}
+  \\
+  You have a claim and some data, want to know how likely it is to
+  have the data under that claim.
+  \paragraph{Ex. 10.5 again} $H_0:\mu = 15, \overline{X}_{36} = 17$
+  \\ Instead of calculating $P_{H_0}(\overline{X}_n = 17)$, get
+  $P_{H_0}(\overline{X}_n>17)$, probability to observe something as
+  bad as we observed with our null hypothesis.
+  \begin{flalign*}
+    P_{H_0} \left(\frac{X_n - 15}{\frac{3}{\sqrt{36}}} > \frac{17-15}{\frac{3}{\sqrt{36}}}\right)
+    \\ \underbrace{P_{H_0} (Z>4) \approx 0 }_{p-value}
+  \end{flalign*}
+  If this probability is small, what does it mean? A small $p$-value
+  means the chance of observing something similar to what we observed
+  against the null is small but we reject it anyway, why? Because we
+  have observed something against the null, so either the hypothesis
+  is wrong or the data is and so we let go of the hypothesis.
+  \begin{flalign*}
+    p\text{-value} & = P(\underbrace{\overline{X}_n}_{\text{test
+        statistic}} \overbrace{>}^{\text{aligned with $H_A$}}
+    \underbrace{17}_{\text{observed value of test statistic}})
+  \end{flalign*}
 \end{document}
