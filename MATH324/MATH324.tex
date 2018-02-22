@@ -28,7 +28,7 @@
 	\maketitle
 	Notes from Masoud Asgharian's Winter 2018 lectures.
 	\tableofcontents
-        \section{01/09/18}
+    \section{01/09/18}
         \paragraph{What we will cover this semester}
         Will essentially cover chapter 8,9,10. For chapter 11, he will
         give us his own notes. The first 6 sections of chapter 13 and
@@ -1851,7 +1851,7 @@
     \\ & =
     \begin{cases}
       \frac{\prod_{i=1}^n
-        e^{-\lambda}\lambda^{x_y}/(x_i!)}{e^{-n\lambda}(n\lambda)^t/t!}
+        e^{-\lambda}\lambda^{x_i}/(x_i!)}{e^{-n\lambda}(n\lambda)^t/t!}
       & \text{if }t = \sum_{i=1}^n X_i
       \\ 0 & \text{o.w}
     \end{cases}
@@ -1923,10 +1923,10 @@
   \ldots,y_n)$$ for any realization $(y_1, \ldots, y_n)$ \& $t$, where
   $t = T(y_1, \ldots, y_n)$
   \paragraph{Ex.} $X_i \stackrel{iid}{\sim} Bernoulli(p)$
-  $$\frak{L}(p, x_1, \ldots, x_n) = p^{\sum_{i=1}^nx_i
-    (1-p)^{n-\sum_{i=1}^nx_i}} =
-  \left(\frac{p}{1-p}\right)^{\sum_{i=1}^nx_i} = (1-p)^n$$
-  Where $p^{\sum_{i=1}^nx_i (1-p)^{n-\sum_{i=1}^nx_i}}$ can be
+  $$\frak{L}(p, x_1, \ldots, x_n) = p^{\sum_{i=1}^nx_i}
+    (1-p)^{n-\sum_{i=1}^nx_i} =
+  \left(\frac{p}{1-p}\right)^{\sum_{i=1}^nx_i} (1-p)^n$$
+  Where $p^{\sum_{i=1}^nx_i} (1-p)^{n-\sum_{i=1}^nx_i}$ can be
   $g(t,p)$, where $t = \sum_{i=1}^nx_i$, $h(x_1, \ldots, x_n) \equiv
   1$.
   \paragraph{Ex.} $X_i \stackrel{iid}{\sim} Po(\lambda)$
@@ -2055,8 +2055,8 @@ So $\frac{T}{n}$ is the MVUE.
 i=1,2,\ldots,n$
 \\ Ex. 9.8, p467
 \begin{align*}
-  \frak{L} (\mu, \sigma^2 ; x_1, \ldots, x_n) & = f_{\mu,\sigma^2}(x_1, \ldots, x_n) = \prod_{i=1}^{n} f_{\mu, \sigma^2} f(x_i) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi }\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}
-  \\ & = \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n exp\{-\frac{1}{2\sigma^2} \left[\sum_{i=1}^n x_i^2 - 2\mu \sum_{i=1}^nx_i + n \mu^2\right]\}
+  \frak{L} (\mu, \sigma^2 ; x_1, \ldots, x_n) & = f_{\mu,\sigma^2}(x_1, \ldots, x_n) = \prod_{i=1}^{n} f_{\mu, \sigma^2} (x_i) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi }\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}
+  \\ & = \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n exp\left\{-\frac{1}{2\sigma^2} \left[\sum_{i=1}^n x_i^2 - 2\mu \sum_{i=1}^nx_i + n \mu^2\right]\right\}
   \\ T & = \left(\sum_{i=1}^n X_i, \sum_{i=1}^n X_i^2 \right)
   \\ E \left(X_i\right) & = \sum_{i=1}^n E(X_i) = n \mu
   \\ \frac{\sum_{i=1}^n X_i}{n} & = \overline{X}_n \text{ is the MVUE
@@ -2078,7 +2078,7 @@ i=1,\ldots,n$
                 \end{cases}
                          \intertext{MVUE of $\theta$?}
                          \frak{L}(\theta ; y_1, \ldots, y_n) & = \prod_{i=1}^{n} \left(\frac{2y_i}{\theta}\right)e^{-\frac{y_i^2}{\theta}} = \left(\frac{2}{\theta}\right)^n \prod_{i=1}^{n} y_i e^{-\frac{1}{\theta}\sum_{i=1}^n y_i^2}
-  \\ g(t ; \theta) & = \left(\frac{z}{\theta}\right)^n e^{\frac{1}{\theta}t}
+  \\ g(t ; \theta) & = \left(\frac{2}{\theta}\right)^n e^{\frac{1}{\theta}t}
   \\ h(y_1, \ldots, y_n) & = \prod_{i=1}^{n} Y_i
   \\ t & = \sum_{i=1}^n y_i^2, \underbrace{T = \sum_{i=1}^nY_i^2}_{\text{Sufficient}}
   \\ W_i & = Y_i^2, i=1, \ldots, n \implies Y = \sqrt{w}
@@ -2096,7 +2096,7 @@ i=1,\ldots,n$
        \end{cases}
   \\ W & \sim Exp(\theta)
   \\ E(W) & = \theta
-  \\ T & = \sum_{i=1}^n Y_i^2, E(T) = E \left(\sum_{i=1}^n Y_i^2\right) = E(\sum_{i=1}^nW_i) = \sum_{i=1}^n E(W_i) = n\theta
+  \\ T & = \sum_{i=1}^n Y_i^2, E(T) = E \left(\sum_{i=1}^n Y_i^2\right) = E\left(\sum_{i=1}^nW_i\right) = \sum_{i=1}^n E(W_i) = n\theta
   \\ E \left(\frac{T}{n}\right) & = \theta
 \end{align*}
 So $\frac{T}{n}$ is MVUE for $\theta$.
@@ -2288,16 +2288,185 @@ we didn't have the computing power to use MLE).
 \begin{align*}
   f_\theta (x) & = \frac{1}{\sqrt{2\pi}}e^{-\frac{(x-\theta)^2}{2}}
 \end{align*}
-Say we ha
-ve two observations, $f_{\theta}(2)$ and $f_{\theta}(5)$,
-                 then the only unknown will be $\theta$:
-                 \\ \includegraphics[width=.9\textwidth]{i6.pdf}
-                 
+Say we have two observations, $f_{\theta}(2)$ and $f_{\theta}(5)$,
+then the only unknown will be $\theta$:
+\\ \includegraphics[width=.9\textwidth]{i6.pdf}
+
 Which of these can have more information about the unknown parameter
 $\theta$? The second one, as the first one is not sensitive to changes
 in $\theta$. The more bumpy the function is the more it shows that the
 changes in $\theta$ are reflected. So we can guess that this has lots
 to do with derivatives. Now, we use the expected value to summarize
 the information:
-$$-E \left[\frac{\partial^2\log_2f_{\theta}(x)}{\partial \theta^2}\right] = E \left[\left\{\frac{\partial \log \delta_\theta(x)}{\partial \theta}\right\}^2\right] $$
+$$-E \left[\frac{\partial^2\log_2f_{\theta}(x)}{\partial
+    \\text{text}heta^2}\right] = E \left[\left\{\frac{\partial \log
+      \delta_\theta(x)}{\partial \theta}\right\}^2\right] $$
+\section{02/20/18}
+Section 9.8, optional in the textbook, but we will be going over it as
+it is slightly important.
+\begin{flalign*}
+  \hat{\theta}_{ML} & = \hat{\theta} (X_1, \ldots, X_n)
+  \\ \sqrt{n}(\hat{\theta}_{ML} - \theta) & \stackrel{app}{\sim}N(0,I^{-1}(\theta))
+  \\ I(\theta) & = E\left\{ \left[\frac{\partial}{\partial \theta} \ln f_{\theta}(X)\right]^2\right\}
+  \\ E\left\{ \left[\frac{\partial}{\partial \theta} \ln f_{\theta}(X)\right]^2 \right\} & = E\left\{-\frac{\partial^2}{\partial \theta^2} \ln f_{\theta}(X)\right\}
+\end{flalign*}
+\begin{flalign*}
+  \hat{\theta}_{ML} \text{ is the MLE for }\theta
+  \\ \implies \tau(\hat{\theta}_{ML}) \text{ is the MLE for }\tau(\theta)
+\end{flalign*}
+This is called invariance.
+\footnote{The support (all possible values that can carry some probability mass) of $f_\theta(x)$ should not depend on $\theta$.}
+\\ \noindent \rule{\textwidth}{0.5pt}
+\begin{flalign*}
+  f_{\mu, \sigma^2}(x) & = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}} , x \in \mathbb{R}
+  \\ f_{\theta} (x) & =
+  \begin{cases}
+    \frac{1}{\theta} & \text{if }0 \leq x \leq \theta
+    \\ 0 & \text{otherwise}
+  \end{cases}
+  \\ f_{\sigma}(x) & = \frac{1}{\gamma(\alpha)\beta^2} x^{\alpha-1}e^{-\frac{x}{\beta}}, x \geq 0
+\end{flalign*}
+So we see that only the uniform distribution's support depends on $\theta$.
+\begin{flalign*}
+  \sqrt{n}(\tau (\hat{\theta}_{ML}) - \tau(\theta)) & \stackrel{app}{\sim} N\left(0,(\frac{\partial \tau (\theta)}{d \theta})^2 I^{-1}(\theta) \right)
+  \\ \frac{\sqrt{u}(\tau(\hat{\theta}_{ML})-\tau(\theta))}{\sqrt{ \left[\frac{\partial \tau (\theta)}{\partial\theta}\right]^2 I^{-1}(\theta)}} & \approx N(0,1)
+  \\I(\theta) & = e\left\{ \left[\frac{\partial}{\partial \theta}\ln f_{\theta}(x)\right]^2 \right\}
+  =E\left\{-\frac{\partial^2}{\partial \theta^2} \ln f_{\theta}(X)\right\}
+  \\ \frac{\sqrt{n}(\tau(\hat{\theta}_{ML})-\tau(\theta))}{\sqrt{ \left[\frac{\partial \tau(\theta)}{\partial \theta}\right]^2 I^{-1} (\theta) }} & \stackrel{app}{\sim} N(0,1)
+  \\ \tau (\hat{\theta}_{ML}) & \pm z_{\frac{\alpha}{2}} \sqrt{\frac{ \left[\frac{\alpha \tau (\theta)}{\partial \theta}\right]^2I^{-1}(\theta) }{n}}
+  \intertext{where $z_{\frac{\alpha}{2}}, P(Z > z_{\frac{\alpha}{2}})
+    = \frac{\alpha}{2}$}
+  Z & \sim N(0,1)
+  \\ \tau (\hat{\theta}_{ML}) & \pm z_{\frac{\alpha}{2}} \sqrt{\frac{ \left[\frac{\alpha \tau (\theta)}{\partial \theta}\right]^2I^{-1}(\hat{\theta}_{ML}) }{n}}
+\end{flalign*}
+\paragraph{Ex.} \#9.18, p484
+\begin{flalign*}
+  Y_i & \stackrel{iid}{\sim} Ber(p), i=1,2,\ldots,n
+  \\ \tau(p) &
+  = p(1-p)
+  = p-p^2
+  \\ \frac{\partial \tau (p)}{\partial p} & = 1-2p
+  \\ P_{p} (Y=y) & = p^y(1-p)^{1-y}, y=0,1
+  \\ \ln P_p(Y=y) &
+  = y \ln p + (1-y)\ln (1-p)
+  \\ \frac{\partial}{\partial p} \ln P_p(Y=y) &
+  = \frac{y}{p} - \frac{1-y}{1-p}
+  \\ \frac{\partial^2}{\partial p^2}\ln P_p (Y=y) & = -\frac{y}{p^2}-\frac{1-y}{(1-p)^2}
+  \\ E\left\{\frac{\partial^2}{\partial p^2}\ln P_p (Y=y)\right\} & = I(p)
+  \\ I(p) & = E\left\{\frac{Y}{p^2}+ \frac{1-Y}{(1-p)^2}\right\}
+  = \frac{1}{p^2}E(Y) + \frac{1}{(1-p)^2}E[1-Y]
+  \\ & = \frac{1}{p^2}p + \frac{1}{(1-p)^2}(1-p)
+  = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
+  \\ I(p) & = \frac{1}{p(1-p)}, I^{-1}(p) = p(1-p)
+\end{flalign*}
+Inverse of information is variance, makes perfect sense as they go in
+opposite ways, the more information you have the less variance you
+have and vice versa.
+\begin{flalign*}
+  C.I. \hat{p}_{ML} & = \hat{p}_n = \frac{1}{n} \sum_{i=1}^n Y_i
+  \\ \tau(\hat{\theta}_{ML}) & \pm z_{\frac{\alpha}{2}}\sqrt{\frac{ \left[\frac{\partial \tau(\theta)}{\partial \theta}\right]^2 I^{-1}(\theta)}{n}}
+  \\ \tau(\hat{p}_n) & \pm z_{\frac{\alpha}{2}}\sqrt{\frac{(1-2\hat{p}_{ML})^2\hat{p}_{ML}(1-\hat{p}_{ML}) }{n}}
+  \\ \frac{\partial \tau (p)}{\partial p} & = 1-2p
+\end{flalign*}
+\subsection{Testing Statistical Hypotheses (TSH)}
+\begin{enumerate}
+\item $H_0$: null hypothesis.
+\item $H_a$: alternative hypothesis.
+\item Test statistic.
+\item Rejection Region.
+\end{enumerate}
+Data used for exploration or validation. But do not use the same data
+set for exploration (forming a hypothesis) and validation. If you use
+the same data for both, you will end up being circular and never
+rejecting your hypothesis.
+
+For a null hypothesis $H_0$ we have:
+\\
+\begin{tabular}{c | c | c}
+  &True&False
+  \\ \hline Accept & \checkmark & Type II error
+  \\ \hline Reject & Type I error & \checkmark
+\end{tabular}
+
+In statistics, usually the statement that goes under the null
+hypothesis is the status quo, we really don't want type I error to
+happen, i.e. in court of law we don't want to send guilty people to
+jail or death. But the bigger one of the type of errors becomes the
+smaller the other one becomes, we can't minimize both. So if we want
+to control one of them by bounding it tightly, we also want to
+optimize it. i.e. given that we are controlling type I error, what is
+the lowest that type II error can get?
+\begin{flalign*}
+  \alpha = P(\text{Type I error}) &
+  = P(\text{Rejecting }H_0 \text{ when }H_0 \text{ is true})
+  \\ \beta = P(\text{Type II error}) &
+  = P(\text{Accepting }H_0 \text{ when }H_0 \text{ is false})
+\end{flalign*}
+Notice that here we have a binary decision to make, either accept null
+hypothesis and reject alternative hypothesis or reject null hypothesis
+and accept alternative hypothesis.
+\paragraph{Ex.} 10.1, p491
+
+We have a bunch of voters, $x_i \stackrel{iid}{\sim} Ber(p),
+i=1,2,\ldots, 15=n$.
+\begin{flalign*}
+  Y & = \sum_{i=1}^{15} X_i 
+  \\ H_0: & \ p = 0.5
+  \\ H_a: & \ p < 0.5
+  \\ RR & = \{Y \leq 2\}
+  \\ \alpha & = P(\text{Type I error})
+  = P(\text{Rejecting }H_0 \text{ when }H_0 \text{ is true})
+  \\ & = P(Y \leq 2 \text{ when }H_0 \text{ is true})
+  = P(Y \leq 2, p =0.5)
+  \\ Y & = \sum_{i=1}^{15} X_i \sim Bin(n=15,
+  \overbrace{p=0.5}^{\text{if $H_0$ is true}})
+  \\ \alpha & = P_{p \leq 0.5}(Y \leq 2)
+  = \sum_{y=0}^2 \binom{15}{y} \left(\frac{1}{2}\right)^y \left(1-\frac{1}{2}\right)^{15-y} \approx 0.004
+\end{flalign*}
+\paragraph{Ex. } 10.2, p492
+\begin{flalign*}
+  \beta & = P(\text{Type II error})
+  = P(\text{Accepting $H_0$ when $H_0$ is false})
+  \\ & = P(Y>2, \underbrace{H_a \text{ is true}}_{p=0.3})
+  \\ & = P(Y>2, p = 0.3)
+  = \sum_{y=3}^{15} \binom{15}{y} (0.3)^y(1-0.3)^{15-y}
+  \intertext{Table 1 in Appendix $3$}
+  \implies & = 1- \sum_{y=0}^2 \binom{15}{y} (0.3)^y(1-0.3)^{15-y}
+  \\ \beta & = 0.873
+\end{flalign*}
+If you try $p=0.1, \beta = 0.184$
+\subsection{Common Large-Sample Tests}
+\paragraph{Ex} 10.6, p498
+\begin{itemize}
+\item $H_0: p = 0.1$
+\item $H_A: p > 0.1$
+\end{itemize}
+$X_i \stackrel{iid}{\sim} Ber(p), i=1,\ldots,15$
+\begin{flalign*}
+  X_i & =
+  \begin{cases}
+    1 & \text{if defective}
+    \\ 0 & \text{otherwise}
+  \end{cases}
+\end{flalign*}
+Now how do we come up with test statistic? We usually try to come up
+with something close to the test parameter, like MLE.
+\begin{flalign*}
+  \text{Test statistic }\to |\hat{p}_{ML} - p|
+  \\ z = \frac{\hat{p}_{ML} - p}{\sqrt{Var(\hat{p}_{ML})}}
+  \stackrel{app}{\sim} \text{ for large sample sizes}
+  \\ Var(\hat{p}_{ML}) = Var \left(\frac{1}{n}\sum_{i=1}^n x_i\right)
+  = \frac{p(1-p)}{n}
+\end{flalign*}
+Suppose we want $\alpha = P(\text{Type I error} \leq 0.05)$
+\begin{flalign*}
+  P_{p=0.1}(Z > k) & \leq 0.05
+  \\ P_{p=0.1}(Z > k) & = 0.05
+  \intertext{Using the table for Normal dist}
+  k & = 1.65
+  \\ P_{p=0.1} (Z > 1.65) & \approx 0.05
+  \\ Z & = \frac{\hat{p}_{ML} - p}{\sqrt{\frac{p(1-p)}{n}}}
+  \\ \frac{\hat{p}_{ML} - 0.1}{\sqrt{0.1(1-0.1)/n}} & = \frac{\hat{p}_{ML}-0.1}{\sqrt{\frac{(0.1)(0.9)}{15}}}
+  \\ \frac{\hat{p}_{ML} - 0.1}{\sqrt{0.1(0.9)/15}} & > 1.65
+\end{flalign*}
 \end{document}
