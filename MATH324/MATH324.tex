@@ -2644,4 +2644,219 @@ Z & =
         statistic}} \overbrace{>}^{\text{aligned with $H_A$}}
     \underbrace{17}_{\text{observed value of test statistic}})
   \end{flalign*}
+  \section{02/27/18}
+  \subsection{$p$-Value}
+  \begin{table}
+    \centering
+    \caption{}
+    \label{fig:t1}
+    \begin{tabular}{c | c | c | c | c | c}
+      $\theta$ & $\mu$ & $p$ & $\sigma^2$& $\mu_1 - \mu_2$& $\frac{\sigma_1^2}{\sigma_2^2}$
+      \\ \hline $\hat{\theta}$ & $\overline{X}_n$ & $\hat{p}_n$ & $S^2$ & $\overline{X}_1 - \overline{X}_2$ & $\frac{S_1^2}{S_2^2}$
+    \end{tabular}
+  \end{table}
+  \begin{table}
+    \centering
+    \caption{}
+    \label{fig:t2}
+    \begin{tabular}{c | c | c | c}
+      $H_A$ & $\theta > \theta_0$ & $\theta < \theta_0$ & $\theta \neq \theta_0$
+      \\ \hline RR & $\hat{\theta} > K$ & $\hat{\theta} < K$ & $|\hat{\theta}| > K$
+    \end{tabular}
+  \end{table}
+  \paragraph{Ex.} \# 10.7 (p500) \& 10.11 (p515)
+  \\ $\alpha = 0.05, n_1 = 50, \overline{Y}_1 = 3.65, n_2 = 50,
+  \overline{Y}_2 = 3.85, S_1^2 = 0.13, S_2^2 = 0.14, H_0: \mu_1 -
+  \mu_2 = 0, H_A : \mu_1 - \mu_2 \neq 0$
+  \begin{itemize}
+  \item Using Table 1, the test statistic,
+    $\overline{Y}_1 - \overline{Y}_2$.
+  \item Using Table 2, the RR = $\{|\overline{Y}_1 - \overline{Y}_2 |
+    > k\}$
+  \end{itemize}
+  \begin{flalign*}
+    0.05 & \alpha = P_{H_0} (|\overline{Y}_1 - \overline{Y}_1| > K)
+    = P_{H_0 = \mu_1 - \mu_2 = 0} \left(\left|\frac{\overline{Y}_1 - \overline{Y}_2 - 0}{\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}}\right| > \frac{k-0}{\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}}\right)
+    \\ \text{CLT} & \approx P\left(|Z| > \frac{k}{\sqrt{\frac{0.18}{50}+\frac{0.19}{50}}}\right)
+    \intertext{Using Table 4, App 3, p848}
+    \frac{k}{\sqrt{\frac{0.18}{50}+\frac{0.19}{50}}} & = 1.96 \implies k\approx 0.1568
+    \\ p-Value &
+    =P_{H_0 : \mu_1 - \mu_2 = 0} \left(|\overline{Y}_1 - \overline{Y}_2| > |\overline{y}_1 - \overline{y}_2|\right) 
+    \\ & =P_{H_0 : \mu_1 - \mu_2 = 0} \left(|\overline{Y}_1 - \overline{Y}_2| > |3.6-3.8|\right) 
+    \\ & =P_{H_0 : \mu_1 - \mu_2 = 0} \left(|\overline{Y}_1 - \overline{Y}_2| > 0.2\right) 
+    \\ & =P_{H_0 : \mu_1 - \mu_2 = 0} \left(\left|\frac{(\overline{Y}_1- \overline{Y}_2) - 0}{\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}}\right| > \frac{0.2-0}{\sqrt{\frac{0.18}{50}+\frac{0.19}{50}}}\right)
+    \\ \text{CLT} & \approx P_{H_0:\mu_1-\mu_2} (|Z| > 25)
+    \intertext{Using Table 4, App 3}
+    & = 2P(Z > 2.5) = 2(0.0062) = 0.0124
+  \end{flalign*}
+  \noindent \rule{\textwidth}{0.5pt}
+  \subsection{TSH and CI} We note that there's a strong relation
+  between testing statistical hypotheses and confidence intervals,
+  about whether we want to accept something that falls in the interval
+  or not. So, using confidence intervals, we can produce acceptance
+  regions and complements of acceptance regions, i.e. rejection
+  regions.
+
+  $100(1-\alpha)\%$ CI, $\hat{\theta}_{ML} \pm Z_{\frac{\alpha}{2}}
+  \sigma_{\hat{\theta}_{ML}}$
+  $$\overline{RR}_\alpha = \{\hat{\theta}_{ML} : \hat{\theta}_{ML} -
+  z_{\frac{\alpha}{2}}\sigma_{\hat{\theta}_{ML}} \leq \theta_0 \leq
+  \hat{\theta}_{ML}+z_{\frac{alpha}{2}}\sigma_{\hat{\theta}_{ML}}\}$$
+  a $100(1-\alpha)\%$ acceptance region.
+  $$RR_{\alpha} = \left\{\hat{\theta}_{ML}:
+    \left|\frac{\hat{\theta}_{ML}=\theta_0}{\sigma_{\hat{\theta}_{ML}}}\right|
+    > z_{\frac{\alpha}{2}}\right\}$$
+  Most people prefer using confidence intervals instead of tsh, but
+  you can transform CIs into TSH.
+  \subsection{Small-Sample TSH}
+  \begin{itemize}
+  \item For $\mu$:
+    \\ Assumptions: $Y_1, \ldots, Y_n$ are independent and identically
+    distributed (iid) samples from $N(\mu,\sigma^2)$, $Y_i
+    \stackrel{iid}{\sim}N(\mu,\sigma^2), i=1,\ldots,n$
+
+    $$H_0: \mu = \mu_0$$
+    $$H_A:
+    \begin{cases}
+      \mu > \mu_0 & \text{(upper tail)}
+      \\ \mu < \mu_0 & \text{(lower tail)}
+      \\ \mu \neq \mu_0 & \text{(Two-tailed)}
+    \end{cases}
+    $$
+    Test statistic $\overline{Y}$
+    $$\text{RR} =
+    \begin{cases}
+      \{\overline{Y} > k\} & \text{for }\mu > \mu_0
+      \\\{\overline{Y} < k\} & \text{for }\mu < \mu_0
+      \\\{|\overline{Y} - \mu_0| > k\} & \text{for }\mu \neq \mu_0
+    \end{cases}
+    $$
+    \begin{flalign*}
+      k : & P_{H_0} (RR) = \alpha
+      \\ \alpha & = P_{H_0}(|\overline{Y}-\mu_0| > k)
+      \\ & = P_{H_0} \left(\left|\frac{\overline{Y}-\mu_0}{\frac{s}{\sqrt{n}}}\right| > \frac{k}{\frac{s}{\sqrt{n}}}\right)
+      \intertext{Note that}
+      T & = P_{H_0}(|T|>k_1)
+      \intertext{Where}
+      T & = \frac{\overline{Y}-\mu_0}{\frac{s}{\sqrt{n}}} \sim T_{(n-1)}
+      \\ \text{and }s^2 & = \frac{1}{n-1}\sum_{i=1}^k (Y_i -
+      \overline{Y})^2 \text{    Table 5, App 3, p845}
+      \\ k_1 \text{ s.t. } P_{H_0}(|T|>k_1) & = \alpha
+    \end{flalign*}
+    For example, if $\alpha = 0.05, n = 17, df = n-1 = 17-1=16$
+    \\ \includegraphics[width=.9\textwidth]{i8.pdf}
+    $$t_{16,0.025} = 2.12$$
+    $$ RR = \{|T| > 2.12\}$$
+    You calculate the observed $t$
+    $$t_{obs} = \frac{\overline{y}-\mu_0}{\frac{s}{\sqrt{n}}}$$
+    \noindent \rule{\textwidth}{0.5pt}
+  \item For the two-sample case, for $\mu_1-\mu_2$
+
+    Assumptions:
+    \begin{itemize}
+    \item $X_1, \ldots, X_{n_1}$ and $Y_1, \ldots, Y_{n_2}$ are random
+      samples
+    \item $X_i \sim N(\mu_1, \sigma_1^2)$, $Y_j \sim N(\mu_2,
+      \sigma_2^2)$
+    \item $\sigma_1^2 = \sigma_2^2$ (this is the strange one to keep
+      in mind that isn't always there)
+    \item $X_s \independent Y_s$
+    \end{itemize}
+    $$H_0 : \mu_1 - \mu_2 = D_0$$
+    $$H_A:
+    \begin{cases}
+      \mu_1 - \mu_2 > D_0
+      \mu_1 - \mu_2 < D_0
+      \mu_1 - \mu_2 \neq D_0
+    \end{cases}
+    $$
+    Test
+    \begin{flalign*}
+      T & = \frac{(\overline{X}-\overline{Y})-D_0}{s_P \sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}
+      \\ \text{where }s_p^2 & = \frac{\overbrace{(n_1-1)s_1^2}^{\sum_{i=1}^{n_1}(X_i - \overline{X})^2} + \overbrace{(n_2-1)s_2^2}^{\sum_{i=1}^{n_1}(Y_i - \overline{Y})^2}}{n_1 + n_2 - 2}
+      \\ \text{under } H_0 :& T \sim T_{(n_1+n_2-2)}
+      \\ RR: &
+      \begin{cases}
+        t > t_{\alpha, \nu} & \text{(upper)}
+        \\t < t_{\alpha, \nu} & \text{(lower)}
+        \\|t| > t_{\frac{\alpha}{2}, \nu} & \text{(two-sided)}
+      \end{cases}
+      \\ \nu & = n_1 + n_2 - 2 = (n_1 - 1) + (n_2 - 1)
+    \end{flalign*}
+  \end{itemize}
+  \paragraph{Ex.} \#10.14, p524
+  \\ $\alpha = 0.05, n_1 = 9, \overline{y}_1 = 35.22s, n_2 = 9,
+  \overline{y}_2 = 31.56s$
+  \begin{flalign*}
+    \sum_{i=1}^9 (y_{1i} - \overline{y}_1) & = 195.56 & H_0: \mu_1 - \mu_2 = 0
+    \\ \sum_{i=1}^9 (y_{2i} - \overline{y}_2) & = 160.22 & H_A: \mu_1 - \mu_2 \neq 0
+    \\ T & = \frac{(\overline{Y}_1 - \overline{Y}_2)-D_0}{s_p \sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}
+    \\ s_p^2 & = \frac{\sum_{i=1}^9 (y_{1i}-\overline{y}_1)^2 + \sum_{i=1}^9 (y_{2i}-\overline{y}_2)^2}{n_1+n_2-2}
+    \\ & = \frac{195.56 - 160.22}{9+9-2} = 22.24
+    \\ s_p & = 4.716
+  \end{flalign*}
+  The observed $t= \frac{(\overline{y}_1 - \overline{y}_2) -
+    0}{4.716\sqrt{\frac{1}{9}+ \frac{1}{9}}} = \frac{35.22 -
+    31.56}{4.716\sqrt{\frac{2}{9}}} = 1.56$.
+
+  The observed $t$ value is $1.56$
+  $$t_{obs} = 1.56$$
+  \includegraphics[width=.9\textwidth]{i9.pdf}
+  \\ Table 5, App 3, p849
+  $$t_{0.025, 16} = 2.12$$
+  $$-2.12 < 1.56 < 2.12$$
+  We do \textbf{NOT} reject $H_0$.
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  \subsubsection{Small-Sample TSH for $\sigma^2$}
+  Assumption: $Y_i \stackrel{iid}{\sim}N(\mu,\sigma^2)$
+  $$H_0: \sigma^2 = \sigma_0^2$$
+  $$H_A:
+  \begin{cases}
+    \sigma^2 > \sigma_0^2
+    \\ \sigma^2 < \sigma_0^2
+    \\\sigma^2 \neq \sigma_0^2
+  \end{cases}
+  $$
+  $$\chi^2 = \frac{(n-1)S^2}{\sigma_0^2} \sim \chi^2_{(n-1)} \text{
+    under }H_0:\sigma^2 - \sigma_0^2$$
+  \begin{flalign*}
+    RR: &
+    \begin{cases}
+      \chi^2 > \chi^2_{\alpha, \nu}
+      \\\chi^2 < \chi^2_{1-\alpha, \nu}
+      \\\chi^2> \chi^2_{\frac{\alpha}{2},\nu} \text{ or } \chi^2<
+      \chi^2_{1-\frac{\alpha}{2}, \nu} \text{ (not symmetric, no
+        absolute val)}
+    \end{cases}
+    \nu = n-1
+  \end{flalign*}
+  Table 6, App 3, p850:
+  \\ \includegraphics[width=.9\textwidth]{i10.pdf}
+  \paragraph{Ex.} 10.16, p532
+  \\ $n=10, \alpha =0.05, s^2 = 0.0003$
+  \\ $H_0:\sigma^2 = 0.0002, H_A: \sigma^2 > 0.0002$
+  \begin{flalign*}
+    \chi^2_{obs} & = \frac{(10-1)(0.0003)}{0.0002} = 13.5
+    \\ \chi^2 & = \frac{(n-1)S^2}{\sigma_0^2} \sim \chi^2_9
+    \\ \chi^2_{0.05, 9} & = 16.919
+    \\ 13.5 < 16.919
+  \end{flalign*}
+  $H_0$ is \textbf{NOT} rejected.
+  \paragraph{Two-Sample case}
+  Assumptions:
+  \begin{itemize}
+  \item $X_1, \ldots, X_n$ and $Y_1, \ldots, Y_m$ are random samples.
+  \item $X_i \sim N(\mu_1, \sigma_1^2)$, $Y_j \sim N(\mu_2,
+    \sigma_2^2)$
+  \item $X_i \independent Y_j$
+  \end{itemize}
+  $$H_0: \sigma_1^2 - \sigma_2^2$$
+  $$ H_A:
+  \begin{cases}
+    \sigma_1^2 > \sigma_2^2
+    \\\sigma_1^2 < \sigma_2^2
+    \\\sigma_1^2 \neq \sigma_2^2
+  \end{cases}
+  $$
+  $$\frac{\sigma_1^2}{\sigma_2^2} \to \text{Test dist: }\frac{S^2X}{S^2Y} \to \text{F-distribution}$$
 \end{document}
