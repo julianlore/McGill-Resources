@@ -2858,5 +2858,145 @@ Z & =
     \\\sigma_1^2 \neq \sigma_2^2
   \end{cases}
   $$
-  $$\frac{\sigma_1^2}{\sigma_2^2} \to \text{Test dist: }\frac{S^2X}{S^2Y} \to \text{F-distribution}$$
+  $$\frac{\sigma_1^2}{\sigma_2^2} \to \text{Test dist:
+  }\frac{S^2_X}{S^2_Y} \to \text{F-distribution}$$
+  \section{03/01/18}
+  Continuation from last class, with small sample TSH and two samples.
+  \begin{flalign*}
+    S_X^2 & = \frac{1}{n_1-1}\sum_{i=1}^{n_1} (x_i - \overline{x})^2
+    \\S_Y^2 & = \frac{1}{n_2-1}\sum_{i=1}^{n_2} (y_i - \overline{y})^2
+    \intertext{Independence of $X_i$ is required for: }
+    \frac{(n-1)S^2_X}{\sigma_1^2} & \sim \chi^2_{(n_1-1)}
+    \intertext{Similarly, for $Y_i$: }
+    \frac{(n-1)S^2_Y}{\sigma_2^2} & \sim \chi^2_{(n_2-1)}
+    \intertext{Independence of $X_i$s and $Y_i$s needed for: }
+    \frac{\chi_{n_1-1}^2/(n_1-1)}{\chi_{n_2-1}^2/(n_2-1)} & \sim F_{(n_1-1), (n_2-1)}
+    \\ \frac{S^2_X}{S^2_Y} & = \frac{(n_1-1)S^2_X/(n_1-1)}{(n_2-1)S^2_Y/(n_2-1)}
+    = \frac{\left[\frac{(n_1-1)S_X^2}{\sigma^2}\right]/(n_1-1)}{\left[\frac{(n_2-1)S_Y^2}{\sigma^2}\right]/(n_2-1)}
+  \end{flalign*}
+  Where $\sigma^2 = \sigma_1^2 = \sigma_2^2$ under $H_0$.
+  $$RR:
+  \begin{cases}
+    F > F_{\alpha, (n_1-1), (n_2-1)}
+    \\ F < F_{1-\alpha, (n_1-1), (n_2-1)}
+    \\ F > F_{\frac{\alpha}{2}, (n_1-1), (n_2-1)}
+    \\ \text{or }F < F_{1-\frac{\alpha}{2}, (n_1-1), (n_2-1)}
+  \end{cases}
+  $$
+  \paragraph{Ex.} \#10.21, p536
+  \begin{tabular}{c| c c}
+    &Women& Men
+    \\ \hline $n$ & $10$ & $14$
+    \\ $\overline{y}$ & $14.9$ & $16.2$
+    \\ $S^2$ & $26.4$ & $12.7$
+  \end{tabular}
+  $$H_0: \sigma_W^2 = \sigma_M^2$$
+  $$H_A: \sigma_W^2 \neq \sigma_M^2$$
+  $$ \alpha = 0.1$$
+  \begin{flalign*}
+    F & = \frac{\overbrace{26.4}^{\nu = 10-1=9}}{\underbrace{12.7}_{\nu = 14-1=13}} \approx 2.08
+    \\ F_{0.05,9,13} & = 2.71
+    \\ F_{\scriptsize{\underbrace{1-0.05}_{0.95}},9,13} & 
+  \end{flalign*}
+  \includegraphics[width=.9\textwidth]{i11.pdf}
+  \\ We do not reject $H_0$.
+
+  If $F \sim Fisher_{\nu_1, \nu_2}$:
+  $$ F^{-1} \sim Fisher_{\nu_2,\nu_1}$$
+  $$F_{0.95,9,13} = F_{0.05,13,9}$$
+  \begin{flalign*}
+    P-value & = 2P(F>F_{obs})
+    \\ F_{obs} & = \frac{\text{Larger of the two }S^2}{\text{Smaller
+        of the two}}
+    \\ P-value & = 2P(F_{0,13}>\overbrace{2.08}^{\approx 2.16}) \approx 0.2
+  \end{flalign*}
+  \noindent \rule{\textwidth}{0.5pt}
+  \subsection{Neyman-Pearson Lemma (TSH)}
+  $H_0:\theta = \theta_0$, $H_A:\theta = \theta_1$
+  \\ $X_1, \ldots, X_n \stackrel{iid}{\sim} f_{\theta}(x),
+  \theta=\theta_1,\theta_2$
+  \begin{flalign*}
+    \frak{L}(\theta ; x_,1, \ldots, x_n) & = \prod_{i=1}^{n}f_\theta(x_i)
+    \intertext{If you treat both likelihoods equally, we can see which
+    one we should prefer going with: }
+    \frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} & > 1
+    \intertext{But what if we don't treat the two hypotheses equally?
+      For example, considering giving people a high credit limit given
+    information about them. It's more costly to give a conman who will
+    disappear a high credit limit, versus not giving a high enough
+    credit limit to someone who deserves it.}
+    \frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} & < K
+  \end{flalign*}
+  $$
+  \begin{cases}
+    \text{Reject }H_0 = 1 & 
+    \frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} < K
+    \\\gamma & 
+    \frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} = K
+    \\ \text{Accept }H_0 = 0 & 
+    \frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} > K
+  \end{cases}
+  $$
+  If $X$ is a continuous r.v. ``$=$'' happens with probability
+  \underline{zero}.
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  $K$ is chosen such that
+  \begin{flalign*}
+    P_{H_0}(\text{Rejecting }H_0) & = \alpha
+    \\ 
+    P\left(\frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} < K\right) & = \alpha
+    \intertext{For the discrete case we have:}
+    P\left(\frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} < K\right) + \gamma
+    P_{H_0}
+    P\left(\frac{\frak{L}(\theta_0 ; x_1, \ldots, x_n)}{\frak{L}(\theta_1 ; x_1, \ldots, x_n)} = K\right) & = \alpha
+  \end{flalign*}
+  \paragraph{Ex} $X_i \frac{iid}{\sim} Ber(p), i=1,\ldots,n, H_0: p =
+  p_0, H_A: p=p_A, p_A>p_0$.
+  \begin{enumerate}[Step 1:]
+  \item
+    \begin{flalign*}
+      \frak{L}(p; x_1, \ldots , x_n) & = \prod_{i=1}^{n} p^{x_i}(1-p)^{1-x_i} = p^{\sum_{i=1}^n x_i}(1-p)^{1-\sum_{i=1}^n x_i}
+    \end{flalign*}
+  \item
+    \begin{flalign*}
+      \frac{\frak{L}(p_0 ; x_1, \ldots, x_n)}{\frak{L}(p_A ; x_1, \ldots, x_n)} & = \frac{p_0^{\sum_{i=1}^n x_i}(1-p_0)^{1-\sum_{i=1}^n x_i}}{p_A^{\sum_{i=1}^n x_i}(1-p_A)^{1-\sum_{i=1}^n x_i}}
+    \end{flalign*}
+    Want to find $K$ such that 2 holds for a given $\alpha$.
+    \begin{flalign*}
+      \alpha & = P_{H_0:p = p_0} \left( \left(\frac{p_0}{p_A}\right)^{\sum_{i=1}^n x_i} \left[\frac{1-p_0}{1-p_A}\right]^{n-\sum_{i=1}^n x_i} <K\right)
+      \\ &\phantom{==}+ P_{H_0:p = p_0} \left( \left(\frac{p_0}{p_A}\right)^{\sum_{i=1}^n x_i} \left[\frac{1-p_0}{1-p_A}\right]^{n-\sum_{i=1}^n x_i} = K\right)
+      \\ RR & = \left\{ (x_1, \ldots, x_n): \left(\frac{p_0}{p_A}\right)^{\sum_{i=1}^n x_i} \left(\frac{1-p_0}{1-p_A}\right)^{n-\sum_{i=1}^n x_i} < K\right\}
+      \\ & \cup \left\{ (x_1, \ldots, x_n): \left(\frac{p_0}{p_A}\right)^{\sum_{i=1}^n x_i} \left(\frac{1-p_0}{1-p_A}\right)^{n-\sum_{i=1}^n x_i} = K\right\}
+      \intertext{Let $T = \sum_{i=1}^nX_i$.}
+      \phi(t) & = \left(\frac{p_0}{p_A}\right)^t
+      \left(\frac{1-p_0}{1-p_A}\right)^{n-t} \text{ is a monotone
+        function when }p_0 > p_A
+      \\ \log\phi(t) & = t\log \frac{p_0}{p_A} + (n-t)\log \frac{1-p_0}{1-p_a}
+      \\ & = t \log \left[\frac{p_0/(1-p_0)}{p_A/(1-p_A)}\right] + n \log \frac{1-p_0}{1-p_A} = at+b
+    \end{flalign*}
+    Now $\overbrace{p_0>p_A}^{(1)} \iff (1-p_0) < (1-p_0) \iff
+    \overbrace{\frac{1}{1-p_0}>\frac{1}{1-p_a}}^{(2)}$
+    \\ Using (1) \& (2) we have:
+    $$\frac{p_0}{1-p_0} > \frac{p_A}{1-p_A} \iff
+    \frac{p_0/(1-p_0)}{p_A/(1-p_A)} > 1$$ and hence $\log \phi(t)$ is
+    a monotone increasing ($\phi \uparrow$) function of $t$ if $p_0>p_A$
+      $$\frac{\frak{L}(p_0 ; x_1, \ldots, x_n)}{\frak{L}(p_A ; x_1,
+        \ldots, x_n)} < K \iff T < K_1$$
+      $$
+      \begin{cases}
+        1 & \text{if }T <K_1
+        \\\gamma & \text{if }T =K_1
+        \\\gamma & \text{if }T >K_1
+      \end{cases}
+      $$
+      ``1'' is rejection, ``0'' is acceptance. $T = \sum_{i=1}^n X_i
+      \stackrel{\text{under }H_0}{\sim} Bin(n,p_0)$.
+
+      Choose $K_1$:
+      $$P_{H_0:p=p_0}(T<K_1) + \gamma P_{H_0}(T=K_1) = \alpha$$
+      Find $K_1$ such that
+      $$P_{H_0:p=p_0} (T<K_1) < \alpha < P_{H_0: p = p_0} (T \leq
+      K_1)$$
+      and $$\gamma = \frac{\alpha - P_{H_0}(T<K_1)}{P_{H_0}(T=K_1)}$$
+  \end{enumerate}
 \end{document}
