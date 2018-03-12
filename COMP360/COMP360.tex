@@ -1948,7 +1948,7 @@
           \begin{align*}
             & \min \sum_{uv \in E}c_{uv}x_{uv}
             \\ & y_s - y_t \geq 1 , (\text{constraints for }f_{ts})
-            \\ & x_{uv} + y_v - y_u \geq 0, \forall uv v\in E (\text{constraints for}f_{uv})
+            \\ & x_{uv} + y_v - y_u \geq 0, \forall uv \in E (\text{constraints for}f_{uv})
             \\ & x_{uv} \geq 0, \forall uv\in E
             \\ & y_{u} \ \text{free }\forall u
           \end{align*}
@@ -2039,4 +2039,172 @@
             & \implies y_1^* = 1, y_3^* = 3
           \end{align*}
           $$12y_1^* + 7y_2^* + 10y_3^* = 42$$
+          \section{03/12/18}
+          \subsection{NP-Completeness and Computational
+            Interactability}
+          All the courses leading up to and including this have been
+          focusing on making efficient algorithms. Now we will focus
+          on what we cannot do.
+          \begin{itemize}
+          \item So far we designed efficient algorithms for many
+            problems.
+          \item There are problems that cannot be solved by any
+            algorithm (even if we don't care about running time,
+            undecidable problems). Hilbert (asked this question),
+            G\"odel, Church, Turing 1930's, see COMP 330 for more
+            information. This was studied before computers even
+            existed.
+          \end{itemize}
+          \paragraph{Ex:} Halting Problem: Given a code with an input,
+          we want to decide whether it eventually terminates
+          (impossible). If something terminates, you can run it and
+          just wait for it to finish. But if something doesn't
+          terminate, there's no definite time you can run it for to
+          know that it doesn't terminate.
+          \paragraph{Ex:} We are given 10 types of tiles, each with
+          four colors on its edges, and $1m \times 1 m$. Can we tile
+          the whole plane such that the color of the neighboring tiles
+          match on the bounding edge?
+          \subparagraph{Ex:} ~
+          \\ \includegraphics[width=.9\textwidth]{i111.pdf}
+          \\ This can be solved by placing them like:
+          \\ \includegraphics[width=.9\textwidth]{i112.pdf}
+          
+          So we can keep trying and find a nice pattern, if one
+          exists. But when do we stop and say there isn't one? This is
+          not possible.
+          \begin{itemize}
+          \item There are also problems that can be solved using
+            computers. Computational complexity studies the running
+            time required for solving these problems.
+          \item Are there problems for which we cannot do
+            significantly better than brute-force search?
+          \end{itemize}
+          \paragraph{Ex:} 3 colorability of a graph:
+          \\ Input: An undirected graph $G=(V,E)$
+          \\ Goal: Can we color the vertices of $G$ with 3 colors such
+          that neighboring vertices receive different colors?
+          \\ \includegraphics[width=.9\textwidth]{i113.pdf}
+          \\ Brute-force algorithm: Check all the $3^n$ different
+          colorings where $n=\left|V\right|$. Running time $O(3^nm)$
+          where $m = \left|E\right|$.
+
+          If we were checking for 2 colorability, we could do better
+          than brute force and just color as we go.
+
+          It seems that we cannot do anything significantly
+          better. Are there any efficient algorithms for this? It
+          seems not.
+
+          On the other hand if someone provides us with a potential
+          proper 3-coloring, we can check its validity in polynomial
+          time.
+          \\ \includegraphics[width=.9\textwidth]{i114.pdf}
+
+          Are there problems for which verifying the
+          \underline{correctness of a solution} (NP, will be formally
+          defined later) is significantly easier than solving them? Of
+          course, some things like grading an assignment seem easier
+          than completing an assignment and checking the validity of a
+          sudoku solution is easier than solving it. So it seems to be
+          true.
+
+          3-colorability seems to be on of these problems.
+
+          This is essentially the P vs NP problem (are these two types
+          of problems the same? Most important problem in computer
+          science).
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          We will focus on yes/no problems (decision problems, like 3
+          colorability, not things like $max\hbox{-}flow$). Problems
+          with yes/no answer.
+
+          We can convert other problems to decision problems without
+          making them easier.
+          \paragraph{Ex: }Max Independence Problem: Given an
+          undirected graph $G=(V,E)$ what is the size of the largest
+          \underline{set of vertices no two which are adjacent}
+          (independent set).
+          \\ \includegraphics[width=.9\textwidth]{i115.pdf}
+
+          Decision version: Input: $G, k \in \mathbb{N}$.
+          \\ Q: Does $G$ have an independent set of size $\geq k$?
+
+          If we can solve this efficiently then we can use a ``for
+          loop'' on $k$ to solve the original problem efficiently.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          We are going to focus on decision problems.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          We call an algorithm \textbf{efficient} if its running time is
+          $O(n^c)$ for some constant $c$ where $\underline{n}$ is the
+          number of bits required to represent the input.
+          \paragraph{Ex:} Primality test
+          \\ Input: $m$
+          \begin{algorithmic}
+            \State Alg.
+            \For {$i=2,\ldots,n-1$}
+                \If {$i|m$} output ``No''
+                \State terminate
+                \EndIf
+            \EndFor
+            \State output ``Yes''
+          \end{algorithmic}
+          Running time: $O(m)$ essentially. But is this efficient?
+          No. Input size: $n = \lceil \log_2 m\rceil$. Running time:
+          $\Theta(2^n)$. This same issue came up when we were looking
+          at Ford Fulkerson and the efficient version of
+          it. \textbf{Not efficient}.
+          \paragraph{Def:} $P$ is the class of all decision problems
+          that can be solved efficiently (Polynomial time)
+          \paragraph{Ex:} ~
+          \\ Input: $G=(V,E)$ undirected
+          \\ Q: Is $G$ connected?
+          \\ Belongs to $P$.
+          \paragraph{Ex:}~
+          \\ Input: Flow network $G$ and a number $k$.
+          \\ Q: Is $max\hbox{-}flow \geq k$?
+          \\ Belongs to $P$. (Can be solved by scaling Ford Fulkerson)
+          \\ \includegraphics[width=.9\textwidth]{i116.pdf}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Def:} An \underline{efficient certifier} for a
+          problem $X$ is an algorithm that takes as input $\langle W,
+          t \rangle$ where $w$ is an input for $X$ and $t$ is a
+          ``potential solution'' (certificate, can be regarded as a
+          hint to the problem).
+          \begin{enumerate}
+          \item It runs in polynomial time $O(n^c)$ where
+            $n=\left|w\right|$.
+          \item If $w$ is a NO input then for all $t$ the algorithm
+            outputs NO.
+          \item If $w$ is a YES input then $\exists \ t$ for which the
+            algorithm outputs YES.
+          \end{enumerate}
+          \paragraph{Ex:} For 3-colorability the efficient certifier
+          takes $\langle G, c \rangle$ where $G$ is the original graph
+          and $c$ a potential coloring. For every edge in $G$ it
+          checks whether $c$ assigns different colors to endpoints, if
+          Yes outputs Yes else outputs NO.
+
+          Running time $O(m)$ where $m$ is the number of edges. Note
+          if $G$ is not 3-colorable $\implies$ for all $c$ we output
+          NO. On the other hand for every Yes input (3-colorable
+          graph) there is a coloring $c$ for which $\langle G, c
+          \rangle$ will be accepted (The certifier outputs Yes).
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          $NP$ (non-deterministic polynomial) is the set of problems
+          with efficient certifiers.
+          \paragraph{Ex:} 3-colorability is in $NP$ as we just saw.
+
+          Q: Is $P \neq NP$?
+          \paragraph{Thm:} $P \subset eq NP$.
+          \paragraph{\underline{Proof}:} Consider a problem $X$ in $P$
+          and let $A$ be an efficient algorithm that solves
+          $A$. Consider the following efficient certifier:
+          \begin{itemize}
+          \item On input $\langle w, t \rangle$: Ignore $t$ and run
+            $A$ on $w$ and if it outputs Yes $\implies $ output Yes,
+            No $\implies$ output NO.
+
+            Running time: Same as $A \implies$ efficient.
+          \end{itemize}
         \end{document}
