@@ -2998,5 +2998,161 @@ Z & =
       $$P_{H_0:p=p_0} (T<K_1) < \alpha < P_{H_0: p = p_0} (T \leq
       K_1)$$
       and $$\gamma = \frac{\alpha - P_{H_0}(T<K_1)}{P_{H_0}(T=K_1)}$$
+    \end{enumerate}
+    \section{03/15/18}
+    \subsection{Likelihood Ratio Tests}
+    We have a bunch of observations: $\lambda(x_1, \ldots, x_n) =
+    \dfrac{\max_{\vec{\theta} \in
+        \Theta_0}\mathcal{L}(\theta;x_1,\ldots,x_n)}{\max_{\vec{\theta}
+        \in \Theta}\mathcal{L}(\theta;x_1,\ldots,x_n)} < K$
+    \begin{flalign*}
+      \mathcal{L}(\theta ; X_1, \ldots, X_n) &
+      = \prod_{i=1}^{n} f(x_i, \theta)
+      \intertext{If we have a random sample, i.e. $X_i \stackrel{iid}{\sim}f$}
+      X_i & \stackrel{iid}{\sim}N(\overbrace{\mu,\sigma^2}^{\text{unknown}}), \vec{\theta} = (\mu,\sigma^2)
+      \\ H_0 & : \mu = \mu_0 \text{ (Composite hypothesis)}
+      \\ \Theta &
+      = \left\{\vec{\theta} = (\mu,\sigma^2): \int_{-\infty}^{\infty} \frac{1}{\sigma\sqrt{2\pi}}e^{-\left(\frac{1}{2\sigma^2}\right)(y-\mu)^2} \ dx = 1\right\}
+      \\ & = \left\{\vec{\theta} = (\mu,\sigma^2): \mu \in \mathbb{R}, \sigma^2 >0\right\}
+      \\ \Theta_0 & = \left\{\vec{\theta}=(\mu_0,\sigma^2): \sigma^2 > 0\right\}
+    \end{flalign*}
+      {What values of $\lambda$ support the null and which
+        support the alternative? $\Theta_0$ is a subset of
+        $\Theta$. If $\mu_0$ is really the true value, then the
+        numerator will be close to the denominator, i.e. the ratio
+        $\lambda$ will be close to $1$. The further away $\mu_0$ is
+        from the true $\mu$, the further the ratio will be from
+        $1$. This is because if the maximum is contained in a subset,
+        then maximizing over the subset will be the same as maximizing
+        over the whole set.}
+      
+      {The denominator here is based off the maximum
+        likelihood method. When $n$ is very large, the maximum
+        likelihood is close to the true value of $\theta$. The fact
+        that this is right headed and more concentrated around the
+        truth for large $n$, then the denominator is the best proxy
+        for this.}
+      \paragraph{Ex.} $X_i \stackrel{iid}{\sim} N(\mu,\sigma^2),
+      i=1,2,\ldots,n$
+
+      The example that motivated Fisher, fertilizing plants with
+      perfect weather and conditions. 
+      \begin{flalign*}
+        H_0 : \mu & = \mu_0
+        \\ X_{ij} & = \mu + \alpha_i +
+        \overbrace{\varepsilon_{ij}}^{\text{Fluctation}}, i=1,2 \text{
+        (2 different fertilizers), }j=1,\ldots,n_i
+        \\ \varepsilon_{ik} & \sim N(0,\tau^2)
+        \\ H_0: \alpha_1 & =\alpha_2 \text{ (if we accept this then we
+          can say the fertilizers are the same)}
+      \end{flalign*}
+      \noindent \rule{\textwidth}{0.5pt}
+      \begin{flalign*}
+        X_i & \stackrel{iid}{\sim} N(\mu, \sigma^2), i=1,\ldots,n
+        \\ H_0 : \mu & = \mu_0 \to \text{ known value}
+        \\ \lambda(x_1, \ldots, x_n) & = \dfrac{\max_{{\theta} \in
+        \Theta_0}\mathcal{L}(\theta;x_1,\ldots,x_n)}{\max_{{\theta}
+        \in \Theta}\mathcal{L}(\theta;x_1,\ldots,x_n)}
+  \end{flalign*}
+  \begin{enumerate}[Step 1:]
+  \item
+    \begin{flalign*}
+      \max_{\theta \in \Theta_0} & = \max_{\mu_0, \sigma^2} \prod_{i=1}^{n} \frac{1}{\sigma\sqrt{2\pi}}e^{-\left(\frac{1}{2\sigma^2}\right)(y-\mu)^2}
+      = \max_{\sigma^2} \left(\frac{1}{\sqrt{2\pi}\sigma}\right)^n e^{-\sum_{i=1}^n \frac{(x_i-\mu_0)^2}{2\sigma^2}}
+    \end{flalign*}
+    Taking logarithm:
+    \begin{flalign*}
+      \max_{\sigma^2} \left[\frac{-n}{2}\log 2\pi - \frac{n}{2} \log \sigma^2 - \sum_{i=1}^n \frac{(x_i-\mu_0)^2}{2\sigma^2}\right]
+    \end{flalign*}
+    Taking $\frac{d{}}{d{\sigma^2}}$:
+    \begin{flalign*}
+      -\frac{n}{2} \cdot \frac{1}{\sigma^2}+\frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \mu_0)^2 & = 0
+      \\ \sigma^2_0 & = \frac{1}{n} \sum_{i=1}^n (x_i-\mu_0)^2
+      \\ \max_{\theta \in \Theta_0} \mathcal{L}(\vec{\theta}; x_1, \ldots, x_n) & = \mathcal{L}(\mu_0,\hat{\sigma}_0^2; x_1, \ldots, x_n)
+      \\ & = \left(\frac{1}{\sqrt{2\pi}\hat{\sigma}_0}\right)^n e^{-\frac{\sum_{i=1}^n (x_i-\mu_0)^2}{2\hat{\sigma}_0^2}}
+      \\ & = \left(\frac{1}{\sqrt{2\pi}\hat{\sigma}_0}\right)^n e^{-\frac{n}{2}}
+    \end{flalign*}
+  \item
+    \begin{flalign*}
+      \max_{\theta \in \Theta} \mathcal{L}(\vec{\theta}; x_1, \ldots, x_n)
+      \\ \hat{\mu}_{ML} = \overline{x}, \hat{\sigma}_{ML}^2 = \frac{1}{n} \sum_{i=1}^n (x_i-\overline{x}_n)^2
+      \\ \max_{\theta \in \Theta} \mathcal{L}(\vec{\theta}; x_1, \ldots, x_n) = \left(\frac{1}{\sqrt{2\pi}\hat{\sigma}_{ML}}\right)^n e^{-\frac{\sum_{i=1}^n (x_i-\overline{x})^2}{2\hat{\sigma}^2_{ML}}}
+      \\ \frac{\sum_{i=1}^n (x_i - \overline{x}_n)^2}{\hat{\sigma}_{ML}^2} = n
+      \\ \max_{\theta \in \Theta} \mathcal{L}(\vec{\theta};x_1,\ldots,x_n) = \left(\frac{1}{\sqrt{2\pi}\hat{\mu}_{ML}}\right)^n e^{-\frac{n}{2}}
+      \\ \lambda(x_1, \ldots, x_n) = \frac{ \left(\frac{1}{\sqrt{2\pi}\hat{\sigma}_0}\right)^n e^{-\frac{n}{2}}}{ \left(\frac{1}{\sqrt{2\pi}\hat{\sigma}_{ML}}\right)^n e^{-\frac{n}{2}}}
+      \\ = \left(\frac{\hat{\sigma}_{ML}^2}{\hat{\sigma}_{0}^2}\right)^{\frac{n}{2}}
+      \\ \hat{\sigma}_0^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \mu)^2, \hat{\sigma}^2_{ML} = \frac{1}{n}\sum_{i=1}^n (x_i - \overline{x}_n)^2
+      \\ \sum_{i=1}^n (x_i - \mu_0)^2 = \sum_{i=1}^n [(x_i-\overline{x}_n)+(\overline{x}_n - \mu_0)]^2
+      \\ = \sum_{i=1}^n (x_i - \overline{x}_n)^2 + n (\overline{x}_n - \mu_0)^2 + 2(\overline{x}_n - \mu_0) \underbrace{\sum_{i=1}^n (x_i-\overline{x}_n)}_{0}
+      \\ = \sum_{i=1}^n (x_i - \overline{x}_n)^2 + n(\overline{x}_n - \mu_0)^2
+      \\ \hat{\sigma}_0^2 = \hat{\sigma}_{ML}^2 + (\overline{x}_n - \mu_0)^2 
+    \end{flalign*}
+    \begin{flalign*}
+      \lambda(x_1, \ldots, x_n) &
+      = \left(\frac{\hat{\sigma}_{ML}^2}{\hat{\sigma}_0^2}\right)^{\frac{n}{2}}
+      = \left(\frac{\hat{\sigma}_{ML}^2}{\hat{\sigma}_{ML}^2 + (\overline{x}_n - \mu_0)^2}\right)^{\frac{n}{2}}
+      \\ & = \left(\frac{1}{1+\frac{(\overline{x}_n - \mu_0)}{\hat{\sigma}^2_{ML}}}\right)^{\frac{n}{2}}
+    \end{flalign*}
+    \begin{flalign*}
+      P_{H_0: \mu = \mu_0} (\lambda(X_1,\ldots,X_n)< K) & = \alpha
+    \end{flalign*}
+    \begin{flalign*}
+      \left\{\lambda(X_1, \ldots, X_n)<K\right\} \text{ if and only if
+      }\left\{U>K'\right\}
+    \end{flalign*}
+    \begin{flalign*}
+      P_{H_0: \mu = \mu_0} (\lambda(X_1, \ldots, X_n)<K) &
+      = P_{H_0: \mu = \mu_0} (U > K')
+      \intertext{I need to find $K'$ such that:}
+      P_{H_0:\mu = \mu_0}(U>K') & = \alpha \to \text{ prespecified}
+      \\ U & = \frac{n(\overline{X}_n - \mu_0)^2}{\sum_{i=1}^n (X_i - \overline{X}_n)^2}
+      \intertext{Assume $\sigma_0^2$ is the true value of the
+        variance, unknown to us}
+      U &
+      =\frac{n(\overline{x}_n - \mu_0)^2/\sigma_0^2}{\sum_{i=1}^n (x_i - \overline{x}_n)^2/\sigma_0^2}
+      =\frac{n(\overline{x}_n - \mu_0)^2/\sigma_0^2}{\underbrace{\frac{(n-1)S_n^2}{\sigma_0^2}}_{\sim \chi^2_{(n-1)}}}
+    \end{flalign*}
+    \begin{flalign*}
+      \frac{\overline{X}_n - \mu_0}{\frac{\sigma_0}{\sqrt{n}}} & \sim N(0,1)
+      \\ & \implies \left[\frac{\overline{X}_n - \mu_0}{\frac{\sigma_0}{\sqrt{n}}}\right]^2 \sim \chi_{(1)}^2
+      \\ Z & \sim N(0,1) \implies Z^2 \sim \chi_{(1)}^2
+    \end{flalign*}
+    $\overline{X}_n$ is independent of $S_n^2$ if $X_i
+    \stackrel{iid}{\sim}N(0,1)$. $X_i = \mu + \varepsilon_i,
+    \varepsilon_i \stackrel{iid}{\sim}N(0,\sigma^2)$
+    \\$X_i = \overbrace{\overline{X}}^{\mu} + \underbrace{(X_i -
+      \overline{X})}_{\varepsilon_i}, \overline{X} \independent (X_1 -
+    \overline{X}, \ldots, X_n - \overline{X}_n)$
   \end{enumerate}
+  Using these three facts ($\chi^2$ distributed and independence):
+  \begin{flalign*}
+    (n-1)U &
+    = \frac{\chi^2_{(1)}/1}{\chi^2_{(n-1)}/n-1} \implies (n-1)U \sim F_{1,n-1}
+  \end{flalign*}
+  \noindent \rule{\textwidth}{0.5pt}
+  \paragraph{Theorem:} Thm 10.2
+  $$-2 \ln \lambda(\vec{X}) \stackrel{D}{\to} \chi^2_{d.f.} \text{ for
+  large }n$$ where
+$d.f. = dim \Theta - dim \Theta_0$
+
+In our case:
+\begin{flalign*}
+  \Theta \ (\mu,\sigma^2) & \implies dim \Theta = 2
+  \\ \Theta_0 \ (\mu_0, \sigma^2) & \implies dim \Theta_0 = 1
+  \\ H_0: \mu \in (a,b) & \to \text{ Problem!}
+\end{flalign*}
+\subsection{Regression Analysis} (Not following the book, look at
+typed notes uploaded on myCourses)
+$$(X,Y)$$
+Get $\displaystyle Y=f(X)$. In this course we'll do linear regression.
+$$ (X_i, Y_i), i=1,2,\ldots,n$$ Say height and weight.
+$$Y_i = \alpha + \beta X_i + \varepsilon_i, \varepsilon_i
+\stackrel{iid}{\sim}F, E(\varepsilon_i) = 0$$
+\noindent \rule{\textwidth}{0.5pt}
+\begin{flalign*}
+  E[Y_i | X_i = x_i] &
+  = \alpha + \beta x_i
+\end{flalign*}
+\includegraphics[width=.9\textwidth]{i12.pdf}
+\\ The challenge in statistics is fit vs prediction.
 \end{document}
