@@ -2196,7 +2196,7 @@
           \paragraph{Ex:} 3-colorability is in $NP$ as we just saw.
 
           Q: Is $P \neq NP$?
-          \paragraph{Thm:} $P \subset eq NP$.
+          \paragraph{Thm:} $P \subseteq NP$.
           \paragraph{\underline{Proof}:} Consider a problem $X$ in $P$
           and let $A$ be an efficient algorithm that solves
           $A$. Consider the following efficient certifier:
@@ -2207,4 +2207,161 @@
 
             Running time: Same as $A \implies$ efficient.
           \end{itemize}
+          \section{03/14/18}
+          \paragraph{Recall:}
+          \begin{itemize}
+          \item Focus on decision (yes/no) problems. We saw that we
+            can convert optimization problems to decision problems,
+            just add an extra input to see if optimal value is greater
+            than or equal to some parameter $k$ and we can just search
+            over all those values.
+          \item Solving a problem vs verifying a solution (the key of
+            $P$ vs $NP$).
+          \end{itemize}
+          \paragraph{Def:} An efficient certifier for a problem $X$ is
+          a polynomial time algorithm that takes as input $\langle w,
+          t \rangle$ ($w$ is an instance of the original problem we
+          want to solve, $t$ is the solution, a certificate or a
+          hint). We are slightly modifying the definition from last lecture.
+          \begin{enumerate}
+          \item $\left|t\right| \leq O (\left|w\right|^c)$ where $c$
+            is a fixed constant. i.e. the solution we want to verify
+            has to be polynomial (we did not mention this last
+            lecture, but we said the algorithm has to be polynomial,
+            so essentially the same).
+          \item $w$ is a Yes input $\iff \exists t $ for which our
+            certifier accepts $\langle w, t \rangle$ (i.e. if $w$ is a
+            No input we just negate this, i.e. $\forall t$ the
+            certifier does not accept)
+          \end{enumerate}
+          \paragraph{Def:} $NP$ is the set of all problems that have
+          efficient certifiers.
+          \paragraph{Def:} $P$ is the set of problems that can be
+          solved in polynomial time.
+          \paragraph{Thm:} $P \subseteq NP$ (proved last lecture, just
+          ignore $t$). Is $P \neq NP$? (most important question in
+          computer science)
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Max-flow:} $(G,k)$ input, where $G$ is a flow
+          network. Is $Max\hbox{-}flow$ of $G \geq k$?
+
+          $\overline{Max\hbox{-}flow}$: is $Max\hbox{-}flow < k$? (negation)
+
+          Problem: Without using the fact that $Max\hbox{-}flow \in P$
+          prove that both these problems are in $NP$ (we want to
+          design an efficient certifier for the problems).
+
+          An efficient certifier for $max\hbox{-}flow: \langle (G,k),
+          f \rangle$ where $f$ is a flow. It verifies that $f$ is a
+          valid flow and its value is $\geq k$. It accepts if these
+          conditions are satisfied.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          An efficient certifier for $\overline{Max\hbox{-}flow}$
+          (complement). $\langle (G,k), (A,B) \rangle$. It accepts
+          $\iff cap(A,B) < k$.
+          \\ \includegraphics[width=.9\textwidth]{i117.pdf}
+
+          Could ask the same 2 questions for linear programming, both
+          of which are also in $NP$. If a problem is in $NP$, it does
+          not mean its complement is in $NP$.
+
+          \paragraph{CoNP:} Is the set of problems whose complements
+          are in $NP$.
+          \paragraph{Thm:} $P \subseteq CoNP$.
+          \\ Conjectured picture (this is how people believe things are):
+          \\ \includegraphics[width=.9\textwidth]{i118.pdf}
+          \paragraph{Def:} $EXP$ is the set of problems that can be
+          solved in exponential time $O(2^{n^c})$ for some constant
+          $c$.
+          \paragraph{Ex:} $3 \hbox{-}$col is in $EXP$.
+          \paragraph{Algorithm:} Generate all possible 3-coloring and
+          see if any of them is proper.
+          $$O(3^n n^2) \leq O(2^{2n})$$
+          Obviously $P \subseteq EXP$.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Thm:} $NP \subseteq EXP$.
+          \paragraph{Proof:} Let $X$ be a problem in $NP$. Then there
+          is an efficient certifier $\mathcal{A}$ that takes $\langle
+          w , t \rangle$ and $w$ is a Yes input $\iff \exists t $
+          such that $\mathcal{A}$ accepts $\langle w,t \rangle$. How
+          do we change this into an exponential time algorithm without
+          a certifier? Just check every $t$ (brute force).
+
+          Let $\mathcal{B}$ be the following algorithm: generate all
+          $t$ up to size $O(\left|w\right|^c)$ (we put a bound on the
+          size of $t$ earlier in the lecture). We run $\mathcal{A}$
+          on $\langle w , t \rangle$ and if any of them is accepted
+          $\implies $ output ``Yes'', else ``No''.
+
+          Another interpretation of the $P$ vs $NP$ question: Does having
+          a brute force algorithm imply there is an efficient
+          algorithm?
+          \\ \includegraphics[width=.9\textwidth]{i119.pdf}
+          \paragraph{Polynomial Time Reductions:} Can instances of a
+          problem $X$ be solved using a blackbox that solves problem
+          $Y$?
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          We say that $X$ is polynomial-time reducible to $Y$ if there
+          is an efficient ``oracle'' algorithm that solves
+          $X$ in polynomial time using a blackbox (``oracle'') that
+          solves whether $y$ is a Yes input for $Y$ or not.
+
+          We write $X \leq_p Y$, i.e. $X$ is easier to solve than
+          $Y$. We've seen this earlier in the course, for example,
+          solving the baseball elimination problem using
+          $Max\hbox{-}flow$ or using linear programming to solve
+          $Max\hbox{-}flow$.
+          \paragraph{Ex:} Hamiltonian Cycle
+          \\ Input: Undirected graph
+          \\ Q: Does $G$ have a cycle that visits all vertices?
+          \\ \includegraphics[width=.9\textwidth]{i120.pdf}
+          \paragraph{Hamiltonian Problem}~
+          \\ Input: $G$ undirected
+          \\ Q: Is there a path that visits all the vertices?
+          \\ \includegraphics[width=.9\textwidth]{i121.pdf}
+
+          Show Hamiltonian Cycle $\leq_P$Hamiltonian Path (note that
+          this means we are reducing Hamiltonian path to Hamiltonian
+          cycle, not the other way around, common mistake on exams and
+          assignments).
+          \\ \includegraphics[width=.9\textwidth]{i122.pdf}
+          \\ If we remove the edges in green, just because there is a
+          Hamiltonian path does not imply there is a Hamiltonian cycle
+          with the removed edge, because it may not go through
+          there. To solve this, we add dangling edges in green. With
+          these dangling edges the only possibility of a Hamiltonian
+          path is a path that starts and ends in the new vertices.
+
+          \begin{algorithmic}
+            \State On an input $G$ for Hamiltonian cycle:
+            \For {every edge $xy$ in $G$}
+                \State remove $xy$, add dangling edges to $x$ and $y$
+                and call this $H_{xy}$
+                \If {$H_{xy}\ \underbrace{\text{has a Hamiltonian
+                      path}}_{(oracle)}$} output Yes; terminate
+                \EndIf
+            \EndFor
+            \State output ``No''
+          \end{algorithmic}
+          \noindent \rule{\textwidth}{0.5pt}
+          So if Hamiltonian Path $\in P \implies$ Hamiltonian Cycle
+          $\in P$.
+          \paragraph{Thm:} If $X \leq_P Y$ and $Y \in p \implies X \in
+          P$.
+          \paragraph{Pf:} Take the ``oracle'' alg that solves $X$
+          using $Y$ and replace the oracle with an efficient
+          algorithm for $Y$. This will give us an efficient algorithm
+          for $X$.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Ex:} Hamiltonian Path $\leq_P$ Hamiltonian Cycle.
+          \begin{algorithmic}
+            \For {every pair of vertices $x,y$}
+                \State add the edge $xy$ (if it doesn't exist)
+                \If {this graph has a Hamiltonian cycle} $\implies$
+                Yes; terminate
+                \EndIf
+            \EndFor
+            \State No
+          \end{algorithmic}
+          \includegraphics[width=.9\textwidth]{i123}
         \end{document}
