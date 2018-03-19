@@ -2364,4 +2364,182 @@
             \State No
           \end{algorithmic}
           \includegraphics[width=.9\textwidth]{i123}
+          \section{03/19/18}
+          \paragraph{Recall:}
+          \begin{itemize}
+          \item $P$ polynomial time solvable (easy problems for us, we
+            have an efficient algorithm for them)
+          \item $NP$ efficient certifiers (if it's a yes input,
+            there's an easy way to convince someone that it is a yes
+            input, easy to verify given a certificate)
+          \item $CoNP$ (No inputs are easy to verify, complement of
+            things in NP)
+          \item $EXP$ exponential time solvable (still slow, but at
+            least there's a bound)
+          \end{itemize}
+          \includegraphics[width=.9\textwidth]{i119.pdf}
+
+          This is interesting, because we see that $NP \rightarrow$
+          Brute force (exponentials)
+          \\ $\implies NP \subseteq EXP$, same for $CoNP$
+
+          Polynomial reductions: $X \leq_P Y$ if $X$ can be solved
+          efficiently (polynomial time) using an oracle for $Y$.
+          \paragraph{Example:} $X$ is the following problem:
+          \\ Input: Undirected $G$
+          \\ Q: Does $G$ have a Hamiltonian Cycle?
+          \\ Problem $Y$:
+          \\ Input: Undirected $G$, $k \in \mathbb{N}$
+          \\ Q: Does $G$ have a cycle of length $k$?
+
+          Which of these problems is harder? $Y$, since it takes in
+          an extra parameter $k$ and can be used to solve $X$ by feeding the
+          number of vertices of $G$ into $Y$.
+
+          $X \leq_P Y$: Given an input $G$ for problem $X$, then we
+          can set $k = \left|V(G)\right|$ and then use the oracle for
+          $Y$ to see if $G$ has a Hamiltonian Cycle.
+
+          How about $Y \leq_P X$? True, but more complicated, won't
+          go through this.
+
+          \paragraph{Example:} Let $Z$:
+          \\ Input: $G$
+          \\ Q: Does $G$ have a cycle of prime length?
+          \\ $Z \leq_P Y$: Given an input $G$ to $Z$ consider the
+          following efficient oracle algorithm:
+          \begin{algorithmic}
+            \For {$k=1,\ldots,\left|V(G)\right|$}
+                \If{$k$ is a prime number}
+                    \If {$(G,k)$ is a Yes input for $Y$} Output Yes
+                    and stop
+                    \EndIf
+                \EndIf    
+            \EndFor    
+            \State Output ``NO''.
+          \end{algorithmic}
+          \subsection{SAT Problem}
+          \paragraph{Def:} Suppose $x_1, \ldots, x_n$ are Boolean
+          variables (True/False vars).
+          \begin{itemize}
+          \item A term (aka literal) is a variable or its negation
+            ($x_i$ or $\underbrace{\overline{x_i}}_{\text{or }\neg
+              x_i}$).
+          \item A clause (or clause) is an OR of a few terms
+            $$C=(t_1 \lor t_2 \lor t_3 \lor \ldots \lor t_{\ell})$$
+            where $t_1, \ldots, t_{\ell}$ are terms.
+          \item A conjunctive normal form (CNF) is an AND of clauses
+            $C_1 \land C_2 \land \ldots \land C_m$
+          \end{itemize}
+          \paragraph{Example of a CNF:}
+          $$\underbrace{(x_1 \lor x_2 \lor \overline{x_3})}_{C_1}
+          \land \underbrace{(\overline{x_2} \lor x_4)}_{C_2} \land
+          \underbrace{(\overline{x_4})}_{C_3}$$
+          Notation: $\lor \iff $OR, $\land \iff $AND
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{SAT Problem:}~
+          \\ Input: A CNF $\phi$
+          \\ Q: Is it possible to assign $T/F$ values to variables
+          such that $\phi$ becomes True? In other words is $\phi$
+          satisfiable?
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          In the above example,$x_1 = x_3 = T, x_2 = x_4 = F$ to
+          satisfy $\phi$, this is a Yes input.
+          \paragraph{Thm:} $SAT \in NP$
+          \paragraph{Proof:} The efficient certifier takes a truth
+          assignment to the variables and verifies whether it
+          satisfies all the clauses (can be done in polytime).
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Thm:} (Cook-Levin 71) Every problem $X$ in $NP$
+          can be polynomialy reduced to $SAT$ (if you can solve $SAT$
+          then you can solve anything in $NP$).
+          $$ X \leq_P SAT$$
+          \paragraph{Corollary:} If $SAT \in P \implies$ every problem
+          $X \in NP$ belongs to $P\implies P=NP$.
+          \\ If $SAT\notin P \implies P \neq NP$ (example of a problem
+          that is in $NP$ but not in $P$)
+          \\ So, thanks to the Cook-Levin Theorem, the $P$ vs $NP$
+          problem is equivalent to ``Is $SAT \in P$?''
+          %we can reduce $P$
+          %vs $NP$ to whether $SAT$ is in $P$ or not.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \includegraphics[width=.9\textwidth]{i124.pdf}
+          \\ i.e. $SAT$ is the hardest problem in $NP$.
+
+          Is $SAT$ the only such problem?
+          \paragraph{Def:} ($NP$-Complete) A problem $Y$ is called
+          $NP$-Complete if
+          \begin{enumerate}[(i)]
+          \item $Y \in NP$
+          \item $X \leq_P Y$ for all $X\in NP$ (Completeness)
+          \end{enumerate}
+          $SAT$ is $NP$-Complete (\underline{do not} confuse this
+          with being $NP$, they are two different things).
+
+          How can we show a problem $Z$ is $NP$-Complete? First we
+          show $Z \in NP$ by giving an efficient certifier (if this is
+          asked on an exam this is usually about 20\% of the question,
+          \textbf{don't forget it}). Then we reduce $SAT$ (or any
+          other $NP$-Complete problem) to $Z$.
+          $$X \leq_P SAT \leq_P Z$$ since being polynomial reducible
+          is a transitive relationship.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          This approach will always work, because if something is
+          $NP$-Complete, then it must be polynomial reducible to
+          $SAT$, although this approach might not be the best approach
+          at times, might be overly complicated.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Independent Set Problem}~
+          \\Input: $G$ undirected, $k\in \mathbb{N}$
+          \\ Q: Does $G$ have an \underline{independent set} (no edges
+          between these vertices) of size $k$?
+          \paragraph{Ex:} ~
+          \\\includegraphics[width=.9\textwidth]{i125.pdf}
+          \paragraph{Thm:} $IND$ is $NP$-Complete.
+          \paragraph{Pf:} It is in $NP$. For a Yes instance we can
+          give an independent set of size $k$ and it can be easily
+          verified.
+
+          To prove completeness $SAT \leq_P IND$ (don't do the
+          reduction in the opposite direction, common mistake, it'll
+          tell us nothing new).
+
+          Let $\phi$ be an input to $SAT$ with variables $x_1, \ldots,
+          x_n$.
+
+          Construct a graph $G_{\phi}$ in the following manner:
+          \begin{enumerate}
+          \item Start with $n$ isolated edges each between a variable
+            $x_i$ and its negation $\overline{x_i}$.
+            \\ \includegraphics[width=.9\textwidth]{i126.pdf}
+            \\ The largest independent set here is of size $n$. Notice
+            that each vertex we decide to include gives us a truth
+            assignment (which one to assign true).
+            \\ (so a max independent set selects exactly one of $x_i$
+            or $\overline{x_i}$ for each $i$ and can be interpreted as
+            a truth assignment)
+          \item
+            \begin{algorithmic}
+              \For{each clause $C_i = (t_{i1}\lor t_{i2} \lor \ldots
+                \lor t_{ir})$}
+                \State put $r$ new vertices in the graph and join all
+                these $r$ vertices together.
+              \EndFor
+            \end{algorithmic}
+          \item
+            \begin{algorithmic}
+              \For{every term in each clause}
+                \State add an edge between that and the opposite term
+                in the set of vertices introduced in part 1.
+              \EndFor
+            \end{algorithmic}
+            This assures that the truth assignment from the first part
+            complies with the second part.
+          \end{enumerate}
+          \paragraph{Ex:} $\phi = (x_1 \lor x_2 \lor x_3) \land
+          (\overline{x_2} \lor x_4) \land (\overline{x_3} \lor
+          \overline{x_4})$
+          \\ \includegraphics[width=.9\textwidth]{i127.pdf}
+          \paragraph{Claim:} $G_{\phi}$ has an independent set of size
+          $n+m \iff \phi$ is satisfiable ($m$ is the number of clauses).
         \end{document}
