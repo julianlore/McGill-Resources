@@ -3155,4 +3155,53 @@ $$Y_i = \alpha + \beta X_i + \varepsilon_i, \varepsilon_i
 \end{flalign*}
 \includegraphics[width=.9\textwidth]{i12.pdf}
 \\ The challenge in statistics is fit vs prediction.
+\section{03/20/18}
+\subsection{Linear Regression}
+\begin{flalign*}
+  E(Y) &
+  = \beta_0 + \beta_1x_1 + \ldots + \beta_k x_k
+\end{flalign*}
+$x_i$ independent variables. For example, let's say:
+$$E(\underbrace{Y}_{\text{Height}}) = \overbrace{\beta_0}^{\text{intercept}} + \overbrace{\beta_1}^{\text{slope}} \underbrace{x_1}_{\text{Age}}$$
+Fitted model: $\hat{y}=\hat{\beta_0}+\hat{\beta_1}x$
+\\ Deterministic model (no error, ex. $F=ma$) vs probalistic model
+($y=\beta_0+\beta_1 x + \varepsilon, E(\varepsilon)=0$)
+
+We are looking at $y$s that are linear in $\beta_i$.
+
+Simple linear model:
+$y = \beta_0 + \beta_1 x + \varepsilon$. We want to minimize the
+distance from the line generated to the points, i.e. $$Q = \sum_{i=1}^n
+(Y_i - \beta_0-\beta_1 x_i)^2 \implies
+\begin{cases}
+  \frac{\partial{Q}}{\partial{\beta_0}} & = -2 \sum_{i=1}^n (y_i -
+  \beta_0 - \beta_1 x_i) = 0 \implies \hat{\beta_0} = \overline{y} - \hat{\beta_1}\overline{x}
+  \\ \frac{\partial{Q}}{\partial{\beta_1}} & = -2 \sum_{i=1}^n x_i
+  (y_i - \beta_0 - \beta_1 x_i) = 0
+\end{cases}
+$$
+$$\implies \hat{\beta_1} = \frac{\sum_{i=1}^n x_i y_i - n \overline{x}
+  \ \overline{y}}{\sum_{i=1}^n x_i^2 - n \overline{x}^2} =
+\frac{S_{XY}}{S_{XX}}$$
+\begin{flalign*}
+  Var(\hat{\beta_1}) &
+  = Var(\overline{y} - \hat{\beta_1}\overline{x}) = Var(\overline{y}) + Var(\hat{\beta_1}\overline{x})-2Cov(\overline{y},\hat{\beta_1}\overline{x}) = \frac{\sigma^2}{n}
+  \\ \hat{\beta_1} & = \frac{S_{XY}}{S_{XX}} = \frac{\sum_{i=1}^n(x_i - \overline{x})(y_i-\overline{y})}{\sum_{i=1}^n(x_i - \overline{x})^2} = \frac{\sum_{i=1}^n(x_i - \overline{x})y_i - \overline{y}\sum_{i=1}^n(x_i - \overline{x})}{S_{XX}}
+  \\ & = \frac{\sum_{i=1}^n (x_i - \overline{x}y_i)}{S_{XX}} = \sum_{i=1}^n c_i y_i \ s.t. \ c_i = \frac{x_i - \overline{x}}{S_{XX}}, \sum_{i=1}^n c_i = 0
+  \\ \implies Var(\hat{\beta_1}) & = Var \left(\sum_{i=1}^n c_i y_i\right) = \sum_{i=1}^n c_i^2 Var(y_i) = \sigma^2 \sum_{i=1}^n c_i^2 = \frac{\sigma^2}{S_{XX}}
+  \\ Cov(\overline{y},\hat{\beta_1}) & = Cov \left(\sum_{i=1}^n y_i/n, \sum_{i=1}^n c_iy_i\right) = \sum_{i=1}^n \frac{c_i}{n}Cov(y_i, y_i) = \frac{\sigma^2}{n}\sum_{i=1}^n c_i = 0
+\end{flalign*}
+The least squares method is useful since we don't need to know the
+distribution of the population. In fact, if the population is normally
+distributed, the least squares method uses the same estimators as the
+MLE.
+
+Why does $E(\hat{\beta_0})-\beta_0$ and $E(\hat{\beta_1})=\beta_1$,
+i.e. they are unbiased?
+\begin{flalign*}
+  \hat{\beta_0} & = \overline{y} - \hat{\beta_1}\overline{x}
+  \\ E(\overline{y}-\hat{\beta}_1 \overline{x}) & = E(\overline{y}) - \overline{x}E(\hat{\beta_1}) = \beta_0
+  \\ E(\hat{\beta_1}) & = E \left(\sum_{i=1}^n c_i y_i\right) = \sum_{i=1}^n c_i E(\beta_0 + \beta_1 x_i) = \beta_1 \sum_{i=1}^nc_i x_i
+  \\ Cov(\hat{\beta_0}, \hat{\beta_1}) & = Cov(\overline{y},\hat{\beta_1}) - \overline{x}Cov(\hat{\beta_1}, \hat{\beta_1}) = 0 - \overline{x}Var(\hat{\beta_1}) = -\overline{x}\frac{\sigma^2}{S_{XX}}
+\end{flalign*}
 \end{document}
