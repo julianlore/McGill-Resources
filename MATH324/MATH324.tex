@@ -3204,4 +3204,163 @@ i.e. they are unbiased?
   \\ E(\hat{\beta_1}) & = E \left(\sum_{i=1}^n c_i y_i\right) = \sum_{i=1}^n c_i E(\beta_0 + \beta_1 x_i) = \beta_1 \sum_{i=1}^nc_i x_i
   \\ Cov(\hat{\beta_0}, \hat{\beta_1}) & = Cov(\overline{y},\hat{\beta_1}) - \overline{x}Cov(\hat{\beta_1}, \hat{\beta_1}) = 0 - \overline{x}Var(\hat{\beta_1}) = -\overline{x}\frac{\sigma^2}{S_{XX}}
 \end{flalign*}
+\section{03/22/18}
+\paragraph{Recap:}
+We have $(\underbrace{X_i}_{h}, \underbrace{Y_i}_{w}), i=1,2,\ldots,n$
+\\ \includegraphics[width=.9\textwidth]{i13.pdf}
+\\ There exists a polynomial that passes through all these points
+(Lagrange interpolation), but statisticians use a simpler function for
+prediction, we do linear regression. Now, we want to minimize the
+distance squared between the line and the points given:
+\begin{flalign*}
+  \hat{y}_i & = a+bx_i
+  \\ \overbrace{Q(a,b)}^{\text{residual}} &
+  = \sum_{i=1}^n (y_i - \hat{y}_i)^2 
+  = \sum_{i=1}^n (y_i - (a+bx_i))^2
+  \\ \min_{(a,b)}Q(a,b) &
+\end{flalign*}
+Assuming $E[Y_i | X = x_i] = \alpha + \beta x_i, Y_i =
+\underbrace{\alpha+\beta
+  x_i}_{a+bx_i}+\overbrace{\varepsilon_i}^{\text{error}}$
+
+With Lagrange, we may have a few outliers and Lagrange interpolation
+will fluctuate a lot to catch up with these points. Since the function
+fluctuates a lot and is unstable, it does not have as much predictive
+power, but it provides an exact fit. So the trade-off in statistics is
+fit versus predictive power.
+\\ \includegraphics[width=.9\textwidth]{i14.pdf}
+\begin{flalign*}
+  \min_{(a,b)}Q(a,b) \implies
+  \begin{cases}
+    \frac{\partial{Q(a,b)}}{\partial{a}} = 0 \implies a = \overline{y}-b \overline{x}
+    \\ \frac{\partial{Q(a,b)}}{\partial{b}} = 0 \implies b = \frac{S_{xy}}{S_{xx}}
+  \end{cases}
+\end{flalign*}
+Where $S_{xy}= \sum_{i=1}^n (x_i - \overline{x})(y_i-\overline{y}),
+S_{xx} = \sum_{i=1}^n (x_i - \overline{x})^2$. What do these
+represent?
+\begin{flalign*}
+  E[(X-\mu_X)(Y-\mu_Y)] &
+  = Cov(X,Y) \approx \frac{1}{n}S_{xy}
+\end{flalign*}
+Recall, what is covariance? If we want to see how aligned two vectors
+are, we usually use $\cos \theta$.
+\\ \includegraphics[width=.9\textwidth]{i15.pdf}
+$$\cos \theta = \frac{\vec{X}\cdot \vec{Y}}{\left\lVert \vec{X}
+  \right\rVert \left\lVert \vec{Y} \right\rVert}$$
+So we first wanted to use $\vec{X} \cdot \vec{Y} = \sum_{i=1}^n x_i
+y_i$, but this is not location invariant, if you shift all values by
+something this will change. So they subtract the mean.
+$$\frac{1}{n}\sum_{i=1}^n (x_i - \overline{x})(y_i - \overline{y})$$
+This is $E[(X-\mu_x)(Y-\mu_Y)]$ and we have the norm as
+$\left(\frac{1}{n}\sum_{i=1}^n (x_i -
+  \overline{x})^2\right)^{\frac{1}{2}} = \sqrt{Var(X)}$,
+$\left(\frac{1}{n}\sum_{i=1}^n (y_i -
+  \overline{y})^2\right)^{\frac{1}{2}} = \sqrt{Var(Y)}$.
+\begin{flalign*}
+  Cov(X,Y) &
+  = \frac{E[(X-\mu_x)(Y-\mu_Y)]}{\sigma_x \sigma_Y}
+  = \rho (x,y)
+\end{flalign*}
+The sample counterpart:
+\begin{flalign*}
+  \frac{\frac{1}{n}\sum_{i=1}^n (x_i - \overline{x})(y_i-\overline{y})}{\sqrt{\frac{1}{n}\sum_{i=1}^n (x_i - \overline{x})^2}\sqrt{\frac{1}{n}\sum_{i=1}^n (y_i-\overline{y})^2}}
+  =\frac{\sum_{i=1}^n (x_i - \overline{x})(y_i-\overline{y})}{\sqrt{\sum_{i=1}^n (x_i - \overline{x})^2}\sqrt{\sum_{i=1}^n (y_i-\overline{y})^2}}
+\end{flalign*}
+When we divide by norm we stay scale invariant, so we expect the same
+thing to happen here, shouldn't matter what unit of measurement we
+use.
+$$\rho(X,Y) = \cos(X,Y), \left|\rho\right|\leq 1$$
+\\ \noindent \rule{\textwidth}{0.5pt}
+Back to where we were before:
+\begin{flalign*}
+  a & = \overline{y}-b \overline{x}
+  \\ b & = \frac{S_{xy}}{S_{xx}}\sqrt{\frac{S_{yy}}{S_{yy}}} =
+  \sqrt{\frac{S_{yy}}{S_{xx}}}\underbrace{\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}}_{\text{estimate
+      of correlation}}
+  = \sqrt{\frac{S_{yy}}{S_{xx}}} \hat{\rho}(x,y) = \sqrt{\frac{\hat{\sigma}_Y}{\hat{\sigma}_X}}\hat{\rho}(X,Y)
+\end{flalign*}
+Which means we have $b \propto \hat{\rho}$. $\hat{\rho}$ tells us how
+linearly correlated $x$ and $y$ are. If the deviation of $Y$ is high
+and $X$ is low, we get a very high ratio, so we get a big $b$ that
+makes it look like $x$ can really predict $y$, but that is not the
+case. So it's better to standardize the data first (subtract mean and
+divide by standard deviation).
+\\ \noindent \rule{\textwidth}{0.5pt}
+\begin{itemize}
+\item $a$ is an unbiased estimator of $\alpha$
+\item $b$ is an unbiased estimator of $\beta$
+\item $a$ \& $b$ are both consistent-estimators
+\end{itemize}
+\begin{flalign*}
+  \sqrt{n}(b-\beta)\stackrel{D}{\to} N(0,\frac{\sigma^2}{k^2})
+\end{flalign*}
+where $k^2 = \lim_{n \to \infty}\frac{S_{xx}}{n} = \lim_{n \to \infty}
+\frac{1}{n}\sum_{i=1}^n(x_i - \overline{x})^2, Y_i = \alpha+\beta x_i +
+\varepsilon, \sigma^2 = Var(\varepsilon)=Var(Y|X=x)$
+$$b \stackrel{app}{\sim} N
+\left(\beta,\frac{\sigma^2}{\kappa}^2\right) $$ when $n$ is large.
+
+A C.I. for $\beta$
+$$b \pm Z_{\alpha/2} \frac{\sigma}{\sqrt{S_{xx}}}$$ a
+$100(1-\alpha)\%$ C.I. for $\beta$.
+
+Intercept:
+\begin{flalign*}
+  \sqrt{n}(a - \alpha) \stackrel{D}{\to}N(0, \sigma^2 \left[1+\frac{\overline{x}^2}{\kappa^2}\right])
+  \\ a \stackrel{app}{\sim,}N \left(\alpha, \sigma^2\left(1+\frac{\overline{x}^2}{\kappa^2}\right)\right)
+\end{flalign*}
+a $100(1-\alpha)\%$ C.I. for $\alpha$.
+\begin{flalign*}
+  a \pm, Z_{\alpha/2}\sigma \sqrt{ \left[\frac{1}{n}+\frac{\overline{x^2}}{S_{xx}}\right]}
+\end{flalign*}
+\begin{flalign*}
+  P(Z>Z_{\alpha/2}) &=
+  \alpha/2, Z \sim N(0,1)
+\end{flalign*}
+We want to estimate $\sigma$.
+\begin{flalign*}
+  &\varepsilon \to y_i - \hat{y}_i&
+  \\ &S^2 = \sum_{i=1}^n (y_i - \hat{y}_i)^2/(n-2), \text{ estimator
+    of }\sigma^2
+  \\ &\sum_{i=1}^n (y_i - \overline{y})^2/(n-1)
+  \\ &A = \left\{Y_i - \overline{Y} : i=1,\ldots,n\right\}, \sum_{i=1}^n (Y_i - \overline{Y}) = 0
+  \\ &dim(Span \ A)
+  \\ &\left\{y_i - \hat{y}_i : i = 1,\ldots,n\right\}, \hat{y}_i = a+bx_i
+\end{flalign*}
+\begin{enumerate}
+\item $\sum_{i=1}^n (y_i - \hat{y}_i) = 0$
+\item $\sum_{i=1}^n (y_i - \hat{y}_i)x_i = 0$
+\item $dim(Span \ B)=n-2$
+\end{enumerate}
+\noindent \rule{\textwidth}{0.5pt}
+Suppose we have $(x_i, y_i), i=1,\ldots,n \to a,b$ Then we have
+$\hat{Y}_1 = a+bx_i$ and $\alpha + \beta x_i = E[Y_i | X = x_i]$ where
+$Y_i = \alpha + \beta x_i + \varepsilon_i$. But we also want a
+estimate for a specific value of $x$ as well, say
+$\hat{Y}_{\text{Masoud}} = a+bx^*$
+$$\hat{y}(x^*) \pm Z_{\alpha/2}S\sqrt{\frac{1}{n}+\frac{(x^*-\overline{x})^2}{S_{xx}}}$$
+$100(1-\alpha)\%$ C.I. for $E[Y|X = x^*]$. Is this right headed?
+$\frac{(x^*-\overline{x})^2}{S_{xx}}$ increases the further we get
+from the center, so there's more uncertainty when we get further from our
+data points, which is what we'd expect. What if we want to give a
+confidence interval for Masoud himself? Then we'd have even more
+uncertainty.
+$$\hat{y}(x^*) \pm
+Z_{\alpha/2}S\sqrt{1+\frac{1}{n}+\frac{(x^*-\overline{x})^2}{S_{xx}}}$$
+$100(1-\alpha)\%$ C.I. for $Y(x^*)=\alpha+\beta x^* + \varepsilon$, where we see that there's an
+extra term, $1$ in the square root. This is to account for
+$\varepsilon$.
+
+If you have small $n$, we need normality assumption.
+$$ Y_i = \alpha + \beta x_i + \varepsilon_i \to \varepsilon_i
+\stackrel{iid}{\sim}N(0,\sigma^2)$$
+We have several assumptions here:
+\\ \noindent \rule{\textwidth}{0.5pt}
+\begin{enumerate}
+\item $E[Y|X=x]=\alpha + \beta x$ (Linearity assumption)
+\item $\varepsilon$ is Normally distributed. (Normality assumption)
+\item Observations are independent. (Independence assumption)
+\item $Var(\varepsilon)$ does not depend on $x$. (Homogeneity of variance)
+\end{enumerate}
 \end{document}
