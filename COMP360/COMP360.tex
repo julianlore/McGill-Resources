@@ -2541,5 +2541,156 @@
           \overline{x_4})$
           \\ \includegraphics[width=.9\textwidth]{i127.pdf}
           \paragraph{Claim:} $G_{\phi}$ has an independent set of size
-          $n+m \iff \phi$ is satisfiable ($m$ is the number of clauses).
+          $n+m \iff \phi$ is satisfiable ($m$ is the number of
+          clauses).
+          \section{03/21/18}
+          \subsection{Np-Completeness} There are problems in $NP$ that
+          every other problem is reducible to them
+          $$ X \leq_P Y, \forall X \in NP$$
+          \begin{enumerate}
+          \item $Y \in NP$
+          \item $\forall X \in NP, X \leq_P Y$
+          \end{enumerate}
+          If these two conditions are satisfied, then $Y$ is called
+          $NP$-Complete. If you find a polynomial algorithm for a
+          problem that is $NP$-Complete, then you'll find a
+          polynomial algorithm for all problems in $NP$, i.e. you'll
+          show that $P=NP$.
+          \paragraph{Thm} (Cook-Levin 71) SAT is $NP$-Complete.
+          \paragraph{Ex.} $\phi = (x_1 \lor x_2 \lor x_3)\land
+          (\overline{x}_2 \lor x_4) \land (\overline{x}_3 \lor
+          \overline{x}_4)$ (This is called a CNF, $\land$ of $\lor$'s)
+          \\ $\lor$ OR, $\land$ AND
+          \\ SAT: Can the formula be satisfied? For the above example,
+          we can set $x_2=x_4 = F, x_1 = x_3 = T$.
+          \\ We can say $P = NP \iff SAT\in P$
+          \\ Are there other $NP$-Complete problems? Note if $Z \in
+          NP$ and $(X \leq_P )SAT \leq_P Z \implies Z$ is
+          $NP$-Complete.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{IND:}~
+          \\ Input: Undirected $G$, $k\in \mathbb{N}$
+          \\ Q: Does $G$ have an independent set of size $\geq k$?
+          \\ \includegraphics[width=.9\textwidth]{i128.pdf}
+          \\ How to show that $SAT$ is polynomially reducible to
+          $IND$? (Look at last lecture for construction of a graph $G_{\phi}$
+          representing $SAT$)
+          \paragraph{Claim:} $\phi$ is satisfiable $\implies G_{\phi}$
+          is an independent set of size $k=m+n$ where $n$ is the number
+          of variables, $m$ is the number of clauses.
+          \\ In our example:
+          \\ \includegraphics[width=.9\textwidth]{i129.pdf}
+          \paragraph{Pf:} Consider a truth assignment that satisfies
+          $\phi$. We pick the corresponding vertices from the matching
+          that was added in step 1 and one true term from each
+          clause. It is not hard to see that this is an independent set.
+          
+          \paragraph{Claim:} If $G_{\phi}$ has an independent set of
+          size $k=m+n \implies \phi$ is satisfiable.
+          \paragraph{Pf:} An independent set of size $k=m+n$ has to
+          pick exactly one node from each edge in step $1$ and one
+          node from each clause. Then the corresponding truth
+          assignment will have at least one true term in each clause
+          $\implies \phi$ is satisfiable.
+          $$\phi \text{ is satisfiable }\iff G_{\phi} \text{ has an
+            independent set of size }k$$
+          \noindent \rule{\textwidth}{0.5pt}
+          $SAT \leq_P IND:$
+          \begin{algorithmic}
+            \State Given an input $\phi$ for $SAT$, construct
+            $G_{\phi}$ and compute $k=m+n$.
+            \If {$G_{\phi}$ has an independent set of size $\geq k$}
+            Output ``$\phi$ is satisfiable''
+            \Else \ Output ``$\phi$ is not satisfiable''
+            \EndIf
+          \end{algorithmic}
+          \paragraph{Thm:} $IND$ is $NP$-Complete.
+          $$P=NP \iff IND \in P$$
+          \subsection{CLIQUE:}
+          Input: Undirected $G, k \in \mathbb{N}$.
+          \\ Q: Does $G$ have a clique (set of vertices that are
+          mutually adjacent) of size $\geq k$?
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Ex:}~
+          \\ \includegraphics[width=.9\textwidth]{i130.pdf}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Thm:} $CLIQUE$ is $NP$-Complete.
+          \paragraph{Pf:} It is in $NP$. A clique of size $k$ can be
+          used as a certificate and verified efficiently by checking
+          the adjacency of the vertices.
+
+          To prove completeness we show $IND \leq_P CLIQUE$.
+          \begin{algorithmic}
+            \State Given an input $(G,k)$ for $IND$
+            \State We construct $\overline{G}$ by replacing edges with
+            non-edges and vice versa.
+            \If {$\overbrace{\overline{G}\text{ has a clique of size }k}^{\text{oracle}}$} Output ``Yes
+            : $G$ has an independent set of size $k$''
+            \Else \ Output ``NO: $G$ does not have an independent set of
+            size $k$''
+            \EndIf
+          \end{algorithmic}
+          \subsection{Vertex Cover:}
+          Input: Undirected $G$, $k\in \mathbb{N}$.
+          \\ Q: Does $G$ have a vertex cover of size $\leq k$?
+          \paragraph{Recall:} Vertex cover: a set of vertices such
+          that removing them will remove all the edges.
+          \\ \includegraphics[width=.9\textwidth]{i131.pdf}
+          \paragraph{Recall:} K\"onig: For bipartite graphs, the size
+          of the minimum vertex cover $=$ size of the largest matching
+          and this can be solved using $Max\hbox{-}Flow$ in polytime.
+          $\implies$ For Bipartite graphs, $VC$ can be solved in
+          polytime.
+          \paragraph{Thm:} $VC$ is $NP$-Complete.
+          \paragraph{Pf:} $VC\in NP$, certificate is a vertex cover of
+          size $k$ and can be verified in polytime.
+
+          To prove completeness we show $IND \leq_P VC$.
+          \begin{algorithmic}
+            \State Given an input $(G,k)$ for $IND$.
+            \If{$G$ has a vertex cover of size $\left|V(G)\right| -
+              k$} Output ``Yes (independent set of size $k$)''
+            \Else \ Output ``NO (independent set of size $k$)''
+            \EndIf
+          \end{algorithmic}
+          Note that if there is a vertex cover $S$ of size $n-k
+          \implies \overline{S}$ is an independent set of size $k$, i.e.
+          after removing the vertices of a vertex cover, the
+          vertices we are left with form an independent set.
+
+          On the other hand, if $G$ has an independent set $T$
+          of size $k\implies \overline{T}$ is a vertex cover of size
+          $\leq n-k$.
+
+          $G$ has an independent set of size $k \iff G$ has a vertex
+          cover of size $n-k$
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          $SAT, IND, CLIQUE, VC$
+          \subsection{SET COVER}
+          Input: Sets $S_1, S_2, \ldots, S_m \subseteq U$ where $U$ is
+          finite. $k \in \mathbb{N}$
+          \\ Q: Can we pick $k$ of these sets so that their union is
+          all of $U$?
+          \paragraph{Ex:} $S_1 = \left\{1,2,3\right\}, S_2 =
+          \left\{2,3\right\}, S_3 = \left\{1,4\right\}, U=
+          \left\{1,2,3,4\right\}, k = 2$, yes, pick $S_1$ and $S_3$.
+          \paragraph{Thm:} $SET \ COVER$ is $NP$-Complete.
+          \paragraph{Pf:} It is in $NP$ (the certificate is a
+          selection of the sets, check if they make $U$). To prove
+          completeness $VC \leq_P SET \ COVER$
+          \begin{algorithmic}
+            \State Given an input $(G,k)$ for $VC$
+            \State Let $U = E(G)$
+            \If {$v_1, \ldots, v_n$ are the vertices of $G$} let $S_i
+            = \left\{e \ in E | e \text{ is adjacent to }v_i\right\}$
+            \If {$S_1, \ldots, S_n \subseteq U$ has a set cover of
+              size $k$} Output ``Yes $(G,k)\in VC$''
+            \Else \ Output ``NO $(G,k)\notin VC$''
+            \EndIf
+            \EndIf
+          \end{algorithmic}
+          \includegraphics[width=.9\textwidth]{i132.pdf}\\
+          $S_1 = \left\{a\right\}, S_2 = \left\{a,b,e\right\}, S_3 =
+          \left\{b,c\right\}, S_4 = \left\{e,c,d\right\}, S_5 =
+          \left\{d\right\}, U=\left\{a,b,c,d,e\right\}$.
         \end{document}
