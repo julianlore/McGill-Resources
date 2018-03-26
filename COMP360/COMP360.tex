@@ -2693,4 +2693,159 @@
           $S_1 = \left\{a\right\}, S_2 = \left\{a,b,e\right\}, S_3 =
           \left\{b,c\right\}, S_4 = \left\{e,c,d\right\}, S_5 =
           \left\{d\right\}, U=\left\{a,b,c,d,e\right\}$.
+          \section{03/26/18}
+          \paragraph{Recall}
+          So far we showed the following are $NP$-Complete:
+          $$SAT,IND,CLIQUE,Vertex\ Cover, Set\ Cover$$
+          The strategy to show that something is $NP$-Complete:
+          \begin{enumerate}
+          \item $X \in NP$
+          \item $Y \leq_P X$ for some $NP$-Complete $Y$
+          \end{enumerate}
+          $\implies$ $X$ is $NP$-Complete.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \subsection{3-COL}
+          Input: Undirected $G$
+          \\ Q: Does $G$ have a proper $3$-coloring of the vertices?
+          \paragraph{Remark:} $1\hbox{-}COL$: Easy ($\in P$), $G$ is
+          $1\hbox{COL} \iff E = \emptyset$
+          \\ $2\hbox{COL}\in P$: We can start by coloring a vertex and
+          then that forces the colors of its neighbors, and the
+          neighbors of neighbors, etc.
+          \\ \includegraphics[width=.9\textwidth]{i133.pdf}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Thm} $3\hbox{-}COL$ is $NP$-Complete.
+          \paragraph{Pf:} $3\hbox{-}COL \in NP$ as we showed earlier
+          (coloring is the certificate, easy to verify if the coloring
+          is valid).
+
+          To prove completeness, reduce $3\hbox{SAT}$ to this problem.
+          \paragraph{3-SAT}~
+          \\ Input: A CNF $\phi$ such that every clause has exactly
+          $3$ terms.
+          \\ Q: Is $\phi$ satisfiable?
+          \paragraph{Thm} $SAT \leq_P 3\hbox{-}SAT \implies
+          3\hbox{-}SAT$ is $NP$-Complete. (Proof omitted, it is in the
+          textbook and we are running behind)
+          $$\phi = (x_1 \lor x_2 \lor x_3) \land (\overline{x_1} \lor
+          x_2 \lor x_4) \land (\overline{x}_2 \lor \overline{x}_3 \lor
+          x_4) \land \ldots$$
+          \noindent \rule{\textwidth}{0.5pt}
+          We want to show $3\hbox{-}SAT \leq_P 3\hbox{-}COL$. So we
+          are given a $3CNF \phi$ and we want to decide whether $\phi$
+          is satisfiable using an oracle for $3\hbox{-}COL$. We will
+          construct a graph $G_\phi$ such that $$\phi \text{ is satisfiable}
+          \iff G_\phi \text{ is }3\hbox{-}COL$$
+          Idea: We will think of colors as $\left\{T,F,B\right\}$,
+          where $B$ is some other color (ex. Black). Start with a
+          triangle with nodes $v_T, v_F, v_B$ (without loss of
+          generality we can assume that we are looking for a
+          $3\hbox{-}COl$ that colors $v_T$ with $T$, $v_F$ with $F$
+          and $v_B$ with $B$).
+          \\ $G_\phi:$ \includegraphics[width=.4\textwidth]{i134.pdf}
+          \\ Next we add a matching of size $n$ by adding an edge
+          between two vertices with labels $x_i$ and $\overline{x}_i$
+          for $i=1,\ldots,n$.
+          \\ \includegraphics[width=.9\textwidth]{i126.pdf}
+          \\We connect $v_B$ to all these vertices (so they don't
+          receive the color $B$). Now any $3$ coloring of this graph
+          gives us a truth assignment to $x_1, \ldots, x_n$ and vice
+          versa.
+          \\ \includegraphics[width=.9\textwidth]{i135.pdf}
+
+          Next we want to deal with the restriction that every clause
+          has to have at least one true term. Take note of the
+          following interesting graph:
+          \\ \includegraphics[width=.9\textwidth]{i136.pdf}
+          If the top vertices have the same color then the bottom
+          vertex has to have the same color. Now look at the following
+          graph:
+          \\ \includegraphics[width=.4\textwidth]{i137.pdf}
+          \\If we have this, then we once again have no choice but to
+          color the bottom vertex $F$. On the other hand if we have
+          anything other than $FFF$ at the top, we can color this so
+          that the bottom vertex is $T$.
+          \\ Ex: \includegraphics[width=.4\textwidth]{i138.pdf}
+          \\ And this is true for all $TTT, TTF, TFT, FTT, FTF, FFT,
+          TFF$
+
+          Now for every clause in $\phi$ we glue a copy of this gadget
+          on the corresponding terms (they become the top vertices of
+          the gadget).
+          \\ Ex: $\phi = (x_1 \lor x_2 \lor \overline{x}_3) \land (x_3
+          \lor \overline{x}_4 \lor \overline{x}_5)$
+          \\ \includegraphics[width=.9\textwidth]{i139.pdf}
+          \\ We connect the bottom vertices to $v_F$. $$G_\phi \text{
+            is }3\hbox{-}COL \iff \phi \text{ is satisfiable}$$
+          If $\phi$ is satisfiable $\implies$ color the terms
+          according to the satisfying the truth assignment.
+          Every clause gets at least one true term $\implies$ all
+          bottom vertices can be colored with $T$.
+
+          On the other hand, any proper $3$ coloring give us a truth
+          assignment that assigns at least one true term to each
+          clause (because $FFF \to F$ property of the gadget) \hfill
+          $\square$
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \subsection{COL}
+          Input: $G, k \in \mathbb{N}$
+          \\ Q: Is $G$ $k$-colorable?
+          \\ $NP$-Complete. $3\hbox{-}COL\leq_P COL$. Given $G$ for
+          $3\hbox{-}COL$, we query the oracle with $(G,k)$ where $k=3$
+          and that will tell us whether $G$ is $3$-colorable or not.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \subsection{4-COL}
+          Input: $G$
+          \\ Q: Is $G$ $4$-colorable?
+          \\ $4\hbox{-}COL$ is $NP$-Complete.
+          \paragraph{Pf:} It is in $NP$ (easy)
+          $$3\hbox{-}COL \leq_P 4\hbox{-}COL$$
+          Given an input $H$ for $3$-colorability, add a new node and
+          connect it to every node in $H$, call it $G$.
+          \\ \includegraphics[width=.9\textwidth]{i140.pdf}
+          $$\text{Note }H \text{ is }3\hbox{-}COL \iff G \text{ is
+          }4\hbox{-}COL$$
+          Oracle alg:
+          \begin{algorithmic}
+            \State Given $H$ (for $3\hbox{-}COL$)
+            \State Construct $G$
+            \If {$G$ is $4\hbox{-}COL$} $H$ is $3\hbox{-}COL$
+            \Else \ $H$ is not $3\hbox{-}COL$
+            \EndIf
+          \end{algorithmic}
+          Similarly, we can do the same thing for $5$-colorability and
+          $6$-colorability, \ldots
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Thm:} For every $k\geq 3$, the $k$-colorability
+          is $NP$-Complete. Note this is different from the $COL$
+          problem mentioned above, the problem is only defined after
+          you pick $k$, i.e. here we have infinitely many problems,
+          whereas $COL$ is only one problem that is $NP$-Complete.
+          \\\includegraphics[width=.9\textwidth]{i141.pdf}
+          \paragraph{Thm:} $2\hbox{-}SAT$ is in $P$.
+          \paragraph{Pf:} In $2\hbox{-}SAT$, every clause has exactly
+          two terms.
+          \\ Example: $\phi = (x_1 \lor x_2) \land (x_1 \lor
+          \overline{x}_3) \land (\overline{x}_1 \lor \overline{x}_2)
+          \land (x_2 \lor x_3) \land (\overline{x}_1 \lor x_3) \land
+          (\overline{x}_3 \lor x_2)$
+          \\ What happens (similar to $2\hbox{-}COL$):
+          \begin{align*}
+            x_1 & = T \implies
+                  \begin{cases}
+                    \overline{x}_2 = T \implies
+                    \begin{cases}
+                      x_1 = T
+                      \\ x_3 = T
+                      \\ x_3 = F \times
+                    \end{cases}
+                    \\ x_3 = T \implies x_1 = T
+                  \end{cases}
+          \end{align*}
+          Now we know $x_1 = F \implies
+          \begin{cases}
+            x_2 = T
+            \\ x_3 = F
+          \end{cases}
+$
         \end{document}
