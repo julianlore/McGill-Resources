@@ -1,6 +1,6 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb, mathtools}
+  lastpage, amssymb, mathtools, float}
 \usepackage[margin=1 in]{geometry}
 \allowdisplaybreaks
 %\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
@@ -3363,4 +3363,77 @@ We have several assumptions here:
 \item Observations are independent. (Independence assumption)
 \item $Var(\varepsilon)$ does not depend on $x$. (Homogeneity of variance)
 \end{enumerate}
+\section{03/27/18}
+\paragraph{Recall} (Regression notes are online on myCourses)
+
+Last class we looked at estimating the intersection
+$a$ and looked at the asymptotic distribution of $a$. We also got a
+confidence interval for $a$. The problem here is $\sigma$, which we
+also need to estimate and we ended up using $s^2$. The denominator is
+$n-2$ and we have a loss of $2$ degrees of freedom because of the
+linear dependence of the sums $\sum_{i=1}^n (y_i - \hat{y}_i) = 0$ and
+$\sum_{i=1}^n (y_i - \hat{y}_i)x_i = 0$. So with all these tests we
+can accept or reject if $\beta = \beta_0$. Note that we use the mean
+response confidence interval if looking to estimate the average and
+the predicted value confidence interval if looking at one specific
+individual. For smaller sample sizes, we replace $z$ by $t$.
+\subsection{Analysis of Variance} We want to see how well a linear
+relationship can describe the relationship between $x$ and $y$.
+\begin{flalign*}
+  y_i - \overline{y} & = (\hat{y}_i - \overline{y}) + (y_i - \hat{y}_i)
+  \\ \implies y_i & = \underbrace{\overline{y}}_{\alpha} + \underbrace{(\hat{y}_i - \overline{y})}_{\beta x_i} + \underbrace{(y_i - \hat{y}_i)}_{\varepsilon_i}
+  \intertext{Where we obtained the idea from:}
+  y_i & = \underbrace{\hat{y}_i}_{\alpha+\beta x_i} + \underbrace{(y_i - \hat{y}_)}_{\varepsilon_i}
+\end{flalign*}
+From $(y_i - \overline{y}) = (\hat{y}_i - \overline{y})+(y_i -
+\hat{y}_i)$ and $\sum_{i=1}^n (\hat{y}_i - \overline{y})(y_i -
+\hat{y}_i)=0$, then we get:
+\begin{flalign*}
+  \sum_{i=1}^n (y_i - \overline{y})^2 & = \sum_{i=1}^n (\hat{y}_i - \overline{y})^2 + \sum_{i=1}^n (y_i - \hat{y}_i)^2
+  \\ SS_{Total} & = SS_{Reg}+SS_{Res}
+  \\ \left(\text{Total variability in response}\right) & =
+  \left(\text{Variability explained by the model}\right) +
+  \left(\text{Variability unexplained}\right)
+\end{flalign*}
+We can arrive at the ratio:
+\begin{flalign*}
+  F & = \frac{SS_{Reg}/1}{SS_{Res}/(n-2)}\sim F_{1,(n-2)}
+\end{flalign*}
+\begin{table}[H]
+  \centering
+  \caption{Analysis of Variance Table}
+  \begin{tabular}{l | l | l | l | l}
+    Source & Sum of Squares (SS) & df & Mean Square (MS) & F
+    \\ \hline Regression&$SS_{Reg}$&$1$&$SS_{Reg}/1$&$F=MS_{Reg}/s^2$
+    \\ Residual & $SS_{Res}$ & $n-2$ & $s^2$
+    \\ Total & $SS_{Total}$ & $n-1$ 
+  \end{tabular}
+  \label{tab:anova}
+\end{table}
+What portion of the total variability can be explained by the
+regression line? This is where $R^2$ comes in.
+\begin{flalign*}
+  R^2 & = \frac{SS_{Reg}}{SS_{Total}} = \frac{SS_{Reg}}{SS_{Reg}+SS_{Res}}
+\end{flalign*}
+\paragraph{ANOVA}
+Analysis of Variance
+\\ $T_1: x_{11}, \ldots, x_{1m}$, $T_2:y_{21}, \ldots, y_{2n}$, two
+treatments.
+\\ \noindent \rule{\textwidth}{0.5pt}
+$H_0: \mu_1 = \mu_2$, so we look at $\overline{x}_m$ vs
+$\overline{y}_n$, which have a small fluctuation, say $x_{ij} = \mu_i
++ \varepsilon_i, i =1,2,\ldots, k$ (groups), $j=1,\ldots,n_i$. We
+don't have any control over the fluctuation $\varepsilon_i$, but we
+can decompose the average:
+$x_{ij}= \mu + \alpha_i + \varepsilon_i$. How do we estimate these
+things?
+\begin{flalign*}
+  x_{ij} & = \overbrace{\overline{x}_{..}}^{\text{Average of all }x_{ij}} + (\overline{x}_{i.}-\overline{x}_{..})+\underbrace{(x_{ij}-\overline{x}_{i.})}_{\varepsilon_i}
+\end{flalign*}
+Where $\overline{x}_{i.} = \frac{1}{n_{i}}\sum_{i=1}^n x_{ij}$,
+$\overline{x}_{..} = \frac{1}{\sum_{i=1}^k n_i}\sum_{i=1}^k
+\sum_{j=1}^{n_i}x_{ij}$.
+\begin{flalign*}
+  x_{ij} - \overline{x}_{..} & = (\overline{x}_{i.} - \overline{x}_{..})+(x_{ij}-\overline{x}_{i.})
+\end{flalign*}
 \end{document}
