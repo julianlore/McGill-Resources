@@ -2847,5 +2847,150 @@
             x_2 = T
             \\ x_3 = F
           \end{cases}
-$
+          $
+          \section{03/28/18}
+          So far, we proved the following are $NP$-Complete: $$SAT,
+          IND, CLIQUE, 3SAT, Vertex \ Cover, Set \ Cover, k\hbox{-}col
+          (k\geq 3)$$
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          On the other hand, $2SAT, 2COL \in P$.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          Hamiltonian Path, Hamiltonian Cycle in both directed and
+          undirected graphs are $NP$-Complete.
+          \\ Remark: Hamiltonian path in directed acyclic graphs is in
+          $P$. There's a topological order, since there's one node
+          that has no incoming edges, remove that and then remove the
+          next one, etc.
+          \\ \includegraphics[width=.9\textwidth]{i142.pdf}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \subsection{Traveling Salesman Problem}
+          There are $n$ cities and we are given the pairwise distances
+          between them. A traveling salesman wants to start from a
+          city, visit every other city and come back to the starting
+          point, minimizing the traveled distance.
+          \\ Input: $d_{ij}$ for $1\leq i < j \leq n$ (distance
+          between $i$ and $j$)
+          \\ \phantom{Input:} $K \in \mathbb{N}$
+          \\ Q: Can it be done with $\leq K$ traveled distance?
+          \paragraph{Ex:}~\\
+          \includegraphics[width=.45\textwidth]{i143.pdf}
+          \\ Here, $K=7$ is true, with a possible path shown in green.
+          \paragraph{Thm} $TSP$ is $NP$-Complete.
+          \paragraph{Pf:} It is in $NP$\ldots
+          \\ To prove completeness we show Hamiltonian cycle $\leq_P
+          TSP$
+          \begin{algorithmic}
+            \State Given an input $G$ for Hamiltonian cycle
+            \If {$ij \in E$} Set $d_{ij}=1$
+            \ElsIf {$ij \notin E$} Set $d_{ij}=2$
+            \EndIf
+            \State $K=n$
+            \If {there is a $TSP$ of length $\leq K$} $G$ has a
+            Hamiltonian cycle
+            \Else\ ``No''
+            \EndIf
+          \end{algorithmic}
+          Why? If $G$ has a Hamiltonian cycle $\implies$ same cycle
+          has total distance $\underline{n}$.
+
+          On the other hand if there is a $TSP$ cycle of length $\leq
+          n$ since there are $n$ traveled pairs each has to be of
+          distance $\leq 1$.
+          \subsection{Subset Sum} (Very similar to the Knapsack
+          problem)
+          \\ Input: Numbers $w_1, \ldots, w_n \in \mathbb{N}$
+          \\ \phantom{Input:} Number $W \in \mathbb{N}$
+          \\ Q: Is there a subset of $w_1, \ldots, w_n$ where sum is
+          exactly $W$?
+          \paragraph{Ex:} $5,4,3,4,8,5$
+          \\ $W=13 \implies $ Yes, $5+5+3=13$
+          \\ $6,5,8,4$
+          \\ $W = 7 \implies$ NO
+          \\ $NP$-Complete: Easy to see in $NP$. It is possible to
+          show $3SAT \leq_P Subset \ Sum$ (write the numbers as
+          digits, $1$ if the clause in that term is true, $2$ if it's
+          false, etc.)
+          \subsection{Knapsack}
+          Input: $w_1, \ldots, w_n \in \mathbb{N}$
+          \\ \phantom{Input:} $W \in \mathbb{N}$ capacity
+          \\ \phantom{Input:} $K \in \mathbb{N}$
+          \\ Q: Can we pick a subset of $w_1, \ldots, w_n$ whose sum
+          does not exceed $W$ and is at least $K$?
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          Knapsack is $NP$-Complete.
+          \paragraph{Pf:} Easy to see it is in $NP$ \ldots
+          \\ $Subset \ Sum \leq_P Knapsack$
+          \begin{algorithmic}
+            \State Take an input of Subset Sum
+            \State Set $K=W$
+            \State Feed it to the oracle for Knapsack
+            \If {Yes} Output Yes
+            \ElsIf {No} Output No
+            \EndIf
+          \end{algorithmic}
+          \subsection{PSPACE:}
+          The class of problems that can be solved using polynomial
+          space (number of memory bits).
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          $P \subseteq PSPACE$
+          \\ An algorithm that runs in polynomial time cannot use more
+          than polynomially many bits (as writing those bits would
+          take more time than the algorithm can afford).
+          \\ $NP \subseteq PSPACE$
+          \\ We can use the same proof that showed $NP \subseteq EXP$,
+          except we make sure we reuse our memory.
+          \\ Consider $X \in NP$ and an efficient certifier for $X$
+          that takes $(w,t)$ where $w$ is the input and $t$ a
+          potential certificate where $|t| \leq p(|w|)$ for some
+          polynomial $p()$.
+          \begin{algorithmic}
+            \State Normal Alg:
+            \State Input $W$
+            \State Generate all possible $t$ of size at most $p(|w|)$
+            \underline{one by one reusing the space}.
+            \State Run the certifier on $(w,t)$
+            \If {outputs Yes} Output Yes and terminate
+            \ElsIf {they all fail} Output No
+            \EndIf
+          \end{algorithmic}
+          \noindent \rule{\textwidth}{0.5pt}
+          $SPACE \subseteq EXP$
+          \\\includegraphics[width=.9\textwidth]{i144}
+          \subsection{QSAT} (We think this problem is in $PSPACE$ but
+          not in $EXP$)
+          \\ Input: CNF $\phi$ and a list of quantifiers over the
+          variables.
+          \\ Q: Is the corresponding formula true?
+          \paragraph{Ex:}
+          $\forall x_1 \exists x_2 \exists x_3 (x_1 \lor x_2) \land
+          (x_1 \lor \overline{x}_2)\land(\overline{x}_1 \lor x_2 \lor
+          x_3)$, this is false, if $x_1 = F$ then we cannot satisfy
+          it.
+          \\ $QSAT$ is $PSPACE$-Complete.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          Many natural problems that we would like to solve are
+          $NP$-Complete.
+          \\ It is believed that there are no sub-exponential
+          algorithms for $NP$-Complete problems!
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Example: Vertex Cover}~
+          \\ Input: Graph $G$
+          \\ Q: What is the size of the smallest Vertex Cover in $G$?
+          \\ \includegraphics[width=.45\textwidth]{i145.pdf}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          A naive algorithm:
+          \begin{algorithmic}
+            \While {there is an edge in $G$}
+            \State Pick both of its endpoints and remove them.
+            \EndWhile
+          \end{algorithmic}
+          \includegraphics[width=.9\textwidth]{i146.pdf}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          The algorithm picks $2m$ nodes if it comes across $e_1, e_2,
+          \ldots, e_m$ throughout its execution.
+          \\ \includegraphics[width=.9\textwidth]{i147.pdf}
+          \\No vertex can cover more than one $e_i$, so the minimum
+          vertex cover is of size at least $m$.
+          \paragraph{Thm:} The output of our algorithm $\leq 2 \times
+          \min \ VC$. Called a \textbf{2-factor approximation} algorithm.
         \end{document}
