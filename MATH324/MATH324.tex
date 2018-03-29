@@ -3436,4 +3436,92 @@ $\overline{x}_{..} = \frac{1}{\sum_{i=1}^k n_i}\sum_{i=1}^k
 \begin{flalign*}
   x_{ij} - \overline{x}_{..} & = (\overline{x}_{i.} - \overline{x}_{..})+(x_{ij}-\overline{x}_{i.})
 \end{flalign*}
+\section{03/29/18}
+\subsection{Analysis of Variance}
+$x_{ij}=\mu + \alpha_i + \varepsilon_{ij},
+\varepsilon_{ij}\stackrel{iid}{\sim} N(0,\sigma^2), i=1,\ldots,k$
+(treatments) $j=1,\ldots,n$ (subjects under treatment $i$)
+\\ $H_0: \alpha_1 = \alpha_2 = \ldots = \alpha_k$
+\begin{flalign*}
+  x_{ij} &
+  = \overline{x}_{..} + (\overline{x}_{i.}-\overline{x}_{..})+(x_{ij}-\overline{x}_{i.})
+  \\ \overline{x}_{i.} &
+  = \frac{1}{n_i} \sum_{j=1}^{n_i}x_{ij}
+  \\ \overline{x}_{..} &
+  = \frac{1}{N} \sum_{i=1}^k \sum_{j=1}^{n_i}x_{ij}
+\end{flalign*}
+where $N = \sum_{i=1}^k n_i$.
+\begin{flalign*}
+  (x_{ij}-\overline{x}_{..}) &
+  = (\overline{x}_{i.} - \overline{x}_{..}) + (x_{ij}-\overline{x}_{i.})
+  \\ \sum_{i=1}^k \sum_{j=1}^{n_i}(x_{ij}-\overline{x}_{..})^2 &
+  = \sum_{i=1}^k \sum_{j=1}^{n_i}(\overline{x}_{i.}-\overline{x}_{..})^2 + \sum_{i=1}^k \sum_{j=1}^{n_i} (x_{ij}-\overline{x}_{i.})^2
+  \\ & = \sum_{i=1}^k \sum_{j=1}^{n_i} (\overline{x}_{i.}-\overline{x}_{..})(x_{ij}-\overline{x}_{i.})
+  \\ & = \sum_{i=1}^k (\overline{x}_{i.}-\overline{x}_{..}) \left[\underbrace{\sum_{j=1}^{n_i}(x_{ij}-\overline{x}_{i.})}_{0}\right] = 0
+  \\ SS{Total} & = SSTr + SSE
+\end{flalign*}
+So we look at the ratio to get the $F$ distribution:
+\begin{flalign*}
+  F &
+  = \frac{SSTr}{SSE}
+  \\ \mathcal{A} &
+  = \left\{x_{ij}-\overline{x}_{..}:i=1,\ldots,k, j = 1, \ldots, n\right\}
+  \\ \mathcal{B} &
+  = \left\{\overline{x}_{i.}- \overline{x}_{..}, i=1 \ldots k\right\}
+  \\ \mathcal{C} &
+  = \left\{x_{ij}-\overline{x}_{i.}: i=1,\ldots,k, j=1,\ldots,n_i\right\}
+  \\ dim(Span \mathcal{B}) & = K-1, \sum_{i=1}^k (\overline{x}_{i.}-\overline{x}_{..}) = 0
+  \\ dim(Span(\mathcal{A})) & = N-1, \sum_{i=1}^k \sum{j=1}^{n_i} (x_{ij}-\overline{x}_{..})
+\end{flalign*}
+$x_1 \independent x_2 \iff M_{{x_1},{x_2}}(t_1,t_2) =
+\mu_{{x_1}}(t_1)\mu_{{y_2}}(t_2)$
+\begin{flalign*}
+  F_{K-1,N-K} & = \frac{SST/K-1}{SSE/N-K}, N = \sum_{i=1}^K n_i
+\end{flalign*}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l| l |l |l |l | l}
+   $X\backslash Y$ &$1$&$2$& \ldots & $c$
+    \\ \hline $1$ & $n_{11}$ & $n_{12}$ & \ldots & $n_{1c}$ & $n_{1.}$
+    \\ \hline $2$ & $n_{21}$ & $n_{22}$ & \ldots & $n_{2c}$ & $n_{2.}$
+    \\ \ldots & \ldots & \ldots & \ldots & \ldots & \ldots
+    \\ \hline $r$ & $n_{r1}$ & $n_{r2}$ & \ldots & $n_{rc}$ & $n_{r.}$
+    \\ \hline & $n_{.1}$ & $n_{.2}$ & \ldots & $n_{.c}$
+  \end{tabular}
+\end{table}
+So we want to see if $X$ and $Y$ are independent, i.e. $$P(X=x,
+Y=y)=P(X=x)P(Y=y), \forall x, y$$
+\begin{flalign*}
+  N & = \sum_{i=1}^r \sum_{j=1}^{c}n_{ij}
+  \\ p_{ij} & = P(X=i, Y=j), N = \sum_{i=1}^r \sum_{j=1}^{c}n_{ij}
+  \\ \hat{p}_{11} & = \frac{n_{11}}{N}, \hat{p}_{ij} = \frac{n_{ij}}{N}
+  \\ n_{.j} & = \sum_{i=1}^r n_{ij}, n_{i.} = \sum_{j=1}^c n_{ij}
+  \\ \hat{p}_{i.} & =\widehat{P(X=i)}=\frac{n_{i.}}{N}, \hat{p}_{.j} = \widehat{P(Y=j)} = \frac{n_{.j}}{N}
+  \\ \hat{p}_{ij} & = \frac{n_{ij}}{N}, \hat{p}_{i.} = \frac{n_{i.}}{N}, \hat{p}_{.j} = \frac{n_{.j}}{N}
+  \\ \hat{p}_{ij} & \approx \hat{p}_{i.}\hat{p}_{.j}, i=1,\ldots,r, j=1,\ldots,c
+  \\ \sum_{i=1}^r \sum_{j=1}^{c}[\hat{p}_{ij}-\hat{p}_{i.}\hat{p}_{.j}]^2/(\hat{p}_{i.}\hat{p}_{.j})
+\end{flalign*}
+In general we have:
+\begin{flalign*}
+  &\sum_{i=1}^r \sum_{j=1}^{c} \frac{[o_{ij}-e_{ij}]^2}{e_{ij}}\sim \chi^2
+  \intertext{
+Where $o$ is observed and $e$ is expected.
+  }
+  &\sum_{i=1}^r \sum_{j=1}^{c} \frac{[n_{ij}-\widehat{E(n_{ij})}]^2}{\widehat{E(n_{ij})}} = \sum_{i=1}^r \sum_{j=1}^{c} \left[\frac{n_{ij}-\widehat{E(n_{ij})}}{\sqrt{\widehat{E(n_{ij})}}}\right]^2 \sim \chi^2
+  \intertext{Now this is similar to the $\chi^2$ formula if this were
+    Poisson distributed, since the expectation is the same as the
+    variance.}
+\end{flalign*}
+Why do we have $(r-1)(c-1)$ df?
+\begin{flalign*}
+  & dim \ span \left\{(n_{ij}-\widehat{E(n_{ij})}): i=1,\ldots,r ; j = 1,\ldots, c\right\}
+  \\ & rc - r - c + 1 \text{ (Like inclusion exclusion)} = (r-1)(c-1)
+  \\ &\sum_{j=1}^{c} n_{ij} = n_{i.}, i=1,\ldots,r
+  \\ &\sum_{i=1}^r n_{ij} = n_{.j}, j=1,\ldots,r
+  \\ &\sum_{i=1}^r \sum_{j=1}^{c}n_{ij} = N
+  \\ & \sum_{i=1}^r \sum_{j=1}^{c} \frac{[n_{ij}-\widehat{E(n_{ij})}]^2}{\widehat{E(n_{ij})}} \sim \chi^2_{(r-1)(c-1)}
+\end{flalign*}
+\begin{flalign*}
+  E(n_{ij}) & = N p_{ij} \stackrel{H_0}{=} N p_{i.}p_{.j} \approx N \hat{p}_{i.}\hat{p}_{.j} = N \frac{n_{i.}}{N} \cdot \frac{n_{.j}}{N} = \frac{n_{i.}\cdot n_{.j}}{N}
+\end{flalign*}
 \end{document}
