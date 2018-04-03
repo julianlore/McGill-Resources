@@ -3524,4 +3524,104 @@ Why do we have $(r-1)(c-1)$ df?
 \begin{flalign*}
   E(n_{ij}) & = N p_{ij} \stackrel{H_0}{=} N p_{i.}p_{.j} \approx N \hat{p}_{i.}\hat{p}_{.j} = N \frac{n_{i.}}{N} \cdot \frac{n_{.j}}{N} = \frac{n_{i.}\cdot n_{.j}}{N}
 \end{flalign*}
+\section{04/03/18}
+Chapters 8,9 and 10 have been covered, which we have Masoud's notes
+for. For linear regression, we have his typed up notes. Final will
+have 2 questions
+from chapter 8, 2 from 9, 2 from 10, 1 from linear, 1 from anova, 1
+from contingency. Questions will be aligned with questions from the
+assignments. Material from now on will not be examined.
+\\ \noindent \rule{\textwidth}{0.5pt}
+\subsection{$\chi^2$ tests}
+Applications:
+\begin{enumerate}
+\item To test independence between two categorical variables.
+\item
+  \begin{tabular}{l|l|l|l}
+    &Republicans& Democrats
+    \\ \hline pop 1 (African Americans) &$n_{11}$ &$N_{12}$ &$n_{1\bullet}$
+    \\ \hline pop 2 (Others) &$n_{21}$ &$n_{22}$ & $n_{2\bullet}$
+    \\ \hline &&& $N = n_{1\bullet}+n_{2\bullet}$
+  \end{tabular}
+  \\$H_0: p_1 = p_2 = p$, where $p_1$ is the proportion of people in the
+  first population  and $p_2$ is the proportion of
+  people in the second population who are pro republican.
+  \begin{flalign*}
+    \sum \left(\frac{o_{ij}-E_{ij}}{\sqrt{E_{ij}}}\right)^2 \sim \chi^2_{(r-1)(c-1)}
+  \end{flalign*}
+  Where $r=\#$ rows, $c=\#$ columns.
+\item Goodness-of-fit tests
+  \begin{flalign*}
+    Y_i & = \alpha + \beta x_i + \varepsilon_i, \varepsilon_i \stackrel{iid}{\sim} N(0,\sigma^2), i=1,\ldots,n
+  \end{flalign*}
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  $X_1, \ldots, X_n \sim F$, where $F$ is an unknown distribution.
+  \\ $H_0: F(x)=\Phi(x), \Phi(x) = \int_{-\infty}^{\infty}
+  \frac{1}{\sqrt{2\pi}}e^{-t^2/2}\ dt$, where $\Phi(x)$ is the cdf of
+  $N(0,1)$. So we make a table and count the number of $X_i$ falling
+  in each interval:
+  \\
+  \begin{tabular}{l l l l l l l l l l l l l}
+    &$-\infty$&& $t_1$&&$t_2$&&\ldots&&$t_k$&&$+\infty$
+    \\ \hline Observed && $\# X_i$ && $\# X_i$ &&$\# X_i$ && $\#X_i$ &&$\# X_i$
+    \\ \hline Expected
+  \end{tabular}
+  \\Recall the multinomial distribution:
+  $$P(O_1 = o_1, \ldots, O_k = o_k) =
+  \binom{n}{o_1,\ldots,o_k}\prod_{j=1}^{k}p_j^{o_j}$$
+  where $$\binom{n}{o_1,\ldots,o_k} = \frac{n!}{o_1! o_2! \ldots o_k!}$$
+  $$E(O_j)=np_j$$
+  \\ \noindent \rule{\textwidth}{0.5pt}
+  \begin{flalign*}
+    \sum_{j=1}^k \left(\frac{o_j-E_j}{\sqrt{E_j}}\right)^2 \sim \chi^2_{k-1}
+  \end{flalign*}
+  \noindent \rule{\textwidth}{0.5pt}
+  \subsection{Bayesian Analysis}
+  $A_1,\ldots, A_k, A_{i}\cup A_{j}=\emptyset, \bigcup_{i=1}^k A_i =
+  S$
+  \paragraph{Law of total probabilty}~
+  \begin{flalign*}
+    P(B) & = \sum_{j=1}^k P(B \cap A_j) = \sum_{j=1}^k P(B|A_j)P(A_j)
+    \\ \underbrace{P(A_j|B)}_{\text{Posterior}} & = \frac{P(A_i\cap B)}{P(B)} = \frac{P(B|A_i)\overbrace{P(A_i)}^{\text{Prior}}}{\sum_{j=1}^kP(B|A_j)P(A_j)}
+  \end{flalign*}
+  \begin{flalign*}
+    A_1 & = \text{Existence of order}, G = \text{Existence of God}
+    \\ A_2 & = \text{None existence of order}, NG = \text{None
+      existence of God}
+    \\ P(A_1 | G) & = 1, P(G)=P(NG)=\frac{1}{2}
+    \\ P(A_1 | NG) & = \varepsilon
+    \\ P(G|A_1) & = \frac{P(A_1|G)P(G)}{P(A_1|G)P(G)+P(A_1|NG)(1-P(G))} = \frac{1/2}{1/2+1/2 \varepsilon} = \frac{1}{1+\varepsilon} \approx 1
+  \end{flalign*}
+  \noindent \rule{\textwidth}{0.5pt}
+  $X_i \stackrel{iid}{\sim}Ber(p)$
+  \\ $P(X_i = x) = p^x(1-p)^{1-x}, x=0,1$
+  \\ When $p$ is unknown, some people would model $p$ as a random
+  variable:
+  \begin{flalign*}
+    P(X_i = x | p) & = p^x(1-p)^{1-x}, x=0, 1
+  \end{flalign*}
+  \begin{flalign*}
+    p \sim Beta(a,b)
+  \end{flalign*}
+  \begin{flalign*}
+    f(p) & = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}p^{a-1}(1-p)^{b-1}
+  \end{flalign*}
+  If $a=1$ and $b=1$, then we get $1$ everywhere, uniform on $[0,1]$,
+  noninformative prior. Now we want to make inferences about $p$:
+  \begin{flalign*}
+    &P(X_i = x | p), f(p)&
+    \\ &f(p|X = x) = \frac{P(X=x|p)f(p)}{\int_0^1 P(X=x|p)f(p) \ dp}
+    = C p^{x+a-1}(1-p)^{1-x+b-1}
+    \\ &P(X=x|p)f(p) = p^x(1-p)^x \kappa p^{a-1}(1-p)^{b-1} = \kappa p^{x+a-1}(1-p)^{b-1+1-x} = \kappa p^{x+a-1}(1-p)^{b-x}
+    \\ & \implies f(p|x) \propto p^{x+a-1}(1-p)^{b-x} \text{ refined prior}
+  \end{flalign*}
+  \paragraph{Dirichlet Distribution} (Generalization of this)
+  \begin{flalign*}
+    &\frac{\Gamma(\sum_{i=1}^k \alpha_i)}{\prod_{i=1}^{k}\Gamma(\alpha_i)}\prod_{i=1}^{k} p_i^{\alpha_i-1}, \sum_{i=1}^k p_i = 1, \alpha_i > 0, i=1,\ldots,n&
+    \\& P(X_i = x_i, i=1, \ldots, k|p_1,\ldots,p_k) = \binom{n}{x_1,\ldots,x_k} \prod_{i=1}^{k} p_i^{x_i}
+    \\ &\overbrace{(p_1,\ldots,p_k)}^{\text{Prior}}\sim Dirichlet\ Dist
+    \\ & \overbrace{(p_1,\ldots,p_k)\bigg\vert_{\vec{x}=(x_1,\ldots,x_k)}}^{\text{Posterior}} \propto \prod_{i=1}^{k}p_i^{\alpha_i+x_i-1}
+  \end{flalign*}
+  \subsection{Empirical Bayes}
+\end{enumerate}
 \end{document}
