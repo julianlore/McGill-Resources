@@ -2993,4 +2993,184 @@
           vertex cover is of size at least $m$.
           \paragraph{Thm:} The output of our algorithm $\leq 2 \times
           \min \ VC$. Called a \textbf{2-factor approximation} algorithm.
+          \section{04/04/18}
+          % Missing beginning
+          \subsection{Approximation Algorithms}
+          For a maximization problem, an algorithm is an
+          $\alpha$-factor approx algorithm if (not too small, $0 <
+          \alpha \leq 1$)
+          $$output \geq \alpha \times optimal$$
+          For a minimization if (not too big, $1 \leq \alpha$)
+          $$output \leq \alpha \times optimal$$
+          \paragraph{Ex:}
+          Seen last class, for vertex cover: Pick both endpoints of an
+          edge, delete them and remove until all edges are
+          gone. $2$-factor.
+          \paragraph{Another algorithm for vertex cover}
+          ~
+          \\ \includegraphics[width=.9\textwidth]{i150.pdf}
+          \\ Cover all edges.
+          \subsection{Integer Linear Program for Vertex Cover}
+          Note that we can formulate any $NP$-complete program as an
+          integer linear program. 
+          $ILP\hbox{-}VC$
+          \\ Vars: $x_v, v \in V$
+          \begin{align*}
+            \min \ &\sum_{v\in V} x_v
+            \\ & x_u + x_V \geq 1, \forall uv \in E
+            \\ & x_v \in \left\{0,1\right\}, \forall v \in V
+          \end{align*}
+          \noindent \rule{\textwidth}{0.5pt}
+          LP relaxation: $LP\hbox{-}VC$
+          \begin{align*}
+            \min \ & \sum_{v\in V}x_v
+            \\ & x_u+x_v \geq 1, \forall uv \in E
+            \\ & x_v \geq 0, \forall v \in V
+            \\ & x_v \leq 1, \forall v \in V \text{ (Remark: redundant
+                 and can be removed)}
+          \end{align*}
+          \paragraph{Ex:}~
+          \\ \includegraphics[width=.9\textwidth]{i148.pdf}
+          \\ So $opt(LP\hbox{-}VC)\neq opt(ILP\hbox{-}VC)$
+          \\ Obs: $opt(LP\hbox{-}VC)\leq
+          opt(ILP\hbox{-}VC)$. Solutions for $ILP\hbox{-}VC$ are also
+          solutions for $LP\hbox{-}VC$, but $LP\hbox{-}VC$ has less
+          constraints and can sometimes be further minimized, like in
+          the example. So solving $LP\hbox{-}VC$ will tell us the
+          optimal vertex cover is at least the size of the optimal
+          solution for $LP\hbox{-}VC$.
+
+          We solve the $LP$ in polynomial time and obtain an optimal
+          solution ($x_v^*$ for $v\in V$) for $LP$.
+
+          We want to round these to an integer solution to the $ILP$.
+
+          Let $\overline{x}_v =
+          \begin{cases}
+            0 & \text{if }x_v^* < \frac{1}{2}
+            \\ 1 & \text{if }x_v^* \geq \frac{1}{2}
+          \end{cases}
+          $
+
+          Note for every edge $uv, x_u^* + x_v^* \geq 1$.
+          \\ $\implies$ at least one of $x_u^*$ or $x_v^* \geq
+          \frac{1}{2} \implies$ at least one of $\overline{x}_u$ or
+          $\overline{x}_v$ is $1 \implies \overline{x}_u +
+          \overline{x}_v \geq 1$.
+
+          So $\overline{x}_v$ for $v \in V$ is a feasible solution to
+          \begin{align*}
+            \min \ &\sum_{v \in V} x_v
+            \\ & x_u+x_v \geq 1, \forall uv \in E
+            \\ & x_v \in \left\{0,1\right\}, \forall v \in V
+          \end{align*}
+          What can we say about $\sum_{v\in V}\overline{x}_v$?
+          \\ Note $\overline{x}_v \leq 2 x_v^*$
+          $$\implies Output = \sum_{v \in
+            V}\overline{x}_v \leq 2 \sum_{v \in V}x^*_v = 2
+          opt(LP\hbox{-}VC)$$
+          Alg:
+          \begin{enumerate}
+          \item Solve the Linear Program relaxation. Let $x_v^*$'s be
+            an optimal solution.
+          \item Round $x_v^*$'s to $\overline{x}_v$'s using the above
+            formula and output the vertices with $\overline{x}_v = 1$.
+          \end{enumerate}
+          $$Output \leq 2 opt(LP\hbox{-}VC)\leq 2 opt(ILP\hbox{-}VC)$$
+          This is a 2-factor approximation algorithm.
+          \subsection{Knapsack}
+          Input: Integers $w_1, \ldots, w_n \geq 0$ and capacity $W
+          \in \mathbb{N}$.
+          \\ Goal: Pick a subset $S \subseteq
+          \left\{1,\ldots,n\right\}$ so that $\sum_{i\in S}w_i \leq W$
+          and this sum is maximized.
+          \paragraph{Ex:} $W=10, w_1=6,w_2=5,w_3=3$
+          \\ $9 = 6+3 \leq 10, opt = 9$
+          \\ $NP$-Complete (as seen in a previous lecture).
+          \paragraph{A greedy alg:}
+          \begin{algorithmic}
+            \State Sort the items $w_1 \geq w_2 \geq \ldots \geq w_n$
+            \For {$i=1,\ldots, n$}
+                \If{we can add $w_i$ to the knapsack add it.}
+                \EndIf
+            \EndFor
+          \end{algorithmic}
+          \paragraph{Ex:} $W=10$
+          \\ $6,5,3,2 \implies 6+3$ (output of greedy)
+          \\ Optimal is $5+3+2 = 10$
+
+          We can disregard any item whose weight is larger than
+          $W$. So we can assume $W \geq w_1 \geq \ldots \geq w_n$. If
+          the algorithm doesn't pick some item $\implies $ the
+          knapsack is at least half full.
+
+          This is because if $w_i$ is the first item that is not
+          picked by the algorithm $\implies w_{i-1}\geq w_i$ is in the
+          knapsack and the knapsack has at least $W-w_{i}$ weight in
+          it.
+
+          If $\sum_{j=1}^{i-1}w_j < \frac{W}{2} \implies w_i \leq
+          w_{i-1}<\frac{W}{2} \implies$ we could add $w_i$ to the
+          knapsack.
+          \\ \includegraphics[width=.6\textwidth]{i149.pdf}
+
+          The algorithm either picks all the items or (inclusive) it
+          fills up at least $\frac{W}{2} \geq \frac{opt}{2}$ in the knapsack.
+
+          In both cases:
+          $$Output \geq \frac{1}{2}Optimal$$
+          $\implies \frac{1}{2}$-factor approximation.
+          \subsection{Load balancing problem}
+          \begin{itemize}
+          \item Jobs with processing times $t_1,t_2,\ldots,t_n \in
+            \mathbb{N}$
+          \item $m$ number of machines.
+          \end{itemize}
+          Goal: Distribute the jobs over these machines so that we
+          minimize the last finishing time.
+          \paragraph{Ex:} $m=3$
+          \\ $2,3,4,6,2,2$
+          \\ $7 = opt$,
+          \begin{tabular}{|l |l |l|}
+            \hline &&$2$
+            \\ $4$ & & $2$
+            \\ $3$ & $6$ & $2$
+            \\ \hline
+          \end{tabular}\\
+          Alg I:
+          \begin{algorithmic}
+            \While{there are jobs}
+                \State Assign the current job to the machine with
+                smallest current load
+            \EndWhile
+          \end{algorithmic}
+          In our example: $ 8 = $
+          \begin{tabular}{|l|l|l|}
+            \hline $6$& $2$& $2$
+            \\ $2$ & $3$ & $4$
+            \\ \hline
+          \end{tabular}. This is an online algorithm, can use it
+          while receiving jobs live. Clearly not optimal, we
+          will show next lecture that it is a $2$-factor
+          approximation. The better approach would be to sort
+          them first.
+          \paragraph{Ex:} $\underbrace{1,1,1,\ldots,1}_{(m-1)\times
+            m}, m$
+          \\ $m+m-1 = 2m-1 =$
+          \begin{tabular}{|l|l|l|l|}
+            \hline $m$&&&
+            \\ $1$ & $1$ & \ldots & $1$
+            \\ \ldots & \ldots & \ldots & \ldots
+            \\ $1$ & $1$ & \ldots & $1$
+            \\ \hline
+          \end{tabular}
+          \\ Optimal: $m=$
+          \begin{tabular}{|l|l|l|l|}
+            \hline &$1$&\ldots&$1$
+            \\ & \ldots & \ldots & \ldots
+            \\ $m$ & $1$ & \ldots & $1$
+            \\ \hline
+          \end{tabular}
+          So we see that this algorithm can give us almost $2$ times
+          the optimal solution.
         \end{document}
