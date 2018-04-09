@@ -3173,4 +3173,186 @@
           \end{tabular}
           So we see that this algorithm can give us almost $2$ times
           the optimal solution.
-        \end{document}
+          \section{04/09/18}
+          \subsection{Load Balancing}
+          Input: Processing times $t_1, t_2, \ldots, t_n$
+          \\ Number of machines $m$.
+          \\ Goal: Distribute the jobs among the $m$ machines so that
+          the last finishing time is minimized.
+          \paragraph{Ex:} $2,3,4,6,2,2$, $m=3$
+          \\ $Opt = 7$, 
+          \begin{tabular}{|l |l |l|}
+            \hline &&$2$
+            \\ $3$ & & $2$
+            \\ $4$ & $6$ & $2$
+            \\ \hline
+          \end{tabular}
+          \paragraph{Alg I:} Assign the current job to the machine
+          with the current lowest load.
+          \\ Output = $8$,
+          \begin{tabular}{|l|l|l|}
+            \hline $6$&$2$&$2$
+            \\ $2$ & $3$ & $4$
+            \\ \hline
+          \end{tabular}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Thm:} Alg I is a $2$-factor approximation
+          algorithm.
+          \paragraph{Proof:} Let $T^*$ be the optimal solution and $T$
+          be the output of the alg. We need to show
+          $$T \leq 2 T^*$$
+          Note:
+          \begin{equation}
+            \label{eq:lbt}
+          \max_i t_i \leq T^*
+          \end{equation}
+          as every job has to be assigned
+          to a machine. Also:
+          \begin{equation}
+            \label{eq:lb2t}
+          \frac{\sum_{i=1}^n t_i}{m} \leq T^*
+          \end{equation} as the total processing time $\sum_{i=1}^n
+          t_i$ has to be distributed among $m$ machines.
+
+          Let $i$ be the machine with the highest load ($T$) in our
+          algorithm and let $t_j$ be the last job assigned to this
+          machine.
+
+          For
+          \begin{tabular}{|l|l|l|}
+            \hline $6$&$2$&$2$
+            \\ $2$ & $3$ & $4$
+            \\ \hline
+          \end{tabular}
+          , $T=8$, $t_j = 6$.
+
+          Let's look at the time that $t_j$ is being assigned to this
+          machine.
+          \\ $6 \to$ 
+          \begin{tabular}{|l|l|l|}
+            &&
+            \\$2$ & $3$ & $4$
+            \\ \hline
+          \end{tabular}
+          \\ The load was $T-t_j$ and that was the smallest
+          load. $\implies$ The final loads of all machines are at
+          least $T-t_j$. $\implies \sum_{i=1}^n t_i \geq m(T-t_j)$
+          $$\implies T^* \geq T- t_j \text{ by (\ref{eq:lb2t})}$$
+          Also
+          $$T^* \geq t_j \text{ by (\ref{eq:lbt})}$$
+          Now, adding both inequalities, we get:
+          $$2T^* \geq T$$
+          Note that a lot of $2$-factor proofs are like this, we show
+          easier bounds and use them together.
+          \paragraph{Alg II:} Sort the jobs $t_1 \geq t_2 \geq \ldots
+          \geq t_n$ and then run Alg I.
+          \paragraph{Thm:} Alg II is a $\frac{3}{2}$-factor
+          approximation algorithm.
+          \paragraph{Pf:} We need to show $T \leq \frac{3}{2}T^*$.
+
+          Let $i$ be the machine with highest load and $t_j$ be the
+          last job on this machine. If $n \leq m \implies$ algorithm
+          is optimal (each job goes to a separate machine).
+          \\ Claim: If $n \geq m+1 \implies T^* \geq 2t_{m+1}$
+          \paragraph{Ex:} $m=3$
+          \\$ 6 \geq 4 \geq 3 \geq \underline{2}
+          \geq 2 \geq 2$, $T^* \geq 2 \times 2$
+          \\ $t_1 \geq t_2 \geq \ldots \geq t_{m+1}$
+          \\ $t_a +t_b \geq t_{m+1}+t_{m+1} = 2t_{m+1}$
+          \paragraph{Pf of claim:} One of the machines will have two
+          of $t_1 \geq t_2 \geq \ldots \geq t_{m+1}$ and its load is
+          going to be at least $2t_{m+1}$.
+          \paragraph{Back to the original proof:} We focus on the case
+          where $n \geq m+1$.
+          \\ $T$
+          \begin{tabular}{|l|}
+            \hline
+            $t_j$
+            \\ \hline
+            \\
+            \\ \hline $i$-th machine
+            \\ \hline
+          \end{tabular}
+          \\ If $t_j$ is the only job assigned to this machine
+          $\implies T = t_j \leq T^* \implies T=T^*$.
+
+          So we can assume there are at least two jobs assigned to the
+          $i$-th machine. Since $n\geq m+1 \implies j \geq m+1
+          \implies t_{m+1} \geq t_j$. This together with the claim
+          shows $T^* \geq 2 t_{m+1} \geq 2t_j$
+
+          Looking at the previous proof, we now have:
+          \begin{align*}
+            T^* & \geq T- t_j
+            \\ \frac{1}{2}T^* & \geq t_j
+                                \intertext{Summing the two:}
+            \frac{3}{2}T^* & \geq T
+          \end{align*}
+          \subsection{Center Selection}
+          Input: A set $S$ of $n$ points $p_1, \ldots, p_n$ on the
+          plane. A number $k \in \mathbb{N}$.
+          \\ Goal: To select $k$ ``centers'' on the plane such that
+          the maximum distance of any point in $S$ to a center is
+          minimized.
+          \\ $dist(p, C) = \min_{q \in C} dis(p,q)$, where $C$ is the
+          set of centers.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Ex:} $k=1$ and $n=2$, put it in the middle.
+          \\ \includegraphics[width=.9\textwidth]{i151.pdf}
+          $$dist(p_1,C)=dist(p2,C)=\frac{dist(p_1,p_2)}{2}$$
+          \paragraph{Ex:} $k=2$ and $n=3$
+          \\ \includegraphics[width=.9\textwidth]{i152.pdf}
+          $$opt=\frac{dist(p_1,p_2)}{2}$$
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Alg:}
+          \begin{algorithmic}
+            \State Put one of the points $p_1, \ldots, p_n$ in $C$.
+            \For {$i=2,\ldots, k$}
+                \State Pick the point with largest distance to $C$ and
+                add it to $C$
+            \EndFor
+          \end{algorithmic}
+          \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Ex:} $k=3$
+          \\ \includegraphics[width=.9\textwidth]{i153.pdf}
+          \paragraph{Ex:} $k=1$, $n=2$. Output $= d_{12}$, Opt $=
+          \frac{d_{12}}{2}$
+          \\ \includegraphics[width=.9\textwidth]{i154.pdf}
+          \\ $\implies$ The alg is not better than $2$-factor.
+          \paragraph{Thm:} This is a $2$-factor approximation
+          algorithm.
+          \paragraph{Pf:} If $n \geq k \implies $ alg is optimal as
+          it puts a center on each point.
+
+          If $n>k \implies$ let $c_1, \ldots, c_k$ be the centers
+          chosen by the algorithm and let $c_{k+1}$ be the point with
+          the largest distance from $\{c_1,\ldots,c_k\}$
+          \\ Output $= dist (c_{k+1},C) = r$
+          \paragraph{Ex:}
+          ~\\\includegraphics[width=.9\textwidth]{i155.pdf}
+
+          Consider $c_1,\ldots, c_k, c_{k+1}$
+          \\ Note $dist(c_i, c_j) \geq r$ for all $i \neq j \in
+          \left\{1,\ldots,k+1\right\}$
+          \\ \includegraphics[width=.9\textwidth]{i156.pdf}
+
+          Indeed for $i < j \leq k$ then when $j$ is chosen, its
+          distance to $c_i$ must have been larger than the distance
+          between $c_{k+1}$ and $C$, otherwise $c_{k+1}$ would have
+          been chosen.
+          \paragraph{Recap:} We showed that there are $k+1$ points
+          whose pairwise distances are $\geq r$.
+          \\ \includegraphics[width=.9\textwidth]{i157.pdf}
+          \\ Q: Can opt be $< \frac{r}{2}$
+
+          Let $q_1,\ldots,q_k$ be the optimal centers. For each of
+          these, let's look at the points that this center is the
+          closest to.
+          \\ \includegraphics[width=.9\textwidth]{i158.pdf}
+
+          One of $q_1,\ldots, q_k$ gets at least two points (whose
+          distance is $\geq$ r). So this center is in distance at
+          least $\frac{r}{2}$ to one of those.
+          \\ \includegraphics[width=.6\textwidth]{i159.pdf}
+          \\ $\implies output = r \leq 2 \times opt$
+         \end{document}
