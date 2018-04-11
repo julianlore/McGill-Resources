@@ -3355,4 +3355,146 @@
           least $\frac{r}{2}$ to one of those.
           \\ \includegraphics[width=.6\textwidth]{i159.pdf}
           \\ $\implies output = r \leq 2 \times opt$
+          \section{04/11/18}
+          \paragraph{Vertex Cover}
+          Very fast $2$-factor approximation algorithm.
+          \\ Probably need exponential for $1.99$-factor approximation
+          (i.e. as soon as we want to improve it slightly, the
+          algorithm must become algorithm, which is true if $P\neq NP$)
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          For certain problems we can guarantee a reasonable trade off
+          between the approximation factor and running time.
+          \paragraph{Ex:} For example something like
+          $O(n^{\frac{1}{\varepsilon}})$ alg that is a
+          $(1+\varepsilon)$-factor approximation algorithm $\forall
+          \varepsilon > 0$
+          \subsection{Polytime Approximation Algorithm Scheme (PTAS)}
+          $\forall \varepsilon > 0$ there exists a polytime (for fixed
+          $\varepsilon$, e.g.
+          $n^{\frac{1}{\varepsilon}},
+          n^{2^{2^{2^{\frac{1}{\varepsilon}}}}}$, not
+          $\left(\frac{1}{\varepsilon}\right)^n$)
+          $(1+\varepsilon)$-factor approximation algorithm for the
+          problem.
+          \paragraph{Knapsack problem}~
+          \\ Values $v_1, \ldots, v_n \in \mathbb{N}$
+          \\ Weights $w_1, \ldots, w_n \in \mathbb{N}$
+          \\ Capacity $W \in \mathbb{N}$
+          \\ Goal: Select a subset of items such that their total
+          weight does not exceed $W$ and their total value is maximized.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Dynamic Programming Approach}~
+          \\ $Opt[k,V]=$ smallest weight of a subset of items from
+          $1,\ldots,k$ that have total value at least $V$.
+          \\ Note, $Opt[k,V]=\min
+          \begin{cases}
+            Opt[k-1,V]
+            \\ w_k+Opt[k-1,\max \left\{0, V-v_k\right\}]
+          \end{cases}
+          $
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \begin{algorithmic}
+            \State // $2$ base cases
+            \For{$k=0,\ldots, n$}
+                \State $Opt[k,0]=0$
+            \EndFor
+            \For{$V=1,\ldots,\sum_{i=1}^nv_i$}
+                \State $Opt[0,V]=\infty$ // Since not possible
+            \EndFor
+            \For{$k=1,\ldots, n$}
+                \For{$V=1,\ldots, \sum_{i=1}^nv_i$}
+                    \State $Opt[k,V]=\min
+          \begin{cases}
+            Opt[k-1,V]
+            \\ w_k+Opt[k-1,\max \left\{0, V-v_k\right\}]
+          \end{cases}
+          $
+                \EndFor
+            \EndFor
+            \For{$v = \sum_{i=1}^n v_i$ to $1$}
+                \If{$Opt[n,v] \leq W$}
+                    \State output ``$v$'' and terminate
+                \EndIf
+            \EndFor
+          \end{algorithmic}
+          \noindent \rule{\textwidth}{0.5pt}
+          Running time: $O(n \sum_{i=1}^n v_i)=O(n^2 v^*)$ where $v^*
+          = \max_i v_i$. \underline{Not a polytime algorithm.}
+
+          An approximation algorithm: Idea is to round these
+          numbers.
+          \begin{algorithmic}
+            \State Let $\varepsilon > 0$
+            \State Set $b=\frac{\varepsilon}{2n}v^*$
+            \State Set $\tilde{v}_i = \lceil \frac{v_i}{b}\rceil b$
+          \end{algorithmic}
+          Note $v_i \leq \tilde{v}_i < v_i + b$ (since $\lceil
+          \frac{v_i}{b}\rceil < \frac{v_i}{b}+1$)\\
+          \begin{tabular}{l l l}
+            Solve&$\tilde{v}_1,\ldots, \tilde{v}_n$& using
+            \\P1 & $w_1 ,\ldots, w_n$ & Dynamic
+            \\ & $W$ & programming
+          \end{tabular}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \begin{tabular}{l l l}
+            Solve&$\hat{v}_1,\ldots,\hat{v}_n$&where
+            \\ P2& $w_1,\ldots,w_n$ & $\hat{v}_i = \lceil \frac{v_i}{b}\rceil$
+            \\ & $W$
+          \end{tabular}
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          $$Opt(P1)=b \times Opt(P2)$$
+          \paragraph{Ex:} $b=10$
+          \\
+          \begin{tabular}{l l l l}
+            $\tilde{v}_i$&$80$&$90$&$20$
+            \\ $w_i$ & $5$ & $6$ & $2$
+            \\ $W$ & $=7$
+          \end{tabular}, choose $5$ and $2$ get $80+20=100$.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \begin{tabular}{l l l l}
+            $\hat{v}_i$&$8$&$9$&$2$
+            \\ $w_i$ & $5$ & $6$ & $2$
+            \\ $W$ & $=7$
+          \end{tabular}, choose $5$ and $2$ get $8+2=10$.
+          
+          Running time = $O(n^2\times
+          \left(\frac{v^*}{b}+1\right))$ 
+          ($+1$ since it may have been rounded by $1$)
+          \begin{align*}
+            =O\left(n^2+\frac{n^2v^*}{b}\right)=O\left(n^2+\frac{n^2v^*}{\frac{\varepsilon}{2n}v^*}\right)
+            = O\left(n^2+\frac{2n^3}{\varepsilon}\right)=O(n^3)
+          \end{align*}
+          For fixed $\varepsilon$.
+
+          We have a polytime $O(n^3)$ that solves $P2$ and $P1$. What
+          does this tell us about the original problem?
+
+          Recall $v_i \leq \tilde{v}_i \leq v_i + b$.
+          \paragraph{Claim:} If $S$ is the set of items found by the
+          alg and $S^*$ is the optimal set of items for the original
+          problem then
+          % $$(1+\varepsilon) \sum_{i\in S} v_i\geq \sum_{i\in S^*}v_i =
+          % Opt$$
+          $$\sum_{i \in S}v_i \geq \left(1-\frac{\varepsilon}{2}\right)\sum_{i\in S^*}v_i = \left(1-\frac{\varepsilon}{2}\right)Opt$$
+          $S$ is the opt solution to $P1$, $S^*$ is the opt solution
+          to the original.
+          \begin{align*}
+            \sum_{i\in S^*} v_i & \leq \sum_{i \in S^*}\tilde{v}_i \leq \sum_{i\in S}\tilde{v}_i \leq \sum_{i \in S}(v_i + b) = \left(\sum_{i \in S}v_i\right)+bn
+                                  = \left(\sum_{i\in S}v_i\right)+\frac{\varepsilon}{2}v^*
+            \\ & \leq \left(\sum_{i\in S}v_i\right)+\frac{\varepsilon}{2}Opt
+          \end{align*}
+          We showed
+          \begin{align*}
+            & Opt \leq \sum_{i\in S}v_i + \frac{\varepsilon}{2}Opt
+            \\  \implies & \left(1-\frac{\varepsilon}{2}\right)Opt\leq \sum_{i\in S}v_i
+          \end{align*}
+          We showed
+          $$Output \geq \left(1-\frac{\varepsilon}{2}\right)$$
+          $\implies (1-\frac{\varepsilon}{2})$-factor approximation
+          algorithm.
+
+          For geometric problems (in particular, the assignment
+          questions), divide the plane into squares of $\varepsilon$
+          and solve this mesh.
+          \\ \includegraphics[width=.9\textwidth]{i160.pdf}
          \end{document}
