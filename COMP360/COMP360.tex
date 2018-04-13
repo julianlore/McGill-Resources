@@ -1852,16 +1852,16 @@
           \begin{align*}
             \min \ b_1y_1 + b_2y_2 + \ldots + b_my_m &
             \\ x_1 \to \underbrace{a_{11}y_1 + a_{21}y_2 + \ldots +
-            a_{m1}y_m}_{\text{coeff of $x_1$ in LHS}} & \leq b_1
-            \\ x_2 \to a_{12}y_1 + a_{22}y_2 + \ldots + a_{m2}y_m & \leq b_2
+            a_{m1}y_m}_{\text{coeff of $x_1$ in LHS}} & \geq c_1
+            \\ x_2 \to a_{12}y_1 + a_{22}y_2 + \ldots + a_{m2}y_m & \geq c_2
             \\ \ldots
-            \\ x_n \to a_{1n}y_1 + a_{2n}y_2 + \ldots + a_{mn}y_m & \leq b_n
+            \\ x_n \to a_{1n}y_1 + a_{2n}y_2 + \ldots + a_{mn}y_m & \geq c_n
           \end{align*}
           \begin{align*}
             \max \ c_1x_1 + \ldots + c_n x_n \ &  & \min \ b_1y_1 + \ldots + b_m y_m
                                                     \\ a_{11}x_1 + \ldots + a_{n1}x_n \leq b_1 & & a_{11}y_1 + \ldots + a_{m1}y_m \geq c_1
             \\ \ldots & & \ldots
-            \\ a_{1m}x_1 + \ldots + a_{nm}x_n \leq b_1 & & a_{1n}y_1 + \ldots + a_{mn}y_m \geq c_1
+            \\ a_{1m}x_1 + \ldots + a_{nm}x_n \leq b_n & & a_{1n}y_1 + \ldots + a_{mn}y_m \geq c_n
             \\ x_1, \ldots, x_n \geq 0 & & y_1, \ldots, y_m \geq 0
           \end{align*}
           Remark: value of every feasible solution to primal $\leq$
