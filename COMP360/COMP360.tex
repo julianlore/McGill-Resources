@@ -3497,4 +3497,137 @@
           questions), divide the plane into squares of $\varepsilon$
           and solve this mesh.
           \\ \includegraphics[width=.9\textwidth]{i160.pdf}
-         \end{document}
+          \section{04/16/18}
+          \subsection{Set Cover Problem}
+          Input: $S_1, S_2, \ldots, S_m \subseteq U$ (finite set)
+          \\ Goal: Find the smallest $T\subseteq
+          \left\{1,\ldots,m\right\}$ such that $\bigcup_{i\in T}S_i =
+          U$
+          \paragraph{Ex:} $\left\{1,2,3\right\}, \left\{2,3,4\right\},
+          \left\{1,2,5\right\}, \left\{4\right\}, \left\{5\right\}
+          \subseteq \left\{1,2,3,4,5\right\}$
+          \\ Solution: $\left\{2,3,4\right\}, \left\{1,2,5\right\}$
+          \\ We saw that this is $NP$-Complete, because we could
+          reduce vertex cover to this (set cover is like a generalized
+          version of vertex cover).
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Approximation Algorithm:} At every step, try to
+          cover as many new elements as possible. 
+          \begin{algorithmic}
+            \State Start $R=U$
+            \While {$R \neq \emptyset$}
+                \State Pick an $S_i$ with largest $\left|S_i \cap
+                  R\right|$
+                \State Set $R = R - S_i$
+            \EndWhile
+            \State Output all the selected sets.
+          \end{algorithmic}
+          \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Ex:} $\left\{1,2,3\right\} \to R =
+          \left\{4,5\right\}$
+          \\ $\left\{2,3,4\right\}\to R=\left\{5\right\}$
+          \\ $\left\{1,2,5\right\}\to R = \emptyset$
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Notation:}~
+          \\$H_n = 1 + \frac{1}{2}+\frac{1}{3}+\ldots+\frac{1}{n}$
+          \\\includegraphics[width=.9\textwidth]{i161.pdf}
+          \\$ \int_1^n \frac{1}{x} \leq H_n \leq 1 + \int_1^n
+          \frac{1}{x} \implies \ln(n) \leq H_n \leq 1+\ln (n) \implies
+          H_n = \Theta(\log (n))$
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Thm:} The above algorithm is an $H_n$-factor
+          approximation algorithm where $n=\left|U\right|$.
+          \paragraph{Pf:} Let $k$ be the output of the alg and $k^*$
+          be the optimal solution. We need to show
+          $$k \leq H_n \times k^*$$
+          For every $x \in U$ let $c_x = \frac{1}{\left|S_i \cap
+              R\right|}$ where $S_i$ is the first selected set that
+          covers $x$.
+          \\ In the example, $\left\{1,2,3,4,5\right\}\to
+          \left\{\frac{1}{3},\frac{1}{3},\frac{1}{3},1,1\right\}$,
+          since the first set selected covers $3$ elements and the
+          last $2$ sets cover only $1$ element.
+          \paragraph{Claim:} $\displaystyle \sum_{x \in U}c_x =
+          k=output$
+          \paragraph{Pf:} Every time we select a new set $S_i$ each
+          element in $S_i\cap R$ gets assigned a cost of
+          $\frac{1}{\left|S_i \cap R\right|}$ and these add up to
+          one. So every new selected set adds $1$ to the total cost.
+          \paragraph{Claim:} For every set $S_j$ we have $\sum_{x \in
+            S_j}c_x \leq
+          1+\frac{1}{2}+\frac{1}{3}+\ldots+\frac{1}{\left|S_j\right|}$
+          \paragraph{Ex:}
+          \begin{align*}
+            \left\{1,2,3\right\} & \to \frac{1}{3}+\frac{1}{3}+\frac{1}{3} \leq 1+\frac{1}{2}+\frac{1}{3}
+            \\ \left\{2,3,4\right\} & \to \frac{1}{3}+\frac{1}{3}+1 \leq 1+\frac{1}{2}+\frac{1}{3}
+            \\ \left\{1,2,5\right\} & \to \frac{1}{3}+\frac{1}{3}+1 \leq 1 + \frac{1}{2} + \frac{1}{3}
+            \\ \left\{4\right\} & \to 1 \leq 1
+            \\ \left\{5\right\} & \to 1 \leq 1
+          \end{align*}
+          \paragraph{Pf:} Let $S_j = \left\{a_1, a_2, \ldots,
+            a_t\right\}$ where $a_1$ is covered first, $a_2$ second,
+          etc.
+          \\ Note $c_{a_1}\leq \frac{1}{t}$ because the first set that
+          is selected and includes $a_1$ has to cover at least $t$ new
+          elements because we had the option of picking $S_j$ and that
+          would cover $t$ new elements and the algorithm goes for a
+          set that covers the largest number of new elements:
+          $$\left\{x,x,x,x,x,a_1\right\} \to
+          \left\{\frac{1}{r},\ldots,\frac{1}{r}\right\}$$ Where $t
+          \leq r$.
+          \\ Furthermore $c_{a_2}\leq \frac{1}{t-1}$ because again
+          selecting $S_j$ would cover $t-1$ new elements $(a_2,\ldots,
+          a_t)$.
+          \\ Continuing this argument:
+          $$c_{a_3} \leq \frac{1}{t-2}, c_{a_4} \leq \frac{1}{t-3},
+          \ldots, c_{a_t} \leq 1$$
+          \noindent \rule{\textwidth}{0.5pt}
+          Summary: $$\sum_{x \in U}c_x = k$$
+          $$\sum_{x \in S_j}c_x \leq 1 +
+          \frac{1}{2}+\ldots+\frac{1}{\left|S_j\right|}\leq H_n$$
+          Let $T \subseteq \left\{1,\ldots,m\right\}$ be the optimal
+          solution. That is $\left|T\right|=k^*$ and $\bigcup_{i\in
+            T}S_j = U$
+          \begin{align*}
+            k = \sum_{x \in U}c_x \leq \sum_{j\in T}\sum_{x \in S_j}c_x & \leq k^* \times H_n
+          \end{align*}
+          We showed $k \leq k^* \times H_n$. $\hfill \square$
+          \paragraph{Remark:} Note if $\left|S_j\right|\leq t$ for all
+          $j = 1,\ldots, m$ then the above algorithm is a $H_t$-factor
+          approximation algorithm.
+          \\ Unless $P=NP$, there is no polytime alg better than
+          $\Theta(\log n)$ factor for set cover.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Remark:} $\frac{c_x}{H_n}$ for $x \in U$ is a
+          feasible solution for the dual of the $LP$ relaxation of set
+          cover.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \subsection{Online Algorithms}
+          The input is coming in an online manner and we have to make
+          decisions as time proceeds.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          \paragraph{Optimal Stopping Time} (Secretary problem) \\
+          Interviewing $n$ people, either you reject them or hire them and
+          stop interviewing. You don't know beforehand how good each
+          person is (and the order is not predetermined). We want to
+          pick the best person.
+          
+          Every time we meet someone we can compare them to the people
+          we have met before.
+          \\ \noindent \rule{\textwidth}{0.5pt}
+          If we accept the first person $\to P(Win)=\frac{1}{n}$
+
+          The idea is to reject the first $T$ people (for a carefully
+          chosen $T$). After that, we accept the first person who is
+          better than everyone we have met before.
+          \\ \includegraphics[width=.9\textwidth]{i162.pdf}
+          \\ Optimal $T$? Two bad things can happen.
+          \begin{enumerate}
+          \item The best candidate is among the first $T$ people. $P
+            \left(\frac{T}{n}\right)$.
+          \item We stop before meeting the best person. Some
+            probability given by a sum. 
+          \end{enumerate}
+          Optimizing over these gives us $T \approx
+          \left(\frac{1}{e}\times n\right) \approx 0.37n$ for large $n$.
+        \end{document}
