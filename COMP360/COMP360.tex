@@ -2257,7 +2257,8 @@
           conditions are satisfied.
           \\ \noindent \rule{\textwidth}{0.5pt}
           An efficient certifier for $\overline{Max\hbox{-}flow}$
-          (complement). $\langle (G,k), (A,B) \rangle$. It accepts
+          (complement). $\langle (G,k), (A,B) \rangle$. \\
+          It accepts
           $\iff cap(A,B) < k$.
           \\ \includegraphics[width=.9\textwidth]{i117.pdf}
 
@@ -2682,7 +2683,7 @@
             \State Given an input $(G,k)$ for $VC$
             \State Let $U = E(G)$
             \If {$v_1, \ldots, v_n$ are the vertices of $G$} let $S_i
-            = \left\{e \ in E | e \text{ is adjacent to }v_i\right\}$
+            = \left\{e \in E \mid e \text{ is adjacent to }v_i\right\}$
             \If {$S_1, \ldots, S_n \subseteq U$ has a set cover of
               size $k$} Output ``Yes $(G,k)\in VC$''
             \Else \ Output ``NO $(G,k)\notin VC$''
@@ -2756,7 +2757,7 @@
           Next we want to deal with the restriction that every clause
           has to have at least one true term. Take note of the
           following interesting graph:
-          \\ \includegraphics[width=.9\textwidth]{i136.pdf}
+          \\ \includegraphics[width=.9\textwidth]{i136.pdf} \\
           If the top vertices have the same color then the bottom
           vertex has to have the same color. Now look at the following
           graph:
