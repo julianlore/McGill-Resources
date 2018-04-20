@@ -1,0 +1,240 @@
+\color{Sepia}
+\section{Expressions}
+Most basic are numbers, strings and booleans.
+\\ 3 -> int
+\\ +,-,*,/ are operators for ints
+\\ 3.0 -> float
+\\+.,-.,*.,/. are operators for floats
+\\ This is because OCaml does not keep types during runtime.
+\begin{lstlisting}
+"comp302" -> string
+'a' -> char
+true -> bool
+true || false -> bool
+true && false -> bool
+\end{lstlisting}
+\colorbox{Yellow}{if statements}
+\begin{lstlisting}
+if 0 = 0 then 1.0
+else 2.0
+if 0 = 0 then 1.0
+else 'a'
+\end{lstlisting}
+Second line won't work with typechecker, both parts of if statement
+must eval to same thing.
+\\ $3/0$ will pass typechecker but will throw exception at runtime if
+it gets run.
+\color{Blue}
+\section{Binding}
+\colorbox{Yellow}{variables}
+\begin{lstlisting}
+let <name> = <exp>
+let x = 3 * 3
+\end{lstlisting}
+x is bound to 9. Values are bounded to names. It
+\textcolor{red}{cannot} be updated or changed, only overshadowed, for
+ex.
+\begin{lstlisting}
+let x = 4
+\end{lstlisting}
+When we look up x now, we look up the most recent x on the binding
+stack. Garbage collector may remove previous one if there is nothing
+else using it (can have a function that was defined before new x but
+uses old x)
+\colorbox{Yellow}{scope}
+\begin{lstlisting}
+let <name> = <expr1> in
+  <expr2>
+\end{lstlisting}
+scope of expr1 ends after expr2
+Functions are values. Func names bind name to body.
+\\ Recursive functions declared using \textcolor{Green}{\texttt{let
+    rec}}
+\begin{lstlisting}
+let rec fact n =
+  if n = 0 then 1
+  else n * fact (n-1)
+\end{lstlisting}
+\colorbox{Yellow}{Tail-recursive} functions are recursive funcs
+that have nothing to do except return final val. i.e. no need to save
+stack frame. Include a parameter to \textcolor{Green}{accumulate
+  result}
+\begin{lstlisting}
+let rec fact_tr n =
+  let rec f (n, m) = 
+    if n = 0 then m
+    else f(n-1, n*m)
+    in f(n,1)
+  \end{lstlisting}
+
+\color{OliveGreen}
+\section{Types}
+Defining a type:
+\begin{lstlisting}
+type suit = Clubs |
+  Spades | Hearts
+  | Diamonds
+\end{lstlisting}
+Order declared does not matter. Clubs, Spades, etc are \textbf{constructors}
+and must begin with a \textbf{capital letter}
+\paragraph{Recursively defined}
+Define hand inductively. Empty is of type hand. If c is a card and h
+is a hand, then Hand(c, h) is a hand. Nothing else is a hand.
+\begin{lstlisting}
+type hand = Empty |
+  Hand of card * hand
+let hand0:hand = Empty
+let hand1:hand =
+  Hand((Ace, Hearts),
+  Empty)
+\end{lstlisting}
+\colorbox{Yellow}{Mutual recursive data type}
+\begin{lstlisting}
+type 'a forest = Forest
+  of ('a tree) list
+and 'a tree = Empty |
+  Node of 'a * 'a forest
+\end{lstlisting}
+\colorbox{Yellow}{Option Data Type}
+\begin{lstlisting}
+type 'a option = None
+  | Some of 'a
+\end{lstlisting}
+Used in case a function might not return something.
+\color{Cyan}
+\section{Pattern Matching}
+\begin{lstlisting}
+match <exp> with
+| <pattern> -> <exp>
+| <pattern> -> <exp>
+...
+\end{lstlisting}
+exp we're analyzing is called \textit{scrutinee}.
+\color{Orange}
+\section{Arguments}
+Passing all args at same time: 'a * 'b -> 'c
+\\ One arg at a time: 'a -> 'b -> 'c
+\\curry: (('a * 'b -> 'c) -> 'a -> 'b -> 'c)
+\begin{lstlisting}
+let curry f =
+  (fun x y -> f (x,y))
+\end{lstlisting}
+uncurry: (('a -> b' -> 'c) -> ('a * b' -> 'c))
+\begin{lstlisting}
+let uncurry f =
+  (fun (x,y) -> f x y)
+\end{lstlisting}
+Note that function types are right associative: 'a -> 'b -> 'c = 'a ->
+('b -> 'c) and function application is left associative: f 1 2 = (f 1) 2
+\color{Magenta}
+\section{Proofs}
+$e \Downarrow v$: e evals to v in multiple steps (Big-Step).
+\\$e\Rightarrow e'$: e evals in one step to e' (small-step
+(single))
+\\$e \implies^* e'$: e evals in multiples steps to e' (small-step
+(multiple))
+\colorbox{Yellow}{Structural induction}
+\begin{lstlisting}
+type 'a list =
+  nil | :: of 'a *
+        'a list
+\end{lstlisting}
+To inductively prove about lists, prove for empty list, assume it
+holds for lists t and then show for lists h ::\ t.
+\begin{lstlisting}
+type 'a tree =
+  Empty | Node of 'a *
+         'a tree *
+         'a tree
+\end{lstlisting}
+To inductively prove about trees, prove for empty tree, assume for
+trees l and r and show for tree Node(a, l, r)
+\\\colorbox{Yellow}{Inductive Proof}
+\begin{lstlisting}
+let rec r_app l1
+  l2 = match l1 with
+  | [] -> l2
+  | x::xs -> r_app xs
+  (x::l2)
+  
+  let r_app' l1
+  l2 =
+  let rec rev l =
+  match l with |[]->[]
+  |x::xs -> xs @ [x] in
+  let rec app l1 l2
+  = match l1 with
+  |[]->l2
+  |x::l1'->x::(app l1' l2)
+  in app
+  (rev l1) l2
+\end{lstlisting}
+For all lists l1 l2, r\_app l1 l2= r\_app' l1 l2
+\\ Proof by structural induction on l1
+\\ Base: l1 = [].
+\\ r\_app l1 l2 = r\_app [] l2 = l2 (by rev\_app) = app []
+l2 (by def of app) = app (rev []) l2 (def of rev) = app (rev l1) l2 =
+rev\_app' l1 l2 (by def of rev\_app')
+\\ Step: l1 = h ::\ t,
+\\ IH: For all l2, rev\_app t l2 = rev\_app' t l2.
+\\ rev\_app' l1 l2 = rev\_app (h ::\ t) l2 = rev\_app = t (h ::\ l2)
+(by def of rev\_app) = rev\_app' t (h ::\ l2) (by IH) = app (rev t) (h
+::\ (app [] l2)) (def app) = app (rev t) (app [h] l2) (def app) = app
+(app (rev t) [h]) l2 (ass of app) = app (rev (h ::\ t) l2) (def
+rev\_app') = rev\_app' l1 l2   
+\color{Black}
+\section{Higher Order Functions}
+Used to abstract over common functionality.
+\\Non-generic sum: int * int -> int
+\\Generic sum with fun as arg: (int -> int) -> int * int -> int
+\\ Common hofs:
+\begin{lstlisting}
+List.map: ('a -> 'b) ->
+  'a list -> 'b list
+List.filter: ('a
+  -> bool)
+  -> 'a list -> 'a list
+(* Folds from l -> r *)
+List.fold_right:
+  ('a -> 'b -> 'b) ->
+  'a list -> 'b -> 'b
+(* Folds from r -> l *)
+List.fold_left:
+  ('a -> 'b -> 'a) ->
+  'a -> 'b list ->'b
+List.for_all:
+  ('a -> bool) ->
+  'a list -> bool
+List.exists:
+  ('a -> bool) ->
+  'a list -> bool
+\end{lstlisting}
+Anonymous functions: (fun x -> x+1)
+\\ (function -> |\_ |else), equiv to matching argument
+\\ Implementing them: map -> apply fun to head and prepend. Return
+empty for empty list. filter -> Prepend on tail called if true, else
+call again on tail.
+\\fold\_right f l b-> ret base if empty, else f h
+(fold\_right f t b)
+\\fold\_left f l b-> ret base if nil, else fold\_left on f t and (f h b), new
+base is f h b
+\color{Plum}
+\section{Partial Evaluation}
+\begin{lstlisting}
+let plus x y = x + y
+let plus3 = (plus 3)
+let plus3' = (fun x ->
+  plus x 3)
+\end{lstlisting}
+plus: int -> int -> int
+\\plus3: int -> int, although it's really a fun y -> 3 + y
+\\plus3' is really a fun x -> x + 3
+\\ Partial evaluation doesn't evaluate inside the function, just plugs
+in the value you gave it. If you want to force it to evaluate a
+certain part, you must define the part to evaluate using let z = x in
+(fun y -> z + y)
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Midterm"
+%%% End:
+  
