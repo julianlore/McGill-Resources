@@ -1,0 +1,18 @@
+~\\\color{Black}
+Problems
+\\ \textbf{List-intersection problem}: input (names of students in COMP250 and names of students in MATH240, no one with same name)
+\\ How many are taking both classes? Minimize times to compare?
+\\ Can nest for-loops $\to$ \colorbox{Red}{inefficient}
+\\ Binary search
+\begin{algorithmic}
+	\State listIntersection (A,m,B,n)
+	\State inter $\gets$ 0
+	\State B $\gets$ sort(B,n)
+	\For{i $\gets$ $0$ to $m-1$}
+		\If{binarySearch(B,n,A[i])} 
+			\State inter $\gets$ inter+1
+			\EndIf
+	\EndFor
+	\State return inter
+\end{algorithmic}
+For actual binary search, see algos

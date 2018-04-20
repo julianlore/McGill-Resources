@@ -1,0 +1,642 @@
+% \color{Sepia}
+% \section{Expressions}
+% Most basic are numbers, strings and booleans.
+% \\ 3 -> int
+% \\ +,-,*,/ are operators for ints
+% \\ 3.0 -> float
+% \\+.,-.,*.,/. are operators for floats
+% \\ This is because OCaml does not keep types during runtime.
+% \begin{lstlisting}
+% "comp302" -> string
+% 'a' -> char
+% true -> bool
+% true || false -> bool
+% true && false -> bool
+% \end{lstlisting}
+% \colorbox{Yellow}{if statements}
+% \begin{lstlisting}
+% if 0 = 0 then 1.0
+% else 2.0
+% if 0 = 0 then 1.0
+% else 'a'
+% \end{lstlisting}
+% Second line won't work with typechecker, both parts of if statement
+% must eval to same thing.
+% \\ $3/0$ will pass typechecker but will throw exception at runtime if
+% it gets run.
+% \color{Blue}
+% \section{Binding}
+% \colorbox{Yellow}{variables}
+% \begin{lstlisting}
+% let <name> = <exp>
+% let x = 3 * 3
+% \end{lstlisting}
+% x is bound to 9. Values are bounded to names. It
+% \textcolor{red}{cannot} be updated or changed, only overshadowed, for
+% ex.
+% \begin{lstlisting}
+% let x = 4
+% \end{lstlisting}
+% When we look up x now, we look up the most recent x on the binding
+% stack. Garbage collector may remove previous one if there is nothing
+% else using it (can have a function that was defined before new x but
+% uses old x)
+% \colorbox{Yellow}{scope}
+% \begin{lstlisting}
+% let <name> = <expr1> in
+%   <expr2>
+% \end{lstlisting}
+% scope of expr1 ends after expr2
+% Functions are values. Func names bind name to body.
+% \\ Recursive functions declared using \textcolor{Green}{\texttt{let
+%     rec}}
+% \begin{lstlisting}
+% let rec fact n =
+%   if n = 0 then 1
+%   else n * fact (n-1)
+% \end{lstlisting}
+% \colorbox{Yellow}{Tail-recursive} functions are recursive funcs
+% that have nothing to do except return final val. i.e. no need to save
+% stack frame. Include a parameter to \textcolor{Green}{accumulate
+%   result}
+% \begin{lstlisting}
+% let rec fact_tr n =
+%   let rec f (n, m) = 
+%     if n = 0 then m
+%     else f(n-1, n*m)
+%     in f(n,1)
+%   \end{lstlisting}
+
+\color{OliveGreen}
+\section{Types}
+Defining a type:
+\begin{lstlisting}
+type suit = Clubs |
+  Spades | Hearts
+  | Diamonds
+\end{lstlisting}
+Order declared does not matter. Clubs, Spades, etc are \textbf{constructors}
+and must begin with a \textbf{capital letter}
+\vspace{-1 em}
+\paragraph{Recursively defined}
+Define hand inductively. Empty is of type hand. If c is a card and h
+is a hand, then Hand(c, h) is a hand. Nothing else is a hand.
+\begin{lstlisting}
+type hand = Empty |
+  Hand of card * hand
+let hand0:hand = Empty
+let hand1:hand =
+  Hand((Ace, Hearts),
+  Empty)
+\end{lstlisting}
+\colorbox{Yellow}{Mutual recursive data type}
+\begin{lstlisting}
+type 'a forest = Forest
+  of ('a tree) list
+and 'a tree = Empty |
+  Node of 'a * 'a forest
+\end{lstlisting}
+\colorbox{Yellow}{Option Data Type}
+\begin{lstlisting}
+type 'a option = None
+  | Some of 'a
+\end{lstlisting}
+Used in case a function might not return something.
+\vspace{-1 em}
+\paragraph{Types of following exprs}
+\begin{itemize}
+  \setlength\itemsep{-0.5 em}
+\item \texttt{3+2}, type = int, val = 5, no effect
+\item \texttt{55}, int, 55, no
+\item \texttt{fun x -> x+3*2}, \texttt{int -> int}, \texttt{<fun>},
+  no
+\item \texttt{((fun x->match x with [] -> true | y::ys -> false), 3.2
+    *. 2.0)}, \texttt{(a' list -> bool) * float},
+  \texttt{(<fun>,6.4)}, no
+\item \texttt{let x = ref 3 in x := !x + 2},  unit, (), updates val of
+  x to 5
+\item \texttt{fun x -> x := 3}, \texttt{ref 'a -> unit},
+  \texttt{<fun>}, no
+\item \texttt{fun x -> (x := 3; x)}, \texttt{ref 'a -> ref 'a}, fun,
+  no
+\item \texttt{fun x -> (x := 3; !x)}, \texttt{ref 'a -> 'a}, fun, no
+\end{itemize}
+
+\color{Cyan}
+\section{Pattern Matching}
+\begin{lstlisting}
+match <exp> with
+| <pattern> -> <exp>
+| <pattern> -> <exp>
+...
+\end{lstlisting}
+exp we're analyzing is called \textit{scrutinee}.
+\color{Orange}
+\section{Arguments}
+Passing all args at same time: 'a * 'b -> 'c
+\\ One arg at a time: 'a -> 'b -> 'c
+\\curry: (('a * 'b -> 'c) -> 'a -> 'b -> 'c)
+\begin{lstlisting}
+let curry f =
+  (fun x y -> f (x,y))
+\end{lstlisting}
+uncurry: (('a -> b' -> 'c) -> ('a * b' -> 'c))
+\begin{lstlisting}
+let uncurry f =
+  (fun (x,y) -> f x y)
+\end{lstlisting}
+Note that function types are right associative: 'a -> 'b -> 'c = 'a ->
+('b -> 'c) and function application is left associative: f 1 2 = (f 1) 2
+\color{Magenta}
+\section{Proofs}
+$e \Downarrow v$: e evals to v in multiple steps (Big-Step).
+\\$e\Rightarrow e'$: e evals in one step to e' (small-step
+(single))
+\\$e \implies^* e'$: e evals in multiples steps to e' (small-step
+(multiple))
+\colorbox{Yellow}{Structural induction}
+\begin{lstlisting}
+type 'a list =
+  nil | :: of 'a *
+        'a list
+\end{lstlisting}
+To inductively prove about lists, prove for empty list, assume it
+holds for lists t and then show for lists h ::\ t.
+\begin{lstlisting}
+type 'a tree =
+  Empty | Node of 'a *
+         'a tree *
+         'a tree
+\end{lstlisting}
+To inductively prove about trees, prove for empty tree, assume for
+trees l and r and show for tree Node(a, l, r)
+\\\colorbox{Yellow}{Inductive Proof}
+\begin{lstlisting}
+let rec r_app l1
+  l2 = match l1 with
+  | [] -> l2
+  | x::xs -> r_app xs
+  (x::l2)
+  
+  let r_app' l1
+  l2 =
+  let rec rev l =
+  match l with |[]->[]
+  |x::xs -> xs @ [x] in
+  let rec app l1 l2
+  = match l1 with
+  |[]->l2
+  |x::l1'->x::(app l1' l2)
+  in app
+  (rev l1) l2
+\end{lstlisting}
+For all lists l1 l2, r\_app l1 l2= r\_app' l1 l2
+\\ Proof by structural induction on l1
+\\ Base: l1 = [].
+\\ r\_app l1 l2 = r\_app [] l2 = l2 (by rev\_app) = app []
+l2 (by def of app) = app (rev []) l2 (def of rev) = app (rev l1) l2 =
+rev\_app' l1 l2 (by def of rev\_app')
+\\ Step: l1 = h ::\ t,
+\\ IH: For all l2, rev\_app t l2 = rev\_app' t l2.
+\\ rev\_app' l1 l2 = rev\_app (h ::\ t) l2 = rev\_app = t (h ::\ l2)
+(by def of rev\_app) = rev\_app' t (h ::\ l2) (by IH) = app (rev t) (h
+::\ (app [] l2)) (def app) = app (rev t) (app [h] l2) (def app) = app
+(app (rev t) [h]) l2 (ass of app) = app (rev (h ::\ t) l2) (def
+rev\_app') = rev\_app' l1 l2   
+\color{Black}
+\section{Higher Order Functions}
+Used to abstract over common functionality.
+\\Non-generic sum: int * int -> int
+\\Generic sum with fun as arg: (int -> int) -> int * int -> int
+\\ Common hofs:
+\begin{lstlisting}
+List.map: ('a -> 'b) ->
+  'a list -> 'b list
+List.filter: ('a
+  -> bool)
+  -> 'a list -> 'a list
+(* Folds from l -> r *)
+List.fold_right:
+  ('a -> 'b -> 'b) ->
+  'a list -> 'b -> 'b
+(* Folds from r -> l *)
+List.fold_left:
+  ('a -> 'b -> 'a) ->
+  'a -> 'b list ->'b
+List.for_all:
+  ('a -> bool) ->
+  'a list -> bool
+List.exists:
+  ('a -> bool) ->
+  'a list -> bool
+\end{lstlisting}
+Anonymous functions: (fun x -> x+1)
+\\ (function -> |\_ |else), equiv to matching argument
+\\ Implementing them: map -> apply fun to head and prepend. Return
+empty for empty list. filter -> Prepend on tail called if true, else
+call again on tail.
+\\fold\_right f l b-> ret base if empty, else f h
+(fold\_right f t b)
+\\fold\_left f l b-> ret base if nil, else fold\_left on f t and (f h b), new
+base is f h b
+\color{Plum}
+\section{Partial Evaluation}
+\begin{lstlisting}
+let plus x y = x + y
+let plus3 = (plus 3)
+let plus3' = (fun x ->
+  plus x 3)
+\end{lstlisting}
+plus: int -> int -> int
+\\plus3: int -> int, although it's really a fun y -> 3 + y
+\\plus3' is really a fun x -> x + 3
+\\ Partial evaluation doesn't evaluate inside the function, just plugs
+in the value you gave it. If you want to force it to evaluate a
+certain part, you must define the part to evaluate using let z = x in
+(fun y -> z + y)
+\color{Blue}
+\section{Effects}
+\texttt{let x = ref 0}, compare addr with \texttt{t == s}, compare
+content with \texttt{t=s}, read value with \texttt{!x}, update val
+\texttt{x := 3}, pattern match val with \texttt{let \{contents = x\} =
+ref 0} gives \texttt{x = 0}. 
+\begin{lstlisting}
+type counter_object = {tick : unit -> int ; reset: unit -> unit}
+
+let newCounter () =
+ let counter = ref 0 in 
+  {tick = (fun () -> counter := !counter + 1; !counter) ; 
+   reset = fun () -> counter := 0}
+\end{lstlisting}
+\color{Brown}
+\section{Exceptions}
+Force to consider exceptional case, can segregate special case from
+others (less clutter), \textbf{divert control flow}
+\\ \texttt{3/0} has type int, but no val, has an \textbf{effect},
+raises run-time exception \texttt{Division\_by\_zero}
+\begin{lstlisting}
+let head (x::t) = x in
+  head []
+\end{lstlisting}
+Raises \texttt{Match\_failure}
+\begin{lstlisting}
+  (*Make a new ex* )
+  exception Domain
+  raise Domain
+\end{lstlisting}
+Backtrack through tree using exceptions
+\begin{lstlisting}
+let rec find_gen  t k = match t with
+| Empty -> raise NotFound
+| Node (l, (k',d), r) -> 
+if k = k' then d else 
+try find_gen l k with NotFound -> find_gen r k
+
+let rec change coins amt = 
+ if amt = 0 then [] else 
+  begin match coins with 
+   | [] -> raise Change
+   | coin::cs ->
+    if coin > amt then change cs amt
+    else 
+     try 
+      coin :: change coins (amt - coin)
+       with Change -> change cs amt
+  end
+\end{lstlisting}
+\color{Emerald}
+\section{Modules}
+sig for defining signature, struct for actual implem
+\begin{lstlisting}
+ module type CURRENCY = 
+sig 
+ type t 
+ val unit : t 
+ val plus : t -> t -> t 
+ val prod : float -> t -> t 
+ val toString : t -> string
+end;;
+  
+module Float = 
+struct 
+ type t = float 
+ let unit = 1.0 
+ let plus = (+.) 
+ let prod = ( *. ) 
+end;;
+
+\end{lstlisting}
+\texttt{module Euro = (Float : CURRENCY)}, \texttt{module Dollar =
+  (Float : CURRENCY)}. Euro.t and Dollar.t incompatible.
+\begin{lstlisting}
+module type CLIENT =
+sig 
+...
+end;; 
+
+module type BANK =
+sig
+ include CLIENT
+end;;
+\end{lstlisting}
+include will inherit all vals declared in CLIENT sig. Can overshadow
+by redeclaring same name.
+\\\textbf{Functor}, takes in module as input
+\begin{lstlisting}
+module Old_Bank (M : CURRENCY) : (BANK with type currency = M.t) = 
+struct 
+ type currency = M.t
+ type t = {mutable balance : currency}
+end;;
+\end{lstlisting}
+\color{RoyalPurple}
+\section{Continuations}
+Representation of execution state of a program (ex. call stack) at a
+pt in time. Save state and restore later.
+\\ Every function can be written tail-recursively
+\\ To re-write a fun tail-recursively, add additional arg, a
+continuation (like acc). Base case calls continuation, recursive
+builds up cont.
+\vspace{-1 em}
+\paragraph{Tail-recursion} Continuation is a functional accumulator,
+represents call stack built when recursively calling func and builds
+final result
+\vspace{-1 em}
+\paragraph{Failure Continuation} Continuation tells you what to do
+upon \textbf{failure}
+\begin{lstlisting}
+let rec find_tr p t cont = match t with 
+ | Empty -> cont ()
+ | Node(l, d, r) -> 
+  if (p d) then Some d
+  else find_tr p l (fun () -> find_tr p r cont)
+
+let find' p t = find_tr p t (fun () -> None)
+\end{lstlisting}
+\vspace{-1 em}
+\paragraph{Success Continuation} Continuation keeps track of what to
+do on \textbf{success}, builds final result
+\begin{lstlisting}
+let rec findAll' p t sc = match t with 
+ | Empty -> sc []
+ | Node(l,d,r) -> 
+  findAll' p l 
+   (fun el -> findAll' p r 
+    (fun er -> if (p d) then sc (el@(d::er)) else sc (el@er)))
+\end{lstlisting}
+\color{Green}
+\section{Lazy Programming}
+Eager: Eval by call-by-value, variables bound to vals
+\\ \texttt{let x = horribleComp (345) in 5}, this evals horribleComp
+(345), binds xx  to it and evals 5
+\\ It is easier to reason about eager comp, clear when things eval but
+may eval things \textbf{never needed}
+\\ Lazy Computation: Suspend computation until needed
+\\ Memoize results, demand-driven
+\\ Good for \textbf{infinite data and interactive data}
+\\ Ex lists are finite. Can pattern match lists. Reason about lists
+via induction.
+\\ We \textbf{don't} construct infinite data, we define
+\textbf{observations} we make about them
+\\ Given stream we can ask for head of stream and tail (rest of
+stream)
+\\ Can we always make an observation? Does it eventually terminate?
+No, prog may run forever. Prog should remain \textbf{productive}
+though, i.e. can make observation at each step
+\\ We can suspend eval of an expr
+\begin{lstlisting}
+type 'a susp = Susp of unit -> 'a
+let force (Susp f) = f ()
+let x = Susp(fun () -> 1 + 2) in
+force x
+\end{lstlisting}
+Infinite data streams
+\begin{lstlisting}
+type 'a str =
+{hd:'a ; tl ('a str) susp}
+
+let rec numsFrom n = 
+{hd = n ; 
+ tl = Susp (fun () -> numsFrom (n+1))}
+\end{lstlisting}
+Get head using observation \texttt{hd}, getting tail gives suspended
+stream. Want more elements, ask for more
+\color{Black}
+\section{Language Design}
+3 key qs: Syntactically legal exprs? \textbf{Grammar.} Well-typed
+exprs? \textbf{Static semantics.} How is expr executed?
+\textbf{Dynamic semantics.}
+\vspace{-1 em}
+\paragraph{Syntactically Legal exprs}
+Defined inductively by: number $n$ is an expr, bools \texttt{true} and
+\texttt{false} are exprs, $e_1$, $e_2$ exprs then so is $e_1 \ op \
+e_2$ with op $=\{+,=,-,*,<\}$, if $e$, $e_1$ and $e_2$ are exprs then
+\texttt{if e then e1 else e2} is an expr
+\\ Alternatively, Backus-Naur Form (BNF)
+\\ operations op ::== $+|-|*|<|=$
+\\ expressions e ::== $n | e_1 \ op \ e_2 | true | false | $if $e$ then
+$e_1$ else $e_2 | x |$ let $x = e_1$ in $e_2$ end  $|fn\ y $=> $e |
+e_1 \ e_2 | fn \ y$ => $e | e_1 e_2 \Downarrow v$
+\\ In ocaml:
+\begin{lstlisting}
+type primop = Equals | 
+LessThan | Plus | Minus | Times
+type exp =
+| Int of int
+| Bool of bool
+| If of exp * exp * exp
+| Primop of primop * exp list
+| Let of dec * exp
+and dec = Val of exp * name
+\end{lstlisting}
+\vspace{-1 em}
+\paragraph{Values}
+Values v ::== $n | true | false$
+\\ $e \Downarrow v$ means expr e evals to val v
+\textbf{Formalizing}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{}
+  \RightLabel{B-VAL}
+  \UnaryInfC{$v \Downarrow v$}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{$e \Downarrow true$}
+  \AxiomC{$e_1 \Downarrow v$}
+  \RightLabel{B-IFTRUE}
+  \BinaryInfC{if $e$ then $e_1$ else $e_2 \Downarrow v$}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.15\textwidth}
+\begin{prooftree}
+  \AxiomC{$e \Downarrow false$}
+  \AxiomC{$e_2 \Downarrow v$}
+  \RightLabel{B-IFFALSE}
+  \BinaryInfC{if $e$ then $e_1$ else $e_2 \Downarrow v$}
+\end{prooftree}
+\end{minipage}
+~
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{$e_1 \Downarrow v_1$}
+  \AxiomC{$e_2 \Downarrow v_2$}
+  \RightLabel{B-OP}
+  \BinaryInfC{$e_1 \ op \ e_2 \Downarrow \overline{v_1 \ op \ v_2}$}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{$e_1 \Downarrow v_1$}
+  \AxiomC{$[v_1/x]e_2 \Downarrow v$}
+  \RightLabel{B-LET}
+  \BinaryInfC{let $x = e_1 $ in $e_2$ end $\Downarrow v$}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\linewidth}
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{B-FN}
+    \UnaryInfC{$fn \ x$ => $e \Downarrow fn \ x$=> $e$}x
+  \end{prooftree}
+\end{minipage}
+% \begin{minipage}{.05\linewidth}
+%   \begin{prooftree}
+%     \AxiomC{$e_1 \Downarrow fn \ x$ => $e$}
+%     \AxiomC{$e_2 \Downarrow v_2$}
+%     \AxiomC{$[v_2/x]e \Downarrow v$}
+%     \RightLabel{B-APP}
+%     \TrinaryInfC{$e_1e_2 \Downarrow v$}
+%   \end{prooftree}
+% \end{minipage}
+\begin{lstlisting}
+  let rec eval e = match e with
+| Int _ -> e
+| Bool _ -> e
+| If (e , e1 , e2 ) ->
+( match eval e with
+| Bool true -> eval e1
+| Bool false -> eval e2
+| _ -> raise ( Stuck " guard is not a bool " ) )
+\end{lstlisting}
+Formal description advantages:
+\\ Coverage: $\forall$ expressions $e \exists$ eval rule. Determinacy:
+if $e \Downarrow v_1$ and $e \Downarrow v_2$ then $v_1=v_2$. Value
+soundness, if $e \Downarrow v$ then $v$ is a value
+
+\vspace{-1 em}
+\paragraph{Well-typed expressions}
+Static type checking. Types classify exprs based on what they compute.
+\\ Types $T$ ::= $int | bool | T_1 \rightarrow T_2 | T_1 \times T_2 |\alpha$
+\\ \textbf{Typing in context} Given assumptions $x_1:T_1, \ldots,
+x_n:T_n$ -> $\Gamma$, expr $e$ has type $T$. i.e. $\Gamma \vdash e:T$
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{}
+  \RightLabel{T-T}
+  \UnaryInfC{$\Gamma \vdash$true : bool}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{}
+  \RightLabel{T-NUM}
+  \UnaryInfC{$\Gamma \vdash$ n : int}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{}
+  \RightLabel{T-F}
+  \UnaryInfC{$\Gamma \vdash$false : bool}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{$\Gamma \vdash e_1$:int}
+  \AxiomC{$\Gamma \vdash e_2$:int}
+  \RightLabel{T-PLUS}
+  \BinaryInfC{$\Gamma \vdash e_1 + e_2$ : int}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{$\Gamma \vdash e_1$:T}
+  \AxiomC{$\Gamma \vdash e_2$:T}
+  \RightLabel{T-EQ}
+  \BinaryInfC{$\Gamma \vdash e_1 = e_2$ : bool}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\textwidth}
+\begin{prooftree}
+  \AxiomC{$\Gamma \vdash e$:bool}
+  \AxiomC{$\Gamma \vdash e_1$:T}
+  \AxiomC{$\Gamma \vdash e_2$:T}
+  \RightLabel{T-IF}
+  \TrinaryInfC{$\Gamma \vdash$ if $e$ then $e_1$ else $e_2$ : T}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.2\linewidth}
+  \begin{prooftree}
+    \AxiomC{$\Gamma(x)=T$}
+    \RightLabel{T-Var}
+    \UnaryInfC{$\Gamma \vdash x : T$}
+  \end{prooftree}
+% \end{minipage}
+% \begin{minipage}{.2\linewidth}
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash e_1 : T_1$}
+    \AxiomC{$\Gamma, x:T_1 \vdash e_2:T$}
+    \RightLabel{T-LET}
+    \BinaryInfC{$\Gamma \vdash$ let $x=e_1$ in $e_2$ end $:T$}
+  \end{prooftree}
+  \begin{prooftree}
+    \AxiomC{$\Gamma,x:\alpha \vdash e:T_2 \Rightarrow T/C$}
+    \RightLabel{T-FN}
+    \UnaryInfC{$\Gamma \vdash fn \ x$=> $\alpha \rightarrow T/C$}
+  \end{prooftree}
+  % \begin{prooftree}
+  %   \AxiomC{$\Gamma \vdash e_1 : \Rightarrow T_1/C_1$}
+  %   \AxiomC{$\Gamma \vdash e_2 \Rightarrow T_2/C_2$}
+  %   \RightLabel{T-APP}
+  %   \BinaryInfC{$\Gamma \vdash e_1 e_2 \Rightarrow \alpha/C_1 \cup C_2
+  %     \cup \{T_1 = (t_2 \rightarrow \alpha)\}$}
+  % \end{prooftree}
+\end{minipage}
+\\
+\textbf{Type checking} e:T Given exp $e$ and type $T$
+, check that $e$ has type $T$. Are all substitution instances of $e$
+well-typed? \textbf{Type Inference} e:T Given expr
+$e$, infer its type $T$. Is some substitution instance of $e$ well-typed?
+\vspace{-1 em}
+\paragraph{Free Variables}
+$FV(e)$ returns the set of free var names occurring in expr
+$e$. Defined inductively based on structure of expr $e$.
+\vspace{-1 em}
+\paragraph{Substitution}[e'/x]e Replace all \textbf{free} occurrences
+of x in expr $e$ by $e'$
+\vspace{-1 em}
+\paragraph{Type Inference} How to get type of expr $e$ given $\Gamma$?
+Analyze $e$ following typing rules. Analyze $e$ recursively, if
+lacking type info, introduce type var and possible constraints. $T$
+may contain type vars. Solve constraints to see if $e$ is
+well-typed. Solving gives a type substitution $\sigma$.
+\begin{itemize}
+  \setlength\itemsep{-0.5 em}
+\item \texttt{fn x => x + 1} type $\alpha \rightarrow int/\{\alpha =
+  int\}$
+\item \texttt{fn f => fn x => f (f x)} type $\alpha \rightarrow \beta
+  \rightarrow \alpha_1, \{\alpha = \beta \rightarrow a_0, \alpha =
+  \alpha_0 \rightarrow \alpha_a\}$
+\end{itemize}
+\vspace{-1 em}
+\paragraph{Constraint Solving via Unification} Two types unifiable if
+exists instantiation $\sigma$ for type vars in both types such that
+they are syntactically equal.
+\\ Simplify set of contrainsty by rewriting constraints and getting
+rid of useless ones
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Final"
+%%% End:
