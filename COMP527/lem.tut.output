@@ -1,0 +1,46 @@
+TUTCH 0.52 beta, $Date: 2002/10/24 19:25:49 $
+[Opening file lem.tut]
+
+Proving lem: ~A | A ... (classically)
+  1  [ ~(~A | A);      
+  2    [ ~A;           
+  3      ~A | A;       by OrIL 2
+  4      F ];          by ImpE 1 3
+  5    A;              by Class 4
+  6    ~A | A;         by OrIR 5
+  7    F ];            by ImpE 1 6
+  8  ~A | A            by Class 7
+QED
+
+Proving disj_assoc: A | B | C => (A | B) | C ...
+  1  [ A | B | C;                      
+  2    [ A;                            
+  3      A | B;                        by OrIL 2
+  4      (A | B) | C ];                by OrIL 3
+  5    [ B | C;                        
+  6      [ B;                          
+  7        A | B;                      by OrIR 6
+  8        (A | B) | C ];              by OrIL 7
+  9      [ C;                          
+ 10        (A | B) | C ];              by OrIR 9
+ 11      (A | B) | C ];                by OrE 5 8 10
+ 12    (A | B) | C ];                  by OrE 1 4 11
+ 13  A | B | C => (A | B) | C          by ImpI 12
+QED
+
+Proving disj_conj: A | B & C => (A | B) & (A | C) ...
+  1  [ A | B & C;                              
+  2    [ A;                                    
+  3      A | B;                                by OrIL 2
+  4      A | C;                                by OrIL 2
+  5      (A | B) & (A | C) ];                  by AndI 3 4
+  6    [ B & C;                                
+  7      B;                                    by AndEL 6
+  8      C;                                    by AndER 6
+  9      A | B;                                by OrIR 7
+ 10      A | C;                                by OrIR 8
+ 11      (A | B) & (A | C) ];                  by AndI 9 10
+ 12    (A | B) & (A | C) ];                    by OrE 1 5 11
+ 13  A | B & C => (A | B) & (A | C)            by ImpI 12
+QED
+[Closing file lem.tut]

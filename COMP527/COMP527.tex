@@ -1,6 +1,6 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb, algpseudocode, bussproofs, tikz}
+  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \EnableBpAbbreviations
@@ -384,13 +384,13 @@
     strong, we'll be able to prove things that we shouldn't be able
     to, more than we had to start with.
 
-    Given a proof $\delta$ for $A$ true and a proof $\varepsilon$ for
+    Given a proof $\mathcal{D}$ for $A$ true and a proof $\mathcal{E}$ for
     $B$ true, we can prove $A$ true.
     \begin{center}
-      \AXC{$\delta$}
+      \AXC{$\mathcal{D}$}
       \noLine
       \UIC{$A$ true}
-      \AXC{$\varepsilon$}
+      \AXC{$\mathcal{E}$}
       \noLine
       \UIC{$B$ true}
       \RL{$\land$ I}
@@ -399,15 +399,15 @@
       \UIC{$A$ true}
       \DP
       \begin{tabular}{c}
-      $\delta$
+      $\mathcal{D}$
       \\ $\Longrightarrow A$ true
       \end{tabular}
     \end{center}
     \begin{center}
-      \AXC{$\delta$}
+      \AXC{$\mathcal{D}$}
       \noLine
       \UIC{$A$ true}
-      \AXC{$\varepsilon$}
+      \AXC{$\mathcal{E}$}
       \noLine
       \UIC{$B$ true}
       \RL{$\land$ I}
@@ -416,21 +416,21 @@
       \UIC{$B$ true}
       \DP
     \begin{tabular}{c}
-      $\varepsilon$\\ $\Longrightarrow B$ true
+      $\mathcal{E}$\\ $\Longrightarrow B$ true
     \end{tabular}
     \end{center}
     \paragraph{Local Completeness}
     Elimination Rules are not too weak, i.e. we are expanding proofs.
     \begin{center}
     \begin{tabular}{c}
-      $\delta$ \\ $A \land B$ true $\Longrightarrow$
+      $\mathcal{D}$ \\ $A \land B$ true $\Longrightarrow$
     \end{tabular}
-    \AXC{$\delta$}
+    \AXC{$\mathcal{D}$}
     \noLine
     \UIC{$A \land B$ true}
     \RL{$\land$ E$_l$}
     \UIC{$A$ true}
-    \AXC{$\delta$}
+    \AXC{$\mathcal{D}$}
     \noLine
     \UIC{$A \land B$ true}
     \RL{$\land$ E$_r$}
@@ -447,21 +447,21 @@
       \noLine
       \UIC{\vdots}
       \noLine
-      \UIC{$\delta^u$}
+      \UIC{$\mathcal{D}^u$}
       \noLine
       \UIC{$B$ true}
       \RL{$\supset$ I$^u$}
       \UIC{$A \supset B$ true}
-      \AXC{$\varepsilon$}
+      \AXC{$\mathcal{E}$}
       \noLine
       \UIC{$A$ true}
       \RL{$\supset$ E}
       \BIC{$B$ true}
       \DP
       \begin{tabular}{c}
-        $\varepsilon$
+        $\mathcal{E}$
         \\$A$ true
-      \\$[\varepsilon/u] (\delta)$
+      \\$[\mathcal{E}/u] (\mathcal{D})$
       \\$\Longrightarrow B$ true 
       \end{tabular}
     \end{center}
@@ -474,7 +474,7 @@
       \noLine
       \UIC{$\vdots$}
       \noLine
-      \UIC{$\delta$}
+      \UIC{$\mathcal{D}$}
       \noLine
       \UIC{$B$ true}
       \DP
@@ -485,7 +485,7 @@
           node rotated/.style = {rotate=180},
           border rotated/.style = {shape border rotate=180}
           ]
-          \node[triangle, border rotated] {$\varepsilon$};
+          \node[triangle, border rotated] {$\mathcal{E}$};
         \end{tikzpicture}\\
         $A$ true 
       \end{tabular},
@@ -496,9 +496,9 @@
           node rotated/.style = {rotate=180},
           border rotated/.style = {shape border rotate=180}
           ]
-          \node[triangle, border rotated] {$\varepsilon$};
+          \node[triangle, border rotated] {$\mathcal{E}$};
         \end{tikzpicture}\\
-    $A$ true \\ $\delta$ \\ $B$ true
+    $A$ true \\ $\mathcal{D}$ \\ $B$ true
       \end{tabular}
     \end{center}
 
@@ -610,7 +610,7 @@
       \UIC{\vdots}
       \noLine
       \UIC{$C$ true}
-      \RL{$\lor$ E}
+      \RL{$\lor$ E$^{u,v}$}
       \TIC{$C$ true}
     \end{prooftree}
     \paragraph{Example}
@@ -640,4 +640,205 @@
       \RL{$\supset$ I}
       \UIC{$(A \lor (B \land C))\supset (A \lor B)\land (A \lor C)$}
     \end{prooftree}
+    \section{01/15/19}
+    Recall: We defined $\neg A$ as $A \supset \perp$. But, there are
+    other ways you can introduce (define) negation.
+    \subsection{Negation}
+    \begin{prooftree}
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \noLine
+      \UIC{\vdots}
+      \noLine
+      \UIC{$p$ true}
+      \RL{$\neg$ I$^{u,p}$}
+      \UIC{$\neg A$ true}
+    \end{prooftree}
+    If we can prove any parameter $p$ from $A$ true, then $\neg A$ is
+    true. This discharges the assumption $u$ and $p$.
+    \begin{prooftree}
+      \AXC{$\neg A$ true}
+      \AXC{$A$ true}
+      \RL{$\neg$ E}
+      \BIC{$C$ true}
+    \end{prooftree}
+    For these new rules, as usual, we want to prove that they are
+    locally sound and complete. In general, for local soundness, you
+    want to introduce the rule and then eliminate it and showing that
+    you've learned nothing new.
+    \paragraph{Local Soundness}
+    \begin{center}
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \noLine
+      \UIC{$D$}
+      \noLine
+      \UIC{$p$ true}
+      \RL{$\neg$ I$^{p,u}$}
+      \UIC{$\neg A$ true}
+      \AXC{$\mathcal{E}$}
+      \noLine
+      \UIC{$A$ true}
+      \RL{$\neg$ E}
+      \BIC{$C$ true}
+      \DP
+      \begin{tabular}{c}
+        $\Longrightarrow [\mathcal{E}/u, C/p]D$
+        \\ $C$ true
+      \end{tabular}
+    \end{center}
+    \paragraph{Local Completeness}
+    For local completeness, we want to introduce a pointless detour,
+    i.e. introduce the rule and then get rid of it and show that we
+    haven't affected the proof.
+    \begin{center}
+      \begin{tabular}{c}
+        $\mathcal{D} \Longrightarrow$
+        \\ $\neg A$ true
+      \end{tabular}
+      \AXC{$\mathcal{D}$}
+      \noLine
+      \UIC{$\neg A$ true}
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \RL{$\neg$ E}
+      \BIC{$p$ true}
+      \RL{$\neg$ I$^{p,u}$}
+      \UIC{$\neg A$ true}
+      \DP
+    \end{center}
+    \subsection{Classical Reasoning}
+    Basic idea behind proof by contradiction, you assume $\neg A$,
+    arrive at a contradiction and then you can prove $A$ true.
+
+    \begin{prooftree}
+      \AXC{}
+      \RL{u}
+      \UIC{$\neg A$ true}
+      \noLine
+      \UIC{\vdots}
+      \noLine
+      \UIC{$p$ true}
+      \RL{$C^{u,p}$}
+      \UIC{$A$ true}
+    \end{prooftree}
+    where $C^{u,p}$ means a proof by contradiction under $u$ and $p$.
+    \paragraph{Law of Excluded Middle}
+    Want to show $\neg A \lor A$ is true for all $A$.
+    \begin{prooftree}
+      
+      \AXC{}
+      \RL{u}
+      \UIC{$\neg (\neg A \lor A)$ true}
+
+      \AXC{}
+      \RL{v}
+      \UIC{$\neg A$}
+      \RL{$\lor$ I$_l$}
+      \UIC{$\neg A \lor A$}
+      
+      \RL{$\neg$ E}
+      \BIC{$p$ true}
+      \RL{$C^{v,p}$}
+      \UIC{$A$}
+      \RL{$\lor$ I$_r$}
+      \UIC{$\neg A \lor A$}
+      
+      \AXC{}
+      \RL{u}
+      \UIC{$\neg (\neg A \lor A)$ true}
+      \RL{$\neg$ E}
+      
+      \BIC{$q$ true}
+      \RL{$C^{u,q}$}
+      \UIC{$\neg A \lor A$}
+    \end{prooftree}
+    \paragraph{Law of Excluded Middle and more examples in tutch}
+    \lstinputlisting{lem.tut}
+    \subparagraph{Output}
+    \lstinputlisting{lem.tut.output}
+    \subsection{NAND}
+    $A \overline{\land} B \equiv \neg (A \land B)$
+
+    Showing this introduction rule is often a midterm question. Often,
+    people make the mistake of using $A \land B$, but we cannot
+    introduce other connectives, make sure $A$ and $B$ are separate.
+    \begin{prooftree}
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \AXC{}
+      \RL{v}
+      \UIC{$B$ true}
+      \noLine
+      \BIC{\vdots}
+      \noLine
+      \UIC{$p$ true}
+      \RL{$\overline{\land}$ I}
+      \UIC{$A \overline{\land} B$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$A$ true}
+      \AXC{$B$ true}
+      \AXC{$A \overline{\land} B$ true}
+      \RL{$\overline{\land}$ E}
+      \TIC{$C$ true}
+    \end{prooftree}
+    \paragraph{Local Soundness}
+    Get rid of assumptions by substituting $\mathcal{E}_1,
+    \mathcal{E}_2$ and $C$ into $\mathcal{D}$.
+    \begin{center}
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \AXC{}
+      \RL{v}
+      \UIC{$B$ true}
+      \noLine
+      \BIC{$\mathcal{D}$}
+      \noLine
+      \UIC{$p$ true}
+      \RL{$\overline{\land}$ I$^{u,v,p}$}
+      \UIC{$A \overline{\land} B$ true}
+      \AXC{$\mathcal{E}_1$}
+      \noLine
+      \UIC{$A$ true}
+      \AXC{$\mathcal{E}_2$}
+      \noLine
+      \UIC{$B$ true}
+      \TIC{$C$ true}
+      \DP
+      $\implies$
+      \begin{tabular}{c}
+        $[\mathcal{E}_1/u, \mathcal{E}_2/v, C/p] \mathcal{D}$
+        \\ $C$ true
+      \end{tabular}
+    \end{center}
+    \paragraph{Local Completeness}
+    \begin{center}
+      \begin{tabular}{c}
+        $\mathcal{D}$
+        \\ $A \overline{\land} B$
+      \end{tabular}
+      $\implies$
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \AXC{}
+      \RL{v}
+      \UIC{$B$ true}
+      \AXC{$\mathcal{D}$}
+      \noLine
+      \UIC{$A \overline{\land} B$ true}
+      \RL{$\overline{\land}$ E}
+      \TIC{$p$ true}
+      \RL{$\overline{\land}$ I$^{u,v,p}$}
+      \UIC{$A \overline{\land} B$}
+      \DP
+    \end{center}
+    Look for other connectives and do these proofs, as they will
+    probably be on the midterm.
 \end{document}
