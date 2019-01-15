@@ -1,0 +1,76 @@
+% classical keyword to say we are under classical logic
+classical proof lem : ~A | A =
+begin
+[ ~(~A | A);
+  [ ~A;
+	~A | A;
+	F ];
+  A;
+  ~A | A;
+  F ];
+~ A | A
+end;
+
+proof disj_assoc : A | (B | C) => (A | B) | C =
+begin
+[ A | (B | C);
+  [ A;
+	A | B;
+	(A | B) | C ];
+  [ B | C;
+	[ B;
+	  A | B;
+	  (A | B) | C ];
+	[ C ;
+	  (A | B) | C ];
+	(A | B) | C
+  ];
+  (A | B) | C
+];
+A | (B | C) => (A | B) | C
+end;
+
+% Disjunction distributes over conjunctions
+proof disj_conj : A | (B & C) => (A | B) & (A | C) =
+begin
+[ A | (B & C);
+  [ A;
+	A | B;
+	A | C;
+	(A | B) & (A | C) ];
+  [ B & C;
+	B;
+	C;
+	A | B;
+	A | C;
+	(A | B) & (A | C) ];
+  (A | B) & (A | C) ];
+A | (B & C) => (A | B) & (A | C)
+end;
+
+proof conj_assoc : (A & (B & C)) => (A & B) & C =
+begin
+[ A & (B & C);
+  A;
+  B & C;
+  B;
+  C;
+  A & B;
+  (A & B) & C ];
+(A & (B & C)) => (A & B) & C
+end;
+
+proof conj_disj : A & (B | C) => A & B | A & C =
+begin
+[ A & (B | C);
+  A;
+  B | C;
+  [ B;
+	A & B;
+	A & B | A & C ];
+  [ C;
+	A & C;
+	A & B | A & C ];
+  A & B | A & C ];
+A & (B | C) => A & B | A & C
+end;
