@@ -665,7 +665,7 @@
     \end{prooftree}
     For these new rules, as usual, we want to prove that they are
     locally sound and complete. In general, for local soundness, you
-    want to introduce the rule and then eliminate it and showing that
+    want to introduce the rule and then eliminate it and show that
     you've learned nothing new.
     \paragraph{Local Soundness}
     \begin{center}
@@ -841,4 +841,247 @@
     \end{center}
     Look for other connectives and do these proofs, as they will
     probably be on the midterm.
+    \section{01/17/19}
+    \subsection{Context}
+    So we've seen several rules so far:
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$T$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\perp$ true}
+      \RL{}
+      \UIC{$C$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$A$ true}
+      \AXC{$B$ true}
+      \RL{$\land$ I}
+      \BIC{$A \land B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$A \land B$ true}
+      \RL{$\land$ E$_l$}
+      \UIC{$A$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$A \lor B$ true}
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \noLine{}
+      \UIC{\vdots}
+      \noLine
+      \UIC{$C$ true}
+      
+      \AXC{}
+      \RL{v}
+      \UIC{$B$}
+      \noLine
+      \UIC{$\vdots$}
+      \noLine
+      \UIC{$C$ true}
+      \RL{$\lor$ E$^{u,v}$}
+      \TIC{$C$ true}
+    \end{prooftree}
+    We are now going to extend these rules with contexts, which allows
+    us to know what we've proved and what assumptions we have at each
+    step.
+
+    Instead of $A$ true, we will write $\Gamma \vdash A$ true. This
+    means:
+
+    ``A is true in context $\Gamma$.''
+
+    $$\Gamma ::= \cdot | \Gamma, u:A \text{ true}$$
+
+    So:
+    \begin{center}
+      \AXC{}
+      \RL{u}
+      \UIC{$A$ true}
+      \noLine
+      \UIC{\vdots}
+      \noLine
+      \UIC{$B$ true}
+      \RL{$\supset$ I$^u$}
+      \UIC{$A \supset B$ true}
+      \DP
+      $\stackrel{+\Gamma}{\longrightarrow}$
+      \AXC{$\Gamma,u:A$ true $\vdash B$ true}
+      \UIC{$\Gamma \vdash A \supset B$ true}
+      \DP
+    \end{center}
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$\Gamma \vdash T$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash \perp$ true}
+      \RL{}
+      \UIC{$\Gamma \vdash C$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash A$ true}
+      \AXC{$\Gamma \vdash B$ true}
+      \RL{$\land$ I}
+      \BIC{$\Gamma \vdash A \land B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash A \land B$ true}
+      \RL{$\land$ E$_l$}
+      \UIC{$\Gamma \vdash A$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash A \lor B$ true}
+      \AXC{$\Gamma,u: A $ true $\vdash C$}
+      \AXC{$\Gamma,v: B $ true $\vdash C$}
+      \RL{$\lor$ E$^{u,v}$}
+      \TIC{$\Gamma\vdash C$ true}
+    \end{prooftree}
+    For something to be derived from a context:
+    \begin{prooftree}
+      \AXC{$u: A$ true $\in \Gamma$}
+      \RL{H}
+      \UIC{$\Gamma \vdash A$ true}
+    \end{prooftree}
+    \paragraph{Example}
+    \begin{prooftree}
+      \AXC{$A \in \Gamma, A, B$}
+      \RL{H}
+      \UIC{$\Gamma, A, B \vdash$ A}
+      \AXC{$B \in \Gamma, A, B$}
+      \RL{$H$}
+      \UIC{$\Gamma, A, B \vdash$ B}
+      
+      \RL{$\land$ I}
+      \BIC{$\Gamma, u: A$ true, $B$ true $\vdash A \land B$}
+      \RL{$\supset$ I}
+      \UIC{$\Gamma,u:A$ true $\vdash B \supset A \land B$}
+      \RL{$\supset$ I}
+      \UIC{$\Gamma \vdash A \supset B \supset A \land B$}
+    \end{prooftree}
+    \subsection{The Curry-Howard Correspondence}
+    We can see that natural deduction is the same as
+    functional programming:
+    \\
+    \begin{tabular}{c c}
+      Logic & Types
+      \\ \hline $\perp$ & unit
+      \\ $A \land B$ & $A \times B$
+      \\ $A \lor B$ & $A + B$
+      \\ $A \supset B$ & $A \implies B$
+      \\ $\perp$ & $\emptyset$
+      \\ proofs & programs
+      \\ checking a proof & type checker
+    \end{tabular}
+    \\
+    
+    $\emptyset$ is the empty type. There is no proof for $\perp$,
+    which is why there is no program for $\emptyset$, the two sides
+    are equivalent.
+
+    Proof terms capture the structure of a derivation.
+
+    \begin{prooftree}
+      \AXC{}
+      \RL{H}
+      \UIC{$\Gamma,x:A,y:B\vdash x:A$}
+      \AXC{}
+      \RL{H}
+      \UIC{$\Gamma,x:A,y:B\vdash y:B$}
+      \RL{$\times$ I}
+      \BIC{$\Gamma,x:A,y:B \vdash (x,y): A \times B$}
+      \RL{$\implies$ I$^y$}
+      \UIC{$\Gamma,x:A \vdash fn\ y \implies (x,y): B \implies A \times
+        B$}
+      \RL{$\implies$ I$^x$}
+      \UIC{$\Gamma \vdash fn\ x \implies fn\ y \implies (x,y) : A \implies B \implies A \times B$}
+    \end{prooftree}
+
+    $\Gamma \vdash M : A$ means:\\
+    ``M is a proof term (program) for proposition (of type) A.''
+    \subsection{Proof Terms}
+    Let's upgrade the rules we mentioned earlier to types:
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$\Gamma \vdash () : unit$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M: \emptyset$}
+      \RL{}
+      \UIC{$\Gamma \vdash abort\ M : C$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M_1: A$ true}
+      \AXC{$\Gamma \vdash M_2: B$ true}
+      \RL{$\times$ I}
+      \BIC{$\Gamma \vdash (M_1, M_2)\ A\ B$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M: A \times B$}
+      \RL{$\times$ E$_l$}
+      \UIC{$\Gamma \vdash fst\ M: A$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M: A \times B$}
+      \RL{$\times$ E$_r$}
+      \UIC{$\Gamma \vdash snd\ M: B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M: A + B$ true}
+      \AXC{$\Gamma,u: A \vdash N_1:C$}
+      \AXC{$\Gamma,v: B \vdash N_2:C$}
+      \RL{$+$ E}
+      \TIC{$\Gamma\vdash $ case $M$ of}
+      \noLine
+      \UIC{of inl $u \implies N_1$}
+      \noLine
+      \UIC{of inr $v \implies N_2$}
+    \end{prooftree}
+    (Where inl is inject left and inr is inject right) Note that this
+    is pattern matching!
+    \begin{prooftree}
+      \AXC{$\Gamma, x:A \vdash M:B$}
+      \UIC{$\Gamma \vdash (fn\ x \implies M):A \implies B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : A$}
+      \RL{$+$ I$_l$}
+      \UIC{$\Gamma \vdash inl \ M: A + B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : B$}
+      \RL{$+$ I$_r$}
+      \UIC{$\Gamma \vdash inr \ M: A + B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : A \implies B$}
+      \AXC{$\Gamma \vdash N : A$}
+      \BIC{$\Gamma \vdash M\_N: B$}
+    \end{prooftree}
+    where $\_$ is a space.
+    \paragraph{Example}
+    We did this on Tuesday, now we'll see it with proof terms.
+    \begin{prooftree}
+      \AXC{}
+      \RL{H}
+      \UIC{$\Gamma, x : A \times B \vdash x : A \times B$}
+      \RL{$\times$ E}
+      \UIC{$\Gamma, x: A \times B \vdash snd\ x : B$}
+      
+      \AXC{}
+      \RL{H}
+      \UIC{$\Gamma, x : A \times B \vdash x : A \times B$}
+      \RL{$\times$ E}
+      \UIC{$\Gamma, x: A \times B \vdash fst\ x : A$}
+      \RL{$\times$ I}
+      
+      \BIC{$\Gamma, x: A \times B \vdash (snd\ x, fst\ x) : B \times
+        A$}
+      \RL{$\implies$ I}
+      \UIC{$\Gamma \vdash fn\ x \implies (snd\ x, fst\ x) : A \times B \implies B \times A$}
+    \end{prooftree}
+    \paragraph{Tutch Examples}
+    \lstinputlisting[breaklines=true]{proofterms.tut}
 \end{document}

@@ -1,0 +1,57 @@
+TUTCH 0.52 beta, $Date: 2002/10/24 19:25:49 $
+[Opening file proofterms.tut]
+
+Proving pair: A => B => A & B annotated...
+[ x                                                          : A;
+  [ y                                                        : B;
+    (x, y)                                                   : A & B ];
+  fn y => (x, y)                                             : B => A & B ];
+fn x => fn y => (x, y)                                       : A => B => A & B
+QED
+
+Proving conj_comm: A & B => B & A annotated...
+[ x                                                          : A & B;
+  fst x                                                      : A;
+  snd x                                                      : B;
+  (snd x, fst x)                                             : B & A ];
+fn x => (snd x, fst x)                                       : A & B => B & A
+QED
+
+Proving disj_comm: A | B => B | A annotated...
+[ x                                                          : A | B;
+  [ a                                                        : A;
+    inr a                                                    : B | A ];
+  [ b                                                        : B;
+    inl b                                                    : B | A ];
+  case x of inl a => inr a | inr b => inl b end              : B | A ];
+fn x => case x of inl a => inr a | inr b => inl b end        : A | B => B | A
+QED
+
+Checking term disj_comm_tm: A | B => B | A
+|- fn x => case x of inl a => inr a | inr b => inl b end
+ : A | B => B | A
+QED
+
+Proving conj_disj: A & (B | C) => A & B | A & C annotated...
+[ x                                                          : A & (B | C);
+  fst x                                                      : A;
+  snd x                                                      : B | C;
+  [ b                                                        : B;
+    [ c                                                      : C;
+      (fst x, c)                                             : A & C ];
+    (fst x, b)                                               : A & B;
+    inl (fst x, b)                                           : A & B | A & C ];
+  [ c                                                        : C;
+    [ b                                                      : B;
+      (fst x, b)                                             : A & B ];
+    (fst x, c)                                               : A & C;
+    inr (fst x, c)                                           : A & B | A & C ];
+  case snd x of inl b => inl (fst x, b) | inr c => inr (fst x, c) end : A & B | A & C ];
+fn x => case snd x of inl b => inl (fst x, b) | inr c => inr (fst x, c) end : A & (B | C) => A & B | A & C
+QED
+
+Checking term conj_disj_tm: A & (B | C) => A & B | A & C
+|- fn x => case snd x of inl b => inl (fst x, b) | inr c => inr (fst x, c) end
+ : A & (B | C) => A & B | A & C
+QED
+[Closing file proofterms.tut]
