@@ -398,9 +398,10 @@
       \RL{$\land$ E}
       \UIC{$A$ true}
       \DP
+      $\implies$
       \begin{tabular}{c}
       $\mathcal{D}$
-      \\ $\Longrightarrow A$ true
+      \\ $A$ true
       \end{tabular}
     \end{center}
     \begin{center}
@@ -415,16 +416,18 @@
       \RL{$\land$ E}
       \UIC{$B$ true}
       \DP
+      $\implies$
     \begin{tabular}{c}
-      $\mathcal{E}$\\ $\Longrightarrow B$ true
+      $\mathcal{E}$\\ $B$ true
     \end{tabular}
     \end{center}
     \paragraph{Local Completeness}
     Elimination Rules are not too weak, i.e. we are expanding proofs.
     \begin{center}
     \begin{tabular}{c}
-      $\mathcal{D}$ \\ $A \land B$ true $\Longrightarrow$
+      $\mathcal{D}$ \\ $A \land B$ true 
     \end{tabular}
+    $\implies$
     \AXC{$\mathcal{D}$}
     \noLine
     \UIC{$A \land B$ true}
@@ -458,11 +461,12 @@
       \RL{$\supset$ E}
       \BIC{$B$ true}
       \DP
+      $\implies$
       \begin{tabular}{c}
         $\mathcal{E}$
         \\$A$ true
       \\$[\mathcal{E}/u] (\mathcal{D})$
-      \\$\Longrightarrow B$ true 
+      \\$B$ true 
       \end{tabular}
     \end{center}
     \paragraph{Substitution Principle}
@@ -507,6 +511,11 @@
 
     \paragraph{Local Completeness}
     \begin{center}
+      \begin{tabular}{c}
+        $\alpha$
+        \\$A \supset B$ true
+      \end{tabular}
+      $\implies$
       \AXC{$\alpha$}
       \noLine
       \UIC{$A \supset B$ true}
@@ -518,10 +527,6 @@
       \RL{$\supset$ I$^u$}
       \UIC{$A \supset B$ true}
       \DP
-      \begin{tabular}{c}
-        $\alpha$
-        \\$\Longrightarrow A \supset B$ true
-      \end{tabular}
     \end{center}
     So we can prove $A \supset B$ from $A \supset B$.
 
@@ -684,8 +689,9 @@
       \RL{$\neg$ E}
       \BIC{$C$ true}
       \DP
+      $\implies$
       \begin{tabular}{c}
-        $\Longrightarrow [\mathcal{E}/u, C/p]D$
+        $ [\mathcal{E}/u, C/p]D$
         \\ $C$ true
       \end{tabular}
     \end{center}
@@ -695,9 +701,10 @@
     haven't affected the proof.
     \begin{center}
       \begin{tabular}{c}
-        $\mathcal{D} \Longrightarrow$
+        $\mathcal{D}$
         \\ $\neg A$ true
       \end{tabular}
+      $\implies$
       \AXC{$\mathcal{D}$}
       \noLine
       \UIC{$\neg A$ true}
@@ -1035,9 +1042,9 @@
       \RL{$+$ E}
       \TIC{$\Gamma\vdash $ case $M$ of}
       \noLine
-      \UIC{of inl $u \implies N_1$}
+      \UIC{inl $u \implies N_1$}
       \noLine
-      \UIC{of inr $v \implies N_2$}
+      \UIC{inr $v \implies N_2$}
     \end{prooftree}
     (Where inl is inject left and inr is inject right) Note that this
     is pattern matching!
