@@ -73,7 +73,7 @@
     \\ Can describe both aspects (semantics and syntax) as judgment
 
     \paragraph{Example Grammar}
-    Proposition $A, B:= T | \perp | A \land B | \ldots$
+    Proposition $A, B:= T \mid \perp \mid A \land B \mid \ldots$
     \begin{prooftree}
       \AXC{}
       \UIC{T wf}
@@ -900,7 +900,7 @@
 
     ``A is true in context $\Gamma$.''
 
-    $$\Gamma ::= \cdot | \Gamma, u:A \text{ true}$$
+    $$\Gamma ::= \cdot \mid \Gamma, u:A \text{ true}$$
 
     So:
     \begin{center}
@@ -1091,4 +1091,307 @@
     \end{prooftree}
     \paragraph{Tutch Examples}
     \lstinputlisting[breaklines=true]{proofterms.tut}
-\end{document}
+    \section{01/22/19}
+    \subsection{Metatheory}
+    Proving things (properties) about a given theory, this will
+    eventually lead us to completeness.
+
+    So far, we've seen:
+    \paragraph{Propositions/Types} $A,B:=T \mid \perp \mid A \supset B \mid A
+    \land B \mid A \lor B$
+
+    \paragraph{Proof Terms} $M,N := \langle \rangle \mid abort^{A}\ M
+    \mid \underbrace{\lambda x: A.M}_{fn\ x \implies M} \mid M \ N$
+
+    \begin{prooftree}
+      \AXC{$M : \perp$}
+      \UIC{$abort^{A}\ M : A$}
+    \end{prooftree}
+
+    Note that: $M : A$ means: Term $M$ has type $A$ or $M$ is a proof
+    witness for the proposition $A$
+
+    Types that have one type are sometimes just called singleton
+    types.
+
+    Earlier we saw:
+    \begin{prooftree}
+      \AXC{}
+      \RL{$u_1$}
+      \UIC{$A_1$ true}
+      \UIC{$\ddots$}
+
+      \AXC{\ldots}
+
+      \AXC{}
+      \RL{$u_n$}
+      \UIC{$A_n$ true}
+      \UIC{$\ddots$}
+
+      \TIC{$C$ true}
+    \end{prooftree}
+    More compactly: Context $\Gamma := \cdot \mid T, A$ true
+
+    $$\Gamma \underbrace{\vdash}_{\text{turnstyle}} C \text{ true}$$
+
+    \paragraph{Reminder about Contexts}
+    Context $\Gamma := \cdot \mid \Gamma, x: A$
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : \perp$}
+      \UIC{$\Gamma \vdash abort^{A}\ M : A$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma,x:A \vdash M : B$}
+      \UIC{$\Gamma \vdash \lambda x:A.M: A \supset B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : A \supset B$}
+      \AXC{$\Gamma \vdash N : A$}
+      \BIC{$\Gamma \vdash M\ N:B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$x : A \in \Gamma$}
+      \UIC{$\Gamma \vdash x : A$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : A$}
+      \AXC{$\Gamma \vdash N : B$}
+      \BIC{$\Gamma \vdash \langle M, N \rangle : A \land B$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : A \land B$}
+      \UIC{$\Gamma \vdash fst \ M : A$}
+    \end{prooftree}
+    Note that, some may be inclined to make $A \land B$ have a type of
+    some pair, like $(M,N)$, but we don't want to limit ourselves to a
+    pair (we also don't yet know it's a pair), so we cannot make it a
+    pair right off the bat.
+    \begin{prooftree}
+      \AXC{$\Gamma \vdash M : A \land B$}
+      \UIC{$\Gamma \vdash snd \ M : B$}
+    \end{prooftree}
+    What would we like to compute with these rules?
+
+    General form: $M \implies M'$, Term $M$ reduces to $M'$.
+    \\ $fst\ \langle M, N \rangle \implies M$
+    \\ $snd\ \langle M, N \rangle \implies N$
+
+    So we can now show things like local soundness:
+    \begin{center}
+      \AXC{$\mathcal{D}_1$}
+      \noLine
+      \UIC{$\Gamma \vdash M : A$}
+      \AXC{$\mathcal{D}_2$}
+      \noLine
+      \UIC{$\Gamma \vdash N : B$}
+      \RL{$\land$ I}
+      \BIC{$\Gamma \vdash \langle M, N \rangle : A \land B$}
+      \RL{$\land$ E$_l$}
+      \UIC{$\Gamma \vdash fst \ \langle M, N \rangle : A$}`
+      \DP
+      $\implies$
+      \begin{tabular}{c}
+        $\mathcal{D}_1$
+        \\ $M : A$
+      \end{tabular}
+    \end{center}
+    Local Soundness here corresponds to Subject Reduction/Type
+    Preservation.
+
+    We've essentially proved that if we start with something well
+    typed (of type $A$), we end up with something that is still well
+    typed, we can show that our program is type \textbf{safe}.
+
+    Now if we have a function:
+
+    $(\lambda x : A . M) N \implies [N/x] M$
+    \paragraph{Simple Program}
+    \begin{align*}
+      & fst \ ((\lambda x . \lambda y . \langle x , y \rangle) \langle \rangle \langle \rangle)
+      \\ \implies & fst \ \langle \langle \rangle, \langle \rangle \rangle
+      \\ \implies & \langle \rangle : T
+    \end{align*}
+    The type of this program is unit, because we have stated earlier
+    that the type we start with is the type we end with. How do we
+    know the first line is of type unit?
+    \begin{prooftree}
+
+      \AXC{}
+      \RL{var}
+      \UIC{$x:T, y:T \vdash x:T$}
+      
+      \AXC{}
+      \RL{var}
+      \UIC{$x:T, y:T \vdash y:T$}
+
+      \RL{$\land$ I}
+      \BIC{$x: T, y:T \vdash \langle x,y \rangle : T \land T$}
+      \UIC{$x:T \vdash \lambda y:T \langle x,y \rangle : T \supset (T
+        \land T)$}
+      \RL{$\supset$ I}
+      \UIC{$\lambda x: T \lambda . y: T \langle x,y \rangle : T \supset
+        T \supset (T \land T)$}
+      
+      \AXC{}
+      \RL{$T$ I}
+      \UIC{$\langle \rangle$ : T}
+      
+      \RL{$\supset$ E}
+      \BIC{$(\lambda x : T \lambda . y: T \langle x,y \rangle)$ : $\langle \rangle$}
+      
+      \AXC{}
+      \RL{$T$ I}
+      \UIC{$\langle \rangle$ : T}
+      
+      \BIC{$((\lambda x:T . \lambda y: T \langle x,y \rangle) \langle
+        \rangle) \langle \rangle$ : }
+      \RL{$\land$ E$_l$}
+      \UIC{$fst\ (\lambda x : T . \lambda y : T \langle x,y \rangle)
+        \langle \rangle \langle \rangle$ : }
+    \end{prooftree}
+
+    The following is a theorem we are not going to prove:
+
+    If $\Gamma \vdash M : A$ and $M \implies M'$ then $\Gamma \vdash
+    M': A$
+    
+    If $\Gamma \vdash M' : A$ and $M \implies M'$ then $\Gamma \vdash
+    M: A$
+    \subsection{Congruence Rules}
+    We can go into functions. This strategy is non-deterministic (will
+    this terminate? Yes, but it is not obvious how to prove it. This
+    is a metatheoretic property)
+    \begin{prooftree}
+      \AXC{$M \implies M'$}
+      \UIC{$fst \ M \implies fst \ M'$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$M \implies M'$}
+      \UIC{$snd \ M \implies snd \ M'$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$M \implies M'$}
+      \UIC{$M \ N \implies M' \ N$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$N \implies N'$}
+      \UIC{$M \ N \implies M \ N'$}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$M \implies M'$}
+      \UIC{$\lambda x:A.M \implies \lambda x : A.M'$}
+    \end{prooftree}
+    \paragraph{Syntactic Equality} is important because we want to
+    introduce substitution.
+    \\\begin{tabular}{l l}
+      $\lambda x.x = \lambda y.y$ & \text{(the name of a bound var
+                                  does not matter)}
+        \\ $\lambda x . \lambda y. x \neq \lambda x . \lambda y . y$
+        \\ $\lambda x. \lambda y. x = \lambda x' . \lambda y . x'$ & These are the same because $x$ has the same binding site as $x'$
+      \end{tabular}
+      \\
+    Terms that only differ in the names of the bound variables are
+    considered equal. This is defined as
+    $\alpha$-renaming. Capture-avoiding substitution.
+
+    Note in the following expression, $x$ is new (``fresh''). We
+    cannot have two variables with the same name, if this was the
+    case, we'd have to rename $x$. 
+
+    \begin{prooftree}
+      \AXC{$\Gamma, x: A \vdash M : B$}
+      \UIC{$\Gamma \vdash \lambda x : A . M : A \supset B$}
+    \end{prooftree}
+
+    Otherwise a rule such as the following would not give you
+    a unique type.
+    \begin{prooftree}
+      \AXC{$x:A \in \Gamma$}
+      \UIC{$\Gamma \vdash x : A$}
+    \end{prooftree}
+    \paragraph{Example of substitution} What does this mean?
+    \\ $[u/w] (\lambda u.w u) \neq \lambda u. u u$
+    \\ You cannot introduce a new variable with the same name as an
+    existing one, this will have completely different meaning than you
+    intended.
+    \\ Solution: $[u/w](\lambda y: w
+    u)\stackrel{\alpha}{=}[u/w](\lambda u'. w u') = \lambda u'. u u'$
+
+    Let's assume that $u : T \supset A$.
+    \\ $[u/w](\underbrace{\lambda u : T. \ w \ u}_{\text{well-typed, $T
+        \supset A$}}) = \lambda u : T. \ \underline{u} \ u$? This is
+    ill-typed!
+    \subsection{Restatement of Definitions Using Context}
+    \paragraph{Weakening} If $\Gamma \vdash M:A$ then $\Gamma, \Gamma'
+    \vdash M:A$
+    \paragraph{Substitution} If $\Gamma, x : a , \Gamma' \vdash M : B$
+    and $\Gamma \vdash N : A$ then $\Gamma, \Gamma' [N/x] M : B$
+
+    How do we prove this? Proof by structural on $\Gamma, x: A,
+    \Gamma' \vdash M : B$
+
+    First we must consider each rule that could have been used to derive
+    $M : B$.
+
+    Base case would be T, trivially true because there is nothing to
+    substitute.
+
+    \subparagraph{Definition of substitution}
+    ~\\$[N/x]M = M'$, $[N/x] x = N$. Replace the "free" occurence of
+    $x$ in $M$ with $N$
+    
+    \subparagraph{Case}
+    \AXC{$\mathcal{D}'$}
+    \noLine
+    \UIC{$\Gamma, x:A, \Gamma' \vdash M : C \land D$}
+    \RL{$\land$ E$_l$}
+    \UIC{$\Gamma, x:A,\Gamma' \vdash fst\ M : C$}
+    \DP
+    \\ $\Gamma, \Gamma ' \vdash [N/x] M : C\land D$ by IH
+    \\ $\Gamma, \Gamma ' \vdash fst\ ([N/x]M) : C$ by $\land$E$_l$
+    \\$\Gamma, \Gamma' \vdash [N/x](fst \ M) : C$ by definition of substitution
+    \subparagraph{Case}
+    \AXC{$\mathcal{D}_1$}
+    \noLine
+    \UIC{$\Gamma, x:A, \Gamma' \vdash M_1 : D \supset C $}
+    
+    \AXC{$\mathcal{D}_2$}
+    \noLine
+    \UIC{$\Gamma, x:A, \Gamma' \vdash M_2 : D$}
+    \RL{$\supset$ E}
+    \BIC{$\Gamma, x:A,\Gamma' \vdash M_1 \ M_2 : C$}
+    \DP
+    \\ $\Gamma, \Gamma ' \vdash [N/x] M_1 : D \supset C$ by IH ($\mathcal{D}_1$)
+    \\ $\Gamma, \Gamma ' \vdash [N/x] M_2 : D$ by IH ($\mathcal{D}_2$)
+    \\$\Gamma, \Gamma' \vdash [N/x]M_1 \ [N/x]M_2 : C$ by $\supset$ E
+    \\ $\Gamma, \Gamma' \vdash [N/x](M_1\ M_2) : C$
+
+    The more interesting case is with variables:
+    \subparagraph{Case}
+    \AXC{$x: A \in (\Gamma, x : A, \Gamma')$}
+    
+    \UIC{$\Gamma, x : A, \Gamma' \vdash x : A$}
+    \DP
+    \\ $\Gamma \vdash N.A$ by assumption
+    \\ $\Gamma, \Gamma' \vdash N : A$ by weakening
+    \\ $\Gamma, \Gamma' \vdash [N/x]x . A$ by substitution definition
+    \subparagraph{Case}
+    \AXC{$y: B \in (\Gamma, x : A, \Gamma')$}
+    \AXC{$x \neq y$}
+    
+    \BIC{$\Gamma, x : A, \Gamma' \vdash y : B$}
+    \DP
+    \\ $y:B \in (\Gamma, \Gamma')$
+    \\ $\Gamma, \Gamma' \vdash y : B$ by variable
+    \subparagraph{Case}
+    \AXC{$\Gamma, x : A, \Gamma', y:B \vdash M:C$}
+    
+    \UIC{$\Gamma, x : A, \Gamma' \vdash \lambda y : B. N:B\supset C$}
+    \DP
+    \\ $\Gamma, \Gamma', y:B \vdash [N/x] M:C$ by IH.
+    \\ $\Gamma, \Gamma', \lambda y : B . [N/x] M:C$ by $\supset$ I %2
+    \\ $\Gamma \vdash N : A$ by assumption (i.e any var in $N$ is in
+    $\Gamma$). $y$ does not occur in $N$
+    \\ $\Gamma, \Gamma ' \vdash [N/x] (\lambda y:B.M) : B \supset C$
+    by substitution definition % Arrow from %2 to here
+ \end{document}
