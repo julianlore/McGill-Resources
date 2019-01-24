@@ -1389,9 +1389,178 @@
     \UIC{$\Gamma, x : A, \Gamma' \vdash \lambda y : B. N:B\supset C$}
     \DP
     \\ $\Gamma, \Gamma', y:B \vdash [N/x] M:C$ by IH.
-    \\ $\Gamma, \Gamma', \lambda y : B . [N/x] M:C$ by $\supset$ I %2
+    \\ $\Gamma, \Gamma', \lambda y : B . [N/x] M:C$ by $\supset$ I 
     \\ $\Gamma \vdash N : A$ by assumption (i.e any var in $N$ is in
     $\Gamma$). $y$ does not occur in $N$
     \\ $\Gamma, \Gamma ' \vdash [N/x] (\lambda y:B.M) : B \supset C$
-    by substitution definition % Arrow from %2 to here
- \end{document}
+    by substitution definition
+    \section{01/24/19}
+    \subsection{More on Proof Terms}
+    Last class we saw:
+    \\ Prop/Types $A,B:= T \mid \perp \mid A \land B \mid A \supset B
+    \mid A \lor B$
+    \\ Terms $M,N := \langle  \rangle \mid abort^c \ M \mid \langle
+    M,N \rangle \mid fst\ M \mid snd \ M \mid \lambda x . A . M \mid M
+    \ N \mid inl^B \ M \mid inr^A \ B \mid (case \ M \ of \ inl \ x
+    \implies N_1 \mid inr\ y \implies N_2)$
+
+    We can think of $M:A$ iff $A$ true.
+    \paragraph{Warm-up}
+    \begin{center}
+      \begin{tabular}{l l}
+        \textbf{Program} & \textbf{Proposition}
+        \\ $\lambda x : A . \lambda y: B. \langle x,y \rangle$ & $A \supset B \supset (A \land B)$
+        \\ $\lambda x : A \supset B  \land B \supset C$ & $(A \subset B \land B \supset C) \supset A \supset C$
+        \\ ~\hspace{5 pt} $\lambda y: A.(snd\ x)\underbrace{(\underbrace{(fst\ x)}_{A \supset B} y)}_{B}$
+        \\ $\lambda x : A \lor B. \lambda y: C$& $(A \lor B) \supset C \supset (B \lor A) \land C$
+        \\ ~\hspace{5 pt} $\langle case \ of \ inl \ a \implies inr\ a \mid inr\ b \implies inl\ b,y  \rangle$
+      \end{tabular}
+    \end{center}
+      \paragraph{Reminder}
+      \begin{tabular}{l l}
+        Prop & Type
+        \\ $T$ & unit
+        \\ $A \land B$ & $A * B$
+        \\ $A \supset B$ & $A \rightarrow B$
+        \\ $ A \lor B$ & $A + B$
+      \end{tabular}
+      The $+$ is usually hidden in programming languages,
+      i.e. \texttt{type int\_or\_string = Int of int | Str of string}
+      is actually \texttt{Int + String}.
+    \begin{center}
+      \begin{tabular}{l l}
+        \textbf{Proposition} & \textbf{Program}
+        \\ $A \supset A$ (has many programs) & $\lambda x:A.x$ \hspace{10 pt}normal/``canonical form''
+        \\ Programs on the right are syntactically different & $\lambda x : A . (\lambda y: A . y) x$
+        \\ & $\lambda x : A . fst ((\lambda y:A \land A . y) \langle x,x \rangle)$
+      \end{tabular}
+    \end{center}
+    We hope that all of the functions on the right can reduce to the
+    normal form.
+
+    If $\Gamma \vdash M : A$ and $M \implies M'$ then $\Gamma \vdash
+    M' : A$ \} Subject Reduction/Type Preservation
+
+    By induction (case analysis) on $M \implies M'$
+    \subparagraph{Case} $fst \langle M,N \rangle \implies M$
+    \\\begin{tabular}{l l}
+    $\Gamma \vdash fst\ \langle M,N \rangle : A$ & by assumption
+    \\ $\Gamma \vdash \langle M,N \rangle : A \land B$ & by \underline{inversion} on
+    $\land$ E$_l$
+    \end{tabular}
+
+    Note the inversion rule tells us:
+    \begin{prooftree}
+      \AXC{$M : A \land B$}
+      \RL{$\land$ E$_l$}
+      \UIC{$fst\ M : A$}
+    \end{prooftree}
+    Inversion Lemma: If $fst\ M : A$ then $M:A \land B$. This is
+    obvious in this system because there is only one rule. If there
+    was another rule that we could use, then we'd have to prove that
+    it came from this inversion rule.
+    \\\begin{tabular}{l l}
+    $\Gamma \vdash M : A$ & by \underline{inversion} of $\land I$
+    \end{tabular}
+
+    The concept of \underline{inversion} is very important, we want to
+    know where the term comes from.
+    \subparagraph{Case} $(\lambda x : A.M) N \implies [N/x] M$
+    \\\begin{tabular}{l l}
+    $\Gamma \vdash (\lambda x : A . M) N : B$ & by assumption
+    \\ $\Gamma \vdash \lambda x: A.M : A \supset B \ \Gamma \vdash N :
+    A$ & by inversion on $\supset$ E
+    \\ $\Gamma, x : A \vdash M : B$ & by inversion on $\supset$ I
+    \\ $\Gamma \vdash [N/x]M:B$ & by substitution lemma (on above line
+    and $\Gamma \vdash N:A$)
+    \end{tabular}
+    \subparagraph{Case} $case\ (inl^B \ M) \ of \ inl\ x \implies N_1
+    \mid inr\ y \implies N_2 \implies [M/x] N_1$
+    \\\begin{tabular}{l l}
+    $\Gamma \vdash case\ (inl^B \ M) \ of \ inl\ x \implies N_1
+        \mid inr\ y \implies N_2 : C $ & by assumption
+        \\ $\Gamma \vdash inl^B \ M : A \lor B$ & by inversion $\lor$ E
+        \\ $\Gamma, x:A \vdash N_1 : C$
+        \\ $\Gamma, x:B \vdash N_2 : C$
+        \\ $\Gamma \vdash M.A : C$ & by inversion $\lor$ I$_l$
+        \\ $\Gamma \vdash [M/x]N_1 : C$ & by substitution
+      \end{tabular}
+      \subparagraph{Case} \AXC{$M_1 \implies M'$}
+      \UIC{$M_1 \ M_2 \implies M_1' M_2$}
+      \DP
+      \\
+      \begin{tabular}{l l}
+        $\Gamma \vdash M_1 \ M_2 : B$& by assumption
+        \\ $\Gamma \vdash M_1 : A \supset B$ and $\Gamma \vdash M_2 : A$ & by inversion $\supset$E
+        \\ $\Gamma \vdash M_1' : A \supset B$ & by IH
+        \\ $\Gamma \vdash M_1' M_1 : B$ & by $\supset$ E
+      \end{tabular}
+      The last step is forward reasoning instead of backward reasoning
+      with inversions. Basically show what your case gives you and
+      then apply IH to get what you want.
+      \subparagraph{Case}
+      \AXC{$M \implies M'$}
+      \UIC{$\lambda x : A.M \implies \lambda x: A.M'$}
+      \DP
+      \\\begin{tabular}{l l}
+        $\Gamma \vdash \lambda x : A . M : A \supset B$& by assumption
+          \\ $\Gamma, x : A \vdash M:B$ & by inversion on $\supset$ I
+          \\ $\Gamma, x:A \vdash M' : B$ & by IH
+          \\ $\Gamma \vdash \lambda x : A . M' : A \supset B$ & by $\supset$ I
+        \end{tabular}
+
+      Note that in trying to reduce $fst\ ((\lambda y:A \land A. y)
+      \langle x,x \rangle)$, we will need to step twice:
+      \\ $\implies \lambda x : A . fst \langle x,x \rangle$
+      \\ $\implies \lambda x : A . x$
+      \\ But so far we are only stepping once.
+      \paragraph{Can we prove the opposite?}
+      If $\Gamma \vdash M' : A$ and $M \implies M'$ then $\Gamma
+      \vdash M : A$
+      \subparagraph{Case} $fst \langle M,N \rangle \implies M$
+      \\\begin{tabular}{l l}
+          $\Gamma \vdash M :A$& by assumption
+          \\ $\Gamma \vdash N : B$ & How to show this?
+          \\ $\Gamma \vdash \langle M,N \rangle : A \land B$
+          \\ $\Gamma \vdash fst \ \langle M,N \rangle : A$ & To show
+        \end{tabular}
+        Cannot prove this syntactically right now.
+        \paragraph{Multi Step} Want to step multiple times. $M
+        \implies^* M'$, meaning $M$ steps in more than one step.
+        \begin{prooftree}
+          \AXC{}
+          \RL{refl(ectivity)}
+          \UIC{$M \implies^* M$}
+        \end{prooftree}
+        \begin{prooftree}
+          \AXC{$M \implies^* K$}
+          \AXC{$K \implies^* N$}
+          \RL{Trans(itivity)}
+          \BIC{$M \implies^* N$}
+        \end{prooftree}
+        \begin{prooftree}
+          \AXC{$M \implies N$}
+          \RL{one-step}
+          \UIC{$M \implies^* N$}
+        \end{prooftree}
+        \subsection{Normal Form}
+        What is a normal form when no reduction is possible anymore?
+        \\ $\lambda :A \supset B.\lambda y : A . x \ y$ is a normal
+        form
+        \\ So is $\lambda x : (A \supset A)\supset C . x \underbrace{(\lambda y: A
+          . y)}_{A \supset A}$
+        \\ Basically, you can no longer reduce the expression.
+        \paragraph{Normal Form} $m,n : = \lambda x:A.m \mid r$
+        \paragraph{Neutral Form} $r : = x \mid r \ m \mid fst\ r \mid
+        snd\ r$
+        \paragraph{Questions}
+        \begin{enumerate}
+        \item Can we always reach a normal form? (Does reduction
+          terminate?)
+        \item Can we change the proof that correspond to the normal
+          forms? ``Normal Proof'' (without any detours)
+        \item Is there a unique normal form that can be computed?
+          \\ If $M \implies^* N_1$ and $M \implies^* N_2$ then $N_1 = N_2$
+        \end{enumerate}
+        Will look at 1 and 2 before the midterm.
+      \end{document}
