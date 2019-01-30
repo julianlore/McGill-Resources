@@ -1563,4 +1563,376 @@
           \\ If $M \implies^* N_1$ and $M \implies^* N_2$ then $N_1 = N_2$
         \end{enumerate}
         Will look at 1 and 2 before the midterm.
+        \section{01/29/19}
+        \subsection{First-order Logic}
+        Reason about domains (nat, list, trees, programs, \ldots)
+
+        How to reason in \underline{general}
+        $$\forall x : \underbrace{\tau}_{\text{domain}} : A(x)\ true$$
+
+        \underline{For all} elements in domain $\tau$, $A(x)$ is true.
+        \begin{align*}
+          & \forall x : nat\ even(x) \supset \neg odd(x)
+          \\ & \forall x : \tau:\forall y:\tau P(x) \supset P(y)
+          \\ & (\forall x: \tau . P(x)) \supset \exists x:\tau. P(x)
+        \end{align*}
+        We define truth of a proposition for all possible domains.
+        \paragraph{Well-Formedness:} $A$ wf
+        \begin{prooftree}
+          \AXC{$\tau$ type ($\tau$ itself is wf)}
+          \AXC{}
+          \UIC{$x : \tau$}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$A(x)$ wf}
+          \BIC{$\forall x : \tau. A(x)$ wf}
+        \end{prooftree}
+        \begin{prooftree}
+          \AXC{$t_1:\tau$}
+          \AXC{\ldots}
+          \AXC{$t_n:\tau$}
+          \TIC{$P(t_1,\ldots,t_n)$ wf}
+        \end{prooftree}
+        $\forall x: nat \ even \ y \supset even (x)$, this is not well
+        formed!
+
+        What is a type? What are its elements?
+
+        \begin{tabular}{l l l}
+          nat type& \AXC{}\UIC{$z$:nat}\DP& \AXC{$n$:nat}\UIC{$succ\ n$:nat}\DP
+          \\ nat\_list type & \AXC{}\UIC{$nil$:nat\_list}\DP & \AXC{$n$:nat}\AXC{$t$:nat\_list}\BIC{$cons(n,t)$:nat\_list}\DP
+        \end{tabular}
+
+        Prop. $A,B:= T \mid \perp \mid A \land B \mid \forall
+        x:\tau. A(x)$
+        \\ Terms $t:= x \mid f(t_1,\ldots,t_n)$
+        \\ Context $\Gamma := \cdot \mid \Gamma, u : A \mid \Gamma, a
+        : \tau$
+        \paragraph{Introduction} We know what it means for something
+        to be well formed, how do we show it? How do we introduce it?
+        We could prove the predicate $A(x)$ for all $x$, but what if
+        our domain is infinite? Often we may not even know much about
+        our domain, so we can't prove it for each element either.
+        \begin{prooftree}
+          \AXC{}
+          \UIC{$a:\tau$}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$A(a)$ true}
+          \RL{$\forall $I$^a$ ($a$ is a parameter)}
+          \UIC{$\forall x:\tau. A(x)$ true}
+        \end{prooftree}
+        This satisfies everything in $\tau$ because $a$ is
+        generic/new, could not exist before in the proof.
+        
+        This rule is true whether you have something in $\tau$ or not,
+        if it's impossible to get something from $\tau$, everything in
+        $\tau$ still satisfies $A(x)$ true.
+        \paragraph{Elimination} Now that we have the information, what
+        can we do with it?
+        \begin{prooftree}
+          \AXC{$\forall x:\tau. A(x)$ true}
+          \AXC{$t:\tau$}
+          \RL{$\forall$ E}
+          \BIC{$A(t)$ true}
+        \end{prooftree}
+        We have to show that there is a $t$ of type $\tau$. This is
+        similar to conjunction.
+        \paragraph{Example}
+        \begin{prooftree}
+          \AXC{}
+          \RL{u}
+          \UIC{$\forall x : \tau. A(x) \land B(x)$ true}
+
+          \AXC{}
+          \RL{}
+          \UIC{$a : \tau$}
+          
+          \RL{$\forall$ E}
+          \BIC{$A(a)\land B(a)$ true}
+          \RL{$\land$ E$_l$}
+          \UIC{$A(a)$ true}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\forall x : \tau . A(x)$}
+
+         
+          \AXC{}
+          \RL{u}
+          \UIC{$\forall x : \tau. A(x) \land B(x)$ true}
+          \AXC{}
+          \RL{}
+          \UIC{$b : \tau$}
+          
+          \RL{$\forall$ E}
+          \BIC{$A(b)\land B(b)$ true}
+          \RL{$\land$ E$_r$}
+          \UIC{$A(a)$ true}
+          \RL{$\forall$ I$^b$}
+          \UIC{$\forall x : \tau . B(x)$}
+          
+          \RL{$\land$ I}
+          \BIC{($(\forall x : \tau . A(x)) \land (\forall x : \tau
+          . B(x))$ true)}
+          \RL{$\supset$I$^u$}
+          \UIC{$(\forall x : \tau . A(x) \land B(x)) \supset ((\forall
+            x : \tau.A(x)) \land (\forall x : \tau. B(x)))$ true}
+        \end{prooftree}
+        The following proof is \underline{invalid}! $a$ is not fresh
+        and we cannot prove $\forall x:\tau .\forall y:\tau
+        . P(x)\supset P(y)$ true (it doesn't make sense after all).
+        \begin{prooftree}
+          \AXC{$P(a) \supset P(a)$}
+          \RL{$\forall$I$^a \times$}
+          \UIC{$\forall y:\tau . P(a) \supset P(y)$}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\forall x : \tau. \forall y : \tau P(x) \supset P(y)$ true}
+        \end{prooftree}
+        \paragraph{Overloaded functions}
+        \begin{prooftree}
+          \AXC{}
+          \UIC{$a:\tau$}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$M:A(a)$ true}
+          \RL{$\forall $I$^a$ ($a$ is a parameter)}
+          \UIC{$\lambda a : \tau . M : \forall x:\tau. A(x)$ true}
+        \end{prooftree}
+        $\lambda a$ is an overloaded function here.
+        \begin{prooftree}
+          \AXC{$M:\forall x:\tau. A(x)$ true}
+          \AXC{$t:\tau$}
+          \RL{$\forall$ E}
+          \BIC{$M\ t : A(t)$ true}
+        \end{prooftree}
+        \paragraph{Types and Propositions with Quantifiers}
+        \begin{tabular}{c c}
+          Prop. & Types
+          \\ T & unit
+          \\ $A \land B$ & $A * B$
+          \\ $A \lor B$ & $A + B$
+          \\ $A \supset B$ & $A \to B$
+          \\ $\forall x : \tau . A(x)$ & $\underbrace{\Pi x:\tau. A(x)}_{\text{dependent type ``indexed''}}$
+        \end{tabular}\\
+        $\Pi n : nat$ rev:$'\alpha$ list (n) $\to 'a $ list(n)
+        \paragraph{Local Soundness}
+        \begin{center}
+          \AXC{}
+          \RL{a}
+          \UIC{$a:\tau$}
+          \noLine
+          \UIC{$\mathcal{D}$}
+          \noLine
+          \UIC{$A(a)$ true}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\forall x : \tau . A(x)$ true}
+          
+          \AXC{$\mathcal{E}$}
+          \noLine
+          \UIC{$t:\tau$}
+          \RL{$\forall$ E}
+          \BIC{$A(t)$ true}
+          \DP
+          $\implies$
+          \begin{tabular}{c}
+            $\mathcal{E}$ 
+            \\$[t / a]\mathcal{D}$
+            \\ $A(t)$ true
+          \end{tabular}
+        \end{center}
+        Sometimes we omit $\mathcal{E}$ from our proof tree and
+        implication (as it is obvious there's a derivation for
+        $t:\tau$).
+        
+        Substitution Lemma (2nd part):
+        If $\Gamma, a:\tau, \Gamma'\vdash A(a)$ true and $\Gamma
+        \vdash t:\tau$ then $\Gamma,[t/a]\Gamma' \vdash A(t)$ true
+        \\ $(\lambda x : \tau . M) t \stackrel{\beta}{\implies} [t/x]M$
+
+        \paragraph{Local Completeness}
+        \begin{center}
+          \begin{tabular}{c}
+            $\mathcal{D}$
+            \\ $\forall x : \tau . A(x)$ true
+          \end{tabular}
+          $\implies$
+          \AXC{$\mathcal{D}$}
+          \noLine
+          \UIC{$\forall x : \tau . A(x)$ true}
+          \AXC{}
+          \RL{}
+          \UIC{$a : \tau$}
+          \RL{$\forall$ E}
+          \BIC{$A(a)$ true}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\forall x : \tau. A(x)$ true}
+          \DP
+        \end{center}
+        Can also expand local completeness: 
+        \begin{center}
+          \begin{tabular}{c}
+            $\mathcal{D}$
+            \\ $\forall x : \tau . A(x)$ true
+          \end{tabular}
+          $\implies$
+          \AXC{$\mathcal{D}$}
+          \noLine
+          \UIC{$M:\forall x : \tau . A(x)$ true}
+          \AXC{}
+          \RL{}
+          \UIC{$M \ a : \tau$}
+          \RL{$\forall$ E}
+          \BIC{$A(a)$ true}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\lambda a : \tau . M\ a\forall x : \tau. A(x)$ true}
+          \DP
+        \end{center}
+        $$M : \forall x : \tau . A(x) \stackrel{\eta}{\implies} \lambda
+        x : \tau . M \ x$$
+        Expansion
+        $$M : A \supset B \implies \lambda x: A . M \ x$$
+
+        Existential quantifier:
+
+        \paragraph{Well-formedness: } $A$ wf
+        \begin{prooftree}
+          \AXC{}
+          \RL{}
+          \UIC{$x:\tau$}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$A(x)$ wf}
+          \UIC{$\exists x : \tau . A(x)$ wf}
+        \end{prooftree}
+        Truth: $A$ true
+        \begin{prooftree}
+          \AXC{$A(t)$ true}
+          \AXC{$t:\tau$}
+          \RL{$\exists$ I}
+          \BIC{$\exists x : \tau . A(x)$ true}
+        \end{prooftree}
+        \begin{prooftree}
+          \AXC{$\exists x : \tau . A(x)$ true}
+          \AXC{}
+          \RL{u}
+          \UIC{$A(a)$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+
+          \AXC{}
+          \RL{}
+          \UIC{$a:\tau$}
+          
+          \RL{$\exists$ E$^{a,u}$}
+          \TIC{$C$ true}
+        \end{prooftree}
+        Note that the $a$ in $A(a)$ is the same as in $a:\tau$. This
+        is similar to disjunction.
+        \begin{prooftree}
+          \AXC{$A \lor B$}
+          \AXC{}
+          \RL{}
+          \UIC{$A$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+          \AXC{}
+          \RL{}
+          \UIC{$B$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+          \TIC{$C$ true}
+        \end{prooftree}
+        \begin{prooftree}
+          \AXC{$\forall x \in \{r,b,g\}. A(x)$}
+          \AXC{}
+          \RL{}
+          \UIC{$A(r)$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+          
+          \AXC{}
+          \RL{}
+          \UIC{$A(b)$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+          
+          \AXC{}
+          \RL{}
+          \UIC{$A(c)$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+          
+          \QIC{$C$ true}
+        \end{prooftree}
+        \paragraph{Another FOL Example}
+        \begin{prooftree}
+          \AXC{}
+          \RL{u}
+          \UIC{$A(a)$ true}
+          \RL{$\supset$ I$^u$}
+          \UIC{$A(a) \supset A(a)$ true}
+          
+          \AXC{}
+          \RL{}
+          \UIC{$a:\tau$}
+          
+          \BIC{$\exists y : \tau A(a) \supset A(y)$ true}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\forall x : \tau \exists y : \tau . A(x \supset A(y))$
+          true}
+      \end{prooftree}
+      The following cannot be proved in constructive logic (in
+      classical logic it is not a problem):
+      \begin{prooftree}
+        \AXC{}
+        \RL{u}
+        \UIC{$\forall x : \tau . A(x)$ true}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\exists x : \tau . P(x)$ true}
+        \RL{$\supset$ I$^u$}
+        \UIC{$(\forall x : \tau . P(x) \supset (\exists x : \tau
+          P(x)))$ true}
+      \end{prooftree}
+
+      If we add an additional assumption (prove the statement with
+      $\tau$ not being empty), we can prove it:
+      \begin{prooftree}
+        \AXC{}
+        \RL{u}
+        \UIC{$\forall x : \tau . A(x)$ true}
+        
+        \AXC{}
+        \RL{}
+        \UIC{$a : \tau$}
+
+        \BIC{$P(a)$ true}
+
+        \AXC{}
+        \RL{}
+        \UIC{$a : \tau$}
+        
+        \BIC{$\exists x : \tau . P(x)$ true}
+        \RL{$\supset$ I$^u$}
+        \UIC{$(\forall x : \tau . P(x) \supset (\exists x : \tau
+          P(x)))$ true}
+        \RL{$\forall$ I$^a$}
+        \UIC{$\forall y:\tau ((\forall x : \tau . P(x) \supset
+          (\exists x : \tau P(x))))$ true}
+      \end{prooftree}
       \end{document}
