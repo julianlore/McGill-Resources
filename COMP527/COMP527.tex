@@ -696,9 +696,6 @@
       \end{tabular}
     \end{center}
     \paragraph{Local Completeness}
-    For local completeness, we want to introduce a pointless detour,
-    i.e. introduce the rule and then get rid of it and show that we
-    haven't affected the proof.
     \begin{center}
       \begin{tabular}{c}
         $\mathcal{D}$
@@ -1819,17 +1816,18 @@
           \AXC{}
           \RL{u}
           \UIC{$A(a)$ true}
-          \noLine
-          \UIC{\vdots}
-          \noLine
-          \UIC{$C$ true}
-
+          
           \AXC{}
           \RL{}
           \UIC{$a:\tau$}
           
+          \noLine
+          \BIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+
           \RL{$\exists$ E$^{a,u}$}
-          \TIC{$C$ true}
+          \BIC{$C$ true}
         \end{prooftree}
         Note that the $a$ in $A(a)$ is the same as in $a:\tau$. This
         is similar to disjunction.
@@ -1935,4 +1933,363 @@
         \UIC{$\forall y:\tau ((\forall x : \tau . P(x) \supset
           (\exists x : \tau P(x))))$ true}
       \end{prooftree}
+      \section{01/31/19}
+      \subsection{More on First-order Logic}
+      Reminder:
+      \\Prop $A,B := \ldots \mid \forall x : \tau . A(x) \mid \exists x
+      : \tau . A(x)$
+      \\ Terms $t,s := x \mid f(t_1,\ldots,t_n)$
+        \begin{center}
+          \AXC{}
+          \UIC{$a:\tau$}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \UIC{$A(a)$ true}
+          \RL{$\forall $I$^a$}
+          \UIC{$\forall x:\tau. A(x)$ true}
+          \DP
+          ~
+          \AXC{$\forall x:\tau. A(x)$ true}
+          \AXC{$t:\tau$}
+          \RL{$\forall$ E}
+          \BIC{$A(t)$ true}
+          \DP
+        \end{center}
+        \begin{center}
+          \AXC{}
+          \UIC{nat type}
+          \DP
+          ~
+          \AXC{}
+          \RL{z\_n}
+          \UIC{$Z$ : nat}
+          \DP
+          ~
+          \AXC{$n$ : nat}
+          \RL{s\_n}
+          \UIC{$s\ n $ : nat}
+          \DP
+        \end{center}
+        \begin{center}
+          \AXC{$A(t)$ true}
+          \AXC{$t:\tau$}
+          \RL{$\exists$ I}
+          \BIC{$\exists x : \tau . A(x)$ true}
+          \DP
+          ~
+          \AXC{$\exists x : \tau . A(x)$ true}
+          %
+          \AXC{}
+          \RL{w}
+          \UIC{$A(a)$ true}
+          %
+          \AXC{}
+          \RL{}
+          \UIC{$a:\tau$}
+          \noLine
+          \BIC{\vdots}
+          \noLine
+          \UIC{$C$ true}
+          %
+          \RL{$\exists$ E$^{w,a}$}
+          \BIC{$C$ true}
+          \DP
+        \end{center}
+        What can we do with the existential quantifier?
+        \begin{flalign*}
+          &A(t) \hat{=} [t/x]A(x)&
+          \\ &even\ z \supset odd(s\ z)
+          \\ &\exists x:nat.even\ x \supset odd (s \ x)
+          % \\ \exists x:nat.even\ x \supset odd(s\ z)
+        \end{flalign*}
+        \paragraph{Examples}
+        \begin{prooftree}
+          \AXC{}
+          \RL{u}
+          \UIC{$\exists x:\tau . \neg A(x)$ true}
+
+          \AXC{}
+          \RL{v}
+          \UIC{$\neg A(a)$}
+          
+          \AXC{}
+          \RL{w}
+          \UIC{$\forall x : \tau . A(x)$ true}
+
+          \AXC{}
+          \RL{}
+          \UIC{$a:\tau$}
+          \RL{$\exists$ I}
+          \BIC{$A(a)$ true}
+
+          \RL{$\supset$ E}
+          \BIC{$\perp$}
+
+          \RL{$\exists$ E$^{v,a}$}
+          \BIC{$\perp$}
+          
+          \RL{$\supset$ I$^w$}
+          \UIC{$\neg \forall x : \tau . A(x)$ true}
+          \RL{$\supset$ I$^u$}
+          \UIC{$(\exists x : \tau. \neg A(x)) \supset \neg (\forall
+            x:\tau . A(x))$ true}
+        \end{prooftree}
+
+        \begin{prooftree}
+          \AXC{}
+          \RL{u}
+          \UIC{$\exists x:nat. A(s\ x)$ true}
+
+          \AXC{}
+          \RL{w}
+          \UIC{$A(s\ a)$}
+
+          \AXC{}
+          \RL{}
+          \UIC{$a:nat$}
+          \RL{$s\_n$}
+          \UIC{$s\ a: nat$}
+
+          \RL{$\exists$ I}
+          \BIC{$\exists y : nat.A(y)$ true}
+          
+          \RL{$\exists$ E$^{w,a}$}
+          \BIC{$\exists y : nat. A(y)$ true}
+          \RL{$\supset$ I$^u$}
+          \UIC{$\exists x : nat. A (s \ x)\supset \exists y : nat
+            . A(y)$ true}
+        \end{prooftree}
+        We now show local soundness and completeness for $\exists$:
+        \paragraph{Local Soundness}
+            $\Gamma, u:A(a)$ true, $a:\tau \vdash C$ true
+        \begin{center}
+          \AXC{$\mathcal{E}_1$}
+          \noLine
+          \UIC{$A(t)$ true}
+          
+          \AXC{$\mathcal{E}_1$}
+          \noLine
+          \UIC{$t:\tau$}
+          
+          \RL{$\exists$ I}
+          \BIC{$\exists x : \tau . A(x)$ true}
+          
+          \AXC{}
+          \RL{u}
+          \UIC{$A(a)$ true}
+
+          \AXC{}
+          \RL{e}
+          \UIC{$a:\tau$}
+          
+          \noLine
+          \BIC{$\mathcal{D}^{u,a}$}
+          \noLine
+          \UIC{$C$ true}
+
+          \RL{$\exists$ E$^{u,a}$}
+          \BIC{$C$ true}
+          \DP
+          $\implies$
+          \begin{tabular}{c}
+            \\$[\mathcal{E}_1 / u]([t/a]\mathcal{D})$
+            \\ $C$ true
+          \end{tabular}
+        \end{center}
+          (By substitution lemmas, we use both here)
+          \\ 1: If $\Gamma ,a : \tau, \Gamma' \vdash A$ true and
+          $\Gamma \vdash t:\tau$ then $\Gamma, [t/a]\Gamma' \vdash
+          [t/a] A$ true
+          \\ 2: If $\Gamma, u: B$ true, $\Gamma' \vdash A$ true and
+          $\Gamma \vdash B$ true then $\Gamma, \Gamma' \vdash A$ true
+        \paragraph{Local Completeness}
+        \begin{center}
+          \begin{tabular}{c}
+            $\mathcal{D}$
+            \\ $\exists x : \tau . A(x)$ true
+          \end{tabular}
+          $\implies$
+          %
+          \AXC{$\mathcal{D}$}
+          \noLine
+          \UIC{$\exists x : \tau . A(x)$ true}
+          %
+          \AXC{}
+          \RL{u}
+          \UIC{$A(a)$}
+          %
+          \AXC{}
+          \RL{}
+          \UIC{$a:\tau$}
+          %
+          \RL{$\exists$ I}
+          \BIC{$\exists x: \tau . A(x)$}
+          \RL{$\exists$ E$^{u,a}$}
+          \BIC{$\exists x : \tau . A(x)$ true}
+          \DP
+        \end{center}
+        Note that completeness isn't always an elimination and then an
+        introduction, however, soundness must always introduce and
+        then eliminate the rule.
+        \paragraph{Existential Rules with Terms}
+        % Fix other existentials to have BIC like this
+        \begin{center}
+          \AXC{$M:A(t)$ true}
+          \AXC{$t:\tau$}
+          \RL{$\exists$ I}
+          \BIC{$\langle M,t \rangle : \exists x : \tau . A(x)$ true}
+          \DP
+          ~
+          \AXC{$M:\exists x : \tau . A(x)$ true}
+          \AXC{}
+          \RL{w}
+          \UIC{$w:A(a)$ true}
+          %
+          \AXC{}
+          \RL{}
+          \UIC{$a:\tau$}
+          \noLine
+          \BIC{\vdots}
+          \noLine
+          \UIC{$N:C$ true}
+          %
+          \RL{$\exists$ E$^{w,a}$}
+          \BIC{$let\ \langle w,a \rangle = M\ in\ N: C$ true}
+          \DP
+        \end{center}
+        Soundness:
+        
+        \begin{center}
+          \AXC{$\mathcal{E}_1$}
+          \noLine
+          \UIC{$M:A(t)$ true}
+          
+          \AXC{$\mathcal{E}_1$}
+          \noLine
+          \UIC{$t:\tau$}
+          
+          \RL{$\exists$ I}
+          \BIC{$\langle M,t \rangle: \exists x : \tau . A(x)$ true}
+          
+          \AXC{}
+          \RL{u}
+          \UIC{$A(a)$ true}
+
+          \AXC{}
+          \RL{e}
+          \UIC{$a:\tau$}
+          
+          \noLine
+          \BIC{$\mathcal{D}^{u,a}$}
+          \noLine
+          \UIC{$N:C$ true}
+
+          \RL{$\exists$ E$^{u,a}$}
+          \BIC{$let \ \langle u,a \rangle = \langle M,t \rangle\ in \ N: C$ true}
+          \DP
+          $\implies$
+          \begin{tabular}{c}
+            \\$[\mathcal{E}_1 / u]([t/a]\mathcal{D})$
+            \\ $C$ true
+          \end{tabular}
+        \end{center}
+        $let \langle u,a \rangle=\langle M,t \rangle \ in \ N \implies
+        $
+        \begin{tabular}{c}
+          $[M/u,t/a]N$
+          \\ $[M/u][t/a]N$
+        \end{tabular}
+        \paragraph{Choice:}
+        \begin{enumerate}
+        \item Build $=, \leq, \ldots$ on nats into the logic
+        \item Define formulas that describe $=,\leq, even, odd,
+          \ldots$
+
+          Could add the following rules:
+          \begin{center}
+            \AXC{$n < s \ n$}
+            \DP
+            ~
+            \AXC{$a < b$}
+            \AXC{$b < c$}
+            \BIC{$a < c$}
+            \DP
+          \end{center}
+          \vspace{2 em}
+          \begin{center}
+            \AXC{$n < m$}
+            \UIC{$n < s \ m$}
+            \DP
+            ~
+            \AXC{$n < m$}
+            \RL{I$_s$}
+            \UIC{$s\ n < s \ m$}
+            \DP
+            ~
+            \AXC{}
+            \RL{I$_0$}
+            \UIC{$0 < s \ n$}
+            \DP
+            ~
+            \AXC{$m < 0$ true}
+            \UIC{$C$ true}
+            \DP
+            ~
+            \AXC{$s\ n < s\ m$}
+            \UIC{$n < m$}
+          \end{center}
+          Some of these rules are redundant, we only need the last
+          four rules.
+
+          Are the first two rules and the last four rules equivalent?
+          If we have both sets, is our language sound and complete?
+
+          There are many choices we make here, but if we look at I$_s$
+          and E$_s$, we can see that we are guided by the possibility
+          of introducing and eliminating.
+        \end{enumerate}
+
+        What if we build on instead of defining formulas?
+        \begin{flalign*}
+          & \forall n:nat. \ 0 < s\ n  &
+        \intertext{ Could also call this
+          $less(0,n)$, but we wrote it in infix notation}
+        & \forall n:nat. \ n<m \supset s\ n < s\ m
+        \\ & \forall n : nat. \ s \ n < s\ m \supset n < m
+        \\ & \forall n : nat. \ m < 0 \supset \perp
+      \end{flalign*}
+
+      We can prove $\forall x . s\ x < s\ 0 \supset P(x)$ in both ways
+      that we defined $<$. If we define new formulas, it makes our
+      proofs more compact. However, adding new rules makes us unsure
+      about whether our system is consistent, therefore requiring us
+      to prove consistency again.
+
+      \paragraph{Consistency:} $\nvdash \perp$ true, i.e. there is no
+      way of proving $\perp$ in our system.
+
+      \paragraph{Rules for governing equality for nats}
+      \begin{center}
+        \AXC{}
+        \UIC{$0 = 0$}
+        \DP
+        ~
+        \AXC{$m=n$}
+        \UIC{$s\ m = s\ n$}
+        \DP
+        ~
+        \AXC{$s\ m = s\ n$}
+        \UIC{$m = n$}
+        \DP
+        ~
+        \AXC{$0 = s\ m$}
+        \UIC{$C$ true}
+        \DP
+        ~
+        \AXC{$s\ m = 0$}
+        \UIC{$C$ true}
+        \DP
+      \end{center}
+      Third choice could be writing a program instead.
       \end{document}
