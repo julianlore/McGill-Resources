@@ -1184,7 +1184,7 @@
       \RL{$\land$ I}
       \BIC{$\Gamma \vdash \langle M, N \rangle : A \land B$}
       \RL{$\land$ E$_l$}
-      \UIC{$\Gamma \vdash fst \ \langle M, N \rangle : A$}`
+      \UIC{$\Gamma \vdash fst \ \langle M, N \rangle : A$}
       \DP
       $\implies$
       \begin{tabular}{c}
@@ -1321,8 +1321,8 @@
     \subsection{Restatement of Definitions Using Context}
     \paragraph{Weakening} If $\Gamma \vdash M:A$ then $\Gamma, \Gamma'
     \vdash M:A$
-    \paragraph{Substitution} If $\Gamma, x : a , \Gamma' \vdash M : B$
-    and $\Gamma \vdash N : A$ then $\Gamma, \Gamma' [N/x] M : B$
+    \paragraph{Substitution} If $\Gamma, x : A , \Gamma' \vdash M : B$
+    and $\Gamma \vdash N : A$ then $\Gamma, \Gamma' \vdash [N/x] M : B$
 
     How do we prove this? Proof by structural on $\Gamma, x: A,
     \Gamma' \vdash M : B$
@@ -1369,9 +1369,9 @@
     
     \UIC{$\Gamma, x : A, \Gamma' \vdash x : A$}
     \DP
-    \\ $\Gamma \vdash N.A$ by assumption
+    \\ $\Gamma \vdash N:A$ by assumption
     \\ $\Gamma, \Gamma' \vdash N : A$ by weakening
-    \\ $\Gamma, \Gamma' \vdash [N/x]x . A$ by substitution definition
+    \\ $\Gamma, \Gamma' \vdash [N/x]x : A$ by substitution definition
     \subparagraph{Case}
     \AXC{$y: B \in (\Gamma, x : A, \Gamma')$}
     \AXC{$x \neq y$}
