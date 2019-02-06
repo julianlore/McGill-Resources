@@ -1465,7 +1465,7 @@
     \subparagraph{Case} $(\lambda x : A.M) N \implies [N/x] M$
     \\\begin{tabular}{l l}
     $\Gamma \vdash (\lambda x : A . M) N : B$ & by assumption
-    \\ $\Gamma \vdash \lambda x: A.M : A \supset B \ \Gamma \vdash N :
+    \\ $\Gamma \vdash \lambda x: A.M : A \supset B,\ \Gamma \vdash N :
     A$ & by inversion on $\supset$ E
     \\ $\Gamma, x : A \vdash M : B$ & by inversion on $\supset$ I
     \\ $\Gamma \vdash [N/x]M:B$ & by substitution lemma (on above line
@@ -1521,7 +1521,7 @@
           \\ $\Gamma \vdash \langle M,N \rangle : A \land B$
           \\ $\Gamma \vdash fst \ \langle M,N \rangle : A$ & To show
         \end{tabular}
-        Cannot prove this syntactically right now.
+\\        Cannot prove this syntactically right now.
         \paragraph{Multi Step} Want to step multiple times. $M
         \implies^* M'$, meaning $M$ steps in more than one step.
         \begin{prooftree}
@@ -1891,7 +1891,7 @@
           
           \BIC{$\exists y : \tau A(a) \supset A(y)$ true}
           \RL{$\forall$ I$^a$}
-          \UIC{$\forall x : \tau \exists y : \tau . A(x \supset A(y))$
+          \UIC{$\forall x : \tau \exists y : \tau . A(x) \supset A(y)$
           true}
       \end{prooftree}
       The following cannot be proved in constructive logic (in
@@ -2292,4 +2292,266 @@
         \DP
       \end{center}
       Third choice could be writing a program instead.
+      \section{02/05/19}
+      \paragraph{So Far:} First-order Logic (independent of a given
+      domain) + domain (for example natural numbers)
+      \begin{center}
+        nat type
+        \AXC{}
+        \RL{nat I$_z$}
+        \UIC{$z:$nat}
+        \DP
+        \AXC{$n:nat$}
+        \RL{nat I$_{s}$}
+        \UIC{$suc\ n : nat$}
+        \DP
+      \end{center}
+      What are good elimination rules for nats? How to reason
+      inductively about nats?
+      \subsection{Relation/Predicates}
+      $n \leq m$
+        \begin{center}
+          \AXC{}
+          \RL{le$_z$}
+          \UIC{$z \leq$ n}
+          \DP
+          \AXC{$n \leq m$}
+          \RL{le$_s$}
+          \UIC{$suc\ n \leq suc\ m$}
+          \DP
+          \AXC{}
+          \RL{refl}
+          \UIC{$n=n$}
+        \end{center}
+        Can encode these rules as:
+        \\ le$_z$: $\forall n : nat. z \leq n$
+        \\ le$_s$: $\forall n:nat. \forall m. nat. n \leq m \supset
+        suc\ n \leq suc\ m$
+        \\ $ref: \forall x : nat . x = x$
+        \\ These rules are called the \underline{signature} $\mathcal{Y}$
+
+        What do I want to prove about our domain?
+        \begin{enumerate}
+        \item $\forall x : nat . x \leq x$
+        \item $\forall x : nat. \neg (x=z) \supset \exists y:
+          nat. suc\ y = x$
+        \item $\forall x : nat . \forall y : nat. \forall w: nat, x
+          \leq y \land y \leq w \supset x \leq w$
+        \end{enumerate}
+        Can prove these via induction.
+        \paragraph{Elimination Rule} Induction Rule
+        \begin{prooftree}
+          \AXC{$t:nat$}
+          \AXC{$A(z)$ true}
+          \AXC{}
+          \RL{}
+          \UIC{$n:nat$}
+          \noLine
+          \UIC{$\ddots$}
+          \AXC{}
+          \RL{ih}
+          \UIC{$A(n)$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \BIC{$A(suc\ n)$ true}
+          \RL{$nat$ E$^{n,ih}$}
+          \TIC{$A(t)$ true}
+        \end{prooftree}
+        Generalization built-in: $A(42)$ true.
+
+        Different way of writing the previous rule:
+        \begin{prooftree}
+          \AXC{$\Gamma \vdash t : nat$}
+          \AXC{$\Gamma \vdash A(z)$ true}
+          \AXC{$\Gamma,n:nat,ih:A(n)$ true $\vdash A(suc\ n)$ true}
+          \RL{$nat$ E$^{n,ih}$}
+          \TIC{$\Gamma \vdash A(t)$ true}
+        \end{prooftree}
+        \paragraph{Example}
+        \begin{prooftree}
+          \AXC{}
+          \RL{}
+          \UIC{$\mathcal{Y},a:nat \vdash a:nat$}
+
+          \AXC{$\mathcal{D}_1$}
+          \noLine
+          \UIC{$\mathcal{Y},a:nat \vdash z \leq z $ true}
+
+          \AXC{$\mathcal{D}_2$}
+          \noLine
+          \UIC{$\mathcal{Y}, a:nat, n:nat,$}
+          \noLine
+          \UIC{$ih: n \leq n \vdash suc\ n \leq suc\ n$}
+          
+          \RL{$nat$ E$^{n,ih}$}
+          \TIC{$\mathcal{Y}, a:nat \vdash a \leq a$ true}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\mathcal{Y} \vdash \forall x : nat. x \leq x$}
+        \end{prooftree}
+        (The proof for $\mathcal{D}_1$ may not be correct/missing some steps, to be fixed)
+        \begin{center}
+          $\mathcal{D}_1 =$
+          \AXC{}
+          \RL{le$_z$}
+          \UIC{$\mathcal{Y}, n:nat \vdash z \leq n$}
+          \AXC{}
+          \RL{nat I$_z$}
+          \UIC{$\mathcal{Y} \vdash z : nat$}
+          \BIC{$\mathcal{Y} \vdash z \leq z$}
+          \DP
+        \end{center}
+          
+          Let $\mathcal{Y}' = \mathcal{Y}, a: nath, n:nat, ih:
+          n\leq n$
+          \\$\mathcal{D}_2 =$
+        \begin{center}
+          \AXC{}
+          \RL{ih}
+          \UIC{$\mathcal{Y} \vdash n \leq n$}
+          \AXC{}
+          \RL{le$_s$}
+          \UIC{$\mathcal{Y}' \vdash \forall n : nat. \forall m :
+            nat. n \leq m \supset suc\ n \leq suc \ m$}
+          \AXC{}
+          \RL{}
+          \UIC{$\mathcal{Y}' \vdash n : nat$}
+          \RL{$\forall E$(2x)}
+          \BIC{$\mathcal{Y}' \vdash n \leq n \supset suc\ n \leq suc\
+            n$}
+          \RL{$\supset$ E}
+          \BIC{$\mathcal{Y}' \vdash suc\ n \leq suc\ n$}
+          \DP
+        \end{center}
+        \paragraph{Elimination Rule with Proof Terms}
+        \begin{prooftree}
+          \AXC{$t:nat$}
+          \AXC{$M_z:A(z)$ true}
+          \AXC{}
+          \RL{}
+          \UIC{$n:nat$}
+          \noLine
+          \UIC{$\ddots$}
+          \AXC{}
+          \RL{ih}
+          \UIC{$f\ n:A(n)$ true}
+          \noLine
+          \UIC{\vdots}
+          \noLine
+          \BIC{$M_s : A(suc\ n)$ true}
+          \RL{$nat$ E$^{n,ih}$}
+          \TIC{$rec(t, M_z, n, ih. M_s) : A(t)$ true}
+        \end{prooftree}
+        Maybe it would be nicer to write $rec(t, M_z, n, ih. M_s)$ as:
+        \\$rec\ t$ with $f\ z \to M_z \mid f (suc\ n) \to M_s$
+
+        Writing our earlier example as a program:
+        \\ $\lambda a : nat. rec\ a$ with $f\ z \to le_z\ z \mid f\
+        suc \ n \to (le_s\ n\ n) (f\ n)$
+        \paragraph{Example}
+        \begin{prooftree}
+          \AXC{}
+          \UIC{$\mathcal{Y}, a : nat \vdash a : nat$}
+
+          \AXC{$\mathcal{D}_1$}
+          \noLine
+          \UIC{$\mathcal{Y} \vdash \neg (z = z) \supset \exists y:
+            nat. \ suc\ y = z$}
+
+          \AXC{$\mathcal{D}_2$}
+          \noLine
+          \UIC{$\mathcal{Y}, n : nat, ih = \ldots  \vdash (suc\ n = z)
+            \supset \exists y : nat. \ suc \ y = suc\ n$}
+          
+          \TIC{$\mathcal{Y}, a : nat \vdash \neg (a=z) \supset \exists
+            y : nat.\ suc\ y = a$}
+          \RL{$\forall$ I$^a$}
+          \UIC{$\mathcal{Y} \vdash \forall x : nat. \neg (x=z) \supset
+            \exists y : nat. \ suc\ y = x$}
+        \end{prooftree}
+        \begin{center}
+          $\mathcal{D}_1 = $
+          \AXC{$\mathcal{Y}, u: \neg (z=z) \vdash \neg (z=z)$}
+          %
+          \AXC{}
+          \RL{refl}
+          \UIC{$\mathcal{Y} \vdash \forall x : nat. x=x$}
+          \RL{$\forall$ E}
+          \UIC{$\mathcal{Y} \vdash z = z$}
+          %
+          \RL{$\supset$ E}
+          \BIC{$\perp$}
+          \RL{$\perp$ E}
+          \UIC{$\mathcal{Y}, u: \neg (z=z) \vdash \exists y:nat. suc\
+            y = z$}
+          \RL{$\supset$ I$^u$}
+          \UIC{$\mathcal{Y} \vdash \neg (z = z) \supset \exists y :
+            nat . suc\ y = z$}
+          \DP
+        \end{center}
+        This is like a proof by contradiction.
+        \\ Let $\mathcal{Y}' = \mathcal{Y}, n: nat.ih:\ldots$
+        \begin{center}
+          $\mathcal{D}_2 =$
+          \AXC{}
+          \RL{}
+          \UIC{$\mathcal{Y}' \vdash n : nat$}
+          \UIC{$\mathcal{Y}' \vdash suc\ n : nat$}
+          \AXC{}
+          \RL{refl}
+          \UIC{$\mathcal{Y}' \vdash \forall x :nat.x = x$}
+          \AXC{}
+          \RL{}
+          \UIC{$\mathcal{Y}' \vdash n : nat$}
+          \RL{$\forall$ E}
+          \BIC{$\mathcal{Y}', u : \neg (suc\ n = z) \neg suc\ n = suc\
+            n$}
+          \RL{$\exists$ I}
+          \BIC{$\mathcal{Y}', u: \neg (suc\ n = z) \vdash \exists y:
+            nat. suc\ y = suc\ n$}
+          \UIC{$\mathcal{Y} \vdash \neg (suc\ n = z) \supset \exists
+            y:nat. suc\ y = suc\ n$}
+          \DP
+        \end{center}
+        This is a weird proof since it never uses its IH and really is
+        just proof on the cases. What does this program do?
+
+        $\lambda a : nat. rec\ a $ with $f\ z \to  \lambda u: \neg
+        (z=z). abort (u\ (refl\ z)) \mid f\ (suc\ n)
+        \to \lambda u: \neg (suc\ n = z).\langle ref\ (suc\ n), n
+        \rangle$
+
+        This is a provably correct predecessor function. If we erase
+        ``Proofs for equality'' from the above program, we get:
+        \\ $\lambda a : nat. rec\ a$ with $f\ z \to \_ \mid f(suc\ n)
+        \to n$
+        \\ This is what we call program extraction. Note in the $z$
+        case the program is undefined (zero has no predecessor).
+
+        How do we come up with reduction rules for these kind of
+        recursers?
+        \paragraph{Reduction Rule:}~
+        \\
+        \begin{tabular}{l l}
+          $rec\ z$ with &$f\ z \to M_z$
+          \\ &$ \mid f\ (suc\ n) \to M_s$
+        \end{tabular}
+        $\to M_z$
+        \\
+        \begin{tabular}{l l}
+          $rec\ (suc\ m)$ with &$f\ z \to M_z$
+          \\ &$ \mid f\ (suc\ n) \to M_s$
+        \end{tabular}
+        $\to [m/n,f_m/f_n]M_s$, where
+        \\ $f_m = rec\ m$ with $f\ z \to M_z \mid f\ (suc\ n) \to M_s$
+        \\ $f_n$ is a placeholder for the recursive call. Like in
+        functional languages, we recurse here by ``pasting'' $f_m$
+        when we look for the recursive call.
+        \begin{prooftree}
+          \AXC{$\Gamma \vdash t : nat$}
+          \AXC{$\Gamma \vdash M_z : A(z)$}
+          \AXC{$\Gamma, n : nat, f\ n : A(n) \vdash M_s : A (suc\ n)$}
+          \TIC{$\Gamma \vdash rec\ t$ with $f\ z \to M_z \mid f\ (suc\
+            n) \to M_s$ : $A(t)$}
+        \end{prooftree}
       \end{document}
