@@ -1383,10 +1383,10 @@
     \subparagraph{Case}
     \AXC{$\Gamma, x : A, \Gamma', y:B \vdash M:C$}
     
-    \UIC{$\Gamma, x : A, \Gamma' \vdash \lambda y : B. N:B\supset C$}
+    \UIC{$\Gamma, x : A, \Gamma' \vdash \lambda y : B. M:B\supset C$}
     \DP
     \\ $\Gamma, \Gamma', y:B \vdash [N/x] M:C$ by IH.
-    \\ $\Gamma, \Gamma', \lambda y : B . [N/x] M:C$ by $\supset$ I 
+    \\ $\Gamma, \Gamma', \lambda y : B . [N/x] M: B \supset C$ by $\supset$ I 
     \\ $\Gamma \vdash N : A$ by assumption (i.e any var in $N$ is in
     $\Gamma$). $y$ does not occur in $N$
     \\ $\Gamma, \Gamma ' \vdash [N/x] (\lambda y:B.M) : B \supset C$
