@@ -1,6 +1,6 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings}
+  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings, marvosym}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \EnableBpAbbreviations
@@ -2554,4 +2554,300 @@
           \TIC{$\Gamma \vdash rec\ t$ with $f\ z \to M_z \mid f\ (suc\
             n) \to M_s$ : $A(t)$}
         \end{prooftree}
+        \section{02/07/19}
+        \subsection{Normal Proof}
+        Let's try and prove something basic directly:
+        \begin{prooftree}
+          \AXC{}
+          \RL{u}
+          \UIC{$A$ true}
+          \RL{$\supset$ I$^v$}
+          \UIC{$B \supset A$ true}
+          \RL{$\supset$ I$^u$}
+          \UIC{$A \supset B \supset A$ true}
+        \end{prooftree}
+        (Here we omitted an unused assumption for $B$ being true).
+        
+        The proof term for this is: $\lambda u : A.\lambda v:B.u$, it's
+        a program that will just ignore its second input.
+
+        The following is another way to prove the same conjecture:
+        \begin{prooftree}
+          \AXC{}
+          \RL{u}
+          \UIC{$A$ true}
+
+          \AXC{}
+          \RL{v}
+          \UIC{$B$ true}
+
+          \RL{$\land$ I}
+          \BIC{$A \land B$ true}
+          \RL{$\land $ E$_l$}
+          \UIC{$A$ true}
+          \RL{$\supset$ I$^v$}
+          \UIC{$B \supset A$ true}
+          \RL{$\supset$ I$^u$}
+          \UIC{$A \supset B \supset A$ true}
+        \end{prooftree}
+        The proof term for this is: $\lambda u:A.\lambda v : B
+        . \underline{fst \langle u,v \rangle}$. However, with our
+        reduction rules, we know that we can reduce $fst \langle u,v
+        \rangle$ to $u$ and end up with the same proof term as before.
+        \paragraph{What are normal proofs?}
+        \begin{enumerate}
+        \item Can we characterize normal proof terms?
+        \item Can we describe normal derivations?
+        \end{enumerate}
+        \paragraph{Normal (proof) terms} $M := \lambda x : A . M \mid
+        \langle M,N \rangle \mid inl^A\ m \mid inr^B\ M \mid R$
+
+        \paragraph{Neutral terms} $R := fst\ R \mid snd\ R\mid x \mid
+        R\ M$
+
+        
+        The basic idea is that we want to rule out terms like $\lambda
+        u : A.\lambda v : B . fst \langle u,v \rangle$.
+
+        A \textbf{normal term} cannot be reduced further.
+        \\\begin{tabular}{l l}
+            $(\lambda x : A . M) \ N$ & $\implies [N/x]M$
+            \\ $fst \langle M,N \rangle$ & $\implies M$
+            \\ $snd \langle M,N \rangle$ & $\implies N$
+            \\ $case\ (inl\ M)\ of \ inl\ x \to N_1 \mid inr\ y \to N_2$ & $\implies [M/x]N_1$
+          \end{tabular}
+          \paragraph{Examples}
+          \begin{itemize}
+          \item $\lambda x : A \land B.fst \ x$ (we can have $fst$, but
+            not on a pair directly, else it would reduce)
+          \item $\lambda x : A \land (B \land C). snd\ (fst\ x)$
+          \end{itemize}
+          \paragraph{Normal Derivations}
+          \begin{equation*}
+            A \text{ true }
+            \begin{cases}
+              \Gamma^{\downarrow} \vdash M:A \uparrow & \text{There is a normal derivation} 
+              \\ \Gamma^{\downarrow} \vdash R: A \downarrow & \text{There is a neutral derivation}
+            \end{cases}
+          \end{equation*}
+          Intuitively, $\uparrow$ means applying intro-rules bottom
+          up (we have a proof for this), whereas $\downarrow$ means
+          synthesizing information top
+          down (from the assumptions).
+
+          $\Gamma^{\downarrow} = x_1:A_1\downarrow, \ldots, x_n : A_n
+          \downarrow$
+
+          Note, the superscript for both Gammas is $\downarrow$
+          because when you have an assumption all you can do is
+          synthesize information from it.
+
+          \paragraph{Rules}
+          \begin{prooftree}
+            \AXC{$x : A \downarrow$}
+            \UIC{$\Gamma^{\downarrow} \vdash x : A \downarrow$}
+          \end{prooftree}
+          Generally, introduction rules are $\uparrow$.
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow}, x : A \downarrow \ \vdash M : B
+              \uparrow$}
+            \RL{$\supset$ I$^x$}
+            \UIC{$\Gamma^{\downarrow} \vdash \lambda x. M : A \supset
+              B \uparrow$}
+          \end{prooftree}
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow} \vdash M : A \uparrow$}
+            \AXC{$\Gamma^{\downarrow} \vdash N : B \uparrow$}
+            \RL{$\land \uparrow$}
+            \BIC{$\Gamma^{\downarrow} \vdash \langle M,n \rangle : A
+              \land B \uparrow$}
+          \end{prooftree}
+          When do we extract information? With the elimination rules.
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow} \vdash R : A \land B
+              \downarrow$}
+            \UIC{$\Gamma^{\downarrow} \vdash fst\ R : A \downarrow$}
+          \end{prooftree}
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow} \vdash R : A \land B
+              \downarrow$}
+            \UIC{$\Gamma^{\downarrow} \vdash snd\ R : B \downarrow$}
+          \end{prooftree}
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow} \vdash R : A \supset B
+              \downarrow$}
+            \AXC{$\Gamma^{\downarrow} \vdash M : A \uparrow$}
+            \BIC{$\Gamma^{\downarrow} \vdash R \ M : B \downarrow$}
+          \end{prooftree}
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow} \vdash M : A \uparrow$}
+            \UIC{$\Gamma^{\downarrow} \vdash inl\ M : A \lor B \uparrow$}
+          \end{prooftree}
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow} \vdash R : A \lor B \downarrow$}
+            \AXC{$\Gamma^{\downarrow} , x : A \downarrow \ \vdash N_1 :
+              C \uparrow$}
+            \AXC{$\Gamma^{\downarrow}, x : B \downarrow \ \vdash N_z :
+              C \uparrow$}
+            \TIC{$\Gamma^{\downarrow} \vdash case\ R \ of \ inl\ x \to
+              N_1 \mid inr\ x \to N_2 : C \uparrow$}
+          \end{prooftree}
+          Here all the Cs can be $\downarrow$ or $\uparrow$, but for
+          us it will be much simpler to have it as $\uparrow$.
+          
+          Sometimes we may need to go in the other direction. Here's
+          the switch from going $\downarrow$ to $\uparrow$.
+          \begin{prooftree}
+            \AXC{$\Gamma^{\downarrow} \vdash R : A \downarrow$}
+            \RL{$\uparrow \downarrow$}
+            \UIC{$\Gamma^{\downarrow} \vdash R : A \uparrow$}
+          \end{prooftree}
+          \paragraph{Example}
+          \begin{prooftree}
+            \AXC{}
+            \UIC{$x: A \land (B\land C) \downarrow \ \vdash x : A \land
+              (B \land C) \downarrow$}
+            \UIC{$x: A \land (B\land C) \downarrow \ \vdash snd\ x : B \land C \downarrow$}
+            \UIC{$x : A \land (B \land C) \downarrow \ \vdash B \downarrow$}
+            \UIC{$x : A \land (B \land C) \downarrow \ \vdash B \uparrow$}
+            \UIC{$\lambda x . fst (snd\ x) : (A \land (B \land C)) \supset B \uparrow$}
+          \end{prooftree}
+          For the examples we originally saw at the beginning of this
+          lecture, if we try to annotate them:
+        \begin{prooftree}
+          \AXC{}
+          \RL{u}
+          \UIC{$A \downarrow$}
+          \UIC{$A \uparrow$}
+          \RL{$\supset$ I$^v$}
+          \UIC{$B \supset A \uparrow$}
+          \RL{$\supset$ I$^u$}
+          \UIC{$A \supset B \supset A \uparrow$}
+        \end{prooftree}
+        \begin{prooftree}
+          \AXC{}
+          \UIC{$A \downarrow$}
+          \UIC{$A \uparrow$}
+          
+          \AXC{}
+          \UIC{$B \downarrow$}
+          \UIC{$B \uparrow$}
+
+          \RL{$\land$ I}
+          \BIC{$A \land B \uparrow$}
+          \RL{$\land $ E$_l \times$ \Lightning}
+          \UIC{$A \uparrow$}
+          \RL{$\supset$ I$^v$}
+          \UIC{$B \supset A \uparrow$}
+          \RL{$\supset$ I$^u$}
+          \UIC{$A \supset B \supset A \uparrow$}
+        \end{prooftree}
+        This proof isn't normal and we wouldn't be able to derive it
+        as we have no rule to go from $A \land B \uparrow$ to $A
+        \uparrow$, only $A \land B \downarrow$ to $A \downarrow$.
+        \begin{prooftree}
+          \AXC{}
+          \UIC{$x : A \supset B\downarrow \ \vdash x : A \supset B \downarrow$}
+          \UIC{$x : A \supset B\downarrow \ \vdash x : A \supset B \uparrow$}
+          \UIC{$\lambda x : A \supset B. X:(A \supset B) \supset (A
+            \supset B) \uparrow$}
+        \end{prooftree}
+        The proof terms aren't necessarily unique. Consider: $\lambda
+        x : A \supset B. \lambda y : A . x\ y$
+        
+        Terms are $\beta$-normal form (none of the reductions apply).
+        \paragraph{Soundness} If $\Gamma^{\downarrow} \vdash M : A
+        \uparrow$ then $\Gamma \vdash M : A$.
+        \\ If $\Gamma^{\downarrow} \vdash R:A \downarrow$ then $\Gamma
+        \vdash R : A$.
+
+        This is a way for us to relate one proof system to another.
+
+        \paragraph{Proof by mutual structural induction on  the first
+          derivation}
+        \subparagraph{Case:} $\mathcal{D} =$
+        \AXC{$\mathcal{D}_0$}
+        \noLine
+        \UIC{$\Gamma^{\downarrow} \vdash R : A \lor B \downarrow$}
+        \AXC{$\mathcal{D}_1$}
+        \noLine
+        \UIC{$\Gamma^{\downarrow} , x : A \downarrow \ \vdash N_1 :
+          C \uparrow$}
+        \AXC{$\mathcal{D}_2$}
+        \noLine
+        \UIC{$\Gamma^{\downarrow}, x : B \downarrow \ \vdash N_z :
+          C \uparrow$}
+        \TIC{$\Gamma^{\downarrow} \vdash case\ R \ of \ inl\ x \to
+          N_1 \mid inr\ x \to N_2 : C \uparrow$}
+        \DP
+        \\
+        \begin{tabular}{l l}
+          $\Gamma \vdash R : A \lor B$& by IH(2) using $\mathcal{D}_0$
+          \\ $\Gamma, x : A \vdash N_1 : C$ & by IH(1) using $\mathcal{D}_1$
+          \\ $\Gamma, y : B \vdash N_2 : C$ & by IH(1) using $\mathcal{D}_2$
+          \\ $\Gamma \vdash case\ R \ of \ inl\ x \to N_1 \mid inr\ y \to N_2 : C$ & by $\lor E^{x,y}$
+        \end{tabular}
+        \\This is a good example because we had to use both inductive
+        hypotheses. We can think of this as writing mutually recursive
+        functions, one that deals with normal derivations, one that
+        deals with neutral derivations.
+        \subparagraph{Case:} $\mathcal{D}=$
+        \AXC{$\mathcal{D'}$}\noLine\UIC{$\Gamma^{\downarrow}\vdash R:A
+          \downarrow$}\UIC{$\Gamma^{\downarrow} \vdash R : A
+          \uparrow$}\DP
+        \\ $\Gamma \vdash R : A$ by IH(2) using $\mathcal{D}'$
+        \paragraph{Completeness} Our new system isn't complete
+        (because we designed it that way, we cannot represent
+        everything). To make this complete, we'd have to be able to go
+        in both directions:
+        \begin{prooftree}
+          \AXC{$\Gamma^{\downarrow} \vdash M : A \uparrow$}
+          \UIC{$\Gamma^{\downarrow} \vdash (M:A):A \downarrow$}
+        \end{prooftree}
+        The ``offending'' rule which makes proofs non-normal, however
+        it allows us to prove completeness.
+
+        Completeness: If $\Gamma \vdash M : A$ then
+        $\Gamma^{\downarrow} \vdash M : A \uparrow$ and
+        $\Gamma^{\downarrow} \vdash M : A \downarrow$
+
+        \paragraph{Proof by induction on $\Gamma \vdash M : A$}
+        \subparagraph{Case:} \AXC{$\Gamma \vdash A \supset
+          B$}\AXC{$\Gamma \vdash A$}\RL{$\supset$ E}\BIC{$\Gamma
+          \vdash B$}\DP
+        \\
+        \begin{tabular}{l l}
+          $\Gamma \vdash A \supset B \downarrow$& by IH($\mathcal{D}_1$)
+          \\ $\Gamma \vdash A \uparrow$ & by IH($\mathcal{D}_2$)
+          \\ $\Gamma \vdash B \downarrow$ & by rule $\supset$ E$\downarrow$
+          \\ $\Gamma \vdash B \uparrow$ & $\uparrow \downarrow$
+        \end{tabular}
+        
+        Why introduce a new ``offending'' rule to show completeness
+        for a new system? Say we want to prove consistency of $\Gamma
+        \vdash A$ true.
+
+        We have $\Gamma \vdash A$ true in one system and
+        \\ $\Gamma \vdash A \uparrow, \Gamma \vdash A \downarrow$,
+        \AXC{$\Gamma \vdash A \uparrow$}\UIC{$\Gamma \vdash A
+          \downarrow$}\DP. But we cannot tell if $\perp$ can be proven
+        from here.
+
+        We will see that using the rules $\Gamma \vdash A \uparrow,
+        \Gamma \vdash A \downarrow$, we will develop Sequent Calculus
+        (directed, easy to see that $\perp$ cannot be proven unless
+        you have assumptions). We will then introduce the Cut-Rule,
+        which can be proven admissible, not necessary, like the
+        substitution rule. The Cut-Rule corresponds to the \AXC{$\Gamma \vdash A \uparrow$}\UIC{$\Gamma \vdash A
+          \downarrow$}\DP and Sequent Calculus with the Cut-Rule will
+        be complete, however because the Cut-Rule is admissible/not
+        needed, we can remove it.
+
+        Note: we say the proof term $M$ for completeness is conserved,
+        but that is not exactly true, we may add additional
+        annotations and so we say:
+        
+        Completeness: If $\Gamma \vdash (M)^{-} : A$ then
+        $\Gamma^{\downarrow} \vdash M : A \uparrow$ and
+        $\Gamma^{\downarrow} \vdash M : A \downarrow$
       \end{document}
