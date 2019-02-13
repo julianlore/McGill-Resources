@@ -2850,4 +2850,236 @@
         Completeness: If $\Gamma \vdash (M)^{-} : A$ then
         $\Gamma^{\downarrow} \vdash M : A \uparrow$ and
         $\Gamma^{\downarrow} \vdash M : A \downarrow$
+        \section{02/12/19}
+        Going to go over how we show two proof systems are
+        equivalent. Last class we saw:
+        \\
+        \begin{tabular}{l l}
+          \textbf{Natural Deduction}& \textbf{Normal Natural Deduction}
+          \\ $\Gamma \vdash M : A$ & $\Gamma^{\downarrow} \vdash m : A\uparrow$
+          \\ & $\Gamma^{\downarrow} \vdash r : A \downarrow$
+          \\ Term $M : = x \mid \lambda x : A . M \mid$ & Normal terms $m : = \lambda x . m \mid \langle m_1, m_2 \rangle \mid r$
+          \\ $M_1\ M_2 \mid \langle M_1, M_2 \rangle \mid fst\ M \mid snd\ M$& Neutral terms $r : = x \mid fst\ r \mid snd\ r \mid r \ m \mid \underline{(m : A)}$
+        \end{tabular}
+        \\Note that showing normal natural $\to$ natural was easy,
+        however to go the other way we had to introduce a new rule
+        \underline{$(m : A)$}, which was:
+        \begin{prooftree}
+          \AXC{$\Gamma \vdash m : A \uparrow$}
+          \UIC{$\Gamma \vdash (m:A) : A \downarrow$}
+        \end{prooftree}
+
+        \paragraph{Recall HW1} $m:= x \mid \lambda x . m \mid m_1\ m_2
+        \mid \langle m_1, m_2 \rangle \mid let\ \langle x,y \rangle =
+        m_1 \ in \ m_2$
+        \\ $\Gamma \vdash m : A$
+        \begin{prooftree}
+          \AXC{$\Gamma \vdash m_1 : A \land B$}
+          \AXC{$\Gamma, x : A, y:B \vdash m_2 : C$}
+          \BIC{$\Gamma \vdash let\ \langle x,y \rangle = m_1\ in\ m_2:C$}
+        \end{prooftree}
+        If $\Gamma \vdash \underline{m}:A$ then $\Gamma \vdash
+        \underline{M}:A$. How to translate between languages? (We want
+        to relate $m$ and $M$, this is very much like compiling one
+        language to another)
+        
+        $\to$ Function that translates $m$ to $M$: $(m)^-$\\
+        \begin{tabular}{l l l}
+          $(x)^-$&$=$&$x$
+          \\ $(\langle m_1, m_2 \rangle)^-$ & $=$ & $\langle (m_1)^-, (m_2)^- \rangle$ (recursive)
+          \\ $(let\ \langle x,y\rangle)^- = m_1\ in \ m_2$ & $=$ & $[fst\ (m_1)^- / x, snd\ (m_1)^- /y](m_2)^-$
+        \end{tabular}
+        (Side: another option for let: $let\ \langle x,y \rangle =
+        m_1\ in\ m_2 = (\lambda x . \lambda y. (m_2)^-\ (fst\ (m_1)^-)
+       ) (snd\ (m_1)^-)$, however this will be much harder to prove
+       equivalence for)
+       \paragraph{Case:} $\mathcal{D} =$ \AXC{$\mathcal{D_1}$}\noLine\UIC{$\Gamma \vdash m_1 : A
+         \land B$}\AXC{$\mathcal{D_2}$}\noLine\UIC{$\Gamma, x:A, y:B \vdash m_2 : C$}\BIC{$\Gamma
+         \vdash let\ \langle x,y \rangle = m_1\ in \ m_2:C$}\DP
+       \\
+       \begin{tabular}{l l}
+         $\Gamma \vdash (m_1)^- : A \land B$& by IH on $\mathcal{D}_1$
+         \\ $\Gamma \vdash fst\ (m_1)^- : A$, $\Gamma \vdash snd\ (m_1)^{-} : B$ & by IH on $\mathcal{D}_2$
+         \\$\Gamma, x:A, y:B \vdash (m_2)^-:C$ & by IH on $\mathcal{D}_2$
+         \\ $\Gamma \vdash [fst\ (m_1)^-/x, snd\ (m_1)^-/y](m_2)^- : C$ & by substitution lemma
+         \\ $\Gamma \vdash (let\ \langle x,y \rangle)^- = m_1 \ in \ m_2 : C$ & by translation function
+         % \\ $(let\ \langle x,y \rangle) = m_1 \ in\ m_2 = [fst\ (m_1)^-/x, snd\ (m_1)^-/y](m_2)^-$
+       \end{tabular}
+
+       We could also prove $let\ \langle x,y \rangle =
+        m_1\ in\ m_2 = (\lambda x . \lambda y. (m_2)^-\ (fst\ (m_1)^-)
+       ) (snd\ (m_1)^-)$ by solely using implication elimination and introduction.
+
+       % Diagram here comparing proof systems
+       We will be able to show that the normal natural deduction
+       system cannot prove bottom because sequent calculus cannot
+       prove bottom, we didn't need the extra rule because the Cut
+       Rule is admissible.
+
+       If $\Gamma \vdash M :A$ then there exists a normal proof
+       $\Gamma \vdash m : A \uparrow$
+
+       \paragraph{Normal ND}
+       \begin{prooftree}
+         \AXC{$\Downarrow \Gamma^{\downarrow} \vdash r : A
+           \downarrow$ Elim-Rules}
+         \UIC{$\Uparrow \Gamma^{\downarrow} \vdash m : A \uparrow$ Intro-Rules}
+       \end{prooftree}
+       \paragraph{Sequent Calculus}
+       \begin{prooftree}
+         \AXC{}
+         \LL{initial rule}
+         \UIC{$\underbrace{\Uparrow}_{\text{Left rules}} \Gamma
+           \implies \underbrace{A}_{\text{Right rules}} \Uparrow$}
+       \end{prooftree}
+       \paragraph{Rules}
+       Init: \AXC{$u : A \in \Gamma$}\UIC{$\Gamma \implies A$}\DP
+       \\\\ Conjunction: \AXC{$\Gamma \implies A$}\AXC{$\Gamma \implies
+         B$}\BIC{$\Gamma \implies A \land B$}\DP
+       \\\\ \AXC{$\Gamma, u : A \land B, w: A \implies C$}\UIC{$\Gamma,
+         u : A \land B \implies C$}\DP Here we see that our set of
+       assumption grows, we extract $A$ from $A \land B$, like a $\downarrow$.
+       \\\\ \AXC{$\Gamma, u : A \land B, w: B \implies C$}\UIC{$\Gamma,
+         u : A \land B \implies C$}\DP Extract $B$.
+       \\\\ Implication: \AXC{$\Gamma, u : A \implies B$}\UIC{$\Gamma
+         \implies A \supset B$}\DP
+       \AXC{$\Gamma, u : A \supset B, w:B \implies C$} \AXC{$\Gamma ,u
+         : A \supset B \implies A$}\BIC{$\Gamma, u : A \supset B
+         \implies C$}\DP
+       \\\\ Top: \AXC{}\RL{T R}\UIC{$\Gamma \implies T$}\DP
+       \\\\ Falsehood: \AXC{}\UIC{$\Gamma,u: \perp \implies C$}\DP
+       \\\\ Disjunctions: \AXC{$\Gamma \implies A$}\UIC{$\Gamma
+         \implies A \lor B$}\DP
+       \AXC{$\Gamma \implies B$}\UIC{$\Gamma \implies A \lor B$}\DP
+      \\\\\AXC{$\Gamma, u:A \lor B, v:A \implies C$}
+       \AXC{$\Gamma, u:A \lor B, w:B \implies C$}
+       \BIC{$\Gamma, u : A \lor B \implies C$}\DP
+       \\\\ Quantifiers: \AXC{$\Gamma \implies A(a)$}\LL{R$\forall^a$}\UIC{$\Gamma
+         \implies \forall x : \tau. A(x)$}\DP
+       \AXC{$\Gamma \vdash t : \tau$}\AXC{$\Gamma, u : \underline{\forall x :
+         \tau . A(x)}, w : \underline{A(t)} \implies C$}\BIC{$\Gamma, u : \forall x
+         : \tau . A(x) \implies C$}\DP Can only instantiate witness
+       once
+       \\\\ \AXC{$\Gamma \vdash t: \tau$}\AXC{$\Gamma \implies
+         A(t)$}\BIC{$\Gamma \implies \exists x : \tau . A(x)$}\DP
+       \AXC{$\Gamma, u : \exists x : \tau . A(x), w : A (a) \implies
+         C$}\RL{$\exists$ L}\UIC{$\Gamma, u: \exists x : \tau.A(x)
+         \implies C$}\DP
+
+       $\Gamma$ accumulates everything we extract from rules, things
+       are kind of inverted as to how they were with natural
+       deduction. Note that you can keep $a:\tau$ in your assumptions
+       for $\forall$ I and $\exists$ E.
+       \paragraph{Example}
+       \begin{prooftree}
+         \AXC{$w:A \in \Gamma'$}
+         \RL{init}
+         \UIC{$\Gamma' \implies A$}
+
+         \AXC{}
+         \RL{init}
+         \UIC{$\Gamma', v:B \implies B$}
+
+         \RL{$\supset$ L}
+         
+         \BIC{$\Gamma' \implies B$}
+         
+         \AXC{}
+         \RL{init}
+         \UIC{$\Gamma', v : C \implies C$}
+         \RL{$\supset$ L}
+         
+         \BIC{$\overbrace{\Gamma, u_1 : (A \supset B), u_2 : B \supset
+           C}^{\Gamma'} \implies C$}
+         \RL{$\land_1$ L, $\land_2$ L}
+         \UIC{$\overbrace{u : (A \supset B) \land (B \supset C, w:A)}^{\Gamma} \implies C$}
+         \RL{$\supset$ R}
+         \UIC{$u : (A \supset B) \land (B \supset C) \implies A
+           \supset C$}
+         \RL{$\supset$ R}
+         \UIC{$\cdot \implies ((A \supset B) \land (B \supset C)) \supset
+           A \supset C$}
+       \end{prooftree}
+       Now, in natural deduction:
+       \begin{prooftree}
+         \AXC{}
+         \RL{u}
+         \UIC{$(A \supset B) \land (B \supset C) \downarrow$}
+         \RL{$\land$ E$_l$}
+         \UIC{$A \supset B \downarrow$}
+
+         \AXC{}
+         \RL{w}
+         \UIC{$A \downarrow \uparrow$}
+         \RL{$\supset$ E}
+         \BIC{$B \downarrow \uparrow$}
+
+         \AXC{}
+         \RL{u}
+         \UIC{$(A \supset B) \land (B\supset C) \downarrow$}
+         \RL{$\land$ E$_r$}
+         \UIC{$B \supset C \downarrow$}
+         
+         \RL{$\supset$ E}
+         \BIC{$C \downarrow \uparrow$}
+         \RL{$\supset$ I$^{w}$}
+         \UIC{$A \supset C \uparrow$}
+         \RL{$\supset$ I$^u$}
+         \UIC{$(A \supset B) \land (B \supset C) \supset A \supset C \uparrow$}
+       \end{prooftree}
+       So we see that init does not correspond to the assumptions, it
+       corresponds to the $\uparrow \downarrow$.
+
+       Is there a proof for $\cdot \implies \perp$? \underline{No.}
+       (Obviously, we don't have a R rule for it and we have no assumptions. This
+       system is complete and it is clearer to see that we don't have
+       a proof for $\perp$ unlike natural deduction.)
+
+       In natural deduction, we could have hypothetically had some
+       proof like:
+       \begin{prooftree}
+         \AXC{$A \lor B$}
+         \AXC{}
+         \RL{}
+         \UIC{A}
+         \noLine
+         \UIC{\vdots}
+         \noLine
+         \UIC{$\perp$}
+         \AXC{}
+         \RL{}
+         \UIC{B}
+         \noLine
+         \UIC{\vdots}
+         \noLine
+         \UIC{$\perp$}
+         \TIC{$\perp$}
+       \end{prooftree}
+
+       \paragraph{Soundness} IF $\Gamma \implies A$ then
+       $\Gamma^{\downarrow} \vdash A \uparrow$ Induction on $\Gamma
+       \implies A$.
+       \paragraph{Case:} $\mathcal{D} =$ \AXC{$u : A \in
+         \Gamma$}\RL{init}\UIC{$\Gamma \implies A$}\DP
+       \\
+       \begin{tabular}{l l}
+         $u:A \downarrow \in \Gamma^{\downarrow}$&
+         \\ $\Gamma^{\downarrow} \vdash A \downarrow$ & by assumption
+         \\ $\Gamma^{\downarrow} \vdash A \uparrow$ & \textbf{by coercion}
+       \end{tabular}
+       
+       Right rules are not interesting as they have direct
+       correspondence to $\Gamma^{\downarrow} \vdash A \uparrow$ as
+       that's how we defined them. Let's look at a left rule.
+       \paragraph{Case:} $\mathcal{D}=$ \AXC{$\Gamma, u : A \land B, v
+         : A \implies C$}\RL{$\land$ L$_1$}\UIC{$\Gamma, u:A \land B
+         \implies C$}\DP
+       \\
+       \begin{tabular}{l l}
+         $\Gamma^{\downarrow}, u : A \land B \downarrow, v : A \downarrow \vdash C \uparrow$& by IH (1)
+         \\ $\Gamma, u : A \land B \downarrow \vdash A \land B \downarrow$ & by assumption
+         \\ $\Gamma, u : A \land B \downarrow \vdash A \downarrow$ & by $\land$ E$_l$ (2)
+         \\$\Gamma^{\downarrow}, u : A \land B \downarrow \vdash C \uparrow$& by substitution lemma (1) + (2)
+       \end{tabular}
+
       \end{document}
