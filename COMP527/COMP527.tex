@@ -3081,5 +3081,169 @@
          \\ $\Gamma, u : A \land B \downarrow \vdash A \downarrow$ & by $\land$ E$_l$ (2)
          \\$\Gamma^{\downarrow}, u : A \land B \downarrow \vdash C \uparrow$& by substitution lemma (1) + (2)
        \end{tabular}
+       \section{02/14/19}
+       % Put boxes around the tables like in the diagram from last lecture
+       \begin{tabular}{l l l}
+         ND & Normal ND & Sequent Calculus
+         \\ $\Gamma \vdash A$ true $\to$ & $\Gamma \vdash A \uparrow$ & $\stackrel{\text{Soundness}}{\leftarrow} \Gamma \implies A$
+         \\ & $\Gamma \vdash A \downarrow$ & Cut Rule
+         \\ & \AXC{$\Gamma \vdash A\uparrow$}\UIC{$\Gamma \vdash A \downarrow$}\DP $\stackrel{\text{Complete}}{\rightarrow}$ & \AXC{$\Gamma \implies A$}\AXC{$\Gamma, A \implies C$}\BIC{$\Gamma \implies C$}\DP
+       \end{tabular}
+       \\ Today we want to prove:
+       \begin{enumerate}
+       \item Completeness of Sequent Calculus.
+         \\ If $\Gamma^{\uparrow} \vdash A \uparrow$ then $\Gamma
+         \implies A$
+       \item Cut is \textbf{admissible}. If $\Gamma \implies A$ and
+         $\Gamma, A \implies C$, then $\Gamma \implies C$
+       \end{enumerate}
+       \paragraph{Remember}
+       \begin{itemize}
+       \item Right rules in $\Gamma \implies A$ correspond directly to
+         the intro rules in ND
+       \item Left rules in $\Gamma \implies A$ extract more
+         information from an assumption present in
+         $\Gamma$. 
+       \end{itemize}
+       \AXC{$\Gamma, A \land B, A \implies
+         C$}\UIC{$\Gamma, A \land B \implies C$}\DP
+       \paragraph{Attempt}
+       \begin{enumerate}[(A)]
+       \item If $\Gamma^{\downarrow} \vdash A \uparrow$ then $\Gamma
+         \implies A$
+       \item If $\Gamma^{\downarrow} \vdash A \downarrow$ then $\Gamma
+         \implies A$
+       \end{enumerate}
+       This is incorrect and will easily breakdown, i.e.
+       \paragraph{Consider} Elim rule for $A \land B$
+       \\ Assumption: \AXC{$\Gamma^{\downarrow}\vdash A \land B
+         \downarrow$}\UIC{$\Gamma^{\downarrow}\vdash A \downarrow$}\DP
+       \\ (IH) $\Gamma \implies A \land B$
+       \\ To show. $\Gamma \implies A$? We need to show what we
+       assumed? That doesn't make sense.
+
+       So what will we show instead?
+       \begin{enumerate}[(A)]
+       \item[(B)] If $\Gamma^{\downarrow} \vdash A \downarrow$ and
+         $\Gamma, A \implies C$ then $\Gamma \implies C$. 
+       \end{enumerate}
+       \paragraph{Case} $\mathcal{D}=$ \AXC{$\Gamma^{\downarrow}
+         \vdash A \land B \downarrow$}\UIC{$\Gamma^{\downarrow} \vdash
+         A \downarrow$}\DP
+       \\
+       \begin{tabular}{l l}
+         $\Gamma, A \implies C$& by assumption
+         \\ $\Gamma, A \land B, A \implies C$& by weakening (can throw in extra assumptions)
+         \\ $\Gamma, A \land B \implies C$ & by $\land L$
+         \\ $\Gamma \implies C$ & by IH
+       \end{tabular}
+       \paragraph{Case} $\mathcal{D} =$ \AXC{$\Gamma^{\downarrow}
+         \vdash A \supset B
+         \downarrow$}\AXC{$\Gamma^{\downarrow}\vdash A
+         \uparrow$}\BIC{$\Gamma^{\downarrow}\vdash B \downarrow$}\DP
+       \\
+       \begin{tabular}{l l}
+         $\Gamma, B \implies C$& by assumption
+         \\ $\Gamma \implies A$ & by IH (A)
+         \\ $\Gamma, A \supset B \implies A$ & by weakening
+         \\ $\Gamma, A \supset B, B \implies C$& by weakening
+         \\ $\Gamma, A \supset B \implies C$ & by $\supset$ L
+         \\ $\Gamma \implies C$ & by IH
+       \end{tabular}
+       \paragraph{Case} \AXC{$\Gamma^{\downarrow}\vdash A
+         \downarrow$}\UIC{$\Gamma^{\downarrow} \vdash A \uparrow$}\DP
+       \\
+       \begin{tabular}{l l}
+         $\Gamma, A \implies A$& by init
+         \\ $\Gamma \implies A$ & by IH
+       \end{tabular}
+       \paragraph{Case} \AXC{$\Gamma^{\downarrow}\vdash A
+         \uparrow$}\UIC{$\Gamma^{\downarrow} \vdash A \downarrow$}\DP
+       (The rule that makes our proofs non-normal)
+       \\
+         $\Gamma \implies A$ by IH
+         \\ Assuming $\Gamma, A \implies C$, we have $\Gamma \implies C$. That is the cut rule!
+         \\\AXC{$\Gamma \implies A$}\AXC{$\Gamma, A \implies C$}\BIC{$\Gamma \implies C$}\DP  
+         \\ So the cut rule corresponds to non-normal proofs (as
+         expected).
+         \paragraph{Cut is admissible} If $\Gamma \stackrel{\mathcal{D}}{\implies} A$ and
+         $\Gamma, \underline{A} \stackrel{\mathcal{E}}{\implies} C$ then $\Gamma \implies C$,
+         where $A$ is the principle formula/cut formula.
+
+         When can we appeal to the IH?
+         \begin{enumerate}
+         \item The cut formula is getting smaller (will in some way
+           get to the base case)
+         \item Either $\mathcal{D}$ is smaller and $\mathcal{E}$ stays
+           the same or $\mathcal{E}$ is smaller and $\mathcal{D}$
+           stays the same. i.e. one of them must be getting smaller.
+         \end{enumerate}
+         Initial sequences (base cases):
+         \paragraph{Case}: $\mathcal{D} = $ \AXC{$A \in
+           \Gamma$}\RL{init}\UIC{$\Gamma \implies A$}\DP
+         \\
+         \begin{tabular}{l l}
+           $\Gamma = (\Gamma', A)$ (we know we have $A$ in $\Gamma$)&
+           \\ $\underbrace{\Gamma', A}_{\Gamma}, A \implies C$ & by assumption ($\mathcal{E}$)
+           \\ $\Gamma \implies C$ & by contraction ($\mathcal{E}$), don't need to use
+           \\ & the second $A$ because we already have $A$
+         \end{tabular}
+         \paragraph{Case}: $\mathcal{E}=$ \AXC{}\RL{init}\UIC{$\Gamma,
+           A \implies \underbrace{A}_C$}\DP
+         \\ $\Gamma \implies A$ by $\mathcal{D}$
+         \paragraph{Case}: $\mathcal{E}=$ \AXC{$C \in \Gamma$}\RL{init}\UIC{$\Gamma,
+           A \implies C$}\DP
+         \\ $\Gamma \implies C$ by $C \in \Gamma$ (init)
+         Non base cases:
+         \paragraph{Case}: $A$ is the principal formula and it is the
+         cut form.
+         \\ $\mathcal{D}=$\AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma \implies A$}\AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma
+           \implies B$}\BIC{$\Gamma \implies A \land B$}\DP, $\mathcal{E}
+         = $\AXC{$\mathcal{E}'$}\noLine\UIC{$\Gamma, A\land B, A \implies C$}\UIC{$\Gamma, A
+           \land B \implies C$}\DP
+         \\
+         \begin{tabular}{l l}
+           $\Gamma, A \implies A \land B$& by weakening $\mathcal{D}$
+           \\ $\mathcal{F}: \Gamma, A \implies C$ & by IH $(A \land B, \mathcal{D}, \mathcal{E}')$
+           \\ $\Gamma \implies C$ & by IH because $A < A \land B$ ($A, D_1, \mathcal{F}$)
+         \end{tabular}
+         \paragraph{Case}: $\mathcal{D}=$\AXC{$\mathcal{D}'$}\noLine\UIC{$\Gamma, A \implies
+           B$}\UIC{$\Gamma \implies A \supset B$}\DP, $\mathcal{E} =$
+         \AXC{$\mathcal{E}_1$}\noLine\UIC{$\Gamma, A \supset B \implies A$}\AXC{$\mathcal{E}_2$}\noLine\UIC{$\Gamma, A \supset
+           B, B \implies C$}\BIC{$\Gamma, A \supset B \implies C$}\DP
+         \\
+         \begin{tabular}{l l}
+           $\Gamma, B \implies A \supset B$& by weakening on $\mathcal{D}$
+           \\ $\Gamma, B \implies C$ & by IH ($A \supset B, \mathcal{D}, \mathcal{E}_2$) ($\mathcal{E}_2 < \mathcal{E}$)
+           \\ $\mathcal{F}: \Gamma \implies A$ & by IH ($A \supset B, \mathcal{D}, \mathcal{E}_1$) ($\mathcal{E}_1 < \mathcal{E}$)
+           \\ $\Gamma \implies B$ & by IH ($A, \mathcal{F}, \mathcal{D}'$) ($A < A \supset B$)
+           \\ $\Gamma \implies C$ & by IH ($B, \ldots$) ($B < A \supset B$)
+         \end{tabular}
+         \\ Note that the order of our cuts here is important, if we
+         cut in the wrong order it may not be justified as we may not
+         know if the formula is getting smaller.
+         \paragraph{Case}: \AXC{$\mathcal{D}$}\noLine\UIC{$\Gamma
+           \implies A$}\DP, $\mathcal{E} =$\AXC{$\mathcal{E}_1$}\noLine\UIC{$\Gamma, A
+           \implies C$}\AXC{$\mathcal{E}_2$}\noLine\UIC{$\Gamma, A
+           \implies D$}\RL{$\land$ R}\BIC{$\Gamma, A \implies C \land
+           D$}\DP
+         \\
+         \begin{tabular}{l l}
+           $\Gamma \implies C$ & by IH ($A, \mathcal{D}, \mathcal{E}_1$) $\mathcal{E}_1 < \mathcal{E}$
+           \\ $\Gamma \implies D$ & by IH ($A, \mathcal{D}, \mathcal{E}_2$) $\mathcal{E}_2 < \mathcal{E}$
+         \end{tabular}
+
+         \paragraph{Case}: $\mathcal{D}=$
+         \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma', B_1, \land B_2, B_1
+           \implies A$}\UIC{$\underbrace{\Gamma', B_1 \land B_2}_{\Gamma}
+           \implies A$}\DP,
+         \AXC{$\mathcal{E}$}\noLine\UIC{$\underbrace{\Gamma_1',B_1
+             \land B_2}_{\Gamma}, A \implies C$}\DP
+         \\
+         \begin{tabular}{l l}
+           $\Gamma', B_1 \land B_2, B_1, A \implies C$& by weakening $\mathcal{E}$
+           \\ $\Gamma', B_1 \land B_2, B_1 \implies C$ & by IH($A, \mathcal{D}_1, \mathcal{E}$)
+           \\ $\underbrace{\Gamma', B_1 \land B_2}_{\Gamma} \implies C$ & by $\land$ L$_1$
+         \end{tabular}
 
       \end{document}
