@@ -3245,5 +3245,219 @@
            \\ $\Gamma', B_1 \land B_2, B_1 \implies C$ & by IH($A, \mathcal{D}_1, \mathcal{E}$)
            \\ $\underbrace{\Gamma', B_1 \land B_2}_{\Gamma} \implies C$ & by $\land$ L$_1$
          \end{tabular}
+         \section{02/19/19}
+         \subsection{Sequent Calculus} $\Gamma \implies A$
 
+         \AXC{$\Gamma \implies A$}
+         \AXC{$\Gamma \implies B$}
+         \BIC{$\Gamma \implies A \land B$}
+         \DP
+         %
+         \AXC{$\Gamma, A \land B, A \implies C$}
+         \UIC{$\Gamma, A \land B \implies C$}
+         \DP
+         %
+         \AXC{$\Gamma, A \land B, B \implies C$}
+         \UIC{$\Gamma, A \land B \implies C$}
+         \DP
+         %
+         \AXC{$\Gamma, A \implies B$}
+         \UIC{$\Gamma \implies A \supset B$}
+         \DP
+         %
+         
+         \AXC{$\Gamma, A \supset B \implies A$}
+         \AXC{$\Gamma, A \supset B, B \implies C$}
+         \BIC{$\Gamma, A \supset B \implies C$}
+         \DP
+         %
+         \AXC{$A \in \Gamma$}
+         \UIC{$\Gamma \implies A$}
+         \DP
+         %
+         \AXC{}
+         \UIC{$\Gamma, \perp \implies C$}
+         \DP
+         %
+         \AXC{}
+         \UIC{$\Gamma \implies \Gamma$}
+         \DP
+         %
+         \AXC{$\Gamma \implies A$}
+         \UIC{$\Gamma \implies A \lor B$}
+         \DP
+         %
+         \AXC{$\Gamma \implies B$}
+         \UIC{$\Gamma \implies A \lor B$}
+         \DP
+         %
+         \AXC{$\Gamma, A \lor B, A \implies C$}
+         \AXC{$\Gamma, A \lor B, B \implies C$}
+         \BIC{$\Gamma, A \lor B \implies C$}
+         \DP
+         %
+         \AXC{$\Gamma, a : \tau \implies A(a)$}
+         \UIC{$\Gamma, \forall x : \tau. A(x)$}
+         \DP
+         
+         \AXC{$\Gamma, \forall x : \tau. A(x), A(t) \implies C$}
+         \UIC{$\Gamma, \forall x : \tau . A(x) \implies C$}
+         \DP
+         %
+         \AXC{$\Gamma \implies A(t)$}
+         \UIC{$\Gamma \implies \exists x : \tau. A(x)$}
+         \DP
+         \paragraph{Cut} If $\Gamma \implies A$ and $\Gamma, A
+         \implies C$ then $\Gamma \implies C$.
+
+         We showed that:
+         \\
+         \begin{tabular}{l l }
+           ND & Sequent Calc (without cut)
+           \\ $\Gamma \vdash A$ true $\iff$ & $\Gamma \implies A$
+         \end{tabular}
+
+         \paragraph{What follows?}
+         \begin{enumerate}
+         \item There is no derivation in ND for $\perp$
+           \begin{itemize}
+           \item $\nvdash \perp$ true (since there is no proof $\cdot
+             \implies \perp$)
+           \end{itemize}
+         \item If $\perp A \lor B$ then $\vdash A$ true or $\vdash B$
+           true
+         \item If $\cdot \vdash \exists: \tau. A(x)$ true then $\vdash
+           A(t)$ true for some $t$
+         \end{enumerate}
+         \paragraph{Independence Results}
+         Is it true that $\vdash A \lor \neg A$ true?
+
+         If $\cdot \vdash A \lor \neg A$ true, then there must be some
+         derivation $\cdot \implies A \lor \neg A$
+
+         By inversion (looking at the rules for $\lor$ R$_1$, $\lor$
+         R$_2$) either there is a proof for $\implies A$ or there is a
+         proof for $\implies \neg A$, i.e. $A \implies \perp$
+         \paragraph{Idea}
+         \begin{enumerate}
+         \item Apply right rules until we have to make a choice on the
+           right
+         \item Apply all left rules until we have only propositions
+           left in $\Gamma$ that force a choice
+         \end{enumerate}
+         We have:
+         \begin{itemize}
+         \item 
+         \underline{do}-care non-determinism ($\lor$ R$_1$, $\lor$
+         R$_2$, $\supset$ L, $\forall$ L, $\exists$ R)
+         \item 
+         \underline{don't}-care non-determinism ($\land $ R, $\land$
+         L$_1$, $\land$ L$_2$, $\forall$ R, $\exists$ L)
+
+         For the $\land$ assumption extraction rules, we don't care
+         because we can extract the assumptions at any stage.
+       \end{itemize}
+       \paragraph{Inversion Properties}
+       \begin{enumerate}
+       \item If $\Gamma \implies A \land B$ then $\Gamma \implies A$
+         and $\Gamma \implies B$ (basically what we mean by having a
+         don't care non-determinism)
+         \paragraph{Proof}
+         
+         \begin{tabular}[t]{l l}
+           $\Gamma \implies A \land B$& by assumption
+           \\ $\Gamma, A \land B, A \implies A$ & by init
+           \\ $\Gamma, A \land B \implies A$ by $\land$ L$_1$
+           \\ $\Gamma \implies A$ & by cut
+           \\ Similarly,
+           \\ $\Gamma, A \land B, B \implies B$ & by init
+           \\ $\Gamma, A \land B \implies B$ by $\land$ L$_2$
+           \\ $\Gamma \implies B$ & by cut
+         \end{tabular}
+         \\ Cut allows you to construct very short proofs.
+         \\ Otherwise you'll have to go the long way using induction,
+         like:
+         \paragraph{Case} \AXC{$\Gamma \implies A$}\AXC{$\Gamma
+           \implies B$}\BIC{$\Gamma \implies A \land B$}\DP
+         Therefore we immediately have $\Gamma \implies A$ and $\Gamma
+         implies B$
+         \paragraph{Case} \AXC{$\mathcal{D}'$}\noLine\UIC{$\Gamma, C
+           \land D, C \implies A \land B$}\UIC{$\Gamma, C \land D
+           \implies A \land B$}\DP
+         \\
+         \begin{tabular}{l l}
+           $\Gamma, C \land D, C \implies A$& by IH
+           \\ $\Gamma, C \land D, C \implies B$ & by IH
+           \\ $\Gamma, C \land D \implies A$ & by $\land$ L$_1$
+           \\ $\Gamma, C \land D \implies B$ & by $\land$ L$_1$
+         \end{tabular}
+       \item If $\Gamma \implies A \supset B$ then $\Gamma, A \implies
+         B$
+       \item If $\Gamma, A \land B \implies C$ then $\Gamma, A \land
+         B, A \implies C$
+       \item If $\Gamma, A \land B \implies C$ then $\Gamma, A \land
+         B, B \implies C$
+
+         3 and 4 give you: If $\Gamma, A \land B \implies C$ then
+         $\Gamma, A, B \implies C$ (stronger inversion)
+       \item If $\Gamma, A \lor B \implies C$ then $\Gamma, A \implies
+         C$ and $\Gamma, B \implies C$
+       \end{enumerate}
+       \paragraph{Horn Clauses} $D := \overbrace{P}^{Atomic} \mid G
+       \supset D \mid \forall x : \tau . D$
+       \\ Horn Goals $G := P \mid G_1 \land G_2$ (although usually
+       just atomic because if you have a conjunction you can just ask
+       multiple questions)
+       \\ Atomic Formula $P := P(t_1, \ldots, t_n)$
+       \\ Prolog is like the original form of this.
+       
+       For example, we can try to prove stuff about natural numbers:
+       \\ $even\ z$ (Atomic formula)
+       \\ $add \ (suc\ z)$
+       \\ $\forall x:nat. even\ x \supset \underbrace{add\ (suc\
+         x)}_{Head}$
+       \\
+       \begin{tabular}{l l}
+         Prolog& Inf Rules
+         \\ $add\ (suc\ x) :- $ & \AXC{}\UIC{$even\ z$}\DP \AXC{}\UIC{$odd\ z$}
+         \\ $even\ x$ & \AXC{$even\ x$}\UIC{$add\ *suc\ x$}
+       \end{tabular}
+
+       \AXC{$P_1$}
+       \AXC{\ldots}
+       \AXC{$P_n$}
+       \TIC{$C$}
+       \DP
+       \underline{Clause} $P_1 \land \ldots \land P_n \supset C$
+       \paragraph{Graph Reachability} (good example for what can be
+       represented)
+       \\
+       \begin{tabular}{l l}
+         edge $a\ b$& $\forall x, \forall y. edge\ x\ y \supset reach\ x\ y$
+         \\ edge $b\ c$ & $\forall x \forall y \forall w.$
+         \\ edge $c\ d$ & $reach\ x\ y \land reach\ y\ w$
+         \\ edge $c\ a$ & $\supset reach\ x\ w$
+       \end{tabular}
+       \\This is our set of clauses. Left side are our axioms/facts,
+       right side are clauses that let us get further with the axioms. This is widely used for things like databases.
+       \paragraph{Search Problem} $\underbrace{\Gamma}_{\text{set of
+           Horn Clauses}} \implies G$
+
+       Programs you would write would look like:
+\begin{verbatim}
+reach x y:-
+    edge x y
+reach x y:-
+    reach x w,
+    reach w y
+\end{verbatim}
+       Can I \underline{reach a d}? It will try the rules we wrote
+       above.
+       \paragraph{Uniform Proofs}
+       \begin{enumerate}
+       \item $\Gamma \implies G$ (don't care non-determinism, can
+         always eagerly split conjunctions)
+       \item $\Gamma > D \implies P$ (pick a clause from $\Gamma$, do
+         care because we're making a choice)
+       \end{enumerate}
       \end{document}
