@@ -6,12 +6,17 @@
 \EnableBpAbbreviations
 \usepackage[margin=1 in]{geometry}
 \allowdisplaybreaks
-%\usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
+% \usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
 \hypersetup{
-	%colorlinks=true, %set true if you want colored links
-	linktoc=all,     %set to all if you want both sections and subsections linked
-	linkcolor=black,  %choose some color if you want links to stand out
+  % colorlinks=true, %set true if you want colored links
+  linktoc=all,     %set to all if you want both sections and subsections linked
+  linkcolor=black,  %choose some color if you want links to stand out
 }
+% New environment to scale prooftrees, from https://tex.stackexchange.com/questions/104554/how-to-scale-prooftree-environment-bussproofs-package
+\newenvironment{scprooftree}[1]%
+  {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+      
 \usepackage{graphicx}
 \graphicspath{{Images/}}
 \author{Julian Lore}
@@ -2449,7 +2454,7 @@
         \\ $\lambda a : nat. rec\ a$ with $f\ z \to le_z\ z \mid f\
         suc \ n \to (le_s\ n\ n) (f\ n)$
         \paragraph{Example}
-        \begin{prooftree}
+        \begin{scprooftree}{0.75}
           \AXC{}
           \UIC{$\mathcal{Y}, a : nat \vdash a : nat$}
 
@@ -2468,7 +2473,7 @@
           \RL{$\forall$ I$^a$}
           \UIC{$\mathcal{Y} \vdash \forall x : nat. \neg (x=z) \supset
             \exists y : nat. \ suc\ y = x$}
-        \end{prooftree}
+        \end{scprooftree}
         \begin{center}
           $\mathcal{D}_1 = $
           \AXC{$\mathcal{Y}, u: \neg (z=z) \vdash \neg (z=z)$}
@@ -3380,7 +3385,7 @@
          \paragraph{Case} \AXC{$\Gamma \implies A$}\AXC{$\Gamma
            \implies B$}\BIC{$\Gamma \implies A \land B$}\DP
          Therefore we immediately have $\Gamma \implies A$ and $\Gamma
-         implies B$
+         \implies B$
          \paragraph{Case} \AXC{$\mathcal{D}'$}\noLine\UIC{$\Gamma, C
            \land D, C \implies A \land B$}\UIC{$\Gamma, C \land D
            \implies A \land B$}\DP
@@ -3403,7 +3408,7 @@
        \item If $\Gamma, A \lor B \implies C$ then $\Gamma, A \implies
          C$ and $\Gamma, B \implies C$
        \end{enumerate}
-       \paragraph{Horn Clauses} $D := \overbrace{P}^{Atomic} \mid G
+       \subsection{Horn Clauses} $D := \overbrace{P}^{Atomic} \mid G
        \supset D \mid \forall x : \tau . D$
        \\ Horn Goals $G := P \mid G_1 \land G_2$ (although usually
        just atomic because if you have a conjunction you can just ask
@@ -3460,4 +3465,230 @@ reach x y:-
        \item $\Gamma > D \implies P$ (pick a clause from $\Gamma$, do
          care because we're making a choice)
        \end{enumerate}
+       \section{02/21/19}
+       \subsection{Horn Clauses, Logic Programming}
+       Very limited subset of natural deduction.
+       \paragraph{Uniform Proofs}
+       \paragraph{Horn Clause} $D := P \mid G \supset P \mid \forall x
+       : \tau . D$
+       \paragraph{Horn Goal} $G := P \mid G_1 \land G_2$
+       \paragraph{Atomic Form} $P := p(1, \ldots, t_n)$
+       \\
+       \begin{tabular}{l l}
+         $e\_z:$&$even\ z$
+         \\ $o\_sz:$ & $add(suc\ z)$
+         \\ $e\_s:$ & $\forall x:nat. add \ x \supset even (suc\ x)$
+         \\ $o\_s:$ & $\forall x : nat. even\ x \supset add(suc\ x)$
+         \\ $r\_e:$ & $\forall x: node. \forall y:node . edge\ x\ y \supset reach\ x\ y$
+         \\ $r\_tr:$ & $\forall x: node.\forall y: node. \forall w:node. reach\ x \ w \land reach\ w\ y \supset reach\ x \ y$
+       \end{tabular}
+       \paragraph{Plan} Extend the Horn Fragment to Hereditary Hairop
+       Formulas (Higher-order logic programming) $\hat{=} \supset,
+       \forall, P$
+       \\ Clauses $C := P \mid \forall x : \tau.C \mid C \supset C$
+
+       We'll be able see if proofs exist for certain things:
+       \\
+       \begin{tabular}{l l}
+         $\Delta$& $\implies P$
+         \\ $\Delta$ & $\implies reach\ a \ c$
+         \\ $\Delta$ & $\implies odd\ (suc\ (suc\ z))$ (hopefully not true as $2$ is even)
+         \\ $\Delta$ & $\implies even\ (suc\ (suc\ z))$
+       \end{tabular}
+       Our rules are as follows, which are just the
+       sequent calculus rules that we need.
+       \begin{center}
+         \AXC{$P \in \Delta$}
+         \UIC{$\Delta \implies P$}
+         \DP
+         %
+         \AXC{$\Delta \implies G_1$}
+         \AXC{$\Delta \implies G_2$}
+         \RL{$\land$ R}
+         \BIC{$\Delta \implies G_1 \land G_2$}
+         \DP
+         %
+         \AXC{$\Delta, \forall x: \tau. D, [t/x]D \implies G$}
+         \RL{$\forall$ L}
+         \UIC{$\Delta, \forall x:\ \tau. D \implies G$}
+         \DP
+         %
+         \AXC{$\Delta, G \supset P \implies G$}
+         \AXC{$\Delta, G \supset P, P \implies G'$}
+         \RL{$\supset$ L}
+         \BIC{$\Delta, G \supset C \implies G'$}
+         \DP
+       \end{center}
+       Recall that last class we proved:
+       \paragraph{Inversion:} If $\Delta \implies G_1 \land G_2$ then
+       $\Delta \implies G_1$ and $\Delta \implies G_2$.
+
+       So if the clause on the right is not atomic, we can split it
+       up.
+       \paragraph{Idea:} (we want to come up with a search strategy)
+       \begin{enumerate}
+       \item Apply init and $\land$ R until $\Delta \implies P$
+         (atomic formula)
+
+         We'll have two steps we can take: $\Delta
+         \stackrel{u}{\implies}G_1$, $\Delta \stackrel{e}{\implies}P$,
+         where $u$ is uniform and we work with the left rules.
+
+         \begin{center}
+           \AXC{$\Delta \stackrel{u}{\implies}G_1$}
+           \AXC{$\Delta \stackrel{u}{\implies}G_2$}
+           \BIC{$\Delta \stackrel{u}{\implies} G_1 \land G_2$}
+           \DP
+           %
+           \AXC{$\Delta \stackrel{e}{\implies}P$}
+           \UIC{$\Delta \stackrel{u}{\implies} P$}
+           \DP
+           \\ Where:
+           \AXC{$P \in \Delta$}
+           \UIC{$\Delta \stackrel{e}{\implies}P$}
+           \DP
+           %
+           \AXC{$\Delta, \forall x: \tau. \mathcal{D},
+             [t/x]\mathcal{D}{\implies} P$}
+           \UIC{$\Delta, \forall x: \tau. D {\implies} P$}
+           \DP
+           %
+           \AXC{$\Delta, G \supset P {\implies G}$}
+           \AXC{$\Delta, G \supset P, P {\implies} P'$}
+           \BIC{$\Delta, G \supset P {\implies} P'$}
+           \DP
+         \end{center}
+       \end{enumerate}
+       With this new proof system, we can show that it is equivalent
+       to the Horn Fragment.
+       \paragraph{Sound} If $\Delta \stackrel{u}{\implies}G$ then
+       $\Delta \implies G$
+       \\ If $\Delta \stackrel{e}{\implies} P$ then $\Delta \implies
+       P$
+       \\ (you can prove this via induction, associating the
+       corresponding rules from our new system to the Horn Fragment
+       rules)
+       \paragraph{Complete} If $\Delta \implies G$ then $\Delta
+       \stackrel{u}{\implies} G$
+       \paragraph{Example of Proof Search}
+       \begin{scprooftree}{0.8}
+         \AXC{}
+         \RL{$e\_z$}
+         \UIC{$\Delta \implies even\ z$}
+         
+         \AXC{}
+         \RL{init}
+         \UIC{$\Delta, add\ (suc\ z) \implies add\ (suc\ z)$}
+
+         \RL{$\supset$ L}
+         \BIC{$\Delta, even\ z \supset odd\ (suc\ z) \implies odd\
+           (suc\ z)$}
+         \RL{$\forall$ L$o\_s$}
+         \UIC{$\Delta \implies odd\ (suc\ z)$}
+         
+         \AXC{}
+         \RL{init}
+         \UIC{$\Delta, even\ (suc\ (suc\ z)) \implies even\ (suc\
+           (suc\ z))$}
+
+         \RL{$\supset$ L}
+         \BIC{$\Delta, odd\ (succ\ z) \supset even\ (suc\ (suc\ z))
+           \implies even\ (suc\ (suc\ z))$}
+         \RL{$\forall$ L $e\_s$}
+         \UIC{$\Delta \implies even (suc\ (suc\ z))$}
+       \end{scprooftree}
+       The consecutive uses of L rules are called \textbf{focusing}
+       ($\supset$ L and $\forall$ L$o\_s$ are coupled together and
+       $\supset$ L and $\forall$ L $e\_s$ are coupled together)
+       
+       We can do the proof either forwards (top to bottom) or
+       backwards (bottom to top). Logic programming goes bottom
+       up. Surprisingly, when you have to make
+       a choice, you can stick with it as it won't make a
+       difference. So we can now make some adjustments to our rules to
+       achieve a narrower search space:
+       \begin{enumerate}
+       \item Apply init and $\land$ R until $\Delta \implies P$
+         (atomic formula)
+       \\$\Delta
+         \stackrel{u}{\implies}G_1$, \textcolor{orange}{$\Delta > D
+           \implies P$}
+         \begin{center}
+           \AXC{$\Delta \stackrel{u}{\implies}G_1$}
+           \AXC{$\Delta \stackrel{u}{\implies}G_2$}
+           \BIC{$\Delta \stackrel{u}{\implies} G_1 \land G_2$}
+           \DP
+           %
+           \AXC{\textcolor{orange}{$\Delta > D \implies P$}}
+           \AXC{\textcolor{orange}{$D \in \Delta$}}
+           \BIC{$\Delta \stackrel{u}{\implies} P$}
+           \DP
+           \\ Where:
+           \AXC{$P \in \Delta$}
+           \UIC{$\Delta \textcolor{orange}{> P} {\implies}P$}
+           \DP
+           %
+           \AXC{$\Delta \textcolor{orange}{>}
+             [t/x]\mathcal{D}{\implies} P$}
+           \UIC{$\Delta \textcolor{orange}{>} \forall x: \tau. D {\implies} P$}
+           \DP
+           %
+           \AXC{$\Delta, G \supset P {\implies G}$}
+           \AXC{$\Delta \textcolor{orange}{>} G \supset P, P {\implies} P'$}
+           \BIC{$\Delta \textcolor{orange}{>} G \supset P {\implies} P'$}
+           \DP
+         \end{center}
+       \item Once we pick a cluase from $\Delta$, we focus on it.
+       \end{enumerate}
+       Now how do we show this is sound and complete?
+       \\ If $\Delta \implies G$ then $\Delta \stackrel{u}{\implies}
+       G$
+       \\ If $\Delta \implies P$ then $\Delta > D \implies P$ for $D
+       \in \Delta$
+       \paragraph{Case} $\mathcal{D} = $
+       \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Delta \implies G_1$}
+       \AXC{$\mathcal{D}_2$}\noLine\UIC{$\Delta \implies G_2$}
+       \RL{$\land$ R}
+       \BIC{$\Delta \implies G_1 \land G_2$}
+       \DP
+       \\
+       \begin{tabular}{l l}
+         $\Delta \stackrel{u}{\implies} G_1$& by IH
+         \\ $\Delta \stackrel{u}{\implies} G_2$ & by IH
+         \\ $\Delta \stackrel{u}{\implies} G_1 \land G_2$ & by $\land$ R$_u$
+       \end{tabular}
+       \paragraph{Case} $\mathcal{D} = $
+       \AXC{$\Delta, G_1 \supset P_1 \implies G_1$}
+       \AXC{$\Delta, G_1 \supset P_1, P_1 \implies G$}
+       \BIC{$\Delta, G_1 \supset P_1 \implies G$}
+       \DP
+       \subparagraph{To show} $\Delta, G_1 \supset P_1
+       \stackrel{u}{\implies} G$
+       \\ \begin{tabular}{l l}
+            $\Delta, G_1 \supset P_1 \stackrel{u}{\implies} G_1$ & by IH
+            \\ $\Delta, G_1 \supset P_1, P_1 \stackrel{u}{\implies} G$ & by IH
+       \end{tabular}
+       \\ Where do we go from here? We have no implication rule (we
+       worked hard to get rid of the rule). This suggests that we need
+       a lemma.
+       \paragraph{Postponement Lemma}
+       If $\Delta, G_1 \supset P_1 \stackrel{u}{\implies}G_1$ and
+       $\Delta, G_1 \supset P_1, P_1 \stackrel{u}{\implies} G$ then
+       $\Delta, G_1 \supset P_1 \stackrel{u}{\implies} G$. Basically
+       we can postpone working on the left for higher up in the tree.
+       \paragraph{Case} $\mathcal{D} = $
+       \AXC{$\Delta, G_1 \supset P_1 \implies G_1$}
+       \AXC{$\Delta, G_1 \supset P_1, P_1 \implies P$}
+       \BIC{$\Delta, G_1 \supset P_1 \implies P$}
+       \DP
+       \subparagraph{To show}: $(\Delta, G_1 \supset P_1) > D \implies
+       P$ where $D \in (\Delta, G_1 \supset P_1)$
+       \\
+       \begin{tabular}{l l}
+         $\Delta, G_1 \supset P_1, P_1 > D' \implies P$& by IH
+         \\ $\Delta, G_1 \supset P_1 \stackrel{u}{\implies} G_1$
+       \end{tabular}
+       \\ This is another form of the postponement lemma. Both forms
+       of the postponement lemma can be proven via induction.
+       % \paragraph{Beluga Examples for Prolog}
       \end{document}
