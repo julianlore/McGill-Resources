@@ -2445,9 +2445,9 @@
           \noLine
           \BIC{$M_s : A(suc\ n)$ true}
           \RL{$nat$ E$^{n,ih}$}
-          \TIC{$rec(t, M_z, n, ih. M_s) : A(t)$ true}
+          \TIC{$rec(t, M_z, n, ih, M_s) : A(t)$ true}
         \end{prooftree}
-        Maybe it would be nicer to write $rec(t, M_z, n, ih. M_s)$ as:
+        Maybe it would be nicer to write $rec(t, M_z, n, ih, M_s)$ as:
         \\$rec\ t$ with $f\ z \to M_z \mid f (suc\ n) \to M_s$
 
         Writing our earlier example as a program:
@@ -2465,7 +2465,7 @@
 
           \AXC{$\mathcal{D}_2$}
           \noLine
-          \UIC{$\mathcal{Y}, n : nat, ih = \ldots  \vdash (suc\ n = z)
+          \UIC{$\mathcal{Y}, n : nat, ih = \ldots  \vdash \neg(suc\ n = z)
             \supset \exists y : nat. \ suc \ y = suc\ n$}
           
           \TIC{$\mathcal{Y}, a : nat \vdash \neg (a=z) \supset \exists
@@ -2494,7 +2494,7 @@
             nat . suc\ y = z$}
           \DP
         \end{center}
-        This is like a proof by contradiction.
+        The above is like a proof by contradiction.
         \\ Let $\mathcal{Y}' = \mathcal{Y}, n: nat.ih:\ldots$
         \begin{center}
           $\mathcal{D}_2 =$
@@ -2508,8 +2508,9 @@
           \AXC{}
           \RL{}
           \UIC{$\mathcal{Y}' \vdash n : nat$}
+          \UIC{$\mathcal{Y}' \vdash suc\ n : nat$}
           \RL{$\forall$ E}
-          \BIC{$\mathcal{Y}', u : \neg (suc\ n = z) \neg suc\ n = suc\
+          \BIC{$\mathcal{Y}', u : \neg (suc\ n = z): suc\ n = suc\
             n$}
           \RL{$\exists$ I}
           \BIC{$\mathcal{Y}', u: \neg (suc\ n = z) \vdash \exists y:
@@ -2894,12 +2895,12 @@
           \\ $(\langle m_1, m_2 \rangle)^-$ & $=$ & $\langle (m_1)^-, (m_2)^- \rangle$ (recursive)
           \\ $(let\ \langle x,y\rangle)^- = m_1\ in \ m_2$ & $=$ & $[fst\ (m_1)^- / x, snd\ (m_1)^- /y](m_2)^-$
         \end{tabular}
-        (Side: another option for let: $let\ \langle x,y \rangle =
+        \\(Note: another option for let: $let\ \langle x,y \rangle =
         m_1\ in\ m_2 = (\lambda x . \lambda y. (m_2)^-\ (fst\ (m_1)^-)
        ) (snd\ (m_1)^-)$, however this will be much harder to prove
        equivalence for)
-       \paragraph{Case:} $\mathcal{D} =$ \AXC{$\mathcal{D_1}$}\noLine\UIC{$\Gamma \vdash m_1 : A
-         \land B$}\AXC{$\mathcal{D_2}$}\noLine\UIC{$\Gamma, x:A, y:B \vdash m_2 : C$}\BIC{$\Gamma
+       \paragraph{Case:} $\mathcal{D} =$ \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma \vdash m_1 : A
+         \land B$}\AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma, x:A, y:B \vdash m_2 : C$}\BIC{$\Gamma
          \vdash let\ \langle x,y \rangle = m_1\ in \ m_2:C$}\DP
        \\
        \begin{tabular}{l l}
@@ -3691,4 +3692,160 @@ reach x y:-
        \\ This is another form of the postponement lemma. Both forms
        of the postponement lemma can be proven via induction.
        % \paragraph{Beluga Examples for Prolog}
+       \section{02/26/19}
+       Logic Programming
+       \paragraph{Recall} Horn Clause $C:=P(t_1 \ldots t_n) \mid G
+       \supset P(t_1 \ldots t_n) \mid \forall x : \tau . C$
+       \\ Goals $G : = P(t_1 \ldots t_n) \mid G_1 \land G_2$
+       \\ Invertible on the right (asynchronous)
+       \\ Focusing (postpone certain choices) (synchronous)
+
+       $\Delta \implies G$ uniform
+       \\ $\Delta > C \implies P(t_1 \ldots t_n)$ focusing
+       \subsection{Higher-Order Logic Programming}
+       (Hereditary Hairop formulas)
+       \\ $F := P(t_1 \ldots t_n) \mid F_1 \supset F_2 \mid \forall x
+       : \tau. F$
+
+       Horn Fragment:
+       \\$P(t_1 \ldots t_n) \land Q(s_1 \ldots s_k) \supset R(w_1
+       \ldots w_m) \to P(t_1 \ldots t_n) \supset Q(s_1 \ldots s_k)
+       \supset R(w_1 \ldots w_m)$
+       \paragraph{Uniform Phase}
+       \AXC{$\Delta \implies [a/x] F$}
+       \RL{$\forall$ R$^a$}
+       \UIC{$\Delta \implies \forall x : \tau . F$}
+       \DP
+       %
+       \AXC{$\Delta, u : F_1 \implies F_2$}
+       \UIC{$\Delta \implies F_1 \supset F_2$}
+       \DP
+       %
+       \AXC{$F \in \Delta\ \Delta > F \implies P(t_1 \ldots t_n)$}
+       \UIC{$\Delta \implies P(t_1 \ldots t_n)$}
+       \DP
+       Where the last rule is new.
+       \paragraph{Focusing phase}
+       \AXC{}
+       \UIC{$\Delta > P(t_1 \ldots t_n) \implies P(t_1 \ldots t_n)$ }
+       \DP
+       \AXC{$\Delta > [t/x] F \implies P(t_1 \ldots t_n)$}
+       \UIC{$\Delta > \forall x : \tau . F \implies P(t_1 \ldots
+         t_n)$}
+       \DP
+       
+       \AXC{$\Delta \implies F_1$}
+       \AXC{$\Delta > F_2 \implies P(t_1 \ldots t_n)$}
+       \BIC{$\Delta > F_1 \supset F_2 \implies P(t_1 \ldots t_n)$}
+       \DP
+
+       (To not reprove things like $F_1$, you could keep a memoization
+       table on the side)
+       \\ ``Reflect'' natural deduction into HHF using one predicate
+       \underline{nd A}
+       \\
+       \begin{tabular}{l l}
+         \textbf{ND Rules}& \textbf{HHF}
+         \\ \AXC{}\RL{$T$ I}\UIC{$T$ true}\DP & $nd\_top$I: nd top
+         \\ \AXC{$A$ true}\AXC{$B$ true}\RL{$\land$ I}\BIC{$(A \land B)$ true}\DP & nd\_andI: $\forall A:o.\forall B:o$ ($o$ is our predicate)
+         \\ & nd A $\supset$ (nd $B \supset $ nd (and $A\ B$))
+         \\ \AXC{$A \land B$ true}\RL{and$E_1$}\UIC{$A$ true}\DP & nd\_andE$_1$:$\forall A :o.\forall B:o.$ nd (and $A\ B$) $\supset$ nd $A$
+         \\
+         \\ \AXC{}
+         \RL{u}
+         \UIC{$A$ true}\noLine\UIC{$\vdots$}\noLine\UIC{$B$ true}\RL{$\supset$ I$^u$}\UIC{$(\textcolor{orange}{A \supset B})$ true}\DP & \textbf{Hypothetical derivation}, use $\supset$ from HHF
+         \\    & nd\_impI: $\forall A : o . \forall B:o. \underline{(nd\ A \supset nd\ B)} \supset nd\ (\textcolor{orange}{imp}\ A\ B)$
+         \\ & (underline corresponds to the hypothetical derivation)
+         \\ \AXC{$A \lor B$ true}\AXC{}
+         \RL{u}
+         \UIC{$A$ true}\noLine\UIC{$\vdots$}\noLine\UIC{$C$ true}
+         \AXC{}
+         \RL{v}
+         \UIC{$B$ true}\noLine\UIC{$\vdots$}\noLine\UIC{$C$ true}
+         \TIC{$C$ true}
+         \DP
+         \\ & nd\_orE: $\forall A: o. \forall B: o. \forall C: o$ nd (or $A\ B$) $\supset$
+         \\ & \underline{(nd $A \supset$ nd $C$)} $\supset$ \underline{($nd\ B \supset nd\ C$)} $\supset nd\ C$
+         \\\\ \AXC{$A \land B$ true} \AXC{}
+         \RL{u}
+         \UIC{$A$ true}
+         \AXC{}
+         \RL{v}
+         \UIC{$B$ true}
+         \noLine
+         \BIC{$\vdots$}
+         \noLine
+         \UIC{$C$ true}
+         \RL{$\land$ E}
+         \BIC{$C$ true}
+         \DP
+       \end{tabular}
+       \\
+       \begin{tabular}{l l}
+         \\ \underline{Judgment} $\vdash$ even $n$
+         \\ Rules:
+         \\ \AXC{}\RL{ev\_z}\UIC{$\vdash$ even $0$}\DP & ev\_z: even $z$
+         \\ \AXC{$\vdash$ even $n$}\UIC{$\vdash$ even $(ss\ n)$}\DP & ev\_s: $\forall n$: nat. even $n \supset$ even $(ss\ n)$
+       \end{tabular}
+
+       Translating HHF to FOL:
+       \begin{tabular}{l l}
+         o:& type
+         \\ top: & o
+         \\ and: & o $\to$ o $\to$ o
+         \\ imp: & o $\to$ o $\to$ o
+         \\ or: & o $\to$ o $\to$ o
+         \\ all: & ? $\to$ o
+         \\ nd & is predicate on o
+         \\ nd: & o $\to$ type
+       \end{tabular}
+       \paragraph{Phases with terms}
+       \paragraph{Uniform Phase}
+       \AXC{$\Delta \implies  \textcolor{orange}{M:}[a/x] F$}
+       \RL{$\forall$ R$^a$}
+       \UIC{$\Delta \implies \textcolor{orange}{\lambda a.M:}\forall x : \tau . F$}
+       \DP
+       %
+       \AXC{$\Delta, u : F_1 \implies \textcolor{orange}{M:}F_2$}
+       \UIC{$\Delta \implies \textcolor{orange}{\lambda u. M :}F_1
+         \supset F_2$}
+       \DP
+       %
+       
+       \AXC{$\textcolor{orange}{x:}F \in \Delta\ \Delta > F \implies \textcolor{orange}{R:}P(t_1 \ldots t_n)$}
+       \UIC{$\Delta \implies \textcolor{orange}{R:}P(t_1 \ldots t_n)$}
+       \DP
+       Where the last rule is new.
+       \paragraph{Focusing phase}
+       \AXC{}
+       \UIC{$\Delta > \textcolor{orange}{R:}P(t_1 \ldots t_n) \implies
+         \textcolor{orange}{R:}P(t_1 \ldots t_n)$ }
+       \DP
+       \AXC{$\Delta > \textcolor{orange}{R\ t:}[t/x] F \implies
+         \textcolor{orange}{R_0:} P(t_1 \ldots t_n)$}
+       \UIC{$\Delta > \textcolor{orange}{R:}\forall x : \tau . F
+         \implies  \textcolor{orange}{R_0:}P(t_1 \ldots
+         t_n)$}
+       \DP
+       
+       \AXC{$\Delta \implies \textcolor{orange}{M:}F_1$}
+       \AXC{$\Delta > \textcolor{orange}{R \ M:}F_2 \implies \textcolor{orange}{R_0:}P(t_1 \ldots t_n)$}
+       \BIC{$\Delta > \textcolor{orange}{R:}F_1 \supset F_2 \implies \textcolor{orange}{R_0:}P(t_1 \ldots t_n)$}
+       \DP
+       % Beluga example of ND
+
+       Can define inference rules in Beluga and proof terms and use it
+       as a proof checker.
+       % \\ $\ldots, nd (\& \ A\ B) \implies nd\ (\& \ B\ A)
+       % \stackrel{nd\_andI}{\to} \ldots, nd\& A\ B \miplies nd\ B$
+       % ($nd\_andE_2$)
+       % \\$\ldots, nd(\& A\ B) \implies nd\ A$ ($nd\_andE_1$)
+
+       % A framework for defining logics and proofs:
+       % \\ Harper, Hansell, Plotkin LIC JACM
+       % \\ Dep $\lambda$-calc = logical framework LF
+       % \\ $M: = \lambda x. M \mid R$
+       % \\ $R : = x \mid C \mid R\ M$
+       % \\ Types $A:= a \ M_1\  M_n' \mid \Pi x : A .B$
+       % \\ $A \to B \hat{=} \Pi x: A . B$ where $x \in FV(B)$
       \end{document}
