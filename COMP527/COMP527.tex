@@ -1,6 +1,7 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings, marvosym}
+  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
+  marvosym, stmaryrd}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \EnableBpAbbreviations
@@ -3848,4 +3849,249 @@ reach x y:-
        % \\ $R : = x \mid C \mid R\ M$
        % \\ Types $A:= a \ M_1\  M_n' \mid \Pi x : A .B$
        % \\ $A \to B \hat{=} \Pi x: A . B$ where $x \in FV(B)$
+       \section{02/28/19}
+       \paragraph{Midterm} (Homework 1 and 2, no normal, sequent, etc.)
+       \begin{enumerate}
+       \item ND: propositional \& $1^{st}$ order
+       \item Inductive proofs
+       \item New \underline{rules} (and prove how they preserve
+         provability)
+       \end{enumerate}
+       \paragraph{Example}
+       \textbf{Source Language}
+       \\ Terms $M := \lambda x. M \mid M_1 \ M_2 \mid nor\ (x.M_1)
+       (y.M_2) \mid abort_l M_0 \ M_1 \mid abort_r M_0\ M_2$
+       \\ Types $A := A_1 \supset A_2 \mid A_1 \overline{\lor} A_2$
+       \\ Contexts $\Gamma := \cdot \mid \Gamma, x :A$
+       \\ \noindent \rule{\textwidth}{0.5pt}
+       \\ \textbf{Target Language}
+       \\ Terms $N : = \lambda x.N \mid N_1\ N_2 \mid (N_1, N_2)
+       \mid fst\ N \mid snd\ N \mid abort\ N$
+       \\ Types $B:= B_1 \supset B_2 \mid B_1 \land B_2 \mid \perp$
+       \\ Contexts $\Delta := \cdot \mid \Delta, x:B$
+
+       Want to show that source language preservers provability of
+       target language.
+
+       Rules:
+
+       \begin{prooftree}
+         \AXC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \AXC{$\Gamma \vdash M_1 : A_1$}
+         \BIC{$\Gamma \vdash abort_L\ M_0\ M_1 : C$}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \AXC{$\Gamma \vdash M_2 : A_2$}
+         \BIC{$\Gamma \vdash abort_R\ M_0\ M_2 : C$}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Gamma, x:A_1 \vdash M_1 : p$}
+         \AXC{$\Gamma, y:A_2 \vdash M_2 : q$}
+         \BIC{$\Gamma \vdash nor (x.M_1) (y.M_2) : A$}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Gamma, x:A_1 \vdash M : A_2$}
+         \UIC{$\Gamma \vdash \lambda x . M : A_1 \supset A_2$}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Gamma \vdash M_0 : A_1 \supset A_2$}
+         \AXC{$\Gamma \vdash M_1 : A_1$}
+         \BIC{$\Gamma \vdash M_0 \ M_1 : A_2$}
+       \end{prooftree}
+       Our rules are not annotated in a certain way to ensure type
+       uniqueness because we don't care about that right now, but if
+       we wanted to guarantee type uniqueness, we'd have to annotate
+       our terms more.
+       \paragraph{Local Soundness}
+       \begin{center}
+         \AXC{$\mathcal{D}_1$}
+         \noLine
+         \UIC{$\Gamma, x:A_1 \vdash M_1 : p$}
+         \AXC{$\mathcal{D}_2$}
+         \noLine
+         \UIC{$\Gamma, y:A_2 \vdash M_2 : q$}
+         \BIC{$\Gamma \vdash nor (x.M_1)(y.M_2) : A_1 \overline{\lor}
+           A_2$}
+         \AXC{$\mathcal{D}'$}
+         \noLine
+         \UIC{$\Gamma \vdash M' : A_1$}
+         \BIC{$\Gamma \vdash abort_L (nor (x.M_1) (y.M_2)) M' : C$}
+         \DP
+         $\implies$
+         \begin{tabular}{l}
+           $[\mathcal{D}'/x, C/p] \mathcal{D}_1$
+           \\ $\Gamma \vdash [M'/x]M_1 : C$
+         \end{tabular}
+       \end{center}
+       We end up with the following reduction rule:
+       \\ $abort_L (nor(x.M_1) (y.M_2))M' \implies [M'/x]M_1$
+       
+       In general, with hypothetical derivations for soundness, you
+       will end up with a substitution.
+
+       We then repeat this for abort right and combine them, just like
+       for conjunction local soundness, where we had two elimination
+       rules and we made two proof trees.
+
+       \paragraph{Local Completeness}
+       \begin{center}
+         \scalebox{0.7}{\AXC{$\mathcal{D}$}
+         \noLine
+         \UIC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \DP
+         $\implies$
+         \AXC{$\mathcal{D}$}
+         \noLine
+         \UIC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \RL{weakening}
+         \UIC{$\Gamma ,x :A_1 \vdash M_0 : A_1 \overline{\lor} A_2$}
+         %
+         \AXC{}
+         \RL{}
+         \UIC{$\Gamma, x:A_1 \vdash x:A_1$}
+         \BIC{$\Gamma, x:A_1 \vdash abort_L\ M_0\ x :p$}
+         \AXC{$\mathcal{D}$}
+         \noLine
+         \UIC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \RL{weakening}
+         \UIC{$\Gamma ,x :A_1 \vdash M_0 : A_1 \overline{\lor} A_2$}
+         %
+         \AXC{}
+         \RL{}
+         \UIC{$\Gamma, y:A_1 \vdash y:A_2$}
+         \BIC{$\Gamma ,y:A_2 \vdash abort_R\ M_0\ y :q$}
+         \RL{$\overline{\lor}$ I$^{x,y, p, q}$}
+         \BIC{$\Gamma \vdash nor (x.abort_L\ M_o\ x) : A_1 \overline{\lor} A_2$}
+         \DP}
+       \end{center}
+       \paragraph{Translation function}~
+       \begin{align*}
+         \llbracket M \rrbracket & = N
+         \\ \llbracket \lambda x. M \rrbracket & = \lambda x. \llbracket M \rrbracket
+         \\ \llbracket x \rrbracket & = x
+         \\ \llbracket nor (x.M_1) (y.M_2) \rrbracket & = (\lambda x. \llbracket M_1 \rrbracket, \lambda y.\llbracket M_2 \rrbracket)
+         \\ \llbracket abort_L\ M_0\ M_2 \rrbracket & = abort [(fst\ \llbracket M_0 \rrbracket)\llbracket M_1 \rrbracket]
+         \\ \llbracket A \rrbracket & = B
+         \\ \llbracket A_1 \supset A_2 \rrbracket & = \llbracket A_1 \rrbracket \supset \llbracket A_2 \rrbracket
+         \\ \llbracket A_1 \overline{\lor} A_2 \rrbracket & = \neg \llbracket A_1 \rrbracket \land \neg \llbracket A_2 \rrbracket = (\llbracket A_1 \rrbracket \supset \perp) \land (\llbracket A_2 \rrbracket \supset \perp)
+         \\ \llbracket \Gamma \rrbracket & = \Delta
+         \\ \llbracket \cdot \rrbracket & = \cdot
+         \\ \llbracket \Gamma, x:A \rrbracket & = \llbracket \Gamma \rrbracket, x:\llbracket A \rrbracket
+       \end{align*}
+       \paragraph{Thm} If $\Gamma \vdash M:A$ then $\llbracket \Gamma
+       \rrbracket : \llbracket A \rrbracket$.
+       \paragraph{Proof} by induction $\mathcal{D} :: \Gamma \vdash M
+       : A$
+       \subparagraph{Case} $\mathcal{D} =$ \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma, x:A_1 \vdash
+         M_1 : p$}\AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma, y:A_2 \vdash
+         M_2 : q$}
+       \RL{$\overline{\lor}$ I$^{x,y,p,q}$}
+       \BIC{$\Gamma \vdash nor(x.M_1)(y.M_2) : A_1 \overline{\lor}
+         A_2$}
+       \DP
+       \\
+       \begin{tabular}{l l}
+         $\llbracket \Gamma \rrbracket \vdash \llbracket nor(x.M_1)(y.M_2) \rrbracket : \llbracket A_1 \overline{\lor} A_2 \rrbracket$ & 
+         \\ $\llbracket \Gamma \rrbracket \vdash (\lambda x. \llbracket M_1 \rrbracket, \lambda y. \llbracket M_2 \rrbracket) : \neg \llbracket A_1 \rrbracket \land \neg \llbracket A_2 \rrbracket$ & (Want to show)
+         \\ $\mathcal{E}_1 :: \llbracket \Gamma ,x:A_1 \rrbracket \vdash \llbracket M_1 \rrbracket ; p$ & by IH on $\mathcal{D}_1$
+         \\ $[\perp/p]\mathcal{E}_1 :: \llbracket \Gamma \rrbracket, x : \llbracket A_1 \rrbracket \vdash \llbracket M_1 \rrbracket : \perp$
+         \\ $\mathcal{E}_2 :: \llbracket \Gamma \rrbracket, y: \llbracket A_2 \rrbracket \vdash \llbracket M_2 \rrbracket : \perp$ & IH on $\mathcal{D}_2$
+       \end{tabular}
+       \begin{prooftree}
+         \AXC{$[\perp/p]\mathcal{E}_1$}
+         \noLine
+         \UIC{$\llbracket \Gamma \rrbracket,  x: \llbracket A_1
+           \rrbracket \vdash \llbracket M_1 \rrbracket : \perp$}
+         \RL{$\supset$ I}
+         \UIC{$\llbracket \Gamma \rrbracket \vdash \lambda
+           x. \llbracket M_1 \rrbracket : \neg \llbracket A_1 \rrbracket$}
+         \AXC{$[\perp/p]\mathcal{E}_2$}
+         \noLine
+         \UIC{$\llbracket \Gamma \rrbracket,  y: \llbracket A_2
+           \rrbracket \vdash \llbracket M_2 \rrbracket : \perp$}
+         \RL{$\supset$ I}
+         \UIC{$\llbracket \Gamma \rrbracket \vdash \lambda
+           x. \llbracket M_2 \rrbracket : \neg \llbracket A_2
+           \rrbracket$}
+         \RL{$\land$ I}
+         \BIC{$\llbracket \Gamma \rrbracket \vdash (\lambda
+           x. \llbracket M \rrbracket, \lambda y. \llbracket M_1
+           \rrbracket) : \neg \llbracket A_1 \rrbracket \land \neg
+           \llbracket A_2 \rrbracket$}
+       \end{prooftree}
+       \subparagraph{Case} $\mathcal{D} =$
+       \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma \vdash M_0 : A_1
+         \overline{\lor} A_2$}
+       \AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma \vdash M : A_1$}
+       \BIC{$\Gamma \vdash abort_L\ M_0\ M_1 : C$}
+       \DP
+       \\
+       \begin{tabular}{l l}
+         $\llbracket \Gamma \rrbracket \vdash \llbracket abort_L\ M_0\ M_1 \rrbracket : \llbracket C \rrbracket$&
+         \\ $\llbracket \Gamma \rrbracket \vdash abort [(fst\ \llbracket M_0 \rrbracket)\llbracket M_1 \rrbracket] : \llbracket C \rrbracket$ & (want to show)
+         \\ $\mathcal{E}_1 :: \llbracket \Gamma \rrbracket \vdash \llbracket M_0 \rrbracket : \neg \llbracket A_1 \rrbracket \land \neg \llbracket A_2 \rrbracket$ & IH on $\mathcal{D}_1$
+         \\ $\mathcal{E}_2 :: \llbracket \Gamma \rrbracket \vdash \llbracket M \rrbracket : \llbracket A_1 \rrbracket$ & IH on $\mathcal{D}_2$
+       \end{tabular}
+       \begin{prooftree}
+         \AXC{$\mathcal{E}_1$}
+         \noLine
+         \UIC{$\llbracket \Gamma \rrbracket \vdash \llbracket M_0
+           \rrbracket : \neg \llbracket A_1 \rrbracket \land \neg
+           \llbracket A_2 \rrbracket$}
+         \RL{$\land$ E$_L$}
+         \UIC{$\llbracket R \rrbracket \vdash fst \llbracket M_0
+           \rrbracket : \neg \llbracket A_1 \rrbracket$}
+         \AXC{$\mathcal{E}_2$}
+         \noLine
+         \UIC{$\llbracket \Gamma \rrbracket \vdash \llbracket M_1
+           \rrbracket : \llbracket A \rrbracket$}
+         \RL{$\supset$ E}
+         \BIC{$\llbracket \Gamma \rrbracket \vdash (fst \llbracket M_0
+           \rrbracket)\llbracket M_1 \rrbracket : \perp$}
+         \RL{$\perp$ E}
+         \UIC{$\llbracket \Gamma \rrbracket \vdash
+           abort[(fst\llbracket M_0 \rrbracket)\llbracket M_1
+           \rrbracket] : \llbracket C \rrbracket$}
+       \end{prooftree}
+       \paragraph{Type Uniqueness}
+       Rules annotated for type uniqueness:
+
+       \begin{prooftree}
+         \AXC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \AXC{$\Gamma \vdash M_1 : A_1$}
+         \BIC{$\Gamma \vdash abort_L^C\ M_0\ M_1 : C$}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \AXC{$\Gamma \vdash M_2 : A_2$}
+         \BIC{$\Gamma \vdash abort_R^C\ M_0\ M_2 : C$}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Gamma, x:A_1 \vdash M_1 : p$}
+         \AXC{$\Gamma, y:A_2 \vdash M_2 : q$}
+         \BIC{$\Gamma \vdash nor (x:A_1.M_1) (y:A_2.M_2) : A$}
+       \end{prooftree}
+       If $\Gamma \vdash M : A_1'$ and $\Gamma \stackrel{\mathcal{E}}{\vdash} M:A_2 '$ then
+       $A_1' = A_2'$
+       \paragraph{Proof} by induction on $\mathcal{D} :: \Gamma
+       \vdash M : A_1'$
+       \subparagraph{Case} $\mathcal{D} =$
+       \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma, x:A_1 \vdash M_1 :
+         p$}
+       \AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma, y:A_2 \vdash M_2 :
+         q$}
+       \RL{$\overline{\lor}$ I$^{x,y,p,q}$}
+       \BIC{$\Gamma \vdash nor(x:A_1.M_1)(y:A_2.M_2)$}
+       \DP
+       \\
+       \begin{tabular}{l l}
+         $M = nor (x:A_1.M_1)(y:A_2.M_2)$& by assumption
+         \\ $A_1' = A_1 \overline{\lor} A_2$ & by assumption
+         \\ $\mathcal{E} :: \Gamma \vdash nor(x:A_1.M_1)(y:A_2.M_2) : A_2'$ & by assumption
+         \\ $\mathcal{E}_1 :: \Gamma, x:A_1 \vdash M_1 : p'$ & by inversion
+         \\ $\mathcal{E}_2 :: \Gamma, y:A_2 \vdash M_2 : q'$ & by inversion
+         \\ $A'2_2 = A_1 \overline{\lor} A_2$ & by inversion
+       \end{tabular}
+
       \end{document}
