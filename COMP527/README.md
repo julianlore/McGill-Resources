@@ -1,1 +1,1 @@
-For the latest precompiled PDF, download COMP527.pdf at [https://github.com/julianlore/McGill-Resources/releases/latest](https://github.com/julianlore/McGill-Resources/releases/latest)
+For the latest precompiled PDF, download COMP527.pdf at [https://github.com/julianlore/McGill-Resources/releases/latest](https://github.com/julianlore/McGill-Resources/releases/latest) or the [live version](https://www.dropbox.com/s/wir94frkhlmznz4/COMP527.pdf?dl=0) on my Dropbox.
