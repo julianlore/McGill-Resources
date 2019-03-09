@@ -1,0 +1,208 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref, amsmath,tabularx, graphicx, pdfpages}
+
+% To make this come out properly in landscape mode, do one of the following
+% 1.
+%  pdflatex latexsheet.tex
+%
+% 2.
+%  latex latexsheet.tex
+%  dvips -P pdf  -t landscape latexsheet.dvi
+%  ps2pdf latexsheet.ps
+
+
+% If you're reading this, be prepared for confusion.  Making this was
+% a learning experience for me, and it shows.  Much of the placement
+% was hacked in; if you make it better, let me know...
+
+
+% 2008-04
+% Changed page margin code to use the geometry package. Also added code for
+% conditional page margins, depending on paper size. Thanks to Uwe Ziegenhagen
+% for the suggestions.
+
+% 2006-08
+% Made changes based on suggestions from Gene Cooperman. <gene at ccs.neu.edu>
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+          \begin{tabularx}{\textwidth}{c c c c c}
+            \hline Distribution & Probability Function & Mean &
+            Variance & MGF
+            \\ \hline Binomial & $p(y)=\binom{n}{y}p^y(1-p)^{n-y}$ &
+            $np$ & $np(1-p)$ & $[pe^t+(1-p)]^n$
+            \\ Geometric & $p(y) = p(1-p)^{y-1}$ & $\frac{1}{p}$ &
+            $\frac{1-p}{p^2}$ & $\frac{pe^t}{1-(1-p)e^t}$
+            \\ Hypergeometric & $p(y) = \frac{\binom{r}{y}
+              \binom{N-r}{n-y}}{\binom{N}{n}}$ & $\frac{nr}{N}$ & $n
+            \left(\frac{r}{N}\right) \left(\frac{N-r}{N}\right)
+            \left(\frac{N-n}{N-1}\right) $ & No closed form
+            \\ Poisson & $p(y) = \frac{\lambda^y e^{-\lambda}}{y!}$ &
+            $\lambda$ & $\lambda$ & $e^{\lambda(e^t-1)}$
+            \\ Negative binomial & $p(y) = \binom{y-1}{r-1} p^r
+            (1-p)^{y-r}$ & $\frac{r}{p}$ & $\frac{r(1-p)}{p^2}$ &
+            $\left(\frac{pe^t}{1-(1-p)e^t}\right)^r$
+            \\ \hline Uniform & $f(y) = \frac{1}{\theta_2 - \theta_1}$
+            & $\frac{\theta_1+\theta_2}{2}$ &
+            $\frac{(\theta_2-\theta_1)^2}{12}$ & $\frac{e^{t
+                \theta_2}-e^{t \theta_1}}{t(\theta_2 - \theta_1)}$
+            \\ Normal & $f(y) = \frac{1}{\sigma \sqrt{2\pi}}e^{-
+              \left(\frac{1}{2\sigma^2}\right)(y-\mu)^2}$ & $\mu$ &
+            $\sigma^2$ & $e^{\mu t + \frac{t^2 \sigma^2}{2}}$
+            \\ Exponential & $f(y) =
+            \frac{1}{\beta}e^{-\frac{y}{\beta}}$ & $\beta$ & $\beta^2$
+            & $(1-\beta t)^{-1}$
+            \\ Gamma & $f(y)=
+            \left(\frac{1}{\Gamma(\alpha)\beta^\alpha}\right)y^{\alpha
+              - 1}e^{-\frac{y}{\beta}}$ & $\alpha \beta$ & $\alpha
+            \beta^2$ & $(1-\beta t)^{-\alpha}$
+            \\ Chi-square & $f(y) =
+            \frac{y^{\frac{\nu}{2}-1}e^{-\frac{y}{2}}}{2^{\frac{\nu}{2}}\Gamma(\frac{\nu}{2})}$
+            & $\nu$ & $2 \nu$ & $(1-2t)^{-\frac{\nu}{2}}$
+            \\ Beta & $f(y)= \left(\frac{\Gamma(\alpha +
+                \beta)}{\Gamma(\alpha)\Gamma(\beta)}\right)y^{\alpha-1}(1-y)^{\beta
+              - 1}$ & $\frac{\alpha}{\alpha + \beta}$ & $\frac{\alpha
+              \beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$ & No closed form
+          \end{tabularx}
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+  \Large{\textbf{MATH324 Formula Sheet}} \\
+  Julian Lore
+\end{center}
+\section{Bias}
+\begin{flalign*}
+  Bias(\hat{\theta}) &= E[\hat{\theta}] - \theta &
+  \\ MSE(\hat{\theta}) &= E[(\hat{\theta} - \theta)^2]
+  \\ & = V(\hat{\theta})+[Bias(\hat{\theta})]^2
+\end{flalign*}
+\section{Common Point Estimators}
+\begin{tabularx}{.33\textwidth}{|X X X X l|}
+  \hline Target Parameter $\theta$ & Sample Size(s) & Point
+  Estimator $\hat{\theta}$ & $E(\hat{\theta})$ & Standard Error
+  $\sigma_{\hat{\theta}}$
+  \\ \hline $\mu$ & $n$ & $\overline{Y}$ & $\mu$ &
+  $\frac{\sigma}{\sqrt{n}}$
+  \\ $p$ & $n$ & $\hat{p} = \frac{Y}{n}$ & $p$ &
+  $\sqrt{\frac{pq}{n}}$
+  \\ $\mu_1 - \mu_2$ & $n_1, n_2$ & $\overline{Y}_1 -
+  \overline{Y}_2$ & $\mu_1 - \mu_2$ &
+  $\sqrt{\frac{\sigma_1^2}{n_1}+ \frac{\sigma_2^2}{n_2}}$
+  \\ $p_1 - p_2$ & $n_1,n_2$ & $\hat{p}_1 - \hat{p}_2$ & $p_1 -
+  p_2$ & $\sqrt{\frac{p_1q_1}{n_1}+\frac{p_2q_2}{n_2}}$
+  \\ \hline
+\end{tabularx}
+\section{Confidence Intervals}
+\begin{flalign*}
+  P(\hat{\theta}_L \leq \theta \leq \hat{\theta}_U) & = 1 - \alpha&
+ \\ P \left[\frac{(n-1)S^2}{\chi^2_{\frac{\alpha}{2}}} \leq \sigma^2
+  \leq
+  \frac{(n-1)S^2}{\chi^2_{1-\left(\frac{\alpha}{2}\right)}}\right] & = 1- \alpha
+\end{flalign*}
+\subsection{Large Sample}
+\begin{flalign*}
+  Z & = \frac{\hat{\theta}-\theta}{\sigma_{\hat{\theta}}} \sim N(0,1) &
+  \\ z_{\alpha/2}\sigma_{\hat{\theta}} & = B
+\end{flalign*}
+\begin{flalign*}
+  &\hat{\theta}_n-z_{\alpha}\sigma_{\hat{\theta}}&
+  \\ &\hat{\theta}_n+z_{\alpha}\sigma_{\hat{\theta}}
+  \\ &\hat{\theta}_n\pm z_{\alpha/2}\sigma_{\hat{\theta}}
+\end{flalign*}
+\subsection{Small Sample}
+\begin{flalign*}
+  T_{n-1} & = \frac{\overline{Y}-\mu}{\frac{S}{\sqrt{n}}}&
+  \\ P(-t_{\frac{\alpha}{2}} \leq T \leq t_{\frac{\alpha}{2}}) &= 1 -\alpha
+\end{flalign*}
+\begin{flalign*}
+  &\overline{Y}\pm t_{\alpha/2} \left(\frac{S}{\sqrt{n}}\right), \nu = n-1 &
+  \\ &\left(\overline{Y_1}-\overline{Y_2}\pm t_{\alpha/2}S_P\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}\right), \nu = n_1 + n_2 - 3
+\end{flalign*}
+\section{Efficiency}
+\begin{flalign*}
+  eff(\hat{\theta}_1,\hat{\theta}_2) & = \frac{V(\hat{\theta}_2)}{V(\hat{\theta}_1)}&
+\end{flalign*}
+\section{Misc}
+\begin{flalign*}
+  F_{Y_{(n)}} &= [F(Y)]^n&
+  \\ F_{Y_{(1)}} &= [1-F(Y)]^n
+  \\ \overline{X} & = \frac{1}{n}\sum_{i=1}^n X_i
+  \\ S^2 & = \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n-1}
+  \\ V(S^2) & = \frac{2\sigma^4}{n-1}
+  \\ S^2_P & = \frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1+n_2-2}
+  \\ P(g(x) \geq \lambda) & \leq \frac{E[g(x)]}{\lambda}, \lambda>0
+  \\ P(\left|X-\mu \right| \geq k\sigma) & \leq \frac{1}{k^2}
+  \\ Var(X) & = E[(X-\mu)^2]
+  \\ & = E[X^2] - (E[X])^2
+  \\ z_{0.025} & = 1.96
+  \\ \Gamma(z) & = \int_0^{\infty}x^{z-1}e^{-x}\ dx
+  \\ E[E(\hat{\theta}|U)] & = E[\hat{\theta}]
+  \\ V(\hat{\theta}) & = V[E(\hat{\theta} | U)] + E[V(\hat{\theta} | U)]
+\end{flalign*}
+\end{multicols}
+\end{document}

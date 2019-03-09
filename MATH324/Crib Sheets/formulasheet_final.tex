@@ -1,0 +1,315 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref, amsmath,tabularx, graphicx, pdfpages}
+\allowdisplaybreaks
+
+% To make this come out properly in landscape mode, do one of the following
+% 1.
+%  pdflatex latexsheet.tex
+%
+% 2.
+%  latex latexsheet.tex
+%  dvips -P pdf  -t landscape latexsheet.dvi
+%  ps2pdf latexsheet.ps
+
+
+% If you're reading this, be prepared for confusion.  Making this was
+% a learning experience for me, and it shows.  Much of the placement
+% was hacked in; if you make it better, let me know...
+
+
+% 2008-04
+% Changed page margin code to use the geometry package. Also added code for
+% conditional page margins, depending on paper size. Thanks to Uwe Ziegenhagen
+% for the suggestions.
+
+% 2006-08
+% Made changes based on suggestions from Gene Cooperman. <gene at ccs.neu.edu>
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+          \begin{tabularx}{\textwidth}{c c c c c}
+            \hline Distribution & Probability Function & Mean &
+            Variance & MGF
+            \\ \hline Binomial & $p(y)=\binom{n}{y}p^y(1-p)^{n-y}$ &
+            $np$ & $np(1-p)$ & $[pe^t+(1-p)]^n$
+            \\ Geometric & $p(y) = p(1-p)^{y-1}$ & $\frac{1}{p}$ &
+            $\frac{1-p}{p^2}$ & $\frac{pe^t}{1-(1-p)e^t}$
+            \\ Hypergeometric & $p(y) = \frac{\binom{r}{y}
+              \binom{N-r}{n-y}}{\binom{N}{n}}$ & $\frac{nr}{N}$ & $n
+            \left(\frac{r}{N}\right) \left(\frac{N-r}{N}\right)
+            \left(\frac{N-n}{N-1}\right) $ & No closed form
+            \\ Poisson & $p(y) = \frac{\lambda^y e^{-\lambda}}{y!}$ &
+            $\lambda$ & $\lambda$ & $e^{\lambda(e^t-1)}$
+            \\ Negative binomial & $p(y) = \binom{y-1}{r-1} p^r
+            (1-p)^{y-r}$ & $\frac{r}{p}$ & $\frac{r(1-p)}{p^2}$ &
+            $\left(\frac{pe^t}{1-(1-p)e^t}\right)^r$
+            \\ Multinomial & $p(y_1, \ldots, y_k) =
+            \frac{n!}{y_1!\ldots y_k!}p_1^{y_1}\ldots p_k^{x_k}$ &
+            $E(Y_i)=np_i$ & $V(Y_i)=np_i(1-p_i)$
+            \\ \hline Uniform & $f(y) = \frac{1}{\theta_2 - \theta_1}$
+            & $\frac{\theta_1+\theta_2}{2}$ &
+            $\frac{(\theta_2-\theta_1)^2}{12}$ & $\frac{e^{t
+                \theta_2}-e^{t \theta_1}}{t(\theta_2 - \theta_1)}$
+            \\ Normal & $f(y) = \frac{1}{\sigma \sqrt{2\pi}}e^{-
+              \left(\frac{1}{2\sigma^2}\right)(y-\mu)^2}$ & $\mu$ &
+            $\sigma^2$ & $e^{\mu t + \frac{t^2 \sigma^2}{2}}$
+            \\ Exponential & $f(y) =
+            \frac{1}{\beta}e^{-\frac{y}{\beta}}$ & $\beta$ & $\beta^2$
+            & $(1-\beta t)^{-1}$
+            \\ Gamma & $f(y)=
+            \left(\frac{1}{\Gamma(\alpha)\beta^\alpha}\right)y^{\alpha
+              - 1}e^{-\frac{y}{\beta}}$ & $\alpha \beta$ & $\alpha
+            \beta^2$ & $(1-\beta t)^{-\alpha}$
+            \\ Chi-square & $f(y) =
+            \frac{y^{\frac{\nu}{2}-1}e^{-\frac{y}{2}}}{2^{\frac{\nu}{2}}\Gamma(\frac{\nu}{2})}$
+            & $\nu$ & $2 \nu$ & $(1-2t)^{-\frac{\nu}{2}}$
+            \\ Beta & $f(y)= \left(\frac{\Gamma(\alpha +
+                \beta)}{\Gamma(\alpha)\Gamma(\beta)}\right)y^{\alpha-1}(1-y)^{\beta
+              - 1}$ & $\frac{\alpha}{\alpha + \beta}$ & $\frac{\alpha
+              \beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$ & No closed form
+          \end{tabularx}
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+  \Large{\textbf{MATH324 Formula Sheet}} \\
+  Julian Lore
+\end{center}
+\section{Bias}
+\begin{flalign*}
+  Bias(\hat{\theta}) &= E[\hat{\theta}] - \theta &
+  \\ MSE(\hat{\theta}) &= E[(\hat{\theta} - \theta)^2]
+  \\ & = V(\hat{\theta})+[Bias(\hat{\theta})]^2
+\end{flalign*}
+\section{Common Point Estimators}
+\begin{tabularx}{.33\textwidth}{|X X X X l|}
+  \hline Target Parameter $\theta$ & Sample Size(s) & Point
+  Estimator $\hat{\theta}$ & $E(\hat{\theta})$ & Standard Error
+  $\sigma_{\hat{\theta}}$
+  \\ \hline $\mu$ & $n$ & $\overline{Y}$ & $\mu$ &
+  $\frac{\sigma}{\sqrt{n}}$
+  \\ $p$ & $n$ & $\hat{p} = \frac{Y}{n}$ & $p$ &
+  $\sqrt{\frac{pq}{n}}$
+  \\ $\mu_1 - \mu_2$ & $n_1, n_2$ & $\overline{Y}_1 -
+  \overline{Y}_2$ & $\mu_1 - \mu_2$ &
+  $\sqrt{\frac{\sigma_1^2}{n_1}+ \frac{\sigma_2^2}{n_2}}$
+  \\ $p_1 - p_2$ & $n_1,n_2$ & $\hat{p}_1 - \hat{p}_2$ & $p_1 -
+  p_2$ & $\sqrt{\frac{p_1q_1}{n_1}+\frac{p_2q_2}{n_2}}$
+  \\ \hline
+\end{tabularx}
+\section{Confidence Intervals}
+\begin{flalign*}
+  P(\hat{\theta}_L \leq \theta \leq \hat{\theta}_U) & = 1 - \alpha&
+ \\ P \left[\frac{(n-1)S^2}{\chi^2_{1-\frac{\alpha}{2}}} \leq \sigma^2
+  \leq
+  \frac{(n-1)S^2}{\chi^2_{\frac{\alpha}{2}}}\right] & = 1- \alpha
+\end{flalign*}
+\subsection{Large Sample}
+\begin{flalign*}
+  Z & = \frac{\hat{\theta}-\theta}{\sigma_{\hat{\theta}}} \sim N(0,1) &
+  \\ z_{\alpha/2}\sigma_{\hat{\theta}} & = B
+\end{flalign*}
+\begin{flalign*}
+  &\hat{\theta}_n-z_{\alpha}\sigma_{\hat{\theta}}&
+  \\ &\hat{\theta}_n+z_{\alpha}\sigma_{\hat{\theta}}
+  \\ &\hat{\theta}_n\pm z_{\alpha/2}\sigma_{\hat{\theta}}
+\end{flalign*}
+\subsection{Small Sample}
+\begin{flalign*}
+  T_{n-1} & = \frac{\overline{Y}-\mu}{\frac{S}{\sqrt{n}}}&
+  \\ P(-t_{\frac{\alpha}{2}} \leq T \leq t_{\frac{\alpha}{2}}) &= 1 -\alpha
+\end{flalign*}
+\begin{flalign*}
+  &\overline{Y}\pm t_{\alpha/2} \left(\frac{S}{\sqrt{n}}\right), \nu = n-1 &
+  \\ &\left(\overline{Y_1}-\overline{Y_2}\pm t_{\alpha/2}S_P\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}\right), \nu = n_1 + n_2 - 2
+\end{flalign*}
+\section{Efficiency}
+\begin{flalign*}
+  eff(\hat{\theta}_1,\hat{\theta}_2) & = \frac{V(\hat{\theta}_2)}{V(\hat{\theta}_1)}&
+\end{flalign*}
+\section{Hypothesis Testing}
+\begin{flalign*}
+  \alpha & = P(\text{type I error}) &
+  \\ &= P(\text{rejecting }H_0 \text{
+    when }H_0 \text{ is true}) &
+  \\ \beta & = P(\text{type II error})
+  \\ & = P(\text{accepting }H_0 \text{
+    when }H_a \text{ is true})
+  \\ Z & = \frac{\hat{\theta}-\theta_0}{\sigma_{\hat{\theta}}}
+  \\ \chi^2_{n-1} & = \frac{(n-1)S^2}{\sigma_0^2}
+  \\ F_{n_1-1,n_2-1} & = \frac{S_1^2}{S_2^2} = \frac{ \left[\frac{(n_1-1)S_1^2}{\sigma^2}\right]/(n_1-1)}{ \left[\frac{(n_2-1)S_2^2}{\sigma^2}\right]/(n_2-1)}
+\end{flalign*}
+\subsection{Small Sample}
+\begin{flalign*}
+  T_{n-1} & = \frac{\overline{Y}-\mu_0}{S/\sqrt{n}}, \mu = \mu_0 &
+  \\ T_{n_1+n_2-2} & = \frac{\overline{Y}_1 - \overline{Y}_2 - D_0}{S_p \sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}, \mu_1 - \mu_2 = D_0
+  \\ S_p & = \sqrt{\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1+n_2-2}}
+\end{flalign*}
+\subsection{Power of Tests}
+\begin{flalign*}
+  power(\theta) & = P(W \in RR | \theta) &
+  \\ power(\theta_a) & = 1 - \beta(\theta_a)
+  \\ \frac{L(\theta_0)}{L(\theta_a)}<k
+\end{flalign*}
+\subsection{Likelihood Ratio Test}
+\begin{flalign*}
+  \lambda & = \frac{L(\hat{\Omega}_0)}{L(\hat{\Omega})} = \frac{\max_{\Theta \in \Omega_0}L(\Theta)}{\max_{\Theta \in \Omega}L(\Theta)}&
+  \\ L(\theta ; y_1, \ldots, y_n) & = \prod_{i=1}^{n}f(\theta; y_i)
+\end{flalign*}
+\section{Linear Regression}
+\begin{flalign*}
+  \\ Y & = \beta_0 + \beta_1 x + \varepsilon
+  \\ E(Y) & = \beta_0+\beta_1 x &
+  \\ E(\varepsilon) & = 0
+  \\ Var(\varepsilon) & = \sigma^2
+  \\ \hat{y}_i & = \hat{\beta}_0+\hat{\beta}_1 x_i
+  \\ SSE & = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = S_{yy}-\hat{\beta}_1S_{xy}
+  \\ S_{xy} & = \sum_{i=1}^n (x_i - \overline{x})(y_i - \overline{y})
+  \\ & = \sum_{i=1}^n x_i y_i - \frac{1}{n}\sum_{i=1}^n x_i \sum_{i=1}^n y_i
+  \\ S_{xx} & = \sum_{i=1}^n (x_i - \overline{x})^2
+  \\ & = \sum_{i=1}^n x_i^2 - \frac{1}{n} \left(\sum_{i=1}^n x_i\right)^2
+  \\ \hat{\beta}_1 & = \frac{S_{xy}}{S_{xx}}
+  \\ \hat{\beta}_0 & = \overline{y}-\hat{\beta}_1 \overline{x}
+  \\ E(\hat{\beta}_1) & = \beta_1
+  \\ E(\hat{\beta}_0) & = \beta_0
+  \\ Var(\hat{\beta}_1) & = \frac{\sigma^2}{S_{xx}}
+  \\ Var(\hat{\beta}_0) & = \frac{\sigma^2 \sum_{i=1}^n x_i^2}{n S_{xx}}
+  \\ Cov(\hat{\beta}_0, \hat{\beta}_1) & = \frac{-\overline{x}\sigma^2}{S_{xx}}
+  \\ S^2 & = \frac{SSE}{(n-2)}                                                                
+\end{flalign*}
+\subsection{Hypothesis Testing}
+\begin{flalign*}
+  T_{n-2} & = \frac{\hat{\beta}_0 - \beta_{00}}{S\sqrt{\frac{\sum x_i^2}{n S_{xx}}}}&
+  \\T_{n-2} & = \frac{\hat{\beta}_1 - \beta_{10}}{S\sqrt{\frac{1}{s_{xx}}}}&
+\end{flalign*}
+\subsection{Confidence Intervals}
+\begin{flalign*}
+  \beta_0 & =\hat{\beta}_0 \pm z_{\frac{\alpha}{2},n-2}\sqrt{Var(\hat{\beta}_0)}&
+  \\ \beta_1 & = \hat{\beta}_1 \pm z_{\frac{\alpha}{2},n-2}\sqrt{Var(\hat{\beta}_1)}
+  \\ E(Y) & = \beta_0+\beta_1 x^* = \hat{\beta}_0 + \hat{\beta}_1 x^* \pm t_{\alpha/2, n-2}S \sqrt{\frac{1}{n}+\frac{(x^*-\overline{x})^2}{S_{xx}}}
+  \\ Y &  = \hat{\beta}_0 + \hat{\beta}_1 x^* \pm t_{\alpha/2, n-2}S \sqrt{1+\frac{1}{n}+\frac{(x^*-\overline{x})^2}{S_{xx}}}
+\end{flalign*}
+\subsection{Correlation}
+\begin{flalign*}
+  r & = \frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}&
+  \\t_{n-2} & = \frac{\hat{\beta}_1 - 0}{S/\sqrt{S_{xx}}} = \frac{r\sqrt{n-2}}{\sqrt{1-r^2}}
+  \\ R^2 & = \frac{SS_{reg}}{SS_{total}} = \frac{\hat{\beta}_1^2S_{xx}}{\hat{\beta}_1^2 S_{xx}+SS_{res}}
+  \\ R^2 & \sim \beta \left(\frac{1}{2}, \frac{n-2}{2}\right)
+\end{flalign*}
+\section{ANOVA}
+\begin{tabularx}{.33\textwidth}{X | X | X | X | X | X}
+  Source & (SS) & df & Mean Square (MS) & F & p-val
+  \\ \hline Treatments&$SST$&$k-1$&$\frac{SST}{k-1}$&$F=\frac{MST}{MSE}$
+  \\ Error & $SSE$ & $n-k$ & $\frac{SSE}{n-k}$
+  \\ Total & Total SS & $n-1$ 
+  \end{tabularx}
+\begin{flalign*}
+  Total \ SS & = SST+SSE &
+  \\ Total\ SS & = \sum_{i=1}^k \sum_{j=1}^{n_i}(Y_{ij}-\overline{Y})^2
+  \\ SST & = \sum_{i=1}^k n_i (\overline{Y}_{i\bullet}-\overline{Y})^2
+  \\ SSE & = \sum_{i=1}^k \sum_{j=1}^{m_i} (Y_{ij} - \overline{Y}_{i\bullet})^2 = \sum_{i=1}^k (n_i-1)S_i^2
+  \\ & = Total\ SS - SST
+  \\ S^2 & = MSE = \frac{SSE}{n-k}
+  \\ MST & = \frac{SST}{k-1}
+  \\ F_{k-1,n-k} & = \frac{MST}{MSE}
+\end{flalign*}
+\section{Goodness of Fit}
+\begin{flalign*}
+  X^2 & = \sum_{i=1}^k \frac{(n_i-E(n_i))^2}{E(n_i)} = \sum_{i=1}^k \frac{(n_i-np_i)^2}{np_i} \sim \chi^2_{k-1}&
+\end{flalign*}
+\section{Contingency Tables}
+\begin{flalign*}
+  \hat{p}_{ij} & = \frac{n_{ij}}{N}, \hat{p}_{\bullet j} = \frac{n_{\bullet j}}{N}, \hat{p}_{i \bullet} = \frac{n_{i\bullet}}{N}
+  \\\widehat{E(n_{ij})} & = \frac{r_ic_j}{n}&
+  \\ X^2 & = \sum_{j=1}^c \sum_{i=1}^r \frac{(n_{ij}-\widehat{E(n_{ij})})^2}{\widehat{E(n_{ij})}}\sim \chi^2_{(r-1)(c-1)}
+\end{flalign*}
+\section{Misc}
+\begin{flalign*}
+  F_{Y_{(n)}} &= [F(Y)]^n,F_{Y_{(1)}} = [1-F(Y)]^n &
+  \\ \overline{X} & = \frac{1}{n}\sum_{i=1}^n X_i,E(\overline{Y}) = \mu
+  \\ Var(\overline{Y}) & = \frac{\sigma^2}{n} = \frac{Var(Y)}{n}
+  \\ S^2 & = \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n-1}
+  \\ V(S^2) & = \frac{2\sigma^4}{n-1}
+  \\ P(g(x) \geq \lambda) & \leq \frac{E[g(x)]}{\lambda}, \lambda>0
+  \\ P(\left|X-\mu \right| \geq k\sigma) & \leq \frac{1}{k^2}
+  \\ P \left(\left|\hat{\theta}_n - \theta\right|\geq\varepsilon\right) & \leq \frac{MSE(\hat{\theta}_n)}{\varepsilon^2}
+  \\ Var(X) & = E[(X-\mu)^2]
+  \\ & = E[X^2] - (E[X])^2
+  \\ z_{0.025} & = 1.96,z_{0.005} = 2.576
+  \\ \Gamma(z) & = \int_0^{\infty}x^{z-1}e^{-x}\ dx
+  \\ E[E(\hat{\theta}|U)] & = E[\hat{\theta}]
+  \\ V(\hat{\theta}) & = V[E(\hat{\theta} | U)] + E[V(\hat{\theta} | U)]
+  \\ \frac{(n-1)S^2}{\sigma^2}& \sim \chi^2_{n-1}
+  , T = \frac{Z}{\sqrt{\chi^2_{\nu}/\nu}} \sim T_{\nu}
+  \\ F_{n_1 -1, n_2 - 1} & \sim \frac{\chi^2_{n_1-1}/(n_1-1)}{\chi^2_{n_2-1}/(n_2-1)}
+  \\ Var(aX \pm bY) & = a^2 Var(X) + b^2 Var(Y) \pm Cov(X,Y)
+  \\ Cov(X,Y) & = E(XY) - E(X)E(Y)
+  \\ P(A|B) & = \frac{P(A \cap B)}{P(B)}
+  \\ T & \sim Gamma(\nu, \theta) \implies \frac{2T}{\theta} \sim \chi^2_{2\nu}
+\end{flalign*}
+\end{multicols}
+\end{document}
