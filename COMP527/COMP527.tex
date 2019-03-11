@@ -94,8 +94,10 @@
       \BIC{A $\land$ B wf}
     \end{prooftree}
     \begin{prooftree}
-      \AXC{$J_1$ \ldots $J_n$}
-      \UIC{$J$}
+      \AXC{$J_1$}
+      \AXC{\ldots}
+      \AXC{$J_n$}
+      \TIC{$J$}
     \end{prooftree}
     $J_i$ are the premises, $J$ is the conclusion
     \\ $A$ true
@@ -1340,7 +1342,7 @@
     substitute.
 
     \subparagraph{Definition of substitution}
-    ~\\$[N/x]M = M'$, $[N/x] x = N$. Replace the "free" occurence of
+    ~\\$[N/x]M = M'$, $[N/x] x = N$. Replace the ``free'' occurence of
     $x$ in $M$ with $N$
     
     \subparagraph{Case}
@@ -1485,7 +1487,7 @@
         \\ $\Gamma \vdash inl^B \ M : A \lor B$ & by inversion $\lor$ E
         \\ $\Gamma, x:A \vdash N_1 : C$
         \\ $\Gamma, x:B \vdash N_2 : C$
-        \\ $\Gamma \vdash M.A : C$ & by inversion $\lor$ I$_l$
+        \\ $\Gamma \vdash M:A$ & by inversion $\lor$ I$_l$
         \\ $\Gamma \vdash [M/x]N_1 : C$ & by substitution
       \end{tabular}
       \subparagraph{Case} \AXC{$M_1 \implies M'$}
@@ -1785,11 +1787,11 @@
           \UIC{$M:\forall x : \tau . A(x)$ true}
           \AXC{}
           \RL{}
-          \UIC{$M \ a : \tau$}
+          \UIC{$a : \tau$}
           \RL{$\forall$ E}
-          \BIC{$A(a)$ true}
+          \BIC{$M\ a: A(a)$ true}
           \RL{$\forall$ I$^a$}
-          \UIC{$\lambda a : \tau . M\ a\forall x : \tau. A(x)$ true}
+          \UIC{$\lambda a : \tau . M\ a:\forall x : \tau. A(x)$ true}
           \DP
         \end{center}
         $$M : \forall x : \tau . A(x) \stackrel{\eta}{\implies} \lambda
@@ -2074,7 +2076,7 @@
           \noLine
           \UIC{$A(t)$ true}
           
-          \AXC{$\mathcal{E}_1$}
+          \AXC{$\mathcal{E}_2$}
           \noLine
           \UIC{$t:\tau$}
           
@@ -2086,7 +2088,7 @@
           \UIC{$A(a)$ true}
 
           \AXC{}
-          \RL{e}
+          \RL{}
           \UIC{$a:\tau$}
           
           \noLine
@@ -3962,7 +3964,7 @@ reach x y:-
          \UIC{$\Gamma, y:A_1 \vdash y:A_2$}
          \BIC{$\Gamma ,y:A_2 \vdash abort_R\ M_0\ y :q$}
          \RL{$\overline{\lor}$ I$^{x,y, p, q}$}
-         \BIC{$\Gamma \vdash nor (x.abort_L\ M_o\ x) : A_1 \overline{\lor} A_2$}
+         \BIC{$\Gamma \vdash nor (x.abort_L\ M_0\ x)(y.abort_R M_0\ y) : A_1 \overline{\lor} A_2$}
          \DP}
        \end{center}
        \paragraph{Translation function}~
