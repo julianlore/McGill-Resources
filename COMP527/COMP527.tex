@@ -1168,7 +1168,7 @@
       \UIC{$\Gamma \vdash fst \ M : A$}
     \end{prooftree}
     Note that, some may be inclined to make $A \land B$ have a type of
-    some pair, like $(M,N)$, but we don't want to limit ourselves to a
+    some pair for $\land$ E, i.e. $\langle M,N \rangle$, but we don't want to limit ourselves to a
     pair (we also don't yet know it's a pair), so we cannot make it a
     pair right off the bat.
     \begin{prooftree}
@@ -1181,7 +1181,7 @@
     \\ $fst\ \langle M, N \rangle \implies M$
     \\ $snd\ \langle M, N \rangle \implies N$
 
-    So we can now show things like local soundness:
+    So we can now show things like local soundness with terms:
     \begin{center}
       \AXC{$\mathcal{D}_1$}
       \noLine
@@ -1255,13 +1255,13 @@
         \langle \rangle \langle \rangle$ : }
     \end{prooftree}
 
-    The following is a theorem we are not going to prove:
+    Note that we have:
 
     If $\Gamma \vdash M : A$ and $M \implies M'$ then $\Gamma \vdash
-    M': A$
+    M': A$ (subject reduction)
     
     If $\Gamma \vdash M' : A$ and $M \implies M'$ then $\Gamma \vdash
-    M: A$
+    M: A$ (won't prove this second one, as it's much less obvious)
     \subsection{Congruence Rules}
     We can go into functions. This strategy is non-deterministic (will
     this terminate? Yes, but it is not obvious how to prove it. This
@@ -1319,7 +1319,7 @@
     \\ You cannot introduce a new variable with the same name as an
     existing one, this will have completely different meaning than you
     intended.
-    \\ Solution: $[u/w](\lambda y: w
+    \\ Solution: $[u/w](\lambda u. w
     u)\stackrel{\alpha}{=}[u/w](\lambda u'. w u') = \lambda u'. u u'$
 
     Let's assume that $u : T \supset A$.
@@ -1415,9 +1415,9 @@
       \begin{tabular}{l l}
         \textbf{Program} & \textbf{Proposition}
         \\ $\lambda x : A . \lambda y: B. \langle x,y \rangle$ & $A \supset B \supset (A \land B)$
-        \\ $\lambda x : A \supset B  \land B \supset C$ & $(A \subset B \land B \supset C) \supset A \supset C$
+        \\ $\lambda x : A \supset B  \land B \supset C.$ & $(A \supset B \land B \supset C) \supset A \supset C$
         \\ ~\hspace{5 pt} $\lambda y: A.(snd\ x)\underbrace{(\underbrace{(fst\ x)}_{A \supset B} y)}_{B}$
-        \\ $\lambda x : A \lor B. \lambda y: C$& $(A \lor B) \supset C \supset (B \lor A) \land C$
+        \\ $\lambda x : A \lor B. \lambda y: C.$& $(A \lor B) \supset C \supset (B \lor A) \land C$
         \\ ~\hspace{5 pt} $\langle case \ of \ inl \ a \implies inr\ a \mid inr\ b \implies inl\ b,y  \rangle$
       \end{tabular}
     \end{center}
@@ -1486,7 +1486,7 @@
         \mid inr\ y \implies N_2 : C $ & by assumption
         \\ $\Gamma \vdash inl^B \ M : A \lor B$ & by inversion $\lor$ E
         \\ $\Gamma, x:A \vdash N_1 : C$
-        \\ $\Gamma, x:B \vdash N_2 : C$
+        \\ $\Gamma, y:B \vdash N_2 : C$
         \\ $\Gamma \vdash M:A$ & by inversion $\lor$ I$_l$
         \\ $\Gamma \vdash [M/x]N_1 : C$ & by substitution
       \end{tabular}
@@ -1498,7 +1498,7 @@
         $\Gamma \vdash M_1 \ M_2 : B$& by assumption
         \\ $\Gamma \vdash M_1 : A \supset B$ and $\Gamma \vdash M_2 : A$ & by inversion $\supset$E
         \\ $\Gamma \vdash M_1' : A \supset B$ & by IH
-        \\ $\Gamma \vdash M_1' M_1 : B$ & by $\supset$ E
+        \\ $\Gamma \vdash M_1'\ M_1 : B$ & by $\supset$ E
       \end{tabular}
       The last step is forward reasoning instead of backward reasoning
       with inversions. Basically show what your case gives you and
@@ -3890,7 +3890,7 @@ reach x y:-
        \begin{prooftree}
          \AXC{$\Gamma, x:A_1 \vdash M_1 : p$}
          \AXC{$\Gamma, y:A_2 \vdash M_2 : q$}
-         \BIC{$\Gamma \vdash nor (x.M_1) (y.M_2) : A$}
+         \BIC{$\Gamma \vdash nor (x.M_1) (y.M_2) : A_1 \overline{\lor} A_2$}
        \end{prooftree}
        \begin{prooftree}
          \AXC{$\Gamma, x:A_1 \vdash M : A_2$}
@@ -3947,7 +3947,7 @@ reach x y:-
          \noLine
          \UIC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
          \RL{weakening}
-         \UIC{$\Gamma ,x :A_1 \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \UIC{$\Gamma, x :A_1 \vdash M_0 : A_1 \overline{\lor} A_2$}
          %
          \AXC{}
          \RL{}
@@ -3957,11 +3957,11 @@ reach x y:-
          \noLine
          \UIC{$\Gamma \vdash M_0 : A_1 \overline{\lor} A_2$}
          \RL{weakening}
-         \UIC{$\Gamma ,x :A_1 \vdash M_0 : A_1 \overline{\lor} A_2$}
+         \UIC{$\Gamma, y :A_2 \vdash M_0 : A_1 \overline{\lor} A_2$}
          %
          \AXC{}
          \RL{}
-         \UIC{$\Gamma, y:A_1 \vdash y:A_2$}
+         \UIC{$\Gamma, y:A_2 \vdash y:A_2$}
          \BIC{$\Gamma ,y:A_2 \vdash abort_R\ M_0\ y :q$}
          \RL{$\overline{\lor}$ I$^{x,y, p, q}$}
          \BIC{$\Gamma \vdash nor (x.abort_L\ M_0\ x)(y.abort_R M_0\ y) : A_1 \overline{\lor} A_2$}
@@ -3973,7 +3973,7 @@ reach x y:-
          \\ \llbracket \lambda x. M \rrbracket & = \lambda x. \llbracket M \rrbracket
          \\ \llbracket x \rrbracket & = x
          \\ \llbracket nor (x.M_1) (y.M_2) \rrbracket & = (\lambda x. \llbracket M_1 \rrbracket, \lambda y.\llbracket M_2 \rrbracket)
-         \\ \llbracket abort_L\ M_0\ M_2 \rrbracket & = abort [(fst\ \llbracket M_0 \rrbracket)\llbracket M_1 \rrbracket]
+         \\ \llbracket abort_L\ M_0\ M_1 \rrbracket & = abort_L [(fst\ \llbracket M_0 \rrbracket)\llbracket M_1 \rrbracket]
          \\ \llbracket A \rrbracket & = B
          \\ \llbracket A_1 \supset A_2 \rrbracket & = \llbracket A_1 \rrbracket \supset \llbracket A_2 \rrbracket
          \\ \llbracket A_1 \overline{\lor} A_2 \rrbracket & = \neg \llbracket A_1 \rrbracket \land \neg \llbracket A_2 \rrbracket = (\llbracket A_1 \rrbracket \supset \perp) \land (\llbracket A_2 \rrbracket \supset \perp)
@@ -3982,8 +3982,8 @@ reach x y:-
          \\ \llbracket \Gamma, x:A \rrbracket & = \llbracket \Gamma \rrbracket, x:\llbracket A \rrbracket
        \end{align*}
        \paragraph{Thm} If $\Gamma \vdash M:A$ then $\llbracket \Gamma
-       \rrbracket : \llbracket A \rrbracket$.
-       \paragraph{Proof} by induction $\mathcal{D} :: \Gamma \vdash M
+       \rrbracket \vdash \llbracket M \rrbracket: \llbracket A \rrbracket$.
+       \paragraph{Proof} by induction on $\mathcal{D} :: \Gamma \vdash M
        : A$
        \subparagraph{Case} $\mathcal{D} =$ \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma, x:A_1 \vdash
          M_1 : p$}\AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma, y:A_2 \vdash
@@ -3996,7 +3996,7 @@ reach x y:-
        \begin{tabular}{l l}
          $\llbracket \Gamma \rrbracket \vdash \llbracket nor(x.M_1)(y.M_2) \rrbracket : \llbracket A_1 \overline{\lor} A_2 \rrbracket$ & 
          \\ $\llbracket \Gamma \rrbracket \vdash (\lambda x. \llbracket M_1 \rrbracket, \lambda y. \llbracket M_2 \rrbracket) : \neg \llbracket A_1 \rrbracket \land \neg \llbracket A_2 \rrbracket$ & (Want to show)
-         \\ $\mathcal{E}_1 :: \llbracket \Gamma ,x:A_1 \rrbracket \vdash \llbracket M_1 \rrbracket ; p$ & by IH on $\mathcal{D}_1$
+         \\ $\mathcal{E}_1 :: \llbracket \Gamma ,x:A_1 \rrbracket \vdash \llbracket M_1 \rrbracket : p$ & by IH on $\mathcal{D}_1$
          \\ $[\perp/p]\mathcal{E}_1 :: \llbracket \Gamma \rrbracket, x : \llbracket A_1 \rrbracket \vdash \llbracket M_1 \rrbracket : \perp$
          \\ $\mathcal{E}_2 :: \llbracket \Gamma \rrbracket, y: \llbracket A_2 \rrbracket \vdash \llbracket M_2 \rrbracket : \perp$ & IH on $\mathcal{D}_2$
        \end{tabular}
@@ -4025,7 +4025,7 @@ reach x y:-
        \subparagraph{Case} $\mathcal{D} =$
        \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma \vdash M_0 : A_1
          \overline{\lor} A_2$}
-       \AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma \vdash M : A_1$}
+       \AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma \vdash M_1 : A_1$}
        \BIC{$\Gamma \vdash abort_L\ M_0\ M_1 : C$}
        \DP
        \\
@@ -4072,7 +4072,8 @@ reach x y:-
        \begin{prooftree}
          \AXC{$\Gamma, x:A_1 \vdash M_1 : p$}
          \AXC{$\Gamma, y:A_2 \vdash M_2 : q$}
-         \BIC{$\Gamma \vdash nor (x:A_1.M_1) (y:A_2.M_2) : A$}
+         \BIC{$\Gamma \vdash nor (x:A_1.M_1) (y:A_2.M_2) : A_1
+           \overline{\lor} A_2$}
        \end{prooftree}
        If $\Gamma \vdash M : A_1'$ and $\Gamma \stackrel{\mathcal{E}}{\vdash} M:A_2 '$ then
        $A_1' = A_2'$
@@ -4093,7 +4094,7 @@ reach x y:-
          \\ $\mathcal{E} :: \Gamma \vdash nor(x:A_1.M_1)(y:A_2.M_2) : A_2'$ & by assumption
          \\ $\mathcal{E}_1 :: \Gamma, x:A_1 \vdash M_1 : p'$ & by inversion
          \\ $\mathcal{E}_2 :: \Gamma, y:A_2 \vdash M_2 : q'$ & by inversion
-         \\ $A'2_2 = A_1 \overline{\lor} A_2$ & by inversion
+         \\ $A'_2 = A_1 \overline{\lor} A_2$ & by inversion
        \end{tabular}
 
       \end{document}
