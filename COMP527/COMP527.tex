@@ -4096,5 +4096,268 @@ reach x y:-
          \\ $\mathcal{E}_2 :: \Gamma, y:A_2 \vdash M_2 : q'$ & by inversion
          \\ $A'_2 = A_1 \overline{\lor} A_2$ & by inversion
        \end{tabular}
+       \section{03/14/19}
+       \subsection{Modal Logic (S4)} Logic in a type of world. In
+       particular we will look at S4 Modal Logic. In S4, we have two
+       laws:
+       \begin{itemize}
+       \item Reflexivity + Transitivity to reason about the truth in
+         different worlds
+       \item We will distinguish between ``global'' notion of truth
+         (valid/validity) and ``local'' notion of truth (two worlds)
 
-      \end{document}
+         Computationally we can think of it as a network topology
+         (every computer lives in its own world). Want to talk about
+         truth of a program at a given node in the network and truth
+         at every possible node in a network.
+
+         We want to see what the difference between validity and truth is.
+       \end{itemize}
+       \paragraph{Today:}
+       \begin{itemize}
+       \item Necessity: A proposition $A$ is necessarily true
+         i.e. valid, globally true, true in every possible world
+
+         Can extend this with:
+         \begin{itemize}
+         \item Possibility (it is possible that in some world it is
+           true)
+         \item ``Time'': it is true in the next timestamp (lax
+           modality), not thinking of absolute time (e.g. at exactly
+           5:05 pm it will be true), but rather clock ticks, think of
+           time in an abstract fashion
+         \end{itemize}
+       \end{itemize}
+       Distinguish between $\underbrace{\text{validity}}_{A\text{
+           valid}}$ and $\underbrace{\text{truth}}_{A\text{ true}}$.
+       \paragraph{Def. of Validity} If $\cdot \vdash A$ true then $\
+       \vdash A$ valid
+       \\ If $\ \vdash A$ valid then $\ \vdash A$ true
+       \\ We can express that things are true unconditionally and
+       everyone will be able to access that truth
+       \\ $\underbrace{A_1 \text{ valid}, \ldots, A_n \text{
+           valid}}_{\Delta : \text{global assumptions}}; \underbrace{B_1
+         \text{ true}, \ldots, B_k \text{ true}}_{\Gamma : \text{local
+           assumptions}} \vdash C$ true
+       \\ So we are distinguishing between what everyone knows and
+       what I know.
+       \\ So how can we then prove something is true?
+       \begin{prooftree}
+         \AXC{$A$ true $\in \Gamma$}
+         \UIC{$\Delta ; \Gamma \vdash A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$A$ valid $\in \Delta$}
+         \UIC{$\Delta ; \Gamma \vdash A$ true}
+       \end{prooftree}
+       \paragraph{Substitution Principles:}
+       \begin{enumerate}
+       \item If $\Delta; \Gamma \vdash A$ true and $\Delta; \Gamma, A$
+         true$, \Gamma' \vdash C$ true then $\Delta;\Gamma, \Gamma'
+         \vdash C$ true
+       \item If $\Delta; \cdot \vdash B$ true and $\Delta, B$
+         valid$,\Delta' ; \Gamma \vdash C$ true then $(\Delta,
+         \Delta'); \Gamma \vdash C$ true
+       \end{enumerate}
+       \paragraph{Necessity:} $\square A$ internalizes validity
+       \\ $A$ is necessarily true
+
+       Prop. $A, B := T \mid A \supset B \mid A \land B \mid \square
+       A$
+
+       Term $M, N := \lambda x.M \mid M\ N \mid box\ M \mid let\ box\
+       u = M\ in\ N$
+       
+       \paragraph{Introduction:}
+       \begin{prooftree}
+         \AXC{$\Delta ; \cdot \vdash A$ true}
+         \RL{$\square$ I}
+         \UIC{$\Delta; \Gamma \vdash \square A$ true}
+       \end{prooftree}
+       \paragraph{Elimination:}
+       \begin{prooftree}
+         \AXC{$\Delta; \Gamma \vdash \square A$ true}
+         \UIC{$\Delta;\Gamma \vdash A$ true}
+       \end{prooftree}
+       Alternative?
+       \begin{center}
+         \AXC{$\Delta; \Gamma \vdash \square A$ true}
+         \UIC{$\Delta;\cdot \vdash A$ true}
+         \DP
+         $\implies$ UNSOUND
+       \end{center}
+       \paragraph{Local Soundness:}
+       \begin{center}
+         \AXC{$\mathcal{D}$}
+         \noLine
+         \UIC{$\Delta; \cdot \vdash A$ true}
+         \RL{$\square$ I}
+         \UIC{$\Delta; \Gamma \vdash \square A$ true}
+         \UIC{$\Delta; \Gamma \vdash A$ true}
+         \DP
+         $\implies$
+         \begin{tabular}{c}
+           $\mathcal{D}^{\text{weak}}$
+           \\ $\Delta; \Gamma \vdash A$ true
+         \end{tabular}
+       \end{center}
+       \paragraph{Local Completeness:}
+       \begin{center}
+         \begin{tabular}{c}
+           $\mathcal{D}$
+           \\$\Delta; \Gamma \vdash \square A$ true
+         \end{tabular}
+         $\implies$
+         \AXC{$\mathcal{D}$}
+         \noLine
+         \UIC{$\Delta; \Gamma \vdash \square A$ true}
+         \UIC{$\Delta; \Gamma \vdash A$ true}
+         \noLine
+         \UIC{$\vdots$}
+         \noLine
+         \UIC{$\Delta; \Gamma \vdash \square A$ true}
+         \DP
+         (\textbf{Too weak})
+       \end{center}
+       So what elimination rule should we have? Take inspiration from
+       disjunction elimination.
+       \begin{prooftree}
+         \AXC{$\Delta; \Gamma \vdash \square A$ true}
+         \AXC{$\Delta, A$ valid$; \Gamma \vdash C$ true}
+         \BIC{$\Delta; \Gamma \vdash C$ true}
+       \end{prooftree}
+       \paragraph{Revisiting Local Soundness}
+       \begin{center}
+         \AXC{$\mathcal{D}_1$}
+         \noLine
+         \UIC{$\Delta; \cdot \vdash A$ true}
+         \RL{$\square$ I}
+         \UIC{$\Delta; \Gamma \vdash \square A$ true}
+         \AXC{$\mathcal{D}_2$}
+         \noLine
+         \UIC{$\Delta, u: A$ valid$; \Gamma \vdash C$ true}
+         \RL{$\square$ E}
+         \BIC{$\Delta; \Gamma \vdash C$ true}
+         \DP
+         $\implies \Delta; \Gamma \vdash C$ true (Substution Lemma) $[\mathcal{D}_1/u]\mathcal{D_2}$
+       \end{center}
+       \paragraph{Local Completeness}
+       \begin{center}
+         \begin{tabular}{c}
+           $\mathcal{D}$
+           \\ $\Delta; \Gamma \vdash \square A$ true
+         \end{tabular}
+         $\implies$
+         \AXC{$\mathcal{D}$}
+         \noLine
+         \UIC{$\Delta; \Gamma \vdash \square A$ true}
+         \AXC{$A$ valid $\in \Delta$}
+         \UIC{$\Delta, A$ valid$; \cdot \vdash A$ true}
+         \UIC{$\Delta, A$ valid$; \Gamma \vdash \square A$ true}
+         \BIC{$\Delta; \Gamma \vdash \square A$ true}
+         \DP
+       \end{center}
+       \paragraph{Examples}
+       We want to prove: $A \supset \square A, \square A
+       \supset A, \square A \supset \square \square A$
+       
+       \begin{scprooftree}{0.7}
+         \AXC{}
+         \UIC{$\cdot; \square (A \supset B)$ true$, \square A$ true
+           $\vdash \square A$ true}
+
+         \AXC{$A$ valid$; \Gamma \vdash \square (A \supset B)$ true}
+
+         \AXC{\ldots}
+         \UIC{$A$ valid$, A \supset B$ valid$; \cdot \vdash A \supset
+           B$ true}
+         
+         \AXC{\ldots}
+         \UIC{$\ldots \vdash A$ true}
+         \RL{$\supset$ E}
+         \BIC{$A$ valid$, A \supset B$ valid$; \cdot \vdash B$ true}
+         \RL{$\square$ I}
+         \UIC{$A$ valid$, A \supset B$ valid$; \Gamma \vdash \square
+           B$ true}
+         \RL{$\square$ E}
+         \BIC{$\cdot; \square(A \supset B)$ true $,\square A$ true
+           $\vdash \square A$ true}
+         
+         \RL{$\square$ E}
+         \BIC{$ \cdot; \overbrace{\square (A \supset B)\text{ true }, \square A\text{ true}}^{\Gamma}\vdash \square B$ true}
+         \RL{$\supset$ I}
+         \UIC{$\cdot; \square(A \supset B)$ true$ \cdot \vdash\square()$}
+         \RL{$\supset$ I$^u$}
+         \UIC{$\cdot; \cdot \vdash \square(A \supset B) \supset
+           \square A \supset \square B$ true}
+       \end{scprooftree}
+       In general, we want to promote validity to truths/assumptions.
+       \begin{prooftree}
+         \AXC{$\cdot; \square A$ true $\vdash \square A$ true}
+         \AXC{}
+         \UIC{$A$ valid$; \square A$ true $\vdash A$ true}
+         \RL{$\square$ E}
+         \BIC{$\cdot; \square A$ true $\vdash A$ true}
+         \RL{$\supset$ I}
+         \UIC{$\cdot; \cdot \vdash \square A \supset A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\cdot; \square A$ true $\vdash \square A$ true}
+
+         \AXC{}
+         \UIC{$A$ valid$; \cdot \vdash A$ true}
+         \RL{$\square$ I}
+         \UIC{$A$ valid$; \cdot \vdash \square A$ true}
+         \RL{$\square$ I}
+         \UIC{$A$ valid$; \square A$ true $\vdash \square \square A$ true}
+         \RL{$\square$ E}
+         \BIC{$\cdot; \square A$ true $\vdash \square \square A$ true}
+         \UIC{$\cdot; \cdot \vdash \square A \supset \square \square
+           A$ true}
+       \end{prooftree}
+
+       \paragraph{Variables}
+       We have two different classes of variables (depending on where
+       they come from)
+       \begin{prooftree}
+         \AXC{$x:A$ true $\in \Gamma$}
+         \UIC{$\Delta; \Gamma \vdash x : A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$u:A$ valid $\in \Delta$}
+         \UIC{$\Delta; \Gamma \vdash u:A$ true}
+       \end{prooftree}
+       \paragraph{Rules with Terms}
+       \begin{prooftree}
+         \AXC{$\Delta; \cdot \vdash M : A$ true}
+         \UIC{$\Delta; \Gamma \vdash box\ M : \square A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta; \Gamma \vdash M:\square A$ true}
+         \AXC{$\Delta, u:A$ valid$; \Gamma \vdash N : C$ true}
+         \BIC{$\Delta; \Gamma \vdash let\ box\ u = M\ in\ N : C$ true}
+       \end{prooftree}
+       \paragraph{Staged Programming}
+       Distinguish between code that is \underline{generated} \textbf{AND} code
+       that is actually doing the work of generating code (\underline{code
+         generator}, for example, $\square$ can be the code generator and
+       $A$ can be the code that is generated)
+
+       Reminder from 302: \texttt{pow 2}$\to $ squaring function $x * x * 1$
+       \\ \texttt{pow 3} $\to x * x * x * 1$
+       \begin{algorithmic}
+         \State {\texttt{(* pow n x = $x^n$*)}}
+         \State {\texttt{pow : int -> $\square$ (int -> int)}}
+         \State {\texttt{let rec pow n =}}
+         \If {$n = 0$}
+         \State {\texttt{box($\lambda$x.1)}}
+         \Else
+         \State {\texttt{box f = pow (n-1) in}}
+         \State {\texttt{box($\lambda$x.x*f x)}}
+         \EndIf
+       \end{algorithmic}
+       \texttt{pow 2} $\neq$ \texttt{box ($\lambda$x. x * x * 1)}
+       \\ \underline{Instead:} \texttt{box ($\lambda$x . x *
+         \underline{($\lambda$x$_1$.x$_1$*($\lambda$x$_0$.1) x$_1$) x})}
+       \\ Administrative redeces
+     \end{document}
