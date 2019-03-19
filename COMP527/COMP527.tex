@@ -1,7 +1,7 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
   lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
-  marvosym, stmaryrd}
+  marvosym, stmaryrd, collectbox}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \EnableBpAbbreviations
@@ -16,7 +16,15 @@
 % New environment to scale prooftrees, from https://tex.stackexchange.com/questions/104554/how-to-scale-prooftree-environment-bussproofs-package
 \newenvironment{scprooftree}[1]%
   {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
-  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center}
+}
+%New command \mybox to box something
+\newcommand{\mybox}{%
+\collectbox{%
+	\setlength{\fboxsep}{3pt}%
+	\fbox{\BOXCONTENT}%
+	}%
+}
       
 \usepackage{graphicx}
 \graphicspath{{Images/}}
@@ -4360,4 +4368,251 @@ reach x y:-
        \\ \underline{Instead:} \texttt{box ($\lambda$x . x *
          \underline{($\lambda$x$_1$.x$_1$*($\lambda$x$_0$.1) x$_1$) x})}
        \\ Administrative redeces
+       \section{03/19/19}
+       Papers posted on myCourses:
+       \begin{itemize}
+       \item Davies, Pfenning: A judgmental reconstruction of modal
+         logic, MSCS 2001
+       \item Nanevski, Pfenning, Pientka: Contextual Modal Type
+         Theory, ACM Transactions on Computational Logic, 2008
+       \end{itemize}
+       Don't have to read the whole papers, just look at them with
+       your notes and read the sections relevant to what we covered.
+
+       \paragraph{Recap}
+       $\mathcal{A} := A \supset B \mid \square A$
+       \\ $\square A \hat{=} A$ is true in every world ``$A$ valid''
+       \\ $\underbrace{\Delta}_{\substack{\text{global assumptions}\\A
+         \text{ valid}}};
+       \underbrace{\Gamma}_{\substack{\text{current local
+             assumptions}\\ \mathcal{A} \text{ true}}} \vdash
+       A$ true
+       \begin{prooftree}
+         \AXC{$u:A$ valid $\in \Delta$}
+         \UIC{$\Delta ; \Gamma \vdash A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta ; \cdot \vdash A$ true}
+         \RL{$\square$ I}
+         \UIC{$\Delta; \Gamma \vdash \square A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta; \Gamma \vdash \square A$ true}
+         \AXC{$\Delta, u:A$ valid$; \Gamma \vdash C$ true}
+         \BIC{$\Delta; \Gamma \vdash C$ true}
+       \end{prooftree}
+       We saw the power function:
+       \\$pow : int \to \square (int \to int)$
+       \\ $pow\ 3 \nrightarrow box(fun\ x \to x * x * x * 1)$
+       \\ $pow\ n = if\ n = 0 \ then \ \mybox{?}\ else\ \mybox{?}$,
+       where $\mybox{?}$ after the then is a hole for $n$
+       \\$\forall x : nat. even\ x \supset \mybox{?}$
+
+       Because of these holes, we want to redefine things a bit (like
+       in code, we want to be able to import things without having to
+       change overall logic):
+       $\mathcal{A} := A \supset B \mid [\psi] A$
+       \\ $[\psi] A \hat{=} A$ is true in every world where we have
+       assumptions $\psi$
+       \\ $[\psi] A \stackrel{\sim}{=} \square (\psi \supset A)$
+       \\ $[x_1:B_1, \ldots, x_n:B_n] A \stackrel{\sim}{=} \square
+       (B_1 \supset B_2 \supset \ldots \supset B_n \supset A)$
+       \\ $\implies$ Logically equivalent (we haven't expanded the
+       proof system)
+       \\ $\implies$ Computationally different
+       \\ $\stackrel{\sim}{=}$ Structure of proofs is different
+       \\ $\underbrace{\Delta}_{\substack{\text{global assumptions}\\ [\psi]A}};
+       \underbrace{\Gamma}_{\substack{\text{current local
+             assumptions}\\ \mathcal{A} \text{ true}}} \vdash
+       A$ true
+       \begin{prooftree}
+         \AXC{$u:[\psi]A \in \Delta$}
+         \AXC{$\Delta; \Gamma \vdash \psi$}
+         \RL{hyp$^*$}
+         \BIC{$\Delta ; \Gamma \vdash A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta ; \psi \vdash A$ true}
+         \RL{$\square$ I, Context switch}
+         \UIC{$\Delta; \Gamma \vdash [\psi] A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta; \Gamma \vdash [\psi] A$ true}
+         \AXC{$\Delta, u:[\psi]A; \Gamma \vdash C$ true}
+         \BIC{$\Delta; \Gamma \vdash C$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta, \Gamma \vdash A_1$ true}
+         \AXC{\ldots}
+         \AXC{$\Delta; \Gamma \vdash A_n$ true}
+         \TIC{$\Delta; \Gamma \vdash x_1 : A_1, \ldots, x_n : A_n = \psi$}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{}
+         \RL{$n$-times}
+         \UIC{$\Delta; x_! : B_1, \ldots, x_n : B_n \vdash A$ true}
+         \RL{$\supset$ I}
+         \UIC{$\Delta ; \cdot \vdash B_1 \supset B_2 \supset \ldots
+           \supset B_n \supset A$}
+         \RL{$\square$ I}
+         \UIC{$\Delta; \Gamma \vdash \square (B_1 \supset B_2 \supset
+           \ldots \supset B_n \supset A)$}
+       \end{prooftree}
+       \paragraph{Examples}
+         {$\square (C \supset A) \supset \square (C \supset D
+           \supset A)$}
+         \begin{prooftree}
+           \AXC{}
+           \UIC{$\cdot; [x:C] A$ true $\vdash [x:C] A$ true}
+           \AXC{}
+           \UIC{$u:[x:C]A$ valid$; C$ true$, D$ true $\vdash C$ true}
+           \RL{hyp$^*$}
+           \UIC{$u:[x:C]A$ valid$; C$ true$, D$ true $\vdash A$ true}
+           \RL{$\square$ I}
+           \UIC{$u:[x:C]A$ valid$; [x:C]A$ true $\vdash [x:C, y:D] A$
+             true}
+           \RL{$\square$ E}
+           \BIC{$\cdot ; [x:C] A$ true $\vdash [x:C, y:D] A$ true}
+           \RL{$\supset$ I}
+           \UIC{$\cdot \vdash [x:C] A \supset [x:C, y:D] A$ true}
+         \end{prooftree}
+         In this proof we don't waste time using $\supset$ E and
+         instead use hyp$^*$, nor do we use $\supset$ I.
+         \begin{scprooftree}{0.8}
+           \AXC{$\ldots$}
+           \AXC{}
+           \UIC{$u:[A]B, v:[A]([B]C); A$ true $\vdash A$ true}
+           \UIC{$u:[A]B, v:[A]([B]C); A$ true $\vdash [B]C$ true}
+           \AXC{}
+           \UIC{$u:[A]B, v:[A]([B]C), w:[B]C; A$ true $\vdash A$ true}
+           \RL{hyp$^*$}
+           \UIC{$u:[A]B, v:[A]([B]C), w:[B]C;A$ true $\vdash B$ true}
+           \RL{hyp$^*$}
+           \UIC{$u: [A]B, v:[A]([B]C), w:[B]C; A$ true $\vdash C$ true}
+           \RL{$\square$ E}
+           \BIC{$u:[A]B, v:[A]([B]C) ; A$ true $\vdash C$ true}
+           \RL{$\square$ I}
+           \UIC{$u : [A]B, v:[A]([B]C); \Gamma \vdash [A]C$ true}
+           \RL{2 - times $\square$ E}
+           \BIC{}
+           \UIC{}
+           \UIC{$\cdot; \underbrace{[A]B \text{ true}, [A]([B] C)
+               \text{ true}}_{\Gamma} \vdash [A]C$ true}
+         \end{scprooftree}
+         For the last line, we can't use $\square$ I right away, as
+         we'd drop all the assumptions we have. We therefore have to
+         transfer these assumptions to our global context such that we
+         can use them. It is hard to reason directly from
+         assumptions.
+
+         This proof is similar to $(A \supset B \supset C) \supset (A
+         \supset C)$, however the proof structure changes a lot.
+
+         \begin{prooftree}
+           \AXC{}
+           \UIC{$\cdot ; A$ true $\vdash A$ true}
+           \RL{$\square$ I}
+           \UIC{$\cdot ; \vdash [A]A$ true}
+         \end{prooftree}
+         Similar to $[\cdot]A \supset A$ true.
+
+         If $\psi$ in hyp$^*$ is empty, then things become trivially
+         true, we don't have to prove everything in $\psi$ and we get
+         an axiom.
+
+         We cannot prove $[A] ([B] C)$ true $\vdash [B]([A]C)$
+         true. We only have reflexivity and transitivity, no symmetry.
+         \begin{prooftree}
+           \AXC{\ldots}
+           \AXC{?}
+           \UIC{$u:[A]([B] C); B$ true $\vdash [A]C$ true}
+           \UIC{$u:[A]([B]C);\Gamma \vdash [B]([A]C)$ true}
+           \RL{$\square$ E}
+           \BIC{$\cdot ; [A] ([B] C)$ true $\vdash [B]([A]C)$ true}
+         \end{prooftree}
+         However, we can prove:
+         \\ $[A][B] C \supset [[] B] [A] C$
+         \\ $[A,B] C \supset [A \land B] C$
+         \\ $[A,B]C \supset [B,A]C$
+
+         Importing a global piece of code, with terms:
+       \begin{prooftree}
+         \AXC{$u:[\psi]A \in \Delta$}
+         \AXC{$\Delta; \Gamma \vdash \overbrace{\sigma}^{\text{Substitution}} : \psi$}
+         \RL{hyp$^*$}
+         \BIC{$\Delta ; \Gamma \vdash clo(u,
+           \underbrace{\sigma}_{\text{Explicit/suspended substitution calculus}}) : A$ true}
+       \end{prooftree}
+       Where clo is a closure.
+       \begin{prooftree}
+         \AXC{$\Delta ; \psi \vdash M:A$ true}
+         \RL{$\square$ I, Context switch}
+         \UIC{$\Delta; \Gamma \vdash box (\psi.M) : [\psi] A$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta; \Gamma \vdash M : [\psi] A$ true}
+         \AXC{$\Delta, u:[\psi]A; \Gamma \vdash N : C$ true}
+         \BIC{$\Delta; \Gamma \vdash let\ box\ u = M\ in\ N : C$ true}
+       \end{prooftree}
+       \begin{prooftree}
+         \AXC{$\Delta, \Gamma \vdash M_1 : A_1$ true}
+         \AXC{\ldots}
+         \AXC{$\Delta; \Gamma \vdash M_n : A_n$ true}
+         \TIC{$\Delta; \Gamma \vdash M_1/x_1, \ldots, M_n/x_n : x_1 : A_1, \ldots, x_n : A_n$}
+       \end{prooftree}
+       Comparing \texttt{pow} with global contexts to imported
+       contexts (note on the RHS we still expect an input $x:int$ to
+       generate the code):\\
+       \begin{minipage}{0.5\linewidth}
+         \texttt{pow : int $\to \square$ (int $\to$ int)}
+         \\ \texttt{let rec pow n = }
+         \\ \phantom{a}\hspace{1 em} \texttt{if n = 0 then box(fun x $\to$ 1)}
+         \\ \phantom{a}\hspace{1 em} \texttt{else let box $\underbrace{p}_{int
+             \to int}$ = pow (n-1) in}
+         \\ \phantom{a}\hspace{2 em} \texttt{box (fun x $\to$ x * p
+           x)}
+       \end{minipage}
+       \begin{minipage}{0.5\linewidth}
+         \texttt{pow : int -> [x : int] int}
+         \\\texttt{let rec pow n =}
+         \\ \phantom{a}\hspace{1 em} \texttt{if n = 0 then box (x
+           . 1)}
+         \\ \phantom{a}\hspace{1 em} \texttt{else let box
+           $\underbrace{p}_{[x':int]int}$ = pow (n-1) in}
+         \\ \phantom{a}\hspace{2 em} \texttt{box (x . x * clo(p, x/x'))}
+       \end{minipage}
+         \\ Running version 1 gives us:
+         \\ \texttt{pow 2 $\to$ let box p = pow 1 in}
+         \\ \phantom{pow 2 $\to$}\hspace{1 em}\texttt{box (fun x $\to$
+           x * p x)}
+         \\ \phantom{pow 2} $\to$ \texttt{let box p = box (fun x$_1
+           \to$ x$_1$ * (fun x$_0 \to$ 1) x$_1$) in}
+         \\ \phantom{pow 2 $\to$}\hspace{1 em}\texttt{box (fun
+           x$_2\to$ x$_2$ * (fun x$_1 \to$x$_1$ * (fun
+           x$_0\to$1)x$_1$)x$_2$)}
+         \\
+         \\ Running version 2 gives us:
+         \\ \texttt{pow 2 $\to$ let box p = pow 1 in}
+         \\ \phantom{pow 2 $\to$}\hspace{1 em}\texttt{box (x$_2$ .
+           x$_2$ * clos(p, x$_2$/x$_1$))}
+         \\ \phantom{pow 2} $\to$ \texttt{let box p = box (x$_1
+           $ . x$_1$ * 1) in}
+         \\ \phantom{pow 2 $\to$}\hspace{1 em}\texttt{box (x$_2$
+           . x$_2$ * clo (p, x$_2$/x$_1$))}
+         \\ \phantom{pow 2}$\to$ \texttt{box (x$_2$ . x$_2$ * x$_2$ *
+           1)}
+         \\
+       Therefore, in the second version, we do not need to introduce
+functions (functions are too complicated for what we want to
+achieve). Clearly the second version is much more efficient and does
+the same thing when we compare them side by side. It generates code
+depending on the runtime environment we provide it.
+
+       Another example:
+       \texttt{let rec length l =}
+       \\\phantom{a} \hspace{1 em} \texttt{match l with}
+       \\ \phantom{a} \hspace{2 em} \texttt{|[] $\to$ ?}
+       \\ \phantom{a} \hspace{2 em} \texttt{|h::t $\to$ \mybox{?}}
+       \\ \texttt{[l:$\alpha$ list, h:$\alpha$, t:$\alpha$ list]int},
+       we substitute in \texttt{l}.
      \end{document}
