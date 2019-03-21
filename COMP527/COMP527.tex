@@ -25,7 +25,7 @@
 	\fbox{\BOXCONTENT}%
 	}%
 }
-      
+
 \usepackage{graphicx}
 \graphicspath{{Images/}}
 \author{Julian Lore}
@@ -4615,4 +4615,195 @@ Another example:
 \\ \phantom{a} \hspace{2 em} \texttt{|h::t $\to$ \mybox{?}}
 \\ \texttt{[l:$\alpha$ list, h:$\alpha$, t:$\alpha$ list]int},
 we substitute in \texttt{l}.
+\section{03/21/19}
+\subsection{Recap of Box Notation}
+\begin{prooftree}
+	\AXC{$x:A \in \Gamma$}
+	\UIC{$\Delta; \Gamma \vdash x : A$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$u:[\psi]A \in \Delta$}
+	\AXC{$\Delta; \Gamma \vdash \sigma : \psi$}
+	\RL{hyp$^{*}$}
+	\BIC{$\Delta; \Gamma \vdash $clo$(u, \sigma) : A$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$\Delta; \Gamma \vdash M_1 : A_1$}
+	\AXC{$\ldots$}
+	\AXC{$\Delta; \Gamma \vdash M_n : A_n$}
+	\TIC{$\Delta; \Gamma \vdash \underbrace{M_1/x_1 \ldots
+				M_n/x_n}_{\sigma}: \underbrace{\psi}_{x_1:A_1 \ldots x_n:A_n}$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$\Delta; \psi \vdash M : A$}
+	\RL{$\square$ I}
+	\UIC{$\Delta; \Gamma \vdash$ box$(\psi.M): [\psi] A$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$\Delta; \Gamma \vdash M : [\psi] A$}
+	\AXC{$\Delta, u : [\psi] A; \Gamma \vdash N : C$}
+	\RL{$\square$ E}
+	\BIC{$\Delta; \Gamma \vdash$ let box $u = M\ in \ N$}
+\end{prooftree}
+Today:
+\begin{enumerate}
+	\item Revisiting substitution op
+	\item Subject reduction
+	\item ND $\to$ Sequent Calculus
+	\item Cut for contextual $\square$
+\end{enumerate}
+\paragraph{Reduction}
+\begin{tabular}{l l}
+	$(\lambda x.M)N$ & $\to [N/x]M$
+	\\ let box $u = $ box$(\psi.M)$ in $N$ & $\to \llbracket \psi.M/u \rrbracket N$
+\end{tabular}
+\\ Coming up with the let reduction is tricky. \texttt{let box u =
+	box(x.x+1) in box(y.y*clo(u,y/x))}
+\paragraph{Idea}
+\begin{itemize}
+	\item Replace $u$ by \texttt{(x.x+1)}
+	\item Followed by applying the substitution $[y/x](x+1)$
+\end{itemize}
+$\to$ \texttt{box(y.y*$\underbrace{y+1}_{[y/x](x+1)})$}
+
+\paragraph{$[M/x] N$ = $N'$}
+Replace $x$ (from $\Gamma$, local context) with $M$ in $N$.
+
+Capture avoiding!
+
+\begin{align*}
+	[M/x]x & =M
+	\\ [M/x]y & =y, x \neq y
+	\\ [M/x](\lambda y. N) & = \lambda y.[M/x]N, y \notin FV(M)
+	\\ &                    \text{(avoid capture ``local'')}
+	\\ [M/x](box(\psi.N)) & = box(\psi.N)
+	\\ & \text{($N$ can only contain
+		things in $\psi$ due to intro rule, no $x$)}
+	\\ [M/x](let\ box\ u = N_1\ in\ N_2)  & = let\ box\ u = [M/x]N_1\ in
+	\ [M/x]N_2, u \notin FMV(M)
+	\\ & \text{(avoid capture ``global'', i.e.\ bound from let)}
+	\\ [M/x](clo(u, \sigma)) & = clo(u, [M/x]\sigma)
+\end{align*}
+(Other substitution)
+\begin{align*}
+	\llbracket \psi.M/u \rrbracket N             & = N'
+	\intertext{Replace $u$ (from
+		global $\Delta$ with $(\psi.M)$
+		in $N$)}
+	\llbracket \psi. M / u \rrbracket x          & = x
+	\llbracket \psi. M/u \rrbracket (\lambda y.N) = \lambda y. \llbracket \psi.M/u \rrbracket N
+	\intertext{Don't
+		need
+		to
+		take
+		care
+		of
+		capture,
+		since
+		$M$
+		is
+		closed
+		wrt
+		$\psi$;
+		in
+		particular
+		$y$
+		cannot
+		occur
+		in
+		$M$}
+	\llbracket \psi.M/u \rrbracket(box (\phi.N)) & = box(\phi.\llbracket \psi.M/u \rrbracket N)
+	\\ \llbracket \psi.M/u \rrbracket(let\ box\ v = N_1\ in\ N_2) & = let\ box\ v = \llbracket \psi.M/u \rrbracket N_1\ in \llbracket \psi.M/u \rrbracket N_2, v \notin FMV(M)
+	\\ \llbracket\psi.M/u\rrbracket clo(u, \sigma) & = [\llbracket \psi.M/u \rrbracket \sigma] M
+	\\ clo(v, \llbracket \psi. M/u \rrbracket \sigma) & = clo(v, \llbracket \psi.M/u\rrbracket \sigma)
+\end{align*}
+Tough to come up with the closure rule here:
+\\ \texttt{let box u = box (x.x+1) in
+	box(y.y*clo(u,y/x))$\to$box(y.y*(y+1))}
+\paragraph{Idea}
+\begin{enumerate}
+	\item
+	      \begin{enumerate}
+		      \item Replace $u$ with $x+1$
+		      \item Replace any free occurrence of $u$ in $(y/x)$!
+	      \end{enumerate}
+	\item Eliminated the closure by applying $[y/x]$ to $(x+1)$, $[y/x](x+1)$
+\end{enumerate}
+\paragraph{Subject Reduction} If $\Delta; \Gamma \vdash M : A$ and $M
+	\to M'$ then $\Delta; \Gamma \vdash M : A$.
+\\ Case Analysis on $M \to M'$
+\paragraph{Case:} $(\lambda x.M)N \to [N/x]M$
+\\
+\begin{tabular}{l l}
+	$\Delta; \Gamma \vdash (\lambda x.M)N:B$ & by assumption
+	\\                                           $\Delta; \Gamma \vdash N : A$
+	\\ $\Delta; \Gamma \vdash \lambda x.M :A \supset B$ & by inversion on $\supset$ E
+	\\ $\Delta; \Gamma, x : A \vdash M:B$ & by inversion on $\supset$ I
+	\\ $\Delta; \Gamma \vdash [N/x]M:B$ & by substitution Lemma for local context
+\end{tabular}
+\paragraph{Case:}let box $u =$ box$(\psi.M)$ in $N \to \llbracket
+	\psi.M/u \rrbracket N$
+\\
+\begin{tabular}{l l}
+	$\Delta; \Gamma \vdash $ let box $u = $ box$(\psi.M)$ in $M : B$ & by assumption
+	\\ $\Delta; u: [\psi]A ; \Gamma \vdash N : B$ & by inversion $\square$E
+	\\ $\Delta; \Gamma \vdash$ box$(\psi.M):[\psi]A$
+	\\ $\Delta; \psi \vdash M : A$ & by inversion $\square$ I
+	\\ $\Delta; \Gamma \vdash \llbracket \psi. M/u \rrbracket N:B$ & by substitution lemma for \underline{global context}
+\end{tabular}
+
+So now we also want to show consistency, much like we did using
+normal proofs and sequent calculus. What was the idea behind sequent
+calculus?
+\paragraph{Sequent Calculus} (only normal derivations)
+\\ A way of proving consistency (we are not able to prove $\cdot ;
+	\cdot \vdash \perp$)
+\subparagraph{Normal ND}
+\begin{prooftree}
+	\AXC{$\Downarrow \Gamma^{\downarrow} \vdash r : A
+			\downarrow$ Elim-Rules}
+	\UIC{$\Uparrow \Gamma^{\downarrow} \vdash m : A \uparrow$ Intro-Rules}
+\end{prooftree}
+\subparagraph{Sequent Calculus}
+\begin{prooftree}
+	\AXC{}
+	\LL{initial rule}
+	\UIC{$\underbrace{\Uparrow}_{\text{Left rules}} \Gamma
+		\implies \underbrace{A}_{\text{Right rules}} \Uparrow$}
+\end{prooftree}
+
+New rules:
+
+\begin{prooftree}
+	\AXC{$\Delta; \psi \implies A$}
+	\RL{$\square$ R}
+	\UIC{$\Delta; \Gamma \implies [\psi] A$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$\Delta; \Gamma, x : A \implies B$}
+	\RL{$\supset$ R}
+	\UIC{$\Delta; \Gamma \implies A \supset B$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$\Delta; \Gamma \implies A$}
+	\AXC{$\Delta; \Gamma, x : A \supset B, y : B \implies C$}
+	\RL{$\supset$ L}
+	\BIC{$\Delta; \Gamma, x : A \supset B \implies B$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{}
+	\RL{initial}
+	\UIC{$\Delta; \Gamma, A \implies A$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$\Delta, u : [\psi]A; \Gamma, x:[\psi]A \implies C$}
+	\RL{$\square$L}
+	\UIC{$\Delta; \Gamma, x: [\psi] A \implies C$}
+\end{prooftree}
+\begin{prooftree}
+	\AXC{$(\Delta, u:[\psi]A);\Gamma \implies \psi$}
+	\AXC{$\Delta, u:[\psi]A; \Gamma, A \implies C$}
+	\RL{reflect}
+	\BIC{$\Delta, u:\underbrace{[\psi]A}_{\psi \supset A}; \Gamma \implies C$}
+\end{prooftree}
 \end{document}
