@@ -3009,7 +3009,7 @@ $\Gamma$ accumulates everything we extract from rules, things
 		\BIC{$\overbrace{\Gamma, u_1 : (A \supset B), u_2 : B \supset
 					C}^{\Gamma'} \implies C$}
 		\RL{$\land_1$ L, $\land_2$ L}
-		\UIC{$\overbrace{u : (A \supset B) \land (B \supset C, w:A)}^{\Gamma} \implies C$}
+		\UIC{$\overbrace{u : (A \supset B) \land (B \supset C), w:A}^{\Gamma} \implies C$}
 		\RL{$\supset$ R}
 		\UIC{$u : (A \supset B) \land (B \supset C) \implies A
 				\supset C$}
@@ -3073,7 +3073,7 @@ $\Gamma$ accumulates everything we extract from rules, things
 		\TIC{$\perp$}
 	\end{prooftree}
 
-	\paragraph{Soundness} IF $\Gamma \implies A$ then
+	\paragraph{Soundness} If $\Gamma \implies A$ then
 $\Gamma^{\downarrow} \vdash A \uparrow$ Induction on $\Gamma
 \implies A$.
 	\paragraph{Case:} $\mathcal{D} =$ \AXC{$u : A \in
@@ -3494,7 +3494,7 @@ reach x y:-
 		\\ $r\_e:$ & $\forall x: node. \forall y:node . edge\ x\ y \supset reach\ x\ y$
 		\\ $r\_tr:$ & $\forall x: node.\forall y: node. \forall w:node. reach\ x \ w \land reach\ w\ y \supset reach\ x \ y$
 	\end{tabular}
-	\paragraph{Plan} Extend the Horn Fragment to Hereditary Hairop
+	\paragraph{Plan} Extend the Horn Fragment to Hereditary Harrop
 	Formulas (Higher-order logic programming) $\hat{=} \supset,
 \forall, P$
 	\\ Clauses $C := P \mid \forall x : \tau.C \mid C \supset C$
@@ -3650,7 +3650,7 @@ P$
 			      \BIC{$\Delta \textcolor{orange}{>} G \supset P {\implies} P'$}
 			      \DP
 		      \end{center}
-		\item Once we pick a cluase from $\Delta$, we focus on it.
+		\item Once we pick a clause from $\Delta$, we focus on it.
 	\end{enumerate}
 	Now how do we show this is sound and complete?
 	\\ If $\Delta \implies G$ then $\Delta \stackrel{u}{\implies}
@@ -3698,7 +3698,7 @@ P$ where $D \in (\Delta, G_1 \supset P_1)$
 	\\
 	\begin{tabular}{l l}
 		$\Delta, G_1 \supset P_1, P_1 > D' \implies P$ & by IH
-		\\ $\Delta, G_1 \supset P_1 \stackrel{u}{\implies} G_1$
+		\\ $\Delta, G_1 \supset P_1 \stackrel{u}{\implies} G_1$ & by postponement lemma
 	\end{tabular}
 	\\ This is another form of the postponement lemma. Both forms
 	of the postponement lemma can be proven via induction.
@@ -3714,7 +3714,7 @@ P$ where $D \in (\Delta, G_1 \supset P_1)$
 $\Delta \implies G$ uniform
 	\\ $\Delta > C \implies P(t_1 \ldots t_n)$ focusing
 	\subsection{Higher-Order Logic Programming}
-	(Hereditary Hairop formulas)
+	(Hereditary Harrop formulas)
 	\\ $F := P(t_1 \ldots t_n) \mid F_1 \supset F_2 \mid \forall x
 : \tau. F$
 
@@ -3732,7 +3732,8 @@ $\Delta \implies G$ uniform
 \UIC{$\Delta \implies F_1 \supset F_2$}
 \DP
 %
-\AXC{$F \in \Delta\ \Delta > F \implies P(t_1 \ldots t_n)$}
+\AXC{$\Delta > F \implies P(t_1 \ldots t_n)$}
+\RL{$F \in \Delta$}
 \UIC{$\Delta \implies P(t_1 \ldots t_n)$}
 \DP
 Where the last rule is new.
@@ -4805,5 +4806,230 @@ New rules:
 	\AXC{$\Delta, u:[\psi]A; \Gamma, A \implies C$}
 	\RL{reflect}
 	\BIC{$\Delta, u:\underbrace{[\psi]A}_{\psi \supset A}; \Gamma \implies C$}
-\end{prooftree}
+      \end{prooftree}
+      \section{03/26/19}
+      Recap of modal logic (with boxes):
+
+      $\square A$, $A$ is necessarily true or $A$ is true in every
+      world.
+      \paragraph{So far:}
+      $\underbrace{\Delta}_{\text{global}};
+      \underbrace{\Gamma}_{\text{local}} \vdash A$ true
+      \\ ``explicit'' box and let-box
+      \subsection{Alternative (implicit) characterization of $\square A$}
+      \paragraph{Today:} Alternative characterization of $\square A$.
+      \begin{itemize}
+      \item Kripke-style interpretation
+      \item S4: Accessibility Relation over worlds
+        \begin{itemize}
+        \item Reflexive
+        \item Transitive
+        \end{itemize}
+      \end{itemize}
+      $\underbrace{\Gamma_1; \Gamma_2 ; \ldots ;
+        \Gamma_n}_{\substack{\text{Context stack}\\\text{initial
+            world}}} \vdash A$ true
+      \paragraph{Idea:} Consider $\Gamma_i$. Then every assumption in
+      $\Gamma_i$ is reachable from the worlds (context) $\Gamma_1;
+      \ldots; \Gamma _{i - 1}$
+      \paragraph{Based:} R.Davies, F. Pfenning
+      \\ A modal analysis of staged computation, ACM 2001.
+      \paragraph{Goal:} Treat the elimination rule for $\square A$
+      differently - implicit - (box - unbox), no let-box like we had
+      before.
+
+      We use $\Psi$ for a context stack. This will keep track of the
+      order that assumptions were added (we will know in what world it
+      was introduced).
+      \\ $\Psi = \cdot; \Gamma_1 ; \Gamma_2 ; \ldots ; \Gamma_n$
+      \paragraph{Variable Rule}
+      \begin{prooftree}
+        \AXC{$x : A \in \Gamma$}
+        \UIC{$\Psi; \Gamma \vdash x : A$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\Psi; \Gamma; \cdot \vdash M : A$}
+        \UIC{$\Psi; \Gamma \vdash box\ M : \square A$}
+      \end{prooftree}
+      Here we force ourselves not to refer directly to the assumptions
+      we have from the other worlds, adding a new assumption from the
+      current world.
+      \begin{prooftree}
+        \AXC{$\Psi; \Gamma \vdash M : \square A$}
+        \UIC{$\Psi;\Gamma ; \Gamma_1 ; \ldots ; \Gamma_n \vdash
+          unbox_n\ M : A$}
+      \end{prooftree}
+      We import the fact that $A$ is valid in our current world, have
+      to bring in the other worlds.
+      \paragraph{Note:} $n$ can be $0$. This rule degenerates to:
+      \begin{prooftree}
+        \AXC{$\Psi; \Gamma \vdash M : \square A$}
+        \UIC{$\Psi;\Gamma \vdash
+          unbox_0\ M : A$}
+      \end{prooftree}
+      Properties such as reflexivity and transitivity will be
+      reflected in the operations and structural properties of context
+      stacks.
+      \paragraph{Local Soundness}
+      \begin{center}
+        \AXC{$\mathcal{D}$}
+        \noLine
+        \UIC{$\Psi; \Gamma; \cdot \vdash M : A$}
+        \RL{$\square$ I}
+        \UIC{$\Psi; \Gamma \vdash box\ M : \square A$}
+        \UIC{$\Psi; \Gamma; \Gamma_1 ; \ldots ; \Gamma_n \vdash
+          unbox_n\ (box\ M) : A$}
+        \DP
+        \begin{tabular}{l}
+          Modal fusion + modal weakening on $\mathcal{D}$
+          \\ $\implies \Psi; \Gamma; \Gamma_1; \ldots; \Gamma_n \vdash \{n/1\} M : A$
+          \\ where $\{n/1\}$ means replace index $1$ by $n$
+        \end{tabular}
+      \end{center}
+      Two weakening properties used:
+      \begin{enumerate}
+      \item Weakening within a context $\Gamma$.
+      \item Weakening with respect to context stacks. In particular:
+        If $\Psi; \Gamma \vdash A$ true then $\Psi; \Gamma; \Gamma_1;
+        \ldots; \Gamma_n \vdash A$ true
+      \end{enumerate}
+      \paragraph{Example:} Assume there is an $x : A$ in $\Gamma$
+      s.t. $\Psi ; \Gamma \vdash x : \square A$. What is the witness/rule that
+      allows us to prove: $\Psi ; \Gamma; \Gamma_1 ; \ldots ; \Gamma_n
+      \vdash A$? Use unboxing similar to in local soundness:
+      $\Psi ; \Gamma; \Gamma_1 ; \ldots ; \Gamma_n
+      \vdash unbox_n\ x : A$. Keeping these indices is mainly only
+      useful from a programming point of view (so we'll know where the
+      assumption comes from), but otherwise we could get rid of it.
+      \\ Just weakening isn't enough to prove soundness, it only does
+      the transformation: $\Psi; \cdot \to \Psi; \cdot ; \Gamma_1 ;
+      \ldots ; \Gamma_n$. We require an additional thing called fusion.
+      \paragraph{Context Fusion (Modal Fusion)}
+      If $\Psi; \Gamma; \Gamma' ; \Psi' \vdash C$ true then $\Psi;
+      (\Gamma, \Gamma') ; \Psi' \vdash C$ true
+      \\ Can only hold if we allow reflexivity ($\Gamma$ is accessible
+      from $\Gamma$)
+      \paragraph{Example}
+      \begin{prooftree}
+        \AXC{}
+        \RL{var}
+        \UIC{$\square(A \supset B) \vdash \square (A \supset B)$}
+        \RL{$\square_1$ E}
+        \UIC{$\square(A \supset B); A \vdash A \supset B$ true}
+        \AXC{}
+        \RL{var}
+        \UIC{$\square(A \supset B); A \vdash A$ true}
+        \RL{$\supset$ E}
+        \BIC{$\square(A \supset B); A \vdash B$ true}
+      \end{prooftree}
+      How does this change when we use modal fusion?
+      \begin{prooftree}
+        \AXC{}
+        \RL{var}
+        \UIC{$\square(A \supset B), A \vdash \square (A \supset B)$ true}
+        \RL{$\square_0$ E}
+        \UIC{$\square(A \supset B), A \vdash A \supset B$ true}
+        \AXC{}
+        \RL{var}
+        \UIC{$\square(A \supset B), A \vdash A$ true}
+        \RL{$\supset$ E}
+        \BIC{$\square(A \supset B), A \vdash B$ true}
+      \end{prooftree}
+      So we see that the index of the unbox changes.
+      \paragraph{Local Completeness}
+      \begin{center}
+        \AXC{$\mathcal{D}$}
+        \noLine
+        \UIC{$\Psi; \Gamma \vdash \square A$ true}
+        \DP
+        $\implies$
+        \AXC{$\mathcal{D}$}
+        \noLine
+        \UIC{$\Psi; \Gamma \vdash \square A$ true}
+        \RL{$\square$ E}
+        \UIC{$\Psi; \Gamma; \cdot \vdash A$ true}
+        \RL{$\square$ I}
+        \UIC{$\Psi; \Gamma \vdash \square A$ true}
+        \DP
+      \end{center}
+      \subsection{Translating explicit (box - let box) to implicit
+        (box - unbox)}
+      \begin{tabular}{l l}
+        $\lambda x.let\ box\ u = x \ in\ u : \square A \supset A$& $\to \lambda x.unbox\ (x)$
+      \end{tabular}
+      \\ However we need to keep track of the depths of the lets for
+      the index of unboxing.
+      \\ Call the explicit box system $E$, the implicit box system
+      $M$.
+      \paragraph{Environment} $\rho := \cdot \mid \rho, box\ u = E$
+      \paragraph{Environment stack} $R := \cdot \mid R ; \rho$
+      \\ $\underbrace{R}_{\text{Given the environment stack}} \triangleright E \to
+      M$
+      \begin{prooftree}
+        \AXC{}
+        \RL{tx\_var}
+        \UIC{$R \triangleright x \to x$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$R \triangleright E \to M$}
+        \RL{tx\_lam}
+        \UIC{$R \triangleright \lambda x. E \to \lambda x. M$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$R; \cdot \triangleright E \to M$}
+        \UIC{$R \triangleright box\ E \to box\ M$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$R; \rho, box\ u = E_1 \triangleright E_2 \to M$}
+        \UIC{$R, \rho \triangleright let\ box\ u = E_1\ in\ E_2 \to M$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$R_0; \rho_n' \triangleright E \to M$}
+        \UIC{$R \triangleright u \to unbox_n\ M$}
+      \end{prooftree}
+      where $R$ is $R_0; \underbrace{\rho_n}_{\rho_n', box\ u = E,
+        \rho_n''} ; \ldots ; \rho_1$. So we force things in-line with
+      their index.
+
+      What is the relationship between context stacks $(\Psi; \Gamma)$
+      and the ``global'' context $\Delta$?
+      \\ $\Psi; \Gamma \models R : \Delta$
+      \\ Intuitively:
+      \begin{prooftree}
+        \AXC{$\Theta_n; \ldots ; \Theta_{i-1}l \Gamma_i \vdash \rho_i : \Theta_i$}
+        \UIC{$\Psi_0; \Gamma_n; \ldots; \Gamma_0 \vdash \cdot; \rho_n;
+          \ldots ; \rho_0 : \Delta$}
+      \end{prooftree}
+      Where $\Delta$ is $\Theta_n, \Theta_{n-1}, \ldots,
+      \Theta_0$, we have to carve it up into different subsets in
+      order to split it into different sections $\rho_i$, since
+      $\Delta$ is one flat object. $\Theta_i$ has access to each of
+      the previous $\Theta_j$ (as we see above).
+      \paragraph{Soundness Theorem} If $\Delta, \Gamma
+      {\vdash}_e E : A$, $R \triangleright E \to M$ and
+      $\Psi; \Gamma \models R : \Delta$ then
+      $\Psi; \Gamma \vdash M : A$ (need to recover what $\Psi$ is,
+      which is why we have the third assumption to tell us something
+      about $R$ from $\Psi; \Gamma$).
+      \paragraph{Case:} \AXC{}
+      \RL{tx\_var}
+      \UIC{$R \triangleright x \to x$}
+      \DP
+      \\
+      \begin{tabular}{l l}
+        $\Delta; \Gamma {\vdash}_e x : A$& by assumption
+        \\ $x : A \in \Gamma$ & by variable rule (e)
+        \\ $\Psi; \Gamma {\vdash}_i x : A$ & by var-rule (i)
+      \end{tabular}
+      \paragraph{Case:} \AXC{$R \triangleright E \to M$}\UIC{$R
+        \triangleright \lambda x.E \to \lambda x . M$}\DP
+      \\
+      \begin{tabular}{l l}
+        $\Delta; \Gamma \vdash \lambda x.M : A$& by assumption
+        \\ $\Delta; \Gamma, x:A_1 \vdash M: A_2$ and $A = A_1 \to A_2$ & by assumption
+        \\ $\Psi; \Gamma \models R : A$ & by assumption
+        \\ $\Psi; \Gamma, x : A_1 \models R : \Delta$ & by weakening
+        \\ $\Psi; \Gamma, x : A_1 {\vdash}_i M : A_2$ & by i.h.
+        \\ $\Psi ; \Gamma {\vdash}_i \lambda x.M : A_1 \to A_2$ & by tx\_lam (i)
+      \end{tabular}
 \end{document}
