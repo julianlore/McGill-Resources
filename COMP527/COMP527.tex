@@ -5032,4 +5032,185 @@ New rules:
         \\ $\Psi; \Gamma, x : A_1 {\vdash}_i M : A_2$ & by i.h.
         \\ $\Psi ; \Gamma {\vdash}_i \lambda x.M : A_1 \to A_2$ & by tx\_lam (i)
       \end{tabular}
+      \section{03/28/19}
+      \subsection{Recap of Modal Logic}
+      \paragraph{Explicit}
+      $\Delta; \Gamma \vdash E : A$
+      \\ $E := \ldots \mid \ box\ E \mid let\ box\ u = E_1 \
+      in \ E_2$
+      \\ $\Delta$ contains assumptions, $A$ valid
+      \\ $\Gamma$ contains assumptions, $A$ true
+      \paragraph{Implicit} Called implicit because we don't have let
+      box.
+      \\ $\underbrace{\Gamma_1 ; \ldots ; \Gamma_n \vdash M :
+        A}_{\text{context stack}}$
+      \\ $M := \ldots \mid box\ M \mid unbox_n\ M$
+      \begin{prooftree}
+        \AXC{$\Sigma; \Gamma; \cdot \vdash M : A$}
+        \UIC{$\Sigma; \Gamma \vdash box\ M : \square A$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\Sigma; \Gamma \vdash M : \square A$}
+        \UIC{$\Sigma; \Gamma; \Gamma_1; \ldots; \Gamma_n \vdash
+          unbox_n : A$}
+      \end{prooftree}
+      Where $\Sigma$ is the context stack.
+      \paragraph{Example:}
+      \begin{prooftree}
+        \AXC{}
+        \UIC{$\Gamma_0 \vdash \square (A \supset B)$}
+        \RL{$\square$ E$_{n=1}$}
+        \UIC{$\Gamma_0 ; \cdot \vdash A \supset B$}
+
+        \AXC{}
+        \RL{$\square$ E$_{n=1}$}
+        \UIC{$\Gamma_0 ; \cdot \vdash A$}
+        \RL{$\supset$ E}
+        \BIC{$(\square (A \supset B), \square A); \cdot \vdash B$}
+        \RL{$\square$ I}
+        \UIC{$(\underbrace{\square (A \supset B), \square A}_{\Gamma_0}) \vdash B$}
+      \end{prooftree}
+      Note that the empty context is still a context, so unboxing the
+      empty context still requires $n=1$.
+
+      Proof term:
+      \begin{itemize}
+      \item Implicit:
+        $\lambda x : \square (A \supset B).\lambda y: \square A. box ((unbox_1\ x) (unbox_1\ y))$
+      \item Explicit:
+        $\lambda x : \square (A \supset B).\lambda y: \square A. let\
+        box\ u = x\ in\ let\ box\ v = y\ in\ box(uv)$
+      \end{itemize}
+      \begin{prooftree}
+        \AXC{}
+        \UIC{$\square A \vdash \square A$}
+        \RL{$\square$ E$_{n=2}$}
+        \UIC{$\square A; \cdot ; \cdot \vdash A$}
+        \RL{$\square$ I}
+        \UIC{$\square A ; \cdot \vdash \square A$}
+        \RL{$\square$ I}
+        \UIC{$\square A \vdash \square \square A$}
+      \end{prooftree}
+      \begin{itemize}
+      \item Implicit: $\lambda x : \square A. box(box\ (unbox_2\ x))$
+      \item Explicit: $\lambda x:\square A. let\ box\ u = x\ in\ box$
+      \end{itemize}
+      Proof for the explicit proof term:
+      \begin{prooftree}
+        \AXC{}
+        \RL{}
+        \UIC{$\cdot ; \square A \vdash \square A$}
+        \AXC{}
+        \RL{}
+        \UIC{$A$ valid$; \cdot \vdash A$}
+        \RL{$\square$ I}
+        \UIC{$A$ valid$; \square A \vdash \square A$}
+        \RL{$\square$ E}
+        \BIC{$\cdot ; \square A \vdash \square \square A$}
+      \end{prooftree}
+      The goal was to show that the implicit and explicit systems are
+      equivalent. In order to do so, we introduced the idea of an
+      environment, that allows us to lookup what we need to unbox. We
+      build and keep track of what these $u$ variables are bound to.
+      \paragraph{Environment} $\rho := \cdot \mid \rho_1\ box\ u = E$
+      \paragraph{Environment Stack} $R : = \cdot \mid R; \rho$
+      \\ $\Sigma; \Gamma \models R : \Delta$
+      \\ $\Delta; \Gamma \models \rho : \Delta'$
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \models \rho : \Delta'$}
+        \AXC{$\Delta ;\Gamma \vdash E : \square A$}
+        \BIC{$\Delta; \Gamma \models \underbrace{\rho, box\ u =
+            E}_{\substack{let\ box\ u_1 = E_1\ in \\ let\ box\ u_2 =
+              E_2\ in \\ \vdots}} :
+          \underbrace{\Delta', u :A}_{\text{valid assumption}}$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{}
+        \UIC{$\Delta; \Gamma \models \cdot : \cdot$}
+      \end{prooftree}
+
+      Environment Stacks:
+      \begin{prooftree}
+        \AXC{$\Sigma \vdash R : \Delta_1$}
+        \AXC{$\Delta_1; \Gamma \vdash \rho : \Delta_2$}
+        \BIC{$\Sigma; \Gamma \vdash R : \rho : (\Delta_1, \Delta_2)$}
+      \end{prooftree}
+      We can carve out our full list of global assumptions $\Delta$
+      into these sections $\rho$ for a context stack. Recall that in
+      the explicit language we kind of ``forget'' how many boxes we
+      have to traverse, as long as its valid we have access to it.
+      \paragraph{Theorem:} If $\Sigma; \Gamma \models R; \rho :
+      \Delta$, $\Delta; \Gamma \vdash E : A$ and $(R ;
+      \rho) \triangleright E \to M$ (Translation) then $\Sigma; \Gamma
+      \vdash M : A$
+      \paragraph{Case:} (Variable $x : A \in \Gamma$)
+      \\\begin{tabular}{l l}
+        $(R; \rho) \triangleright x \to x$&
+        \\ $\Delta; \Gamma \vdash_e x : A$ & by assumption
+        \\ $x:A \in \Gamma$ & by assumption
+        \\ $\Sigma, \Gamma \vdash_i x : A$
+        \end{tabular}
+        \paragraph{Case:} Functions
+        \\ \AXC{$(R; \rho) \triangleright E \to M$}
+        \UIC{$(R; \rho) \triangleright \lambda x. E \to \lambda x. M$}
+        \DP
+        \\
+        \begin{tabular}{l l}
+          $\Delta; \Gamma \vdash \lambda x. E : A$& by assumption
+          \\ $\Delta; \Gamma, x : B_1 \vdash E : B_2$ & by inversion
+          \\ $A = B_1 \supset B_2$
+          \\ $\Sigma; \Gamma \models (R; \rho) : \Delta$ & by assumption
+          \\ $\Sigma; (\Gamma, x ; B_1) \models (R; \rho) : \Delta$ & by weakening contexts in a context stack
+          \\ $\Sigma; (\Gamma, x : B_1) \vdash M : B_2$ & by IH
+          \\ $\Sigma; \Gamma \vdash \lambda x. M : B_1 \supset B_2$ & by $\supset$ I
+        \end{tabular}
+        \paragraph{Case:} Box
+        \\ \AXC{$R; \rho; \cdot \triangleright E \to M$}
+        \UIC{$(R; \rho) \triangleright box\ E \to box\ M$}
+        \DP
+        \\
+        \begin{tabular}{l l}
+          $\Delta; \Gamma \vdash box\ E : \square A$& by assumption
+          \\ $\Delta; \cdot \vdash E : A$ & by inversion on $\square$ I
+          \\ $\Sigma; \Gamma \models R; \rho : \Delta$ & by assumption
+          \\ \colorbox{orange}{$(\Sigma; \Gamma); \cdot \models R; \rho ; \cdot : \Delta$} & by $\textcolor{orange}{\Delta ; \cdot \Gamma \cdot : \cdot}$ and above line (see proof tree below) \\ & (note the RHS gives us $(\Delta, \cdot)$, but that's the same as $\Delta$)
+          \\ $(\Sigma; \Gamma); \cdot \vdash M : A$ & by IH
+          \\ $\Sigma; \Gamma \vdash box\ M : \square A$ & by $\square$ I (implicit)
+        \end{tabular}
+      \begin{prooftree}
+        \AXC{$\Sigma' \vdash R' : \Delta_1$}
+        \AXC{$\Delta_1; \textcolor{orange}{\Gamma} \vdash \rho : \Delta_2$}
+        \BIC{$\Sigma'; \textcolor{orange}{\Gamma} \vdash R' : \rho : (\Delta_1, \Delta_2)$}
+      \end{prooftree}
+      \paragraph{Case:} Let-Box
+      \\ \AXC{\colorbox{orange}{$R; (\rho, box\ u = E_1) \triangleright E_2 \to M$}}
+      \UIC{$(R; \rho) \triangleright let\ box\ u = E_1 \ in E_2 \to
+        M$}
+      \DP
+      \\
+      \begin{tabular}{l l}
+        $\Delta; \Gamma \vdash E_1 : \square B$& by inversion on $\square E$
+        \\ \colorbox{orange}{$(\Delta, u : B\ valid); \Gamma \vdash E_2 : A$} & by inversion on $\square$ E
+        \\ $\Sigma; \Gamma \models R ; \rho : \Delta$ & by assumption
+        \\ $\Sigma \models R : \Delta_1$ & by typing def on env.\ stacks
+        \\ $\Delta_1 ; \Gamma \vdash \rho : \Delta_2$, $\Delta = \Delta_1, \Delta_2$ & by typing def of env.\ stacks
+        \\ $(\underbrace{\Delta_1, \Delta_2}_{\Delta}) ; \Gamma \vdash E_1 : \square B$ & from above
+        \\ $\Delta_1; \Gamma \vdash \rho, box\ u = E_1 : (\Delta_2, u:B\ valid)$
+        \\ \colorbox{orange}{$\Sigma; \Gamma \models; (\rho, box\ u = E_1) : \Delta, u : B\ valid$} & by typing def of env.\ stacks
+        \\ $\Sigma; \Gamma \vdash M : A$ & \colorbox{orange}{by IH}
+      \end{tabular}
+      \paragraph{Case:} $u$ (from $\Delta$)
+      \\\AXC{$(R; \rho_n') \triangleright E \to M$}
+      \UIC{$(R; \underbrace{\rho_n}_{\rho_n', box\ u = E, \rho_n''};
+        \ldots; \rho_1) \triangleright u \to unbox_n\ M$}
+      \DP
+      \\
+      \begin{tabular}{l l}
+        $\underbrace{\Sigma}_{\Sigma_0; \Gamma_n; \ldots; \Gamma_1}; \Gamma \models R; \rho_n; \ldots; \rho_1 : \underbrace{\Delta_0, \Delta_n \ldots, \Delta_1}_{\Delta}$& by assumption
+        \\ $\Delta_0 \vdash \rho_n : \Delta_n$ and $\Delta_n = \Delta_n', u : A\ valid, \Delta_n'$& typing def on env.\ stacks $n$ times
+        \\ $\Delta_0, \Delta_n'; \Gamma_n \vdash E : \square A$ & by previous rules
+        \\ $\Sigma; \Gamma_n \vdash M : \square A$ & by IH
+        \\ $\Sigma; \Gamma_n ; \ldots; \Gamma_1; \Gamma \vdash unbox_n\ M : A$ & by typing rule for $\square$ E$_n$
+      \end{tabular}
+
 \end{document}
