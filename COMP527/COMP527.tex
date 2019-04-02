@@ -5212,5 +5212,162 @@ New rules:
         \\ $\Sigma; \Gamma_n \vdash M : \square A$ & by IH
         \\ $\Sigma; \Gamma_n ; \ldots; \Gamma_1; \Gamma \vdash unbox_n\ M : A$ & by typing rule for $\square$ E$_n$
       \end{tabular}
+      \section{04/02/19}
+      \subsection{Modality: Possibility}
+      \begin{tabular}{l l}
+        $A$ true& is a proposition $A$ true? (is there a proof for $A$ true?)
+        \\ $A$ valid & $A$ is true in every possible world
+        \\ & $\to$ we cannot presuppose any knowledge about $A$
+        \\ & $\to$ Intervalize validity using $\square$A
+        \\ & $A$ is necessarily true
+        \\ $A$ poss & $A$ is true in \underline{some} world
+        \\ & $\to A$ is possibly true
+        \\ & $\to$ Internalizing possibility using $\diamond A$
+        \\ & $\to$ How can we use the knowledge that $A$ is possible?
+      \end{tabular}
+      Certain things to keep in mind:
+      \begin{enumerate}
+      \item If $A$ is true, then $A$ is possible.
+      \item If $A$ is possible and assuming $A$ is true $C$ is
+        possible, then $C$ is possible. We can encapsulate the logic
+        of $A$ being possible by further getting something else possible.
+      \end{enumerate}
+      $$\underbrace{\Delta}_{\substack{\text{global}\\A\text{
+            valid}}};
+      \underbrace{\Gamma}_{\substack{\text{local}\\A\text{ true}}}
+      \vdash A \text{ true}$$
+      \paragraph{Intro for Diamond:}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash A$ poss}
+        \RL{$\diamond$ I}
+        \UIC{$\Delta; \Gamma \vdash \diamond A$ true}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash A$ true}
+        \UIC{$\Delta; \Gamma \vdash A$ poss}
+      \end{prooftree}
+      This is a silent rule, we don't need to use this because
+      $A$ is true means $A$ is possible, however we can use it to be explicit.
+      \paragraph{Elim for Diamond:}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash \diamond A$ true}
+        \AXC{$\Delta; A$ true $\vdash C$ poss}
+        \BIC{$\Delta; \Gamma \vdash C$ poss}
+      \end{prooftree}
+      \paragraph{Examples}
+        {$\square (A \supset B) \supset \diamond A \supset \diamond B$ true}
+      \begin{prooftree}
+        \AXC{}
+        \UIC{$(A \supset B)$ valid$; \diamond A$ true $\vdash \diamond
+          A$ true}
+        \AXC{}
+        \UIC{$(A \supset B)$ valid$; A$ true $\vdash A \supset B$
+          true}
+        \AXC{}
+        UIC{$\ldots ; A$ true $\vdash A$ true}
+        \BIC{$(A \supset B)$ valid$; A$ true $\vdash B$ true}
+        \UIC{$(A \supset B)$ valid$; A$ true $\vdash B$ poss}
+        \RL{$\diamond$ E}
+        \BIC{$(A \supset B)$ valid$; \diamond A$ true $\vdash B$ poss}
+        \RL{$\diamond$ I}
+        \UIC{$(A \supset B)$ valid$; \diamond A$ true $\vdash \diamond
+          B$}
+      \end{prooftree}
+      \paragraph{Introducing proof terms}
+      Proof Terms $M := x \mid \lambda x. M \mid M\ N \mid \langle
+      M,N \rangle \mid \ldots \mid box(M) \mid let\ box\ u = M\ in\ N
+      \mid dia \ E$
+      \\ Proof Expressions $E:= M \mid let\ dia\ x = M\ in\ E$
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash E : A$ poss}
+        \RL{$\diamond$ I}
+        \UIC{$\Delta; \Gamma \vdash dia\ E : \diamond A$ true}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash M : \diamond A$ true}
+        \AXC{$\Delta; A$ true $\vdash E : C$ poss}
+        \BIC{$\Delta; \Gamma \vdash let\ dia\ x = M\ in\ E : C$ poss}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{}
+        \RL{hyp$^*$}
+        \UIC{$\cdot ; A$ true $\vdash A$ poss}
+        \RL{$\diamond$ I}
+        \UIC{$\cdot; A$ true $\vdash \diamond A$ true}
+        \RL{$\supset$ I}
+        \UIC{$\cdot; \cdot \vdash A \supset \diamond A$ true}
+      \end{prooftree}
+      Proof term for this is $\lambda x : A . dia\ x$
+
+      Proof term for previous example is $let\ box\ u = x\ in \
+      \lambda x:\square(A \supset B).\lambda y: \diamond A. dia(let\
+      dia\ y' = y\ in\ u\ y')$
+      \paragraph{Local Soundness}
+      \begin{center}
+        \AXC{$\mathcal{D}$}
+        \noLine
+        \UIC{$\Delta; \Gamma \vdash A$ poss}
+        \RL{$\diamond$ I}
+        \UIC{$\Delta; \Gamma \vdash \diamond A$ true}
+        %
+        \AXC{$\mathcal{E}$}
+        \noLine
+        \UIC{$\Diamond; A$ true $\vdash C$ poss}
+        \BIC{$\Delta; \Gamma \vdash C$ poss}
+        \DP
+        $\implies$
+        \begin{tabular}{c}
+          $\mathcal{E}'$
+          \\ $\Delta; \Gamma \vdash C$ poss
+          \\ $\mathcal{E}'$ comes from 2.
+        \end{tabular}
+      \end{center}
+      (Note that 2. says: If $A$ is possible and assuming $A$ is true,
+      $C$ is possible, then $C$ is possible)
+
+      This gives us another substitution lemma. If $\Delta; \Gamma
+      \vdash E : A$ poss and $\Delta; x:A$ true $\vdash F : C$ poss then
+      $\Delta, \Gamma \vdash \langle E/x \rangle F$ poss
+
+      With the reduction rule: $let\ dia\ x = dia\ E\ in\ N \implies
+      \langle E/x\rangle N$.
+
+      What is the substitution here? Is it the usual substitution?
+      Recall that $[N/x] M$ and $\llbracket N/u \rrbracket M$ were
+      defined inductively on $M$, since that's also what allowed us to
+      prove:
+      \begin{itemize}
+      \item  If $\Delta; \Gamma \vdash N : A$ true and $\Delta; \gamma, x
+        : A $ true $\vdash M : C$ true then $\Delta, \Gamma \vdash [N/x]
+        M:C$ true.
+      \item If $\Delta; \cdot \vdash A$ true and $\Delta, u : A$ valid
+        $;\Gamma \vdash M : C$ true then $\Delta, \Gamma \vdash
+        \llbracket N/u \rrbracket M : C$ true
+      \end{itemize}
+      We went from the proof of $M$ to its leaves and then we plugged
+      in $N$.
+
+      But the new substitution rule tries to modify things that were
+      only introduced in the diamond operator (working on the $E$
+      instead of $N$), which is why we use a new symbol to indicate
+      this type of substitution.
+
+      Expr. $E := M \mid let\ dia\ x = M\ in\ E$
+      \\ $\langle N/x \rangle F = [N/x] F$ (if it is in $M$, we
+      fallback to the usual operation)
+      \\ $\langle let\ dia\ y = N\ in E /x \rangle F = let\ dia\ y =
+      N\ in \langle E/x \rangle F$ (we pull out the let, rearranging
+      structure)
+
+      To prove the substitution lemma, we'd do induction on the first
+      judgment/derivation.
+      \paragraph{Case} $E = M$
+      \\
+      \begin{tabular}{l l}
+        $\Delta; \Gamma \vdash M$ poss& by assumption
+        \\ $\Delta; \Gamma \vdash M$ true & (that's by the case we are in, i.e. inversion not on let but silent rule)
+        \\ $\Delta; x : A$ true $\vdash F : C$ poss
+        \\ $\Delta; \Gamma \vdash [M/x] F : C$ poss & (reg. subst)
+      \end{tabular}
 
 \end{document}
