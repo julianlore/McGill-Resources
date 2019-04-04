@@ -5369,5 +5369,203 @@ New rules:
         \\ $\Delta; x : A$ true $\vdash F : C$ poss
         \\ $\Delta; \Gamma \vdash [M/x] F : C$ poss & (reg. subst)
       \end{tabular}
+      \section{04/04/19}
+      What we've seen so far for $S4$:
+      \\
+      \begin{tabular}{l l}
+        $A$ true& $A$ is true ``here'' (locally)
+        \\ $A$ valid, $\square A$ & $A$ true holds in \underline{every} accessible world
+        \\ $A$ pos, $\diamond A$ & $A$ true holds in \underline{some} accessible world
+      \end{tabular}
+      \\ Computationally, we can say:
+      \\\begin{tabular}{l l}
+          $\square A$& mobile code of type $A$
+          \\ $\diamond A$ & remote `$A$'
+        \end{tabular}
+        \\ Proof terms $M := x \mid \lambda x. M \mid M\ N \mid box\
+        M \mid let\ box\ u = M\ in\ N\mid dia\ E$
+        \\ Proof Expression $E, F:= M \mid let\ dia\ x = M\ in\ E$
+      \paragraph{Box}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash M : \square A$}
+        \AXC{$\Delta, u :: A$ valid $\vdash N : C$}
+        \BIC{$\Delta, \Gamma \vdash let\ box\ u = M : C\ in\ N$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\Delta; \cdot \vdash M : A$}
+        \UIC{$\Delta; \Gamma \vdash box\ M : \square A$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$u :: A$ valid $\in \Delta$}
+        \UIC{$\Delta; \Gamma \vdash u : A$}
+      \end{prooftree}
+      \paragraph{Diamond}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash M : \diamond A$}
+        \AXC{$\Delta; x : A \vdash E \div C$ poss}
+        \BIC{$\Delta; \Gamma \vdash let\ dia\ x = M\ in\ E \div C$ poss}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash E \div A$ poss}
+        \UIC{$\Delta; \Gamma \vdash dia\ E: \diamond A$}
+      \end{prooftree}
+      \begin{prooftree}
+        \AXC{$\Delta; \Gamma \vdash M : A$}
+        \UIC{$\Delta; \Gamma \vdash M \div A$ poss}
+      \end{prooftree}
+      Where $\div$ is equivalent to $:$ but used to put emphasis on
+      the fact that $A$ poss (used in the paper), but also redundant
+      as we can just use $\div$ instead of writing poss.
 
+      Is $(A \supset B) \supset \diamond A \supset \diamond B$ true?
+      \\ Option 1, proving from $B$ true:
+      \begin{prooftree}
+        \AXC{}
+        \UIC{$\cdot; x : A \supset B, y : \diamond A \vdash A \supset
+          B$ true}
+        \AXC{? Stuck because we cannot use $\diamond$ E}
+        \UIC{$\cdot; x : A \supset B, y : \diamond A \vdash A$ true}
+        \BIC{$\cdot ; x : A \supset B, y: \diamond A \vdash B$ true}
+        \RL{coercion poss-true}
+        \UIC{$\cdot ; x : A \supset B, y: \diamond A \vdash B$ poss}
+        \UIC{$\cdot; x : A \supset B, y: \diamond A \vdash \diamond B$
+        true}
+    \end{prooftree}
+    Note that if we had no distinction between truth and possibility,
+    we couldn't be stuck here and we'd be able to prove something that
+    isn't true.
+
+    The following is ``ill-typed'' (not even syntactically legal)
+    \\ $\lambda x : A \supset B. \lambda y : \diamond A. dia \underline{(x (let\
+      dia\ w = y\ in\ w))}$
+    \\ Would be legal with no distinction between truth and possibility.
+      \\ Option 2:
+      \begin{prooftree}
+        \AXC{}
+        \UIC{$\cdot; x : A \supset B, y : \diamond A \vdash \diamond
+          A$ true}
+        \AXC{? Stuck, $A \supset B$ only true locally, lost information}
+        \UIC{$\cdot; w : A \vdash B$ poss}
+        \BIC{$\cdot ; x : A \supset B, y: \diamond A \vdash B$ poss}
+        \UIC{$\cdot; x : A \supset B, y: \diamond A \vdash \diamond B$
+        true}
+    \end{prooftree}
+    \paragraph{Another Example}
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$\cdot; x : \diamond \square A \vdash \diamond \square A$
+        true}
+      \AXC{}
+      \UIC{$\cdot ; y : \square A \vdash A$ poss}
+      \RL{$\diamond$ E}
+      \BIC{$\cdot; x : \diamond \square A \vdash A$ poss}
+      \UIC{$\cdot; x : \diamond \square A \vdash \diamond A$ true}
+      \UIC{$\cdot ; \cdot \vdash \diamond \square A \supset \diamond A
+        $ true}
+    \end{prooftree}
+    Alternatively, to get $A$ poss:
+    \begin{prooftree}
+      \AXC{$\Delta; \Gamma \vdash M : \square A$}
+      \AXC{$\Delta, u ::A$ valid$; \Gamma \vdash N \div C$ poss}
+      \BIC{$\Delta; \Gamma \vdash let\ box\ u = M\ in\ N \div C$ poss}
+    \end{prooftree}
+    This rule is not required in the proof above, but it could become
+    necessary if we have nested $\square$ and $\diamond$.
+
+    $\square A \supset \diamond \square A$ is true.
+    \\ $\diamond (A \land B) \supset \diamond A \land \diamond B$ is
+    true.
+    \\ $\diamond A \land \diamond B \supset \diamond(A \land B)$ is
+    not true, the diamonds on the LHS can be for different worlds.
+    \\ $\diamond \square A \supset \square A$ is not true, we do not
+    have symmetry.
+
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$\cdot; x : \diamond(A \land B) \vdash \diamond(A \land B)$
+        true}
+      \AXC{}
+      \UIC{$\cdot; y : A \land B \vdash A \land B$ true}
+      \RL{$\land$ E$_1$}
+      \UIC{$\cdot; y : A \land B \vdash A$ true}
+      \UIC{$\cdot; y : A \land \vdash A$ poss}
+      \BIC{$\cdot; x : \diamond (A \land B) \vdash A $ poss}
+      \UIC{$\cdot; x : \diamond (A \land B) \vdash \diamond A$ true}
+    \end{prooftree}
+    Where we commit to a world and show that we can get $A$ from it.
+    \paragraph{Going back to substitution and reductions}
+    ~\\
+    \begin{tabular}{l l}
+      $let\ box\ u = box\ M\ in\ N$&$\implies \llbracket M/x \rrbracket$
+      \\ $let\ dia\ x = dia\ E\ in\ F$ & $\implies \langle E/x \rangle F$
+      \\ $(\lambda x . N) M$ & $\implies [M/x]N$
+    \end{tabular}
+    \\ $\langle M/x \rangle F = [M/x] F$
+    \\ $\langle let\ dia\ y = M\ in\ E/x \rangle F = let\ dia\ y = M\
+    in \langle E/x \rangle F$
+    \\ If $\Delta; \Gamma \vdash E \div A$ poss and $\Delta; x  : A$
+    true $\vdash F \div C$ poss then $\Delta; \Gamma \vdash \langle
+    E/x \rangle F \div C$ poss.
+    \\ If $\Delta; \Gamma \vdash E : A$ true and $\Delta; x  : A$
+    true $\vdash F \div C$ poss then $\Delta; \Gamma \vdash [M/x]F \div C$ poss.
+    \paragraph{Case} $\mathcal{D} = $
+    \AXC{$\mathcal{D'}$}
+    \noLine
+    \UIC{$\Delta; \Gamma \vdash M : A$ true}
+    \UIC{$\Delta; \Gamma \vdash M \div A$ poss}
+    \DP
+    \\
+    \begin{tabular}{l l}
+      $\Delta; x : A$ true $\vdash F \div C$ poss& by ass
+      \\ $\Delta; \Gamma \vdash [M/x]F \div C$ poss & by IH (2)
+      \\ $\Delta; \Gamma \vdash \langle M/x \rangle F \div C$ poss & by def of $\langle \cdot \rangle$
+    \end{tabular}
+    \paragraph{Case} $\mathcal{D} =$
+    \AXC{$\mathcal{D}_1$}
+    \noLine
+    \UIC{$\Delta; \Gamma \vdash M : \diamond B$}
+    \AXC{$\mathcal{D}_2$}
+    \noLine
+    \UIC{$\Delta; x : B$ true $\vdash E \div A$ poss}
+    \RL{$\diamond$ E}
+    \BIC{$\Delta; \Gamma \vdash let\ dia\ y = M\ in\ E \div A$ poss}
+    \DP
+    \\
+    \begin{tabular}{l l}
+      $\Delta; \underline{x : A}$ true $\vdash F \div C$ poss& by ass
+      \\ $\Delta; y : B$ true $\vdash \langle E/x \rangle F \div C$ poss & by IH(1)
+      \\ $\Delta; \Gamma \vdash let\ dia\ y = M\ in\ \langle E/x \rangle F \div C$ poss & by $\diamond$ E
+      \\ $\Delta; \Gamma \vdash \langle let\ dia\ y = M\ in\ E/x \rangle F \div C$ poss & by def $\langle \cdot \rangle$
+    \end{tabular}
+    \paragraph{Case}
+    \AXC{$\mathcal{D}'$}
+    \noLine
+    \UIC{$\Delta; x : A$ true $\vdash N : C$ true}
+    \UIC{$\Delta; x : A$ true $\vdash N \div C$ poss}
+    \DP
+    \\
+    \begin{tabular}{l l}
+      $\Delta; \Gamma \vdash M : A$ true& by ass
+      \\ $\Delta; \Gamma \vdash [M/x]N : A$ true & by substitution lemma for $A$ true
+    \end{tabular}
+    \paragraph{Case} $\mathcal{D} =$
+    \AXC{$\mathcal{D}_1$}
+    \noLine
+    \UIC{$\Delta; x : A \vdash N : \diamond B$}
+    \AXC{$\mathcal{D}_2$}
+    \noLine
+    \UIC{$\Delta; y : B$ true $\vdash E \div C$ poss}
+    \RL{$\diamond$ E}
+    \BIC{$\Delta; x : A \vdash let\ dia\ y = N\ in\ E \div C$ poss}
+    \DP
+    \\
+    \begin{tabular}{l l}
+      $\Delta; \Gamma \vdash M : A$ true & by ass
+      \\ $\Delta; \Gamma \vdash [M/x]N: \diamond B$ true & by substitution lemma for ($A$ true)
+      \\ $\Delta; \Gamma \vdash let\ dia\ y = [M/x]N\ in\ E \div C$ poss & by $\diamond$ E
+      \\ $\Delta; \Gamma \vdash [M/x](let\ dia\ y = N\ in\ E) \div C$ poss & by def of $[\cdot]$
+    \end{tabular}
+
+    The modality we've seen is equivalent to lax modality: $\diamond
+    \square A = \circ A$
 \end{document}
