@@ -4440,12 +4440,14 @@ proof system)
 \begin{prooftree}
 	\AXC{$\Delta; \Gamma \vdash [\psi] A$ true}
 	\AXC{$\Delta, u:[\psi]A; \Gamma \vdash C$ true}
+        \RL{$\square$ E$^u$}
 	\BIC{$\Delta; \Gamma \vdash C$ true}
 \end{prooftree}
 \begin{prooftree}
 	\AXC{$\Delta, \Gamma \vdash A_1$ true}
 	\AXC{\ldots}
 	\AXC{$\Delta; \Gamma \vdash A_n$ true}
+        \RL{ctx}
 	\TIC{$\Delta; \Gamma \vdash x_1 : A_1, \ldots, x_n : A_n = \psi$}
 \end{prooftree}
 \begin{prooftree}
@@ -4644,7 +4646,7 @@ we substitute in \texttt{l}.
 	\AXC{$\Delta; \Gamma \vdash M : [\psi] A$}
 	\AXC{$\Delta, u : [\psi] A; \Gamma \vdash N : C$}
 	\RL{$\square$ E}
-	\BIC{$\Delta; \Gamma \vdash$ let box $u = M\ in \ N$}
+	\BIC{$\Delta; \Gamma \vdash$ let box $u = M\ in \ N : C$}
 \end{prooftree}
 Today:
 \begin{enumerate}
@@ -5568,4 +5570,206 @@ New rules:
 
     The modality we've seen is equivalent to lax modality: $\diamond
     \square A = \circ A$
+    \section{04/09/19}
+    Earlier throughout the term, all of our assumptions had the same
+    structure, they shared structural properties. Today we will see a
+    different structure.
+    \subsection{Linear Logic}
+    \paragraph{Substructural Logic}
+    Let's assume we want to model the following:
+    \begin{enumerate}
+    \item If one has one dollar, the none can buy a coke. $D \supset
+      C$
+    \item If one has one dollar, then one can buy a sandwich. $D
+      \supset S$
+    \end{enumerate}
+    \begin{prooftree}
+      \AXC{}
+      \RL{}
+      \UIC{$\Gamma \vdash D \supset C$ true}
+      \AXC{}
+      \RL{}
+      \UIC{$\Gamma \vdash D$ true}
+      \RL{$\supset$ E}
+      \BIC{$\Gamma = D \supset C, D \supset S, \mathbf{D} \vdash C$ true}
+      \AXC{}
+      \RL{}
+      \UIC{$\Gamma \vdash D \supset S$ true}
+      \AXC{}
+      \RL{}
+      \UIC{$\Gamma \vdash D$ true}
+      \RL{$\supset$ E}
+      \BIC{$\Gamma \vdash S$ true}
+      \RL{$\land$ I}
+      \BIC{$D \supset C, \mathbf{D} \supset S, D \vdash C \land S$ true}
+      \RL{$\supset$ I}
+      \UIC{$D \supset C, D \supset S \vdash D \supset (C \land S)$ true}
+    \end{prooftree}
+    This proof is correct in our system, but it doesn't make sense in
+    the real world, if you have one dollar you can't buy a coke
+    \textbf{and} a sandwich. We could fix this by counting how many
+    dollars we have or spending the money, however this will
+    overcomplicate our logic. Notice that the assumption $D$ is used
+    in both the left and right branches of the $\land$ I.
+    \paragraph{Linear Logic} Every assumption is used
+    \underline{exactly} once.
+    \\ We don't have weakening, we have to use all our dollars, can't
+    keep any.
+    \paragraph{Affine Logic} Every assumption is used at most once.
+    \paragraph{Relevant Logic} Every assumption is used at least once.
+    \paragraph{Ordered Logic} Every assumption has to be used exactly
+    once in the order it was introduced.
+    \\
+    \begin{tabular}{l | c c c}
+      &exchange&weakening&contraction
+      \\ Linear Logic & $\checkmark$ & $\times$ & $\times$
+      \\ Affine Logic & $\checkmark$ & $\checkmark$ & $\times$
+      \\ Relevant Logic & $\checkmark$ & $\times$ & $\checkmark$
+      \\ Order Logic & $\times$ & $\times$ & $\times$
+    \end{tabular}
+    $$\underbrace{\Delta}_{\substack{\text{List
+          of}\\\text{resources=}\\\text{assumptions}\\\text{that can
+          be used}\\\text{exactly once}}} \vdash A \text{ true}$$
+    \paragraph{Substitution principle}
+    If $\Delta \vdash A$ true and $\Delta', A$ true $\vdash C$ true
+    then $\Delta, \Delta' \vdash C$ true
+    \paragraph{Simultaneous Conjunction} $A \otimes B$
+    \\ ``Given some resources we can achieve both $A$ and $B$ at the
+    same time.''
+    \begin{prooftree}
+      \AXC{$\Delta_1 \vdash A$ true}
+      \AXC{$\Delta_2 \vdash B$ true}
+      \BIC{$\Delta_1, \Delta_2 \vdash A \otimes B$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Delta_1 \vdash A \otimes B$ true}
+      \AXC{$\Delta_2, A$ true$, B$ true $\vdash C$ true}
+      \BIC{$\Delta_1, \Delta_2 \vdash C$ true}
+    \end{prooftree}
+    Very similar to the alternative conjunction rule we've seen many
+    times, although in this case it is literally a different
+    conjunction rule, we can get both $A$ and $B$ at the same time.
+
+    \paragraph{Alternative Conjunction} Internal choice: With the set
+    of resources we can achieve $A$ and $B$ - but \underline{not} at
+    the same time! This sounds like a disjunction, but a disjunction
+    is an external choice, i.e. the cashier chooses whether we get a
+    coke or a sandwich, not us. In this case we get to choose.
+    \begin{prooftree}
+      \AXC{$\Delta \vdash A$ true}
+      \AXC{$\Delta \vdash B$ true}
+      \BIC{$\Delta \vdash A \& B$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Delta \vdash A \& B$ true}
+      \UIC{$\Delta \vdash A$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Delta \vdash A \& B$ true}
+      \UIC{$\Delta \vdash B$ true}
+    \end{prooftree}
+    \paragraph{Implication} $A \multimap B$
+    \begin{prooftree}
+      \AXC{$\Delta, A$ true $\vdash B$ true}
+      \UIC{$\Delta \vdash A \multimap B$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Delta_1 \vdash A \multimap B$ true}
+      \AXC{$\Delta_2 \vdash A$ true}
+      \BIC{$\Delta_1, \Delta_2 \vdash B$ true}
+    \end{prooftree}
+    \paragraph{External Choice} $A \oplus B$
+    \begin{prooftree}
+      \AXC{$\Delta \vdash A$ true}
+      \UIC{$\Delta \vdash A \oplus B$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Delta \vdash B$ true}
+      \UIC{$\Delta \vdash A \oplus B$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Delta' \vdash A \oplus B$ true}
+      \AXC{$\Delta, A$ true $\vdash C$ true}
+      \AXC{$\Delta, B$ true $\vdash C$ true}
+      \TIC{$\Delta, \Delta' \vdash C$ true}
+    \end{prooftree}
+    So $D \supset C$ and $D \supset S$ become $D \multimap C$ and $D
+    \multimap S$. But say we want to buy multiple cokes, will we just
+    copy the proposition multiple times? No. So now we want to
+    distinguish between truth and validity like we have before.
+
+    $$\overbrace{\Gamma}^{\text{unrestricted}};\underbrace{\Delta}_{\substack{\text{List
+          of}\\\text{resources=}\\\text{assumptions}\\\text{that can
+          be used}\\\text{exactly once}}} \vdash A \text{ true}$$
+    To accommodate unrestricted (intuitionistic) assumptions, we want
+    to distinguish between
+    \\ $A$ valid - unrestricted
+    \\ $A$ true - resource
+
+    Internalize the fact that $A$ is valid
+    \\ $\implies !A$ (``of course'')
+    \begin{prooftree}
+      \AXC{$\Gamma ; \cdot \vdash A$ true}
+      \UIC{$\Gamma ; \cdot \vdash !A$ true}
+    \end{prooftree}
+    Since we don't have weakening, we can't allow additional resources
+    on the LHS. This is a refinement of the box modality that we've
+    seen.
+
+    \begin{prooftree}
+      \AXC{$\Gamma; \Delta \vdash !A$ true}
+      \AXC{$\Gamma, A$ valid$; \Delta' \vdash C$ true}
+      \BIC{$\Gamma; (\Delta, \Delta') \vdash C$ true}
+    \end{prooftree}
+    \paragraph{Menu} Formalizing a restaurant menu: $CAD(60)$
+    \\ $\multimap$ (Soup \& Salad) ``internal choice'', you can choose
+    one of these
+    \\ $\otimes$ Salmon
+    \\ $\otimes$ (Carrots $\oplus$ Asparagus) ``external choice'',
+    this is a seasonal item, you have no choice as to whether carrots
+    or asparagus are available
+    \\ $\otimes ((CAD(5) \multimap Mousse) \& 1)$
+    \\ $\otimes$ coffee $\otimes$
+    $\underbrace{\text{!(Coffee)}}_{\text{unlimited refills}}$
+
+    \paragraph{Top:} Consume all resources
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$\Delta \vdash$ T true}
+    \end{prooftree}
+    Useful because sometimes we might not use up resources,
+    i.e. leftover money after buying meal from menu, flush additional resources.
+    \paragraph{Unit:} Trivial Goal which requires \underline{no}
+    resources
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$\cdot \vdash 1$ true}
+    \end{prooftree}
+    \begin{prooftree}
+      \AXC{$\Delta \vdash 1$ true}
+      \AXC{$\Delta' \vdash C$ true}
+      \BIC{$\Delta, \Delta' \vdash C$ true}
+    \end{prooftree}
+    Useful for when things are optional, i.e. you can buy a dessert or
+    skip it.
+    \paragraph{Example}
+    \begin{prooftree}
+      \AXC{}
+      \UIC{$\varphi; \cdot \vdash D \multimap C$ true}
+      \AXC{}
+      \UIC{$\varphi; D$ true $\vdash D$ true}
+      \BIC{$D \multimap C$ valid$, D \multimap S$ valid$;D\ true
+        \vdash C$ true}
+      \AXC{}
+      \UIC{$\varphi; \cdot \vdash D \multimap S$ true}
+      \AXC{}
+      \UIC{$\varphi; D$ true $\vdash D$ true}
+      \BIC{$D \multimap C$ valid$, D \multimap S$ valid$;D\ true
+        \vdash S$ true}
+      \BIC{$D \multimap C$ valid$, D \multimap S$
+        valid$;\underbrace{D,D}_{D\ true,D\ true} \vdash C
+        \otimes S$ true}
+    \end{prooftree}
+    Two different formulations, $D \multimap D \multimap C \otimes S$
+    \\ $D \otimes D \multimap C \otimes S$
 \end{document}
