@@ -4733,7 +4733,7 @@ Tough to come up with the closure rule here:
 	\item Eliminated the closure by applying $[y/x]$ to $(x+1)$, $[y/x](x+1)$
 \end{enumerate}
 \paragraph{Subject Reduction} If $\Delta; \Gamma \vdash M : A$ and $M
-	\to M'$ then $\Delta; \Gamma \vdash M : A$.
+	\to M'$ then $\Delta; \Gamma \vdash M' : A$.
 \\ Case Analysis on $M \to M'$
 \paragraph{Case:} $(\lambda x.M)N \to [N/x]M$
 \\
@@ -4791,7 +4791,7 @@ New rules:
 	\AXC{$\Delta; \Gamma \implies A$}
 	\AXC{$\Delta; \Gamma, x : A \supset B, y : B \implies C$}
 	\RL{$\supset$ L}
-	\BIC{$\Delta; \Gamma, x : A \supset B \implies B$}
+	\BIC{$\Delta; \Gamma, x : A \supset B \implies C$}
 \end{prooftree}
 \begin{prooftree}
 	\AXC{}
@@ -5266,7 +5266,7 @@ New rules:
         \UIC{$(A \supset B)$ valid$; A$ true $\vdash A \supset B$
           true}
         \AXC{}
-        UIC{$\ldots ; A$ true $\vdash A$ true}
+        \UIC{$\ldots ; A$ true $\vdash A$ true}
         \BIC{$(A \supset B)$ valid$; A$ true $\vdash B$ true}
         \UIC{$(A \supset B)$ valid$; A$ true $\vdash B$ poss}
         \RL{$\diamond$ E}
