@@ -2405,7 +2405,6 @@ suc\ n \leq suc\ m$
 		\RL{$\forall$ I$^a$}
 		\UIC{$\mathcal{Y} \vdash \forall x : nat. x \leq x$}
 	\end{prooftree}
-	(The proof for $\mathcal{D}_1$ may not be correct/missing some steps, to be fixed)
 	\begin{center}
 		$\mathcal{D}_1 =$
 		\AXC{}
@@ -2418,7 +2417,7 @@ suc\ n \leq suc\ m$
 		\DP
 	\end{center}
 
-	Let $\mathcal{Y}' = \mathcal{Y}, a: nath, n:nat, ih:
+	Let $\mathcal{Y}' = \mathcal{Y}, a: nat, n:nat, ih:
 n\leq n$
 	\\$\mathcal{D}_2 =$
 \begin{center}
@@ -2465,18 +2464,18 @@ Maybe it would be nicer to write $rec(t, M_z, n, ih, M_s)$ as:
 	\\ $\lambda a : nat. rec\ a$ with $f\ z \to le_z\ z \mid f\
 suc \ n \to (le_s\ n\ n) (f\ n)$
 	\paragraph{Example}
-	\begin{scprooftree}{0.75}
+	\begin{scprooftree}{0.7}
 		\AXC{}
 		\UIC{$\mathcal{Y}, a : nat \vdash a : nat$}
 
 		\AXC{$\mathcal{D}_1$}
 		\noLine
-		\UIC{$\mathcal{Y} \vdash \neg (z = z) \supset \exists y:
+		\UIC{$\mathcal{Y}, a : nat \vdash \neg (z = z) \supset \exists y:
 				nat. \ suc\ y = z$}
 
 		\AXC{$\mathcal{D}_2$}
 		\noLine
-		\UIC{$\mathcal{Y}, n : nat, ih = \ldots  \vdash \neg(suc\ n = z)
+		\UIC{$\mathcal{Y}, a:nat, n : nat, ih = \ldots  \vdash \neg(suc\ n = z)
 				\supset \exists y : nat. \ suc \ y = suc\ n$}
 
 		\TIC{$\mathcal{Y}, a : nat \vdash \neg (a=z) \supset \exists
@@ -2617,7 +2616,7 @@ $\to [m/n,f_m/f_n]M_s$, where
 		\item Can we describe normal derivations?
 	\end{enumerate}
 	\paragraph{Normal (proof) terms} $M := \lambda x : A . M \mid
-\langle M,N \rangle \mid inl^A\ m \mid inr^B\ M \mid R$
+\langle M,N \rangle \mid inl^A\ M \mid inr^B\ M \mid R$
 
 	\paragraph{Neutral terms} $R := fst\ R \mid snd\ R\mid x \mid
 R\ M$
@@ -3488,9 +3487,9 @@ reach x y:-
 	\\
 	\begin{tabular}{l l}
 		$e\_z:$ & $even\ z$
-		\\ $o\_sz:$ & $add(suc\ z)$
-		\\ $e\_s:$ & $\forall x:nat. add \ x \supset even (suc\ x)$
-		\\ $o\_s:$ & $\forall x : nat. even\ x \supset add(suc\ x)$
+		\\ $o\_sz:$ & $odd(suc\ z)$
+		\\ $e\_s:$ & $\forall x:nat. odd \ x \supset even (suc\ x)$
+		\\ $o\_s:$ & $\forall x : nat. even\ x \supset odd(suc\ x)$
 		\\ $r\_e:$ & $\forall x: node. \forall y:node . edge\ x\ y \supset reach\ x\ y$
 		\\ $r\_tr:$ & $\forall x: node.\forall y: node. \forall w:node. reach\ x \ w \land reach\ w\ y \supset reach\ x \ y$
 	\end{tabular}
