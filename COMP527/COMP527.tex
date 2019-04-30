@@ -4247,7 +4247,7 @@ disjunction elimination.
 	\RL{$\square$ E}
 	\BIC{$\Delta; \Gamma \vdash C$ true}
 	\DP
-	$\implies \Delta; \Gamma \vdash C$ true (Substution Lemma) $[\mathcal{D}_1/u]\mathcal{D_2}$
+	$\implies \Delta; \Gamma \vdash C$ true (Substitution Lemma) $[\mathcal{D}_1/u]\mathcal{D_2}$
 \end{center}
 \paragraph{Local Completeness}
 \begin{center}
@@ -4452,7 +4452,7 @@ proof system)
 \begin{prooftree}
 	\AXC{}
 	\RL{$n$-times}
-	\UIC{$\Delta; x_! : B_1, \ldots, x_n : B_n \vdash A$ true}
+	\UIC{$\Delta; x_1 : B_1, \ldots, x_n : B_n \vdash A$ true}
 	\RL{$\supset$ I}
 	\UIC{$\Delta ; \cdot \vdash B_1 \supset B_2 \supset \ldots
 			\supset B_n \supset A$}
@@ -4716,8 +4716,8 @@ Capture avoiding!
 		$M$}
 	\llbracket \psi.M/u \rrbracket(box (\phi.N)) & = box(\phi.\llbracket \psi.M/u \rrbracket N)
 	\\ \llbracket \psi.M/u \rrbracket(let\ box\ v = N_1\ in\ N_2) & = let\ box\ v = \llbracket \psi.M/u \rrbracket N_1\ in \llbracket \psi.M/u \rrbracket N_2, v \notin FMV(M)
-	\\ \llbracket\psi.M/u\rrbracket clo(u, \sigma) & = [\llbracket \psi.M/u \rrbracket \sigma] M
-	\\ clo(v, \llbracket \psi. M/u \rrbracket \sigma) & = clo(v, \llbracket \psi.M/u\rrbracket \sigma)
+	\\ \llbracket\psi.M/u\rrbracket clo(u, \sigma) & = [\llbracket \psi.M/u \rrbracket \sigma] M \implies
+	\\ \llbracket \psi . M /u \rrbracket clo(v, \sigma) & = clo(v, \llbracket \psi.M/u\rrbracket \sigma)
 \end{align*}
 Tough to come up with the closure rule here:
 \\ \texttt{let box u = box (x.x+1) in
@@ -4997,7 +4997,7 @@ New rules:
       \\ $\Psi; \Gamma \models R : \Delta$
       \\ Intuitively:
       \begin{prooftree}
-        \AXC{$\Theta_n; \ldots ; \Theta_{i-1}l \Gamma_i \vdash \rho_i : \Theta_i$}
+        \AXC{$\Theta_n; \ldots ; \Theta_{i-1}; \Gamma_i \vdash \rho_i : \Theta_i$}
         \UIC{$\Psi_0; \Gamma_n; \ldots; \Gamma_0 \vdash \cdot; \rho_n;
           \ldots ; \rho_0 : \Delta$}
       \end{prooftree}
