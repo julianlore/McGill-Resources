@@ -1,0 +1,121 @@
+\documentclass[12 pt]{article}
+\usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
+  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
+  marvosym, stmaryrd, collectbox}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{positioning}
+\EnableBpAbbreviations
+\usepackage[margin=1 in]{geometry}
+\allowdisplaybreaks
+% \usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
+\hypersetup{
+  % colorlinks=true, %set true if you want colored links
+  linktoc=all,     %set to all if you want both sections and subsections linked
+  linkcolor=black,  %choose some color if you want links to stand out
+}
+% New environment to scale prooftrees, from https://tex.stackexchange.com/questions/104554/how-to-scale-prooftree-environment-bussproofs-package
+\newenvironment{scprooftree}[1]%
+  {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center}
+}
+%New command \mybox to box something
+\newcommand{\mybox}{%
+\collectbox{%
+	\setlength{\fboxsep}{3pt}%
+	\fbox{\BOXCONTENT}%
+	}%
+}
+
+\usepackage{graphicx}
+\graphicspath{{Images/}}
+\author{Julian Lore}
+\date{Last updated: \today}
+\title{MATH 423: Regression and Analysis of Variance}
+\pagestyle{fancy}
+\lhead{MATH 423}
+\chead{\leftmark}
+\rhead{Julian Lore}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\newenvironment{rcases}
+  {\left.\begin{aligned}}
+  {\end{aligned}\right\rbrace}
+\begin{document}
+\onehalfspacing
+\maketitle
+\tableofcontents
+\section{09/04/19}
+\subsection{Introduction}
+\begin{itemize}
+\item
+\textbf{Regression analysis} is about investigating quantitative predictive
+relationships variables. Several examples include: getting a car insurance quote. You
+provide the company/website a lot of personal information about
+yourself and your car and then they'll tell you an estimated price of
+your car insurance. How do they get this estimated price? Linear
+regression. Another application is estimating your time of arrival
+when taking a taxi or some other ride. Credit card applications also
+use some form of linear regression to assess the risk of you not
+paying your debt, etc. Many asset management pricing models use linear
+regression too.
+\item
+  \textbf{Prediction} is important, which consists of studying the
+  relation between two or more variables
+\item This class is about:
+  \begin{itemize}
+  \item Crafting predictive mathematical models
+  \item Seeing whether such models really have any predictive power
+  \item Comparing their predictions
+  \end{itemize}
+\end{itemize}
+A more concrete example is Sales vs TV, Radio and Newspaper
+advertising, with a linear-regression line fit for each. Now we want
+to predict sales using all three variables, i.e.\ $Sales \approx
+f(TV,Radio,Newspaper)$. Eventually we will study how to estimate this
+function $f$ given the data.
+
+Let's go back to a simpler example. Say we only have one variable,
+with no other variables, e.g.\ temperature, we want to estimate the
+temperature but only have historical data of previous
+temperatures. How do we predict tomorrow's temperature? Here we
+\textcolor{red}{cannot} use regression, we don't have two
+variables. The simplest answer is to use an average. Get the average
+of the previous temperatures of the same date of previous years. How
+do we generalize this? Given multiple variables but only wanting to
+predict one, how do we do so? It will still be some sort of average,
+but not simply an average of the output.
+\subsection{Statistical Prediction and Optimal Linear Regression}
+\subsubsection{Predicting a Random Variable from its Distribution}
+Let's first think about what the optimal prediction would look like,
+if we somehow knew all the probability distribution of our
+variable. Suppose we want to predict the value of a random variable
+$Y$. What's the best prediction we can make? The best one-number guess
+we could make for $Y$ is just its expected value $E(Y)$. Why is this
+the case? We want to mathematically show this.
+
+We need some way to measure how good a prediction $m$ is.
+\begin{itemize}
+\item The difference $Y-m$ should be small
+\item Since we don't care about positive more than negative errors, we
+  can use $(Y-m)^2$. Since $Y$ is random, this will fluctuate (it is a
+  function of a random variable and is thus also a random variable). So we
+  use its expected value.
+\end{itemize}
+  $$MSE(m) = E[(Y-m)^2]$$
+  where MSE stands for mean square error. However, sometimes the
+  positive and negative error don't have the same importance, like
+  predicting bank expenses, you don't want to predict negative
+  expenses as you may go bankrupt. In this case the median may be
+  better. We will see this case later.
+
+  From the definition of variance:
+  \begin{align*}
+    MSE(m) & = E[(Y-m)^2] = (E[(Y-m)])^2 + Var[Y-m] = (E[Y]-m)^2 + Var[Y]
+  \end{align*}
+  We cannot control the variance of $Y$, as it is given to us. We can
+  however, do something about $(E[Y] - m)^2$, thus seeing that the
+  optimal solution would be $m = E[Y]$.
+
+  But if we don't have all the data on $Y$, then we can estimate
+  $E[Y]$ using the sample mean.
+\end{document}
