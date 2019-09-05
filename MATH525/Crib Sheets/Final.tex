@@ -1,0 +1,963 @@
+\documentclass[landscape]{article}
+\usepackage{multicol}
+\usepackage[nosf]{kpfonts}
+\usepackage[t1]{sourcesanspro}
+\usepackage[landscape, margin=0.1in]{geometry}
+\usepackage{hyperref, amsmath,tabularx, graphicx, pdfpages, blkarray}
+\usepackage{xcolor}
+\usepackage[fontsize=8pt]{scrextend}
+\allowdisplaybreaks%
+
+% Turn off header and footer
+\pagestyle{empty}
+
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.1ex}%x
+                                {\color{blue}\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.1ex}%
+                                {\color{orange}\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.1ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+\usepackage{scalerel,stackengine}
+\stackMath
+\newcommand\reallywidehat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}%
+}{0.5ex}}%
+\stackon[1pt]{#1}{\tmpbox}%
+}
+% -----------------------------------------------------------------------
+
+\begin{document}
+\raggedright
+\footnotesize
+\begin{multicols*}{3}
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+  \Large{\textbf{MATH525 Crib Sheet}} \\
+  Julian Lore
+\end{center}
+\begin{flalign*}
+  V(aX + bY) & = a^2 V(X) + b^2 V(Y) + 2ab Cov(X,Y)
+  \\ V(aX - bY) & = a^2 V(X) + b^2 V(Y) - 2ab Cov(X,Y)
+  & X \perp Y & \implies Cov(X,Y) = 0
+  \\ V(Y) & = E(Y^2) - (E(Y))^2 = E[(Y - E[Y])^2]
+  \\ MSE(\hat{Y}) & = E((\hat{Y} - Y)^2) = V(\hat{Y}) + Bias(\hat{Y})^2
+  \\ Cov(X,Y) & = \frac{1}{n} \sum_{i=1}^n (x_i - E(X))(y_i - E(Y))
+  \\ Cov(X,Y) & = E \left[\left(X - E[X]\right)\left(Y - E[Y]\right)\right]
+  & V(X) & = Cov(X,X)
+  \\ Cov(X,Y) & = E(XY) - E(X)E(Y)
+  & Bias(\hat{\theta}) & = E[\hat{\theta}] - \theta
+  \\ V_W [W] & = V_Y (E_{W \mid Y} [W \mid Y]) + E_{Y} (V_{W \mid Y} [W \mid Y])
+  & E_W [W] & = E_Z [E_{W \mid Z} [W \mid Z]]
+\end{flalign*}
+\section{Key Definitions}
+\textbf{census} - measuring the quantity of interest
+\underline{exactly}
+\\ \textbf{observation unit/population unit} - single member of the
+population
+\\ \textbf{target population} - set of observation units that we want
+to estimate the quantity for
+\\ \textbf{sample} - subset of population units that we will measure
+\\ \textbf{sample population} - set of population units who could ever
+be sampled
+\\ \textbf{sampling unit} - unit that can be selected for a sample
+\\ \textbf{sampling frame} - list of all sampling units in the sample population
+\\ We hope that everyone in sample pop belongs to target pop, but not
+always the case. Perfect world would be target pop = sample pop.
+\\ \textbf{selection bias}: part of target pop is not in sampled
+pop. \textbf{judgment sample}: deliberately or purposely selecting
+representative sample, sample units that you judge are
+representative. \textbf{undercoverage}: failing to include all of
+target pop in sampling frame. \textbf{overcoverage}: including pop
+units in sampling frame that are not in target pop.
+\\ \textbf{cluster sample}: randomly sample strata and take SRS or
+census within each (can't sample all strata)
+\\ \textbf{systematic sample}: choose a random starting point and then
+take every $k$-th unit in the list
+\\ \textbf{Probability sampling}: Each unit has a \underline{known}
+prob of being sampled.
+\section{Simple Random Sample} With replacement, select one unit with
+probability $\frac{1}{N}$ and repeat $n$ times, getting $\pi_i =
+\frac{n}{N}$. Without replacement:
+Select one of all possible subsets of
+$n$ population units. $\binom{N}{n}$ possible samples, each equally
+likely. So $P(s) = \frac{1}{\binom{N}{n}}$ and $\pi_i = \frac{n}{N}$
+(probability of including unit $i$).
+\subsection{Estimation}
+\begin{align*}
+  t & = \sum_{i=1}^N y_i = N \overline{y}_U
+ & \hat{t}_s & = \dfrac{N
+  \sum_{s\in S} y_s}{n} = N \overline{y}_S (\textbf{unbiased})
+\\ \overline{y}_u & = \frac{\sum_{i=1}^N y_i}{N}
+= \frac{t}{n}
+ & \overline{y}_S & =
+\frac{\sum_{s\in S}y_s}{n} = \frac{\hat{t}_s}{N}(\textbf{unbiased})
+\intertext{Under SRS:}
+E(\hat{t}_s)
+& =t, E(\overline{y}_S) = \overline{y}_U
+\\ V(\overline{y}_s) & = \left(1 - \frac{n}{N}\right) \frac{S^2}{n}
+&\implies SE(\overline{y}_s) &= \sqrt{ \left(1 - \frac{n}{N}\right)\frac{S^2}{n}}
+    \\ \reallywidehat{SE}(\overline{y}_S) & =
+\sqrt{\frac{s^2}{n} \left(1 - \frac{n}{N}\right)}
+\\ V(\hat{t}_s) &= N^2 \left(1 - \frac{n}{N}\right)
+\frac{S^2}{n} &\implies SE(\hat{t}_s) &= N \sqrt{ \left(1 - \frac{n}{N}\right)\frac{S^2}{n}}
+\end{align*}
+\begin{align*}
+S^2 & = \frac{\sum_{i=1}^N (y_i -
+  \overline{y}_u)^2}{N-1} = \frac{\sum_{i=1}^N y_i^2 - \frac{1}{N}
+  \left(\sum_{i=1}^N y_i\right)^2}{N - 1}
+= \frac{\sum_{i=1}^N y_i^2 - N
+  \overline{y}_u^2}{N-1}
+\end{align*}
+\\Under SRS: For fixed $N$, as $n \to N, V(\hat{t}_s) \to
+0$.
+\\Estimate $S^2$ with sample variance $s^2$:
+\begin{flalign*}
+s^2 & = \frac{\sum_{s
+    \in S}(y_s - \overline{y}_s)^2}{n-1} = \frac{\sum_{s \in S} y_i^2
+  - n \overline{y}_u^2}{n-1} &
+\end{flalign*}
+\\ \textbf{Confidence interval for $\overline{y}_U$} $N \overline{y}_S
+\pm z_{\alpha/2} \reallywidehat{SE}(\overline{y}_S)$
+\\ \textbf{Finite population correction (fpc)} $\left(1 -
+  \frac{n}{N}\right)$
+\\ \textbf{Coefficient of variation (CV)} $CV(\overline{y}) =
+\frac{\sqrt{V(\overline{y})}}{E(\overline{y})} = \sqrt{1 -
+  \frac{n}{N}} \frac{S}{\sqrt{n}\overline{y}_U}$
+\\ \textbf{Hajek} $N_{\nu} - n_{\nu} \to \infty$ then $\hat{t}_S \sim
+N\left(t, N^2 \left(1 - \frac{n}{N}\right) \frac{S^2}{n}\right),
+\hat{t}_S \pm 1.96 \sqrt{N^2 \left(1 -
+    \frac{n}{N}\right)\frac{s^2}{n}}$ ($95\%$ CI)
+\begin{align*}
+  Z_i & =
+        \begin{cases}
+          1 & \text{if unit } i \text{ is in the sample}
+          \\ 0 & \text{otherwise}
+        \end{cases}
+  & \overline{y} = \sum_{i \in \mathcal{S}} \frac{y_i}{n} = \sum_{i=1}^N Z_i \frac{y_i}{n}
+  \\ \Pr(Z_i = 1) & = \frac{\binom{N-1}{n-1}}{\binom{N}{n}} = \frac{n}{N} \implies E[Z_i] = \frac{n}{N}
+  \\ V(Z_i) & = E(Z_i^2) - E(Z_i)^2 = \frac{n}{N} - \left(\frac{n}{N}\right)^2 = \frac{n}{N} \left(1 - \frac{n}{N}\right)
+  \\ E[Z_iZ_j] & = \left(\frac{n-1}{N-1}\right) \left(\frac{n}{N}\right) ,i \neq j
+  \\ Cov(Z_i, Z_j) & = E[Z_iZ_j] - E[Z_i]E[Z_j] = - \frac{1}{N-1} \left(1 - \frac{n}{N}\right) \left(\frac{n}{N}\right)
+\end{align*}
+\subsection{Sample Size Estimation}
+\textbf{Absolute error:} $Pr(\left|\overline{y}_s - \overline{y}_U
+  \leq e\right|) = 1 - \alpha$, $e$ is called the \textbf{margin of error}
+\\ \textbf{Relative error:} $Pr \left(\frac{\left|\overline{y}_s -
+      \overline{y}_U\right|}{\left|\overline{y}_u\right|} \leq
+  r\right) = 1 - \alpha$
+$$n = \frac{S^2z^2_{\alpha/2}}{e^2 + \frac{S^2z^2_{\alpha/2}}{N}}
+\text{ or }
+n = \frac{z^2_{\alpha/2}S^2}{(r\overline{y}_U)^2 +
+  \frac{z^2_{\alpha/2}S^2}{N}}$$
+\\ Naive sample size calc with no fpc (SRSWR): $n_0 = \frac{S^2
+  z^2_{\alpha/2}}{e^2}
+\implies n = \frac{n_0}{1+\frac{n_0}{N}}$
+\subsection{Weights}
+\begin{align*}
+  \hat{t}_S &= \sum_{i \in S} \frac{N}{n}y_i = \sum_{i \in S}w_i y_i
+  & w_i &= \frac{N}{n} = \frac{1}{\pi_i} = \frac{1}{Pr(z_i=1)}
+& \overline{y}_S = \frac{\hat{t}}{N} = \frac{\sum_{i\in
+    S}w_iy_i}{\sum_{i \in S} w_i}
+\end{align*}
+All weights are same in SRS. A sample in which every unit has same
+sampling weight is called a \textbf{self-weighting} sample
+\subsection{When to use SRS} \textcolor{red}{Do not} use if a
+controlled experiment is better (i.e. is this brand of bath oil an
+effective mosquito repellent), do not have a list of obs
+units/expensive to take an SRS or have extra information to make a
+more cost-effective scheme.
+\\ \textcolor{green}{Good for} little extra info available or
+interested in multivariate relationships and no need to take
+stratified/cluster sample. Easier to perform.
+\section{Stratified Sampling}
+\begin{enumerate}
+\item Divide pop units into $H$ subpops or \underline{strata}
+  (requires additional info)
+\item Take a probability sample \underline{within} each stratum
+  (independently)
+\item Make inference about target param within each stratum, then pool
+  results together
+\end{enumerate}
+Strata should be \underline{disjoint and partition} the sampling frame.
+\subsection{Stratified Random Sampling} SRS within each
+stratum. Divide pop of $N$ sampling units into $H$ strata, $N_h$ units
+in strata $h$. Membership of strata must be mutually exclusive. Must
+know $N_1, \ldots, N_H$ s.t. $N = \sum_{h = 1}^H N_h$. Stratified with
+equal strata size is not the same as SRS because you are forcing to
+have samples in each strata.
+\\ Independently take SRS of size $n_h$ from each stratum: $n =
+\sum_{h=1}^{H}n_h$
+\\ Population quantities:
+\begin{align*}
+  y_{hj} &= \text{ val of $j^{th}$ unit in stratum $h$}
+  \\t_h & =
+  \sum_{j=1}^{N_h}y_{hj} = \text{ stratum $h$ total}
+  & t  & = \sum_{h=1}^{H}t_h = \text{ pop tot}
+  \\ \overline{y}_{hU} & = \frac{t_h}{N_h} =\text{ true stratum $h$
+    mean}
+  & \overline{y}_U & = \frac{t}{N} =\text{ true pop mean}
+  \\S_h^2 & = \sum_{j=1}^{N_h} \frac{(y_{hj} -
+    \overline{y}_{hU})^2}{N_h-1} = \text{ stratum $h$ pop var}
+  & S^2 & = \frac{\sum_{h=1}^{H}\sum_{j=1}^{N_h}(y_{jh} - \overline{y}_U)^2}{N-1}
+= \text{ pop var}
+\end{align*}
+\\ Sample quantities:
+\begin{align*}
+\overline{y}_h & = \frac{\sum_{j \in
+    S_h}y_{hj}}{n_h}
+\\ \hat{t}_h & = \frac{N_h}{n_h} \sum_{j \in S_n}
+y_{hj} = N_h \overline{y}_h
+ & s_h^2 & = \sum_{j \in S_h} \frac{(y_{jh}
+  - \overline{y}_U)^2}{n_h - 1}
+\\ \hat{t}_{str} &= \sum_{h=1}^{H}\hat{t}_h = \sum_{h=1}^{H} N_h \overline{y}_h (\textbf{unbiased})
+ & V(\hat{t}_{str}) &= \sum_{h=1}^{H} N_h^2
+\frac{S_h^2}{n_h} \left(1 - \frac{n_h}{N_h}\right)
+\\ \overline{y}_{str} & = \frac{\hat{t}_{str}}{N} = \sum_{h=1}^{H}
+\frac{N_h}{N} \overline{y}_h (\textbf{unbiased})
+ &V(\overline{y}_{str}) &= \frac{1}{N^2} V(\hat{t}_{str})=\sum_{h = 1}^H \left(1 -
+  \frac{n_h}{N_h}\right) \left(\frac{N_h}{N}\right)^2
+\frac{S_h^2}{n_h}
+\\ \overline{y}_{str}& \pm z_{\alpha/2} SE(\overline{y}_{str}) &  &
+                                                                    \text{To
+                                                                    est
+                                                                    $V$,
+                                                                    use
+                                                                    $s_h$}
+\end{align*}
+\subsection{Weights}
+\begin{align*}
+\hat{t}_{str}& = \sum_{h=1}^{H} N_h \overline{y}_h = \sum_{h=1}^{H}
+\sum_{j \in S_h} \frac{N_h}{n_h}y_{hj} = \sum_{h=1}^{H} \sum_{j\in
+  S_h} w_{hj} y_{hj}
+\\w_{hj} &= \frac{N_h}{n_h} = \frac{1}{Pr(Z_{hj} = 1)}
+= \frac{1}{\pi_{hj}}
+& \pi_{hj} & = \frac{n_h}{N_h}
+\\\overline{y}_{str} & = \frac{\hat{t}_{str}}{N} = \frac{\sum_{h=1}^H
+  \sum_{j \in S_h}w_{hj}y_{hj}}{\sum_{h=1}^{H}\sum_{j \in S_h}
+  w_{hj}}
+\end{align*}
+\subsection{Allocating Observations}
+\textbf{Proportional allocation}: $$n_h \propto N_h \implies n_h =
+\left(\frac{N_h}{N}\right)n \implies \pi_{hj} = \frac{n_h}{N_h} =
+\frac{n}{N}$$
+$\hat{t}_{str} = \frac{N}{n} \sum_{h=1}^{H} \sum_{j \in S_h}
+y_{hj}$ (self-weighting sample)
+\\ $(N-1) S^2 = \left[\sum_{h=1}^{H} (N_h - 1)S_h^2\right] +
+\sum_{h=1}^{H} N_h (\overline{y}_{hU} - \overline{y}_U) \implies TSS =
+SSW + SSB$ (total sum of squares = sum of squares within + sum of
+squares between)
+\\ $V_{prop}(\hat{t}_{str}) = \left(1 - \frac{n}{N}\right) \frac{N}{n}
+\sum_{h=1}^{H} N_h S_h^2 = \left(1 - \frac{n}{N}\right) \frac{N}{n}
+(SSW + \sum_{h=1}^{H} S_h^2)$
+\\ $V(\hat{t}_{SRS}) = \left(1 - \frac{n}{N}\right)N^2 \frac{S^2}{n} =
+\frac{N}{N-1}V_{prop}(\hat{t}_{str}) + \frac{(N-h)N}{n(N-1)} (SSB -
+\sum_{h=1}^{H} s_h^2)$
+\\ So $\hat{t}_{SRS}$ will have larger variance than $\hat{t}_{str}$
+unless $SSB < \sum_{h=1}^{H} S_h^2 \implies \sum_{h=1}^{H} N_h
+(\overline{y}_h - \overline{y}_U)^2 < \sum_{h=1}^{H} S_h^2$
+(variability between clusters is smaller than variability of each
+strata). Don't want all strata to have same mean, or else variability
+between will be small, making prop alloc worse. We \textcolor{green}{want stratum means
+to differ a lot} (for stratified to beat SRS) s.t.\ sum of squares is large, variability within
+strata is smaller.
+\textbf{ANOVA} for stratified sampling:\\
+\begin{tabular}{c | c c}
+  Between& $df = H - 1$& $SSB = \sum_{h=1}^H \sum_{j = 1}^{N_h} \left(\overline{y}_{hU} - \overline{y}_U\right)^2 = \sum_{h=1}^{H}N_h (\overline{y}_{hU} - \overline{y}_U)^2$
+  \\ Within & $df = N - H$ & $SSW  = \sum_{h=1}^H \sum_{j = 1}^{N_h} \left(y_{hj} - \overline{y}_{hU}\right)^2 = \sum_{h=1}^{H}(N_h - 1)S_h^2$
+  \\\hline tot & $df = N - 1$ & $SSTO = \sum_{h=1}^H \sum_{j = 1}^{N_h} \left(y_{hj} - \overline{y}_U\right)^2 = (N-1)S^2$
+\end{tabular}
+\\ \textbf{Cost}: $C = c_0 + \sum_{h=1}^{H} c_h n_h$. Minimize
+$V(\hat{y}_{str})$ subject to the constraint that $C <
+C_{max}$. \textbf{Optimal allocation} $$n_h \propto
+\frac{N_hS_h}{\sqrt{c_h}} \implies \frac{n_h}{n} =
+\left(\dfrac{\dfrac{N_hS_h}{\sqrt{c_h}}}{\sum_{t = 1}^H \dfrac{N_t
+      S_t}{\sqrt{c_t}}}\right)$$
+If costs are equal across strata $c_1 = c_2 = \ldots = c_h$, then
+$$n_h \propto N_h S_h \implies \frac{n_h}{n} =
+\frac{N_hS_h}{\sum_{t=1}^H N_tS_t}$$ this is \textbf{Neyman allocation}. If
+$S_h$ is known for all $h$, then Neyman beats prop alloc. With no max
+cost, Neyman gives optimal alloc. Prop better if $S_h^2$ relatively
+uniform, vary little. If $S_h^2$ vary lots, optimal alloc will result
+in smaller cost.
+\subsection{Determining Sample Size}
+$V(\overline{y}_{str}) = \sum_{h=1}^{H} \left(1 -
+  \frac{n_h}{N_h}\right) \left(\frac{N_h}{N}\right)^2
+\frac{S_h^2}{n_h} \leq \frac{1}{n} \sum_{h=1}^{H} \frac{n}{n_h}
+\left(\frac{N_h}{N}\right)^2S_h^2 = \frac{\nu}{n}$, where $\nu =
+\sum_{h=1}^{H}\left(\frac{n}{n_h}\right) \left(\frac{N_h}{N}\right)^2
+S_h^2$.
+\\ So $\overline{y}_{str} \pm z_{\alpha/2} \sqrt{\nu/n}$
+\\ $n = z^2_{\alpha/2}\nu/e^2$ for margin of error $e$
+\subsection{When not to Stratify} Expensive/impossible to identify the
+strata, need to know $N_1, \ldots, N_H$, need to choose strata and
+defend why it's good. Also, small $n_h$ may make Hajek not apply.
+\section{Ratio Estimators}
+\textbf{Auxiliary Variables} Additional info on units used to
+improve precision. This is used after sampling (gotten from sampling),
+whereas stratification variables used before.
+\\ $y_i$ and $x_i$ measured on unit $i$ in pop.
+\begin{align*}
+  t_y & = \sum_{i=1}^N Y_i
+  & t_x & = \sum_{i=1}^N X_i
+  & B & = \frac{t_y}{t_x} = \frac{\overline{y}_U}{\overline{x}_U}
+  & \hat{B} & = \frac{\overline{y}_s}{\overline{x}_s}
+\end{align*}
+Note that $\overline{y}_s$ and $\overline{x}_s$ are
+\underline{random}, so $E(\hat{B}) \neq B$ unless $x_i = c, \forall
+i$, \textcolor{red}{not unbiased}
+\\ \textbf{Correlation} between $X$ and $Y$ is most important
+idea. Population correlation coefficient of $x$ and $y$:
+\begin{align*}
+  R & = \sum_{i = 1}^M \frac{(x_i - \overline{x}_U)(y_i - \overline{y}_U)}{(N-1)S_xS_y}
+\end{align*}
+$R$ is a measure of \underline{linear} association.
+\\\textbf{Why use Ratio Estimation?} Estimate a ratio, estimate pop
+total but we don't know $N$, increase the precision of estimated
+means/totals, adjust estimates to reflect demographic totals or adjust
+for nonresponse.
+\\ e.g. Assume we want to know $t_y$, don't know $N$ (pop total) but know $t_x$:
+\begin{align*}
+  N & = \frac{t_x}{\overline{x}_U}& \hat{N}& = \frac{t_x}{\overline{x}}
+  & \hat{t}_{yr} & = \overline{y}\hat{N} = \overline{y} \frac{t_x}{\overline{x}} = \hat{B} t_x
+  \\ \hat{\overline{y}}_r & = \frac{\overline{x}_u}{\overline{x}} \overline{y} = \hat{B} \overline{x}_u
+  & E(\overline{y}_r) & = E \left(\frac{\overline{x}_U}{\overline{x}} \overline{y}\right) \neq \overline{y}_U
+\end{align*}
+Note that $E[\overline{y}_r - \overline{y}_U] =
+-E[\hat{B}(\overline{x} - \overline{x}_U)] = -Cov(\hat{B},
+\overline{x})$. Because
+$\frac{\overline{x}-\overline{x}_U}{\overline{x}} \approx \frac{\overline{x}}{\overline{x}_U}$:
+\begin{align*}
+  Bias(\hat{\overline{y}}_r) & = E(\hat{\overline{y}}_r - \overline{y}_U)
+                               = E \left(\frac{\overline{x}_U (\overline{y}-B \overline{x})}{\overline{x}}\right) = (\overline{y}-B \overline{x}) \left(1 - \frac{\overline{x} - \overline{x}_U}{\overline{x}}\right)
+  \\ & \approx \frac{1}{\overline{x}_U} [BV(\overline{x}) - Cov(\overline{y}, \overline{x})]
+       = \left(1 - \frac{n}{N}\right) \frac{1}{n\overline{x}_U} (B S_x^2 - R S_xS_y)
+\end{align*}
+This bias
+is \textcolor{green}{small if} $n$ large, $\frac{n}{N}$ large,
+$\overline{x}_U$ large, $S_x$ small, correlation close to $1$. As
+noted above, if all $x_i = c$, then $S_x = 0$ so no
+bias. Alternatively, bias small if $x$ does not depend too strongly on
+$y$, i.e.\ $Cov(\overline{x},\overline{y})$ is small.
+\begin{align*}
+  MSE[\hat{\overline{y}}_r] & = E[(\hat{\overline{y}}_r = \overline{y}_U)^2]
+                              = E \left[ \left((\overline{y}-B \overline{x}) \left(1 - \frac{\overline{x}-\overline{x}_U}{\overline{x}}\right)\right)^2\right]
+  \\ & = E \left[(\overline{y} - B \overline{x})^2 + (\overline{y}-B \overline{x})^2 \left( \left(\frac{\overline{x}-\overline{x}_U}{\overline{x}}\right)^2 - 2 \frac{(\overline{x}-\overline{x}_U)}{\overline{x}}\right)\right]
+  \\ & \approx E[(\overline{y}-B\overline{x})^2] = V(\overline{y} - B \overline{x})
+   = V(\overline{y}) + B^2 V(\overline{x}) - 2B Cov(\overline{x}, \overline{y})
+  \\ & = \left(1 - \frac{n}{N}\right) \frac{S_y^2 + \colorbox{cyan}{$B^2S_x^2-2BRS_xS_y$}}{n}
+\end{align*}
+\textcolor{green}{Small when} $n$ large, $\frac{n}{N}$ large,
+deviations $y_i - B
+x_i$ small, $R$ close to $+1$.
+\begin{align*}
+  E[(\overline{y}-B \overline{x})^2] & = V(\overline{d})
+  & d_i & = y_i - Bx_i & \overline{d}_U &= 0
+  \\ \hat{V}(\hat{\overline{y}}_r) & = \left(1 - \frac{n}{N}\right) \left(\frac{\overline{x}_U}{\overline{x}}\right)^2 \frac{s_e^2}{n}
+  & s_e^2 & =
+            \frac{1}{n - 1} \sum_{i \in \mathcal{S}}e_i^2
+  & e_i & = y_i - \hat{B}x_i
+  \\ \hat{V}(\hat{t}_{yr}) & = \hat{V}(t_x \hat{B}) = \left(1 - \frac{n}{N}\right) \left(\frac{t_x}{\overline{x}}\right)^2 \frac{s_e^2}{n}
+  & \hat{V}(\hat{B}) & = \left(1 - \frac{n}{N}\right) \frac{s^2_e}{n \overline{x}^2}
+\end{align*}
+\subsection{Weights}
+\begin{align*}
+  \hat{t}_{yr} & = \frac{t_x}{\hat{t}_x}\hat{t}_y = \frac{t_x}{\hat{t}_x} \sum_{i \in \mathcal{S}} w_iy_i
+                 \intertext{Modification in ratio estimation is like
+                 an adjustment to each weight}
+                 g_i & = \frac{t_x}{\hat{t}_x}
+  \\ \hat{t}_{yr} & = \sum_{i \in \mathcal{S}} w_i g_i y_i
+\end{align*}
+The weights are $w_i^* = w_ig_i$, but they \underline{depend on values
+from the sample}. The weight adjustments $g_i$ (\textbf{calibration factors}) \textbf{calibrate}
+estimates on $x$, i.e.\ $\sum_{i \in \mathcal{S}}w_ig_ix_i =
+t_x$. Ratio estimation \underline{changes} the weights from unbiased
+estimator. Re-weight such that $\hat{t}_x = t_x$
+\\ \textbf{Advantages of Ratio Estimation} If $x$ and $y$ perfectly
+correlated ($y_i = Bx_i, \forall i$), then $\hat{t}_{yr} = t_y$. In
+general, if $y_i$ roughly proportion to $x_i$, MSE will be small. If
+deviations of $y_i$ from $\hat{B}x_i$ smaller than deviations of $y_i$
+from $\overline{y}$, then $\hat{V}(\hat{\overline{y}}_r) \leq
+\hat{V}(\overline{y})$.
+\subsection{Domain Estimation}
+Estimate totals within subgroups (i.e.\ strata) in population. Assume
+we have $D$ domains, $d = 1, \ldots, D$. $s_d$ is the set of indices
+of sample units belonging to $D$.
+\begin{align*}
+  \overline{y}_{U_d} & = \frac{\sum_{i \in U_d}y_i}{N_d}
+  &N & = \sum_{d = 1}^D N_d
+       \intertext{Where $U_d$ is collection of units
+       in $d$ in pop, $N_d$ is \# of units in $d$.
+       Estimate $\overline{y}_{U_d}$ with (ratio estimator):}
+       \overline{y}_d & = \frac{\sum_{i \in S_d}y_i}{\colorbox{cyan}{$n_d$} \text{(random)}}
+  & x_i & =
+           \begin{cases}
+             1 & \text{if } i \in U_d
+             \\ 0 & \text{if } i \notin U_d
+           \end{cases}
+  & u_i & = x_i y_i =
+           \begin{cases}
+             y_i & \text{if } i \in U_d
+             \\ 0 & \text{if } i \notin U_d
+           \end{cases}
+  \\ t_x & = \sum_{i=1}^N x_i = N_d
+  & t_u & = \sum_{i=1}^N u_i = \sum_{i \in U_d} y_i
+  \\ \overline{y}_{U_d} & = \frac{t_u}{t_x}
+  & \overline{x} & = \frac{n_d}{n}
+  & \overline{y}_d & = \hat{B} = \frac{\overline{u}}{\overline{x}} = \frac{\hat{t}_u}{\hat{t}_x}
+\end{align*}
+\begin{align*}
+  SE(\overline{y}_d) & = \sqrt{ \left(1 - \frac{n}{N}\right) \frac{1}{n \overline{x}^2} \frac{\sum_{i \in S}(u_i - \hat{B}x_i)^2}{n-1}}
+   = \sqrt{\left(1 - \frac{n}{N}\right) \frac{1}{n \overline{x}^2} \frac{\sum_{i \in \mathcal{S}_d}(y_i - \hat{B}x_i)^2}{n-1}}
+  \\ & = \sqrt{\left(1 - \frac{n}{N}\right)\frac{1}{n_d^2}\frac{(n_d-1)S_{y_d}^2}{n-1}}
+  = \sqrt{\left(1 - \frac{n}{N}\right)\frac{n}{n-1}\frac{n_d-1}{n_d}\frac{s_{y_d}^2}{n_d}}
+  \\ s_{yd}^{2} & = \frac{\sum_{i \in \mathcal{S}_d}(y_i - \overline{y}_d)^2}{n_d-1}
+\end{align*}
+If $E(n_d)$ large, then: $SE(\overline{y}_d) \approx \sqrt{\left(1 -
+    \frac{n}{N}\right)\frac{s^2_{y_d}}{n_d}}$
+\\What about \underline{estimating totals}?
+\\ If we know $N_d$, then $\hat{t}_u = N_d \overline{y}_d$. For $SE$,
+just multiply the above by $N_d$.
+\\ Otherwise if we don't know $N_d$, then $\hat{t}_u = N \overline{u}$
+with $SE(\hat{t}_u) = N SE (\overline{u}) = N \sqrt{\left(1 -
+    \frac{n}{N}\right)\frac{s_u^2}{n}}$ (much \textcolor{red}{worse}
+than when we knew $N_d$, but unbiased)
+\subsection{Post stratification} If we know stratum membership
+\underline{before} sampling, we should \underline{stratify}. If we
+only know \underline{after}:
+ $ \overline{y}_{str} = \sum_{h=1}^{H}\overline{y}_h \frac{N_h}{N}$
+This is \textcolor{red}{not unbiased}, since $\overline{y}_h$ is a ratio estimator and
+$n_h$s are random instead of fixed like in stratified.
+\\ $\overline{y}_1, \ldots, \overline{y}_H$ are post-stratified means
+in sample, $n_1 , \ldots , n_H$ are
+\colorbox{yellow}{\underline{random}} \# of units in each post stratum
+\\ Sample $(y_i, x_i)$ pairs. If $x_i$ is something you wished you
+could have stratified on before, stratify after:
+\begin{align*}
+  x_{ih} & =
+           \begin{cases}
+             1 & \text{if } i \in \text{post stratum }h
+             \\ 0 & \text{otherwise}
+           \end{cases}
+  & x_{ih}y_i & = u_{ih} =
+                 \begin{cases}
+                   y_i & \text{if } i \in \text{post stratum }h
+                   \\ 0 & \text{otherwise}
+                 \end{cases}
+  \\ t_{xh} & = \sum_{i=1}^N x_{ih} = N_h
+  & \hat{t}_{xh} & = \frac{N}{n} \sum_{i \in \mathcal{S}} x_{ih} = \frac{N}{n} \underbrace{n_h}_{\text{random}} = \hat{N}_h
+  \\ t_{uh} & = \sum_{i=1}^N u_{ih} = t_{yh}
+  & \overline{y}_{uh} & = \frac{\sum_{i=1}^N u_{ih}}{N_h} = \frac{t_{yh}}{t_{xh}} = B_h
+  \\ \hat{t}_{uh} & = \sum_{i \in \mathcal{S}} \frac{N}{n}u_{ih}
+\end{align*}
+\begin{align*}
+   \hat{t}_{uhr} & = \frac{t_{xh}}{\hat{t}_{xh}}\hat{t}_{uh} = \frac{N_h}{\hat{N}_h}\hat{t}_{uh} = \colorbox{yellow}{$N_h \overline{y}_h$}
+                   = {\overline{y}_h}t_{xh}= \frac{\sum_{i\in \mathcal{S}}y_ix_{ih}}{\sum_{i \in \mathcal{S}}x_{ih}} t_{xh} = \frac{\hat{t}_{uh}}{\hat{t}_{xh}} t_{xh}
+\end{align*}
+\begin{align*}
+  \hat{t}_{y,post} & = \sum_{h=1}^{H}\hat{t}_{uhr} = \sum_{h=1}^{H}\frac{N_h}{\hat{N}_h} \hat{t}_{uh} = \sum_{h=1}^{H}N_h \overline{y}_h
+  & \overline{y}_{post} & = \sum_{h=1}^{H}\frac{N_h}{N} \overline{y}_h
+\end{align*}
+\begin{align*}
+  V(\overline{y}_{post}) & \approx \left(1 - \frac{n}{N}\right) \sum_{h=1}^{H} \left(\frac{N_h}{N}\right) \frac{s_h^2}{n} + \frac{1}{n} \left(\frac{N-n}{N-1}\right) \sum_{h=1}^{H} \left(1 - \frac{N_h}{N}\right) \frac{s_h^2}{n}
+\end{align*}
+\subsection{Ratio Estimation with Stratified Sampling}
+\textbf{Combined ratio estimator}: (apply ratio estimator on
+stratified sample) Assume fixed strata $h = 1 ,\ldots , H$
+\begin{align*}
+  \hat{t}_{y, str} & = \sum_{h=1}^{H} \hat{t}_h = \sum_{h=1}^{H} \sum_{j \in \mathcal{S}_h} w_{hj}y_{hj}& w_{hj}& = \frac{N_h}{n_h}
+                     \intertext{If we also have $x$, we can also use
+                     ratio estimation:}
+                     \hat{t}_{x, str} & = \sum_{h=1}^{H} \hat{t}_{hx} = \sum_{h=1}^{H} \sum_{j \in S_h} w_{hj}x_{hj}
+  & B & = \frac{t_y}{t_X} \implies \hat{B} = \frac{\hat{t}_{y, str}}{\hat{t}_{x,str}}
+  \\ t_y & = Bt_x \implies \hat{t}_{yrc} \text{(c for combined)} = \hat{B}t_x
+\end{align*}
+\begin{align*}
+   MSE(\hat{t}_{yrc}) & \approx V(\hat{t}_{yrc} - B\hat{t}_{x,str})
+                        = V \left[\sum_{h=1}^{H}\sum_{j \in \mathcal{S}_m}w_{hj}(y_{hj} - Bx_{hj})\right]
+  \\ \hat{V}(\hat{t}_{yrc}) & = \left(\frac{t_{x,str}}{\hat{t}_{x,str}}\right)^2 \hat{V} \left(\sum_{h=1}^H \sum_{j \in \mathcal{S}_h}w_{hj}e_{hj}\right)
+                            & e_{hj} & = y_{hj} - \hat{B}_{x_{hj}}
+  \\ &  = \left(\frac{t_{x,str}}{\hat{t}_{x,str}}\right)^2 [\hat{V}(\hat{t}_{y,str}) + \hat{B}^2 \hat{V}(\hat{t}_{x, str}) - 2\hat{B} \reallywidehat{Cov}(\hat{t}_{y, str}, \hat{t}_{x, str})]
+\end{align*}
+\textbf{Separate ratio estimator}: (ratio estimation and then combine
+strata)
+\begin{align*}
+  \hat{t}_{yrs} & = \sum_{h=1}^{H} \hat{t}_{yhr} = \sum_{h=1}^{H} t_{xh} \frac{\hat{t}_{yh}}{\hat{t}_{xh}}
+  & V(\hat{t}_{yrs}) & = \sum_{h=1}^{H} V(\hat{t}_{yhr})
+\end{align*}
+\textbf{Which is best}? Depends.
+\\ Separate is good if ratios across strata
+$\left(\frac{t_{yh}}{t_{xh}}\right)$ \underline{vary a lot}, but you
+are accumulating \underline{bias} with $h$ (each ratio adds bias)
+\\ Combined is good if ratios are \underline{constant} across strata
+and less bias if some sample sizes in strata are small.
+\section{Cluster Sampling}
+Clusters are the \underline{primary sampling units} (\textbf{psu}'s)
+\\ Units within clusters are \underline{secondary sampling units}
+(\textbf{ssu}'s), units of the target pop of interest
+\\ $N$ psu's indexed by $i$, $M_i$ ssu's in $i$-th cluster, $M_0 =
+\sum_{i=1}^{N} M_i =$ \# of ssu's in target population. \textbf{Why
+  use cluster sampling}? Making sampling frame list of observations
+units can be difficult, expensive, impossible. Population may be
+widely distributed geographically, may occur in natural clusters
+(e.g.\ houses) and less expensive to sample clusters than SRS of
+individuals. However, unlike stratified sampling, cluster sampling
+tends to \textcolor{red}{decrease} precision.
+\begin{align*}
+  t_i & = \sum_{j = 1}^{M_i} y_{ij} = \text{psu $i$ total}
+  & t & = \sum_{i=1}^N t_i = \sum_{i=1}^N \sum_{j=1}^{M_i} y_{ij} =
+                              \text{pop total}
+  \\ S_t^2 & = \frac{1}{N-1} \sum_{i=1}^N \left(t_i -
+             \frac{t}{N}\right)^2 = \text{pop var of psu tots}
+  \\ \overline{y}_U & = \sum_{i=1}^N \sum_{j=1}^{M_i}
+                      \frac{y_{ij}}{M_0} = \frac{t}{M_0} = \text{pop mean}
+  & \overline{y}_{iU} & = \sum_{j=1}^{M_i}\frac{y_{ij}}{M_i} =
+                         \frac{t_i}{M_i} = \text{pop $\mu$ in psu $i$}
+  \\ S^2 & = \sum_{i=1}^N \sum_{j = 1}^{M_i} \frac{(y_{ij} -
+           \overline{y}_U)^2}{M_0 - 1} = \text{pop var at ssu level}
+  & S_i^2 & = \sum_{j = 1}^{M_i}
+             \frac{(y_{ij}-\overline{y}_{iU})^2}{M_i - 1} =
+             \text{var in psu $i$}
+\end{align*}
+Assume sample of both levels. Let $\Omega$ be set of psu indices in sample
+and $\Omega_i$ be set of ssu indices for psu $i$ in sample.
+\begin{align*}
+  n & = \text{\# of psu's in sample}
+  & m_i & = \text{\# of ssu's from psu $i$ in sample}
+  \\ \overline{y}_i & = \sum_{j \in \Omega_i} \frac{y_{ij}}{m_i} =
+                      \text{sample mean for psu $i$}
+  \\ \hat{t}_{i} & = M_i \overline{y}_i = \sum_{j \in \Omega_i} \frac{M_i}{m_i}y_{ij}
+  & \hat{t} & = \sum_{i \in \Omega} N \frac{\hat{t}_i}{n} = \sum_{i \in \Omega} \frac{N}{n}\hat{t}_i
+  \\ s_t^2 & = \frac{1}{n-1} \sum_{i \in \Omega} \left(\hat{t}_i - \frac{\hat{t}}{N}\right)^2
+  & s_i^2 & = \frac{1}{m_i - 1} \sum_{j \in \Omega_i} \left(y_{ij} - \overline{y}_i\right)^2
+\end{align*}
+\subsection{One-stage Sampling}
+All ssu's within sampled psu's are included in the sample (census of
+ssu's). Assume initially $M_i = m_i = M$.
+\begin{align*}
+  \hat{t} & = \frac{N}{n} \sum_{i \in \Omega} t_i
+  & V(\hat{t}) & = N^2 \left(1 - \frac{n}{N}\right) \frac{S_t^2}{n}
+  \\ \reallywidehat{SE}(\hat{t}) & = N \sqrt{\left(1 - \frac{n}{N}\right)\frac{s_t^2}{n}}
+  & \hat{\overline{y}} & = \frac{\hat{t}}{NM}
+  \\ V(\hat{\overline{y}}) & = \left(1 - \frac{n}{N}\right) \frac{S_t^2}{nM^2}
+  & \reallywidehat{SE}(\hat{\overline{y}}) & = \frac{1}{M} \sqrt{\left(1 - \frac{n}{N}\right)\frac{s_t^2}{N}}
+\end{align*}
+Still self-weighting:
+\begin{align*}
+  w_{ij} & = \frac{1}{\Pr(\text{ssu $j$ in psu $i$ in sample})} = \frac{N}{n}
+  \\ \hat{t} & = \sum_{i \in \Omega} \frac{N}{n}t_i = \sum_{i \in \Omega} \sum_{j \in \Omega_i} \frac{N}{n} y_{ij} = \sum_{i \in N} \sum_{j=1}^{M} \left(\frac{N}{n}\right)y_{ij} = \sum_{i \in \Omega} \sum_{j = 1}^{M} w_{ij}y_{ij}
+  \\ \hat{\overline{y}} & = \frac{\sum_{i \in \Omega}\sum_{j = 1}^M w_{ij}y_{ij}}{\sum_{i \in \Omega}\sum_{j = 1}^M w_{ij}} = \frac{\frac{N}{n}\sum_{i \in \Omega}\sum_{j=1}^{M}y_{ij}}{nM \frac{N}{n}} = \frac{\sum_{i \in \Omega}\sum_{j = 1}^{M}y_{ij}}{nM}
+\end{align*}
+Role of variability \textcolor{red}{changes}. In stratified, it is
+\textcolor{green}{good}, in cluster sampling, it is
+\textcolor{red}{bad}.
+\begin{align*}
+  \sum_{i=1}^N \sum_{j = 1}^{M} \left(y_{ij} - \overline{y}_U\right)^2 & = \sum_{i=1}^N \sum_{j=1}^{M} \left(y_{ij} - \overline{y}_{iU}\right)^2 + \sum_{i=1}^N M \left(\overline{y}_{iU} - \overline{y}_U\right)^2 = SSW + SSB
+\end{align*}
+\textbf{ANOVA} for cluster sampling:\\
+\begin{tabular}{c | c c c}
+  Between& $df =N - 1$& $SSB = \sum_{i=1}^N \sum_{j = 1}^{M} \left(\overline{y}_{iU} - \overline{y}_U\right)^2$& $MSB = \frac{SSB}{N - 1}$
+  \\ Within & $df = N(M-1)$ & $SSW  = \sum_{i=1}^N \sum_{j = 1}^{M} \left(y_{ij} - \overline{y}_{iU}\right)^2$ & $MSW = \frac{SSW}{N(M-1)}$
+  \\\hline tot & $df = NM - 1$ & $SSTO = \sum_{i=1}^N \sum_{j = 1}^{M} \left(y_{ij} - \overline{y}_U\right)^2$ & $S^2 = \frac{SSTO}{NM - 1}$
+  \\ & & $ = SSB + SSW$
+\end{tabular}
+\begin{align*}
+  S_t^2 & = \frac{\sum_{i=1}^N \left(t_i - \frac{t }{N}\right)^2}{N-1} = \frac{\sum_{i=1}^N \left(M \overline{y}_{iU} - M \overline{y}_U\right)^2}{N - 1} = \frac{\sum_{i=1}^N M^2 \left(\overline{y}_{iU} - \overline{y}_U\right)^2}{N-1}
+  \\ & = M \frac{SSB}{N-1} = M \times MSB
+  \\ V(\hat{t}_{SRS}) & = (NM)^2 \left(1 - \frac{nM}{NM}\right) \frac{s^2}{nM} = N^2 \left(1 - \frac{n}{N}\right) \frac{\colorbox{cyan}{$S^2$}M}{n} =
+                        N^2 \left(1 - \frac{n}{N}\right) \frac{SSB + SSW}{NM - 1} \frac{M}{n}
+  \\ V(\hat{t}_{cluster}) & = \left(1 - \frac{n}{N}\right) N^2 \frac{M \left(\frac{SSB}{N-1}\right)}{n} = N^2 \left(1 - \frac{n}{N}\right) \frac{M \times \colorbox{cyan}{$MSB$}}{n}
+\end{align*}
+\textbf{Intraclass correlation coefficient} (ICC) tells us how similar
+elements in same cluster are, measure the extent to which clusters are
+homogeneous relative to overall variability. ICC is the Pearson
+correlation coefficient for the $NM(M - 1)$ pairs $(y_{ij}, y_{ik})$
+for $1 \leq i \leq N, j \neq k$ s.t.\
+\begin{align*}
+  ICC & = 1 - \frac{M}{M-1} \times \frac{SSW}{SSB + SSW}
+  \\ 0 & \leq SSW/SSTO \leq 1 \implies - \frac{1}{M-1} \leq ICC \leq 1
+  \\ MSB & = \frac{N(M-1)}{M(N-1)}S^2 [1 + (M-1)ICC]
+  \\ \frac{V(\hat{t}_{cluster})}{V(\hat{t}_{SRS})} & = \frac{MSB}{S^2}  = \frac{N(M-1)}{M(N-1)} [1 + (M-1) ICC]
+\end{align*}
+\underline{If $ICC$ is positive}, cluster is
+\textcolor{red}{worse}. Also note that if clusters are perfectly
+homogeneous, then $SSW = 0 \implies ICC = 1$. Design effect (ratio of
+variances) is about $1$ when $ICC \approx 1$.
+\\ $ICC$ only works for clusters of \textcolor{green}{equal
+  sizes}. Alternative measure of homogeneity is the \textbf{adjusted
+  $R^2$}: $ R_a^2 = 1 - \frac{MSW}{S^2}$
+\paragraph{Unequal size clusters} What happens if $M_i$'s differ?
+\begin{align*}
+  \hat{t}_{unb} & = \frac{N}{n} \sum_{i \in \Omega} t_i
+  & M_0 & = \sum_{i=1}^N M_i
+  & V (\hat{t}_{unb}) & = N^2 {\left(1 - \frac{n}{N}\right)\frac{S_t^2}{n}}
+  & V(\hat{\overline{y}}_{unb}) & = \frac{V(\hat{t}_{unb})}{N^2M_0^2}
+\end{align*}
+Unbiased, but inefficient due to variability between $M_i$'s. To
+reduce this variance, we use \textbf{ratio estimation}.
+\begin{align*}
+  \overline{y}_U & = \frac{\sum_{i=1}^N t_i}{\sum_{i=1}^M M_i} = \frac{t }{M_0}
+  & \hat{\overline{y}}_r & = \frac{\hat{t}_{unb}}{\hat{M}_0} = \frac{\frac{N}{n}\sum_{i \in \Omega}t_i}{\frac{N}{n}\sum_{i \in \Omega}M_i} = \frac{\sum_{i \in \Omega}t_i}{\sum_{i \in \Omega M_i}} = \hat{B}
+\end{align*}
+{Alternatively, with weights:}
+$$\hat{\overline{y}}_r = \frac{\sum_{i \in \Omega}M_i \overline{y}_i}{\sum_{i \in \Omega}M_i} = \frac{\sum_{i \in \Omega} \sum_{j \in \Omega_i} y_{ij}}{\sum_{i \in \Omega}\sum_{j \in \Omega_i} 1} = \frac{\sum_{i \in \Omega}\sum_{j \in \Omega_i} \frac{N}{n}y_{ij}}{\sum_{i \in \Omega}\sum_{j \in \Omega_i} \frac{N}{n}} = \frac{\sum_{i \in \Omega} \sum_{j \in \Omega_i} w_{ij}y_{ij}}{\sum_{i \in \Omega} \sum_{j \in \Omega_i}w_{ij}}, w_{ij} = \frac{1}{\pi_{ij}}$$
+\begin{align*}
+   SE(\hat{\overline{y}}_r) & = \sqrt{\left(1 - \frac{n}{N}\right)\frac{1}{n \overline{M}^2} \sum_{i \in \Omega} \frac{(t_i - \hat{\overline{y}}_rM_i)^2}{n-1}}
+  & \overline{M} & = \frac{\sum_{i \in \Omega}M_i}{n}
+  & \hat{t}_r & = \hat{B}M_0 = \frac{\sum_{i \in \Omega}t_i}{\sum_{i \in \Omega}M_i}M_0
+\end{align*}
+\subsection{Two Stage Cluster Sampling}
+\begin{enumerate}
+\item Select an SRS of size $n$ of psu's (from $N$)
+\item Select an SRS of size $m_i$ of ssu's (from $M_i$) within psu $i$
+  (note that if $m_i \geq M_i$, we just sample the whole $M_i$)
+\end{enumerate}
+\begin{align*}
+  \hat{t}_i & = \sum_{j \in \Omega_i}\frac{M_i}{m_i}y_{ij} = M_i \overline{y}_i
+  \\ \frac{1}{w_{ij}} & = \Pr(\text{ssu $j$ from psu $i$ in sample}) =
+                        \frac{n}{N} \times \frac{m_i}{M_i} =
+                        \Pr(\text{psu in samp})\Pr(\text{ssu in samp})
+  \\ & = \frac{nm_i}{NM_i} \implies w_{ij} = \frac{NM_i}{nm_i}
+  \\ \hat{t}_{unb} & = \sum_{i \in \Omega} \frac{N}{n} \hat{t}_i = \sum_{i \in \Omega} \frac{N}{n} M_i \overline{y}_i = \sum_{i \in \Omega} \frac{NM_i}{n} \sum_{j \in \Omega_i}\frac{1}{m_i}y_{ij}
+  \\ & = \sum_{i \in \Omega} w_{ij} \sum_{j \in \Omega_i} y_{ij} = \sum_{j \in \Omega_i} y_{ij} = \sum_{i \in \Omega} \sum_{j \in \Omega_i} w_{ij} y_{ij}
+\end{align*}
+
+\textcolor{red}{Not automatically} a self weighted sample, only if
+$\frac{M_i}{m_i} = c, \forall i$
+\\ Two sources of variability: Between cluster variability ($t_i$'s),
+$N^2 \left(1 - \frac{n}{N}\right) \frac{S_t^2}{n}$. Within cluster
+variability ($\hat{t}_i$), $\left(1 - \frac{m_i}{M-i}\right) M_i^2
+\frac{S_i^2}{m_i}$
+\begin{align*}
+  V(\hat{t}_{unb}) & = N^2 \left(1 - \frac{n}{N}\right) \frac{S_t^2}{n} + \frac{N}{n} \sum_{i=1}^M \left(1 - \frac{m_i}{M_i}\right)M_i^2 \frac{S_i^2}{m_i}
+  % \\ \hat{V}(\hat{t}_{unb}) & = N^2 \left(1 - \frac{n}{N}\right) \frac{s_t^2}{n} + \frac{N}{n} \sum_{i \in \Omega} \left(1 - \frac{m_i}{M_i}\right) M_i^2 \frac{s_i^2}{m_i}
+                              & \hat{\overline{y}}_{unb} & = \frac{\hat{t}_{unb}}{M_0}
+  \\ \hat{V}_{WR}(\hat{t}_{unb}) & = N^2 \frac{s_t^2}{n} \text{ (with
+                                   replacement close to var)}
+  \\ \hat{\overline{y}}_r & = \frac{\sum_{i \in \Omega}\colorbox{cyan}{$\hat{t}_i$}}{\sum_{i \in \Omega}M_i} = \frac{\sum_{i \in \Omega}\sum_{j \in \Omega_i} w_{ij}y_{ij}}{\sum_{i \in \Omega} \sum_{j \in \Omega_i} w_{ij}}
+  \\ \hat{V}(\hat{\overline{y}}_r) & = \frac{1}{\overline{M}^2} \left(1 - \frac{n}{N}\right) \frac{s_r^2}{n} + \frac{1}{nN \overline{M}^2} \sum_{i \in \Omega} M_i^2 \left(1 - \frac{m_i}{M_i}\right) \frac{s_i^2}{m_i}
+  \\ s_r^2 & = \frac{1}{n-1} \sum_{i \in \Omega} (m_i \overline{y}_i - M_i \hat{\overline{y}}_r)^2
+\end{align*}
+\subsection{Designing a Cluster Sample}
+Assume $M_i =M, m_i = m$
+$$V(\hat{\overline{y}}_{unb}) = \left(1 - \frac{n}{N}\right)
+\frac{MSB}{nM} + \left(1 - \frac{m}{M}\right) \frac{MSW}{nM}$$
+If $MSW = 0$, then choose $ m = 1$ (all points equal).
+\begin{align*}
+  c_1 & = \text{cost for sampling $1$ psu}
+  & c_2 & = \text{cost for sampling $1$ ssu}
+  \\ C & = c_1 n + c_2 nm = \text{total cost of sampling}
+  \\ n_{opt} & = \frac{C}{c_1 + c_2 m_{opt}}
+  & m_{opt} & = \sqrt{\frac{c_1 M(N-1)(1-R_a^2)}{c_2 (NM - 1)R_a^2}}
+\end{align*}
+Choosing sample size (\# psu's): If clusters same size and we ignore
+psu-level fpc
+\begin{align*}
+  V (\hat{y}_{unb}) &\leq \frac{1}{n} \left[\frac{MSB}{M} + \left(1 - \frac{m}{M}\right) \frac{MSW}{m}\right] = \frac{1}{n}v
+  & \hat{\overline{y}}_{unb} & \pm z_{\alpha/2} \sqrt{\frac{1}{n}v}
+  & n & = z_{\alpha/2}^2 v/e^2
+\end{align*}
+\subsection{Systematic Sampling} Is cluster sampling. Choose a
+starting point and then every $i^{th}$ index after to make up the
+psu's. We get the mean of one psu (take SRS of one psu generated by
+the systematic counting above).
+\begin{align*}
+  \overline{y}_i & = \overline{y}_{iU} = \hat{\overline{y}}_{sys}
+  & E[\hat{y}_{sys}] & = \overline{y}_U
+  \\ V(\hat{y}_{sys}) & = \left(1 - \frac{1}{N}\right) \frac{S_t^2}{M^2} = \left(1 - \frac{1}{N}\right) \frac{MSB}{M} \approx \frac{S^2}{M} [1 + (M - 1) ICC]
+\end{align*}
+\section{Unequal Probability Sampling}
+\begin{align*}
+  w_i & = \frac{1}{\pi_i}
+  & w_{ij}&  = \frac{1}{\pi_{ij}}
+  & \hat{t} & = \sum_{i \in \Omega} w_i y_i
+  & \overline{y}_r & = \frac{\sum_{i \in \Omega}w_iy_i}{\sum_{i \in \Omega}w_i}
+  & \overline{y}_{unb} & = \frac{\sum_{i \in \Omega}w_iy_i}{N}
+\end{align*}
+Start with sampling one unit, $n = 1$: $\psi_i = \pi_i = \Pr(i \text{
+  is selected}), y_i = t_i$
+\begin{align*}
+  \hat{t}_\psi & = w_iy_i = \frac{1}{\psi_i}y_i, \text{ where }i \in \Omega
+  \\ E(\hat{t}_\psi) & = E \left(\sum_{i \in \Omega} w_iy_i\right) = E \left(\sum_{j=1}^{N}w_jy_jz_j\right)
+   = \sum_{j=1}^{N} \frac{1}{\psi_j}y_j E(Z_j) = \sum_{j=1}^{N} \frac{1}{\psi_j} y_j \psi_j = t
+  \\ V(\hat{t}_{\psi}) & = E ((\hat{t}_{\psi} - t)^2) =
+                         \sum_{\text{possible samples }\Omega} \Pr(\Omega) (\hat{t}_{\psi \Omega} - t)^2 = \sum_{i=1}^N \psi_i \left(\frac{y_i}{\psi_i}- t\right)^2
+\end{align*}
+With $\psi$ proportional to pop size, we get smaller var here than for
+SRS, which makes sense since we use auxiliary information to sample,
+which we believe to be correlated to what we're measuring.
+\subsection{One Stage Sampling}
+\begin{align*}
+  \hat{t}_{\psi} & = \sum_{i \in \Omega} w_i t_i = \sum_{i \in \Omega} \frac{1}{\psi_i}t_i
+  & E(\hat{t}_{\psi}) & = t
+  & V(\hat{t}_{\psi}) & = \sum_{i=1}^N \psi \left(\frac{t_i}{\psi_i}-t\right)^2
+  & \pi_i & = 1 - (1- \psi_i)^n
+\end{align*}
+We take a sample of $n$ psu's \underline{with replacement},
+straightforward \colorbox{yellow}{if we know all psu sizes} $\implies
+\psi_i = \frac{M_i}{M_0}, M_0= \sum_{i=1}^N M_i$
+\\ To sample with only ssu's: Take a sample of size $1$ from list of
+ssu's by SRS. Take all ssu's from the psu of the one ssu sampled
+$\implies \psi_i \propto M_i$.
+\paragraph{Lahiri's Algorithm} $N = $ \# of psu's in pop. Let $\max
+\left\{M_i\right\} =$ max psu size. \textbf{Lahiri's method} is as
+follows:
+\begin{enumerate}
+\item Draw \# $i$ from $1$ to $N$ uniformly (with replacement)
+\item Draw second random number $k$ between $1$ and $\max
+  \left\{M_i\right\}$. If $k \leq M_i$ for psu in step $1$, select psu
+  $i$, otherwise go back to $1$.
+\item Repeat until $n$ psu's selected.
+\end{enumerate}
+This is an example of \textbf{rejection sampling}. Sample with
+replacement with $\psi_i = \frac{M_i}{\sum_{i=1}^N M_i}$. Note that
+the prob for selection for slot $j = \frac{1}{N} \frac{M_i}{\max
+  \left\{M_i\right\}} \propto M_i$.
+\\ \noindent \rule{0.33\textwidth}{0.5pt}
+$\mathcal{R}$ denotes units included in the sample, including \underline{repeats}.
+\begin{align*}
+  \hat{t}_{\psi} & = \frac{\sum_{i \in \mathcal{R}}\frac{t_i}{\psi_i}}{n} = \frac{1}{n} \sum_{i \in \mathcal{R}} u_i = \overline{u}, u_i = \frac{t_i}{\psi_i}
+  \\ Q & \sim Mult(n, \psi_1, \ldots, \psi_n), Q_i = \text{\# times
+         $i$ appears in samp}
+  \\ E(\hat{t}_{\psi}) & = E \left(\frac{1}{n}\sum_{i \in \mathcal{R}}\frac{t_i}{\psi_i}\right) = \frac{1}{n} E \left(\sum_{i=1}^N Q_i \frac{t_i}{\psi_i}\right) = \frac{1}{n} \sum_{i=1}^N n \psi_i \frac{t_i}{\psi_i} = t
+  \\ \hat{t}_{\psi} & = \frac{1}{n} \sum_{i=1}^N Q_i \frac{t_i}{\psi_i} = \frac{1}{n} \sum_{i=1}^N \left[\sum_{j = 1}q_{ij}\right] \frac{t_i}{\psi_i} = \frac{1}{n} \sum_{j=1}^{n} \left[\sum_{i=1}^N q_{ij}\right] \frac{t_i}{\psi_i} \implies
+  \\ V(\hat{t}_{\psi}) & = \frac{1}{n^2} \sum_{j=1}^{n} V
+                         (\underbrace{\sum_{i=1}^N
+                         q_{ij}}_{\text{only one of these } \neq 0} \frac{t_i}{\psi_i}) = \frac{1}{n^2} \sum_{j=1}^{n} \sum_{i=1}^N \psi_i \left(\frac{t_i}{\psi_i} - t\right)^2 = \frac{1}{n} \sum_{i=1}^N \psi_i \left(\frac{t_i}{\psi_i} - t \right)^2
+  \\ \hat{V}(\hat{t}_\psi) & = \frac{s_u^2}{n} = \frac{1}{n}\frac{1}{n-1} \sum_{i \in \mathcal{R}} (u_i - \overline{u})^2 = \frac{1}{n}\frac{1}{n-1} \sum_{i \in \mathcal{R}} \left(\frac{t_i}{\psi_i}- \hat{t}_{\psi}\right)^2
+  \\ E(\hat{V}(\hat{t}_{\psi})) & = V(\hat{t}_{\psi})
+\end{align*}
+\begin{align*}
+  \hat{\overline{y}}_{\psi} & = \frac{\hat{t}_{\psi}}{\hat{M}_{0 \psi}} & \hat{M}_{0\psi} &= \frac{1}{n} \sum_{i \in \mathcal{R}} \frac{M_i}{\psi_i}
+  & \hat{V} (\hat{\overline{y}}_{\psi}) & = \frac{1}{(\hat{M}_0\psi)^2} \frac{1}{n} \frac{1}{n-1} \sum_{i \in \mathcal{R}} \left(\frac{t_i}{\psi_i} - \frac{\hat{\overline{y}}_\psi M_i}{\psi_i}\right)^2
+\end{align*}
+If $N$ is small or some $\psi_i$ are very large, possible that the
+sample will be one psu sampled $n$ times, estimated variance will be
+$0$. Better to use sampling without replacement in this case.
+\paragraph{Choosing $\psi_i$}
+Optimal $\psi_i = \frac{t_i}{t}$, but this requires $t$ and
+$t_i$. Take \textbf{probability proportional to size} (pps) sampling.
+\begin{align*}
+  \psi_i & = \frac{M_i}{M_0}
+  & \frac{t_i}{\psi_i} & = t_i\frac{M_0}{M_i} = M_0 \overline{y}_i
+  \\ \hat{t}_{\psi} & = \frac{1}{n} \sum_{i \in \mathcal{R}} M_0 \overline{y}_i
+  & \hat{\overline{y}}_\psi & = \frac{1}{n}\sum_{i \in \mathcal{R}} \overline{y}_i
+\end{align*}
+\begin{align*}
+  \hat{M}_{0\psi} & = \frac{1}{n} \sum_{i \in \mathcal{R}} \frac{M_i}{\psi_i} = \frac{1}{n} \sum_{i \in \mathcal{R}} \frac{M_i}{M_i/M_0} = \frac{1}{n} \sum_{i \in \mathcal{R}}M_0 = M_0
+  \\ \hat{V}(\hat{\overline{y}}_{\psi}) & = \frac{1}{n} \frac{1}{n-1} \sum_{i \in \mathcal{R}} (\overline{y}_i - \hat{\overline{y}}_{\psi})^2
+\end{align*}
+\paragraph{Weights} without replacement, $w_i =
+\frac{1}{E(Z_i)}$. With replacement:
+\begin{align*}
+  w_{ij} & = w_i = \frac{1}{E(Q_i)} = \frac{1}{n\psi_i}
+  & \hat{t}_{\psi} & = \sum_{i \in \mathcal{R}} \sum_{j = 1}^{M_i}w_{ij}y_{ij}
+  & \hat{\overline{y}}_{\psi} & = \frac{\sum_{i \in \mathcal{R}}\sum_{j=1}^{M_i}w_{ij}y_{ij}}{\sum_{i \in \mathcal{R}}\sum_{j=1}^{M_i}w_{ij}}
+\end{align*}
+If $\psi_i$ are unequal, not self-weighting. In one stage pps, elements in
+larger psu's have smaller weights than elements in small psu's.
+\subsection{Two Stage Sampling}
+With replacement:
+\begin{enumerate}
+\item Take sample of psu's with replacement choosing psu $i$ with prob
+  $\psi_i$ at slow $j$ out of $n$.
+\item Take probability sample of $m_i$ ssu's from psu $i$ at each
+  replication.
+\item If psu $i$ appears $Q_i$ times, $\hat{t}_{i1}, \ldots,
+  \hat{t}_{iQ_i}$ are different.
+\end{enumerate}
+\underline{Conditions}: Different subsamples within psu $i$ must be done
+independently and with same sampling scheme. Also, $j^{th}$ subsample
+from psu $i$ is selected s.t.\ $E[\hat{t}_{ij}] = t_i, j = 1, \ldots, Q_i$. Using the same
+procedure each time means $V[\hat{t}_{ij}] = V_i, \forall j$
+\begin{align*}
+  \hat{t}_{\psi} & = \frac{1}{n} \sum_{i=1}^N \sum_{j=1}^{Q_i} \frac{\hat{t}_{ij}}{\psi_i}
+  \\ E (\hat{t}_{\psi}) &
+                          = \frac{1}{n} \sum_{i=1}^N E_{Q_i} \left(E_{\hat{t}_{ij}} \left(\sum_{j=1}^{Q_i}\frac{\hat{t}_{ij}}{\psi_i} \mid Q_i\right)\right)
+                          = \frac{1}{n} \sum_{i=1}^N E_{Q_i} \left( \frac{1}{\psi_i} \sum_{j=1}^{Q_i} E \left({\hat{t}_{ij}} \mid Q_i\right)\right)
+  \\ &   = \frac{1}{n} \sum_{i=1}^N \frac{t_i}{\psi_i} E_{Q_i} [Q_i] = t
+  \\ \hat{V}(\hat{t}_{\psi}) & = \frac{1}{n} \frac{1}{n-1} \sum_{i=1}^N \sum_{j = 1}^{Q_i} \left(\frac{{\hat{t}}_{ij}}{\psi_i} - \hat{t}_{\psi}\right)^2
+  \\ \hat{\overline{y}}_{\psi} & = \frac{\hat{t}_{\psi}}{\hat{M}_{0\psi}}, \hat{M}_{0\psi} = \frac{1}{n} \sum_{i \in \mathcal{R}} \frac{M_i}{\psi_i}
+\end{align*}
+For an SRS of size $m_i$ at stage 2, $w_{ij} = \frac{1}{n \psi_i}
+\frac{M_i}{m_i}$.
+\\ If $\psi_i = \frac{M_i}{M_0}$ (\textbf{Probability proportional to
+  size} - PPS), $w_{ij} = \frac{M_0}{n M_i} \frac{M_i}{m_i} =
+\frac{M_0}{n m_i}$. If $m_i = m \implies w_{ij} = \frac{M_0}{nm}$,
+self-weighted
+\subsection{Without Replacement}
+Probability of being chosen second is different from being chosen
+first. For $n = 2$ we have:
+\begin{align*}
+  \Pr(i &\text{ chosen }1^{st}, \text{ then }j \text{ }2^{nd}) =
+  \psi_i\frac{\psi_j}{1 - \psi_i} \neq \psi_j\frac{\psi_i}{1-\psi_j} =
+  \Pr(j \text{ } 1^{st}, i \text{ }2^{nd})
+ \\ \pi_{ij} & = \Pr(i \text{ and } j \text{ in sample})=\psi_i \frac{\psi_j}{1 - \psi_i} + \psi_j \frac{\psi_i}{1 - \psi_j}
+\end{align*}
+In general:
+\begin{align*}
+  \pi_i & = E(Z_i) \implies \sum_{i=1}^N Z_i = n
+  \\ \pi_{ij} & = E(Z_i Z_j) = \sum_{\substack{j = 1\\j \neq i}}^{N} \pi_{ik} = \sum_{\substack{j = 1\\j \neq i}}^{N} E(Z_iZ_j) = E \left[\sum_{j=1}^{N} Z_iZ_j - Z_i^2\right] = E \left[\sum_{j=1}^{N}Z_iZ_k - Z_i\right]
+  \\ & = E [Z_i n - Z_i] = (n-1)E(Z_i) = (n-1)\pi_i
+\end{align*}
+$\frac{\pi_i}{n}$ {is average prob of selection for each draw}
+\paragraph{Horvitz-Thompson Estimator for One Stage}
+\begin{align*}
+  \hat{t}_{HT} & = \sum_{i \in \Omega} \frac{{t}_i}{\pi_i} = \sum_{i=1}^N Z_i \frac{t_i}{\pi_i}
+  & Cov(Z_i,Z_i) & = \pi_i (1- \pi_i) & Cov(Z_i, Z_k) & = \pi_{ik} - \pi_i \pi_k, i \neq k
+\end{align*}
+Assume subsampling independent between psu's, $\hat{t}_i \perp Z_1,
+\ldots, Z_n$ and $E(\hat{t}_i \mid Z_1, \ldots, Z_n) = t_i$
+\begin{align*}
+  E(\hat{t}_i \mid Z_1, \ldots, Z_n) & = t_i
+  \\ V(\hat{t}_i \mid Z_1, \dots, Z_n) & = v_i
+  \\  E[\hat{t}_{HT}] & = E \left[\sum_{i=1}^N Z_i \frac{\hat{t}_{i}}{\pi_i}\right] = E_{Z_1, \ldots, Z_N} \left[E_{\hat{t}_1, \ldots, \hat{t}_N \mid Z_1, \ldots, Z_n} \left[\sum_{i=1}^N Z_i \frac{\hat{t}_i}{\pi_i}\mid Z_1, \ldots, Z_n\right]\right]
+  \\ & = E_{Z_1, \ldots, Z_n} \left[\sum_{i=1}^N Z_i E_{\hat{t}_i \mid Z_i} \left[\frac{\hat{t}_i}{\pi_i}\right]\right] = E_{Z_1, \ldots, Z_n} \left[\sum_{i=1}^N Z_i \frac{t_i}{\pi_i}\right] = \sum_{i=1}^N t_i = t
+  \\ V(\hat{t}_{HT}) & = V_{\vec{Z}} (E_{\vec{\hat{t}} \mid \vec{Z}} (\hat{t}_{HT} \mid Z_1, \ldots, Z_n)) + E_{\vec{Z}} (V_{\vec{\hat{t}}\mid \vec{Z}}(\hat{t}_{HT} \mid Z_1, \ldots, Z_N))
+  \\ &                       = V \left[\sum_{i=1}^N Z_i E \left[\frac{\hat{t}_i}{\pi_i}\right]\right] + E \left[\sum_{i=1}^N Z_i^2 V \left[\frac{\hat{t}_i}{\pi_i}\right]\right]
+  \\ & = V \left[\sum_{i=1}^N Z_i \frac{t_i}{\pi_i}\right] + E \left[\sum_{i=1}^N Z_i^2 \frac{v_i}{\pi_i}\right]
+       = \sum_{i=1}^N \sum_{j=1}^{N} \frac{t_it_k}{\pi_i\pi_k} Cov(Z_i, Z_k) + \sum_{i=1}^N \pi_i\frac{v_i}{\pi_i^2}
+  \\ & = \sum_{i=1}^N \pi_i (1- \pi_i) \frac{t_i^2}{\pi_i^2} +
+       \sum_{i=1}^N \sum_{i \neq k} (\pi_{ik} - \pi_i \pi_k)
+       \frac{t_it_k}{\pi_i\pi_k} + \underbrace{\sum_{i=1}^N
+       \frac{v_i}{\pi_i}}_{\text{ssu var}}
+\end{align*}
+For one stage, $V(\hat{t}_i) = 0$ for $i \in \Omega \implies$
+\begin{align*}
+  V_{HT}(\hat{t}_{HT}) & = \sum_{i=1}^N (1-\pi_i) \frac{t_i^2}{\pi_i} + \sum_{i=1}^N \sum_{\substack{k = 1\\k \neq i}} (\pi_{ik} - \pi_i \pi_k) \frac{t_i}{\pi_i} \frac{t_k}{\pi_k}
+  \\ & = \frac{1}{2} \sum_{i=1}^N \sum_{\substack{k = 1\\k \neq i}} (\pi_i\pi_k - \pi_{ik}) \left(\frac{t_i}{\pi} - \frac{t_k}{\pi_k}\right)^2
+       = V_{SYG}(\hat{t}_{HT})
+  \\ \hat{V}_{HT}(\hat{t}_{HT}) & = \sum_{i=1}^N Z_i (1-\pi_i) \frac{\hat{t}_i^2}{\pi_i^2} + \sum_{i=1}^N \sum_{\substack{k = 1 \\ k \neq i}}^{N}R_{ik} \left(\frac{\pi_{ik}-\pi_i\pi_k}{\pi_{ik}}\right) \frac{\hat{t}_i \hat{t}_k}{\pi_i\pi_k}
+  \\ R_{ik} & =
+              \begin{cases}
+                1 & \text{if }Z_i = Z_k = 1
+                \\ 0 & \text{otherwise}
+              \end{cases}
+  \\ \hat{V}_{SYG}(\hat{t}_{HT}) & = \frac{1}{2} \sum_{i=1}^N \sum_{\substack{k=1\\k \neq i}}^{N} Z_i Z_k \frac{\pi_i\pi_k-\pi_{ik}}{\pi_{ik}} \left(\frac{t_i}{\pi_i} - \frac{t_k}{\pi_k}\right)^2 \neq \hat{V}_{HT}(\hat{t}_{HT})
+\end{align*}
+However, both are \underline{unbiased}. $\hat{V}_{SYG}$ usually
+preferred. Since $\pi_{ik}$ can be hard to compute, we can still
+estimate the variance by pretending it was taken with replacement,
+$\psi_i = \frac{\pi_i}{n}$:
+\begin{align*}
+  \hat{V}_{WR}(\hat{t}_{HT}) & = \frac{1}{n} \frac{1}{n-1} \sum_{i \in \Omega} \left(\frac{t_i}{\psi_i} - \hat{t}_{HT}\right) = \frac{n}{n-1} \sum_{i \in \Omega} \left(\frac{t_i}{\pi_i} - \frac{\hat{t}_{HT}}{n}\right)^2
+\end{align*}
+\paragraph{Two Stage Horvitz-Thompson}
+\begin{align*}
+  \hat{t}_{HT} & = \sum_{i \in \Omega} \frac{\hat{t}_i}{\pi_i} = \sum_{i=1}^N Z_i \frac{\hat{t}_i}{\pi_i}
+  \\
+  V(\hat{t}_{HT}) & =
+  \sum_{i=1}^N \pi_i (1- \pi_i) \frac{t_i^2}{\pi_i^2} +
+       \sum_{i=1}^N \sum_{i \neq k} (\pi_{ik} - \pi_i \pi_k)
+       \frac{t_it_k}{\pi_i\pi_k} + {\sum_{i=1}^N
+                    \frac{v_i}{\pi_i}}
+  \\ &
+                    = \frac{1}{2} \sum_{i=1}^N \sum_{\substack{k = 1\\k \neq i}} (\pi_i\pi_k - \pi_{ik}) \left(\frac{t_i}{\pi} - \frac{t_k}{\pi_k}\right)^2 + {\sum_{i=1}^N
+  \frac{v_i}{\pi_i}}
+  \\ \hat{V}_{HT}(\hat{t}_{HT}) & = \sum_{i=1}^N Z_i (1-\pi_i) \frac{\hat{t}_i^2}{\pi_i^2} + \sum_{i=1}^N \sum_{\substack{k = 1 \\ k \neq i}}^{N}R_{ik} \left(\frac{\pi_{ik}-\pi_i\pi_k}{\pi_{ik}}\right) \frac{\hat{t}_i \hat{t}_k}{\pi_i\pi_k} + \sum_{i=1}^N Z_i \frac{\hat{v}_i}{\pi_i}
+  \\ \hat{V}_{SYG}(\hat{t}_{HT}) & = \frac{1}{2} \sum_{i=1}^N \sum_{\substack{k=1\\k \neq i}}^{N} Z_i Z_k \frac{\pi_i\pi_k-\pi_{ik}}{\pi_{ik}} \left(\frac{t_i}{\pi_i} - \frac{t_k}{\pi_k}\right)^2 + \sum_{i=1}^N Z_i \frac{\hat{v}_i}{\pi_i} \neq \hat{V}_{HT}(\hat{t}_{HT})
+  \\\hat{V}_{WR}(\hat{t}_{HT}) & = \frac{1}{n} \frac{1}{n-1} \sum_{i \in \Omega} \left(\frac{n \hat{t}_i}{\pi_i} - \hat{t}_{HT}\right)^2 = \frac{n}{n-1} \sum_{i \in \Omega} \left(\frac{\hat{t}_i}{\pi_i} - \frac{\hat{t}_{HT}}{n}\right)^2
+\end{align*}
+\subsection{Weights}
+\paragraph{One Stage} $\hat{t}_{HT} = \sum_{i \in \Omega} w_i
+\hat{t}_i, w_i = \frac{1}{\pi_i}$
+\paragraph{Two Stage} with SRS at stage 2:
+\begin{align*}
+  \hat{t}_i & = \sum_{j \in \Omega_i} \frac{y_{ij}}{\pi_{j \mid i}} &  \pi_{j \mid i} & = \frac{m_i}{M_i}
+  & w_{ij} & = \frac{1}{\pi_{i} \pi_{j \mid i}}
+  \\ \hat{t}_{HT} & = \sum_{i \in \Omega} w_i \hat{t}_i = \sum_{i \in \Omega} \sum_{j \in \Omega_i} w_{ij}y_{ij}
+  & \hat{\overline{y}}_{HT} & = \frac{\sum_{i \in \Omega}\sum_{j \in \Omega_i} w_{ij}y_{ij}}{\sum_{i \in \Omega}\sum_{j \in \Omega_i}w_{ij}}
+  & \hat{M}_0 & = \sum_{i \in \Omega} \sum_{j \in \Omega_i} w_{ij}
+\end{align*}
+Residual from the fact that $\hat{\overline{y}}$ is ratio estimator:
+$\hat{e}_i = \hat{t}_i - \hat{\overline{y}}_{HT} \hat{M}_i, \hat{M}_i
+= \sum_{j \in \Omega_i} \frac{1}{\pi_{j \mid i}}$ we then get:
+\begin{align*}
+  \hat{V}_{WR}(\hat{\overline{y}}_{HT}) & = \frac{n}{n-1} \sum_{i \in \Omega} \left(\frac{\hat{e}_i}{\hat{M}_0 \pi_i}\right) = \frac{n}{n-1} \sum_{i \in \Omega} \left(\frac{\sum_{j \in \Omega_i} w_{ij} (y_{ij} - \overline{y}_{HT})}{\sum_{k \in \Omega} \sum_{j \in \Omega_i} w_{kj}}\right)^2
+\end{align*}
+\section{Example Problems}
+Gas stations, consider gas prices in November and December, want to
+estimate pop diff in average gas prices between two months. Design 1:
+SRS $n$ gas stations in November and then SRS $n$ gas stations in
+December (independently). Good estimator is $\hat{\overline{d}} =
+\overline{y}_{Dec} - \overline{y}_{Nov}$, sample avgs unbiased for
+$\overline{y}_{u,Month}$. so difference is
+unbiased. $V[\hat{\overline{d}}] = V(\overline{y}_{Dec}) +
+V(\overline{y}_{Nov})$
+\\ Design 2: SRS of $n$ gas stations in November and then same
+stations in December. $\hat{\overline{d^*}} = \overline{y}_{Dec} -
+\overline{y}_{Nov}$, unbiased because sample means are unbiased. For
+var: $\hat{\overline{d^*}} = \frac{1}{n} \sum_{i \in S} (y_{i, Dec} -
+y_{i, Nov}) = \frac{1}{n} \sum_{i \in S} d_i \implies
+V[\hat{\overline{d^*}}] = \left(1 - \frac{n}{N}\right)\frac{S_d^2}{n}$
+where $S_d^2 = \frac{1}{N-1} \sum_{i=1}^N (y_{i,Dec} - y_{i,Nov} -
+[\overline{y}_{u,Dec} - \overline{y}_{u, Nov}])^2 = V(Y_{Dec}) +
+V(Y_{Nov}) - 2Cov(Y_{Dec}, Y_{Nov})$. Design 2 is better if covariance
+or correlation is positive (lower var).
+\\ Given margin of error for SRS total and want to compute $n$,
+convert margin of error to mean and then use formula for $n$ for mean.
+\\ Cov: Design based: $Cov(\overline{y}_n, \overline{y}_m) = Cov
+\left(\sum_{i \in S_1} \frac{y_i}{n}, \sum_{j\in S_2}
+  \frac{y_j}{m}\right) = Cov \left(\sum_{i=1}^N Z_i \frac{y_i}{n},
+  \sum_{j=1}^N Z'_j \frac{y_j}{m}\right) = \sum_{i=1}^N \sum_{j=1}^N
+y_i y_j \frac{1}{n} \frac{1}{m} \underbrace{Cov (Z_i,
+  Z_j')}_{E(Z_iZ_j') - E(Z_i)E(Z_j')}$. Use $E(Z_i Z_j') = Pr(Z_i = 1,
+Z_j'=1) = Pr(Z_j' = 1 \mid Z_i = 1)Pr(Z_i = 1)$
+\\ \textbf{Design Effect} of $\hat{t}$ relative to $\hat{t}_2$ is
+$\frac{V(\hat{t})}{V(\hat{t}_2)}$
+\\ \textbf{Lagrange}: Set constraint $= 0$ (e.g.\ $C = c_0 + c_1 \to 0
+= c_0 + c_1 - c^*$), then partial derive wrt to
+each variable (one at a time) of $f - \lambda(constraint)$, e.g.\ $f -
+\lambda (c_0 + c_1 - c^*)$ and derive wrt to $n_h$. If second deriv is
+positive, then min.
+\\Two-phase, sample of size $n$ from $N$ and each unit has
+category. $N_g$ be \# units in pop with category $g$ and $n_g$ be \#
+units in samp with cat $g$. 2nd phase, sample $m$ units from each
+category.
+\\ Inclusion prob, $\pi^* = \frac{n}{N} \times \sum_{g=1}^G x_{ig}
+\min \left(\frac{m}{n_g},1\right)$, where $x_{ig} = 1$ if $i$ in cat
+$g$.
+\\ Write $n_g = \sum_{i \in S_1}x_{ig}$ for $S_1$ being units sampled
+in phase 1. $E(n_g) = \frac{N_{g}}{N}n$. Simplify $\pi_i^*$, gets rid
+of $\max$ for large $n$ and converges to inclusion for stratified with
+$m$ from each strata.
+\\ When deriving var, try to get var in terms of an expr we already
+know var of.
+\\ Cannot estimate var between if only one cluster in samp, so cannot
+estimate var.
+\\ If one cluster has higher var than all the others in two stage, we
+can sample more from that cluster to decrease variance.
+\\ Multinomial: $p(x_1, \ldots, x_k) = \frac{n!}{x_1!\cdots
+  x_k!}p_1^{x_1}\cdots p_k^{x_k}, E(X_i) = np_i, V(X_i) = np_i
+(1-p_i), Cov(X_i, X_j) = -np_ip_j (i \neq j)$. SRSWR is multinomial.
+\end{multicols*}
+\end{document}

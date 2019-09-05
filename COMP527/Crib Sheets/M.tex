@@ -1,0 +1,737 @@
+\color{Sepia}
+\section{{Natural Deduction}}
+Rules:
+\scalebox{0.8}{\AXC{}
+\RL{T I}
+\UIC{$\Gamma \vdash ():$T }
+\DP}
+\scalebox{0.8}{
+\AXC{$\Gamma \vdash M : A$ }
+\AXC{$\Gamma \vdash N : B$ }
+\RL{$\land$I}
+\BIC{$\Gamma \vdash \langle M,N \rangle : A \land B$ }
+\DP}
+% 
+\scalebox{0.8}{\AXC{$\Gamma \vdash M: A \land B$ }
+\RL{$\land$E$_l$}
+\UIC{$\Gamma \vdash fst\ M: A$ }
+\DP}
+%
+\scalebox{0.8}{
+\AXC{$\Gamma \vdash M: A \land B$ }
+\RL{$\land$E$_r$}
+\UIC{$\Gamma \vdash snd\ M: B$ }
+\DP}
+% 
+\scalebox{0.8}{\AXC{$\Gamma, u:A \vdash M:B$}
+\RL{$ \supset$ I$^{u}$}
+\UIC{$\Gamma \vdash \lambda u: A.M : A \supset B$ }
+\DP}
+% 
+\scalebox{0.8}{\AXC{$\Gamma \vdash M : A \supset B$ }
+\AXC{$\Gamma \vdash N: A$}
+\RL{$\supset$ E}
+\BIC{$\Gamma \vdash M\ N: B$ }
+\DP}
+% 
+\scalebox{0.8}{$\neg A \equiv A \supset \perp$
+\AXC{$\Gamma \vdash M: \perp$ }
+\RL{$\perp$ E}
+\UIC{$\Gamma \vdash abort^C\ M : C$ }
+\DP}
+%
+% \rotatebox{90}{\scalebox{0.8}{
+% \AXC{$\Gamma \vdash M: A$}
+% \RL{$\lor$ I$_l$}
+% \UIC{$\Gamma \vdash inl^B\ M : A \lor B$ }
+% \DP}
+% %
+% \scalebox{0.8}{
+% \AXC{$\Gamma \vdash M: B$}
+% \RL{$\lor$ I$_r$}
+% \UIC{$\Gamma \vdash inr^A\ M : A \lor B$ }
+% \DP}}
+% % 
+% \rotatebox{90}{\scalebox{0.8}{\AXC{$\Gamma \vdash M : A \lor B$ }
+% \AXC{$\Gamma, u : A \vdash N_l : C$}
+% \AXC{$\Gamma, v : B \vdash N_r : C$}
+% \RL{$\lor$ E$^{u,v}$}
+% \TIC{$\Gamma \vdash case\ M\ of\ inl^A\ x \to N_l \mid inr^B\ y \to
+%   N_r : C$}
+% \DP}}
+% \rotatebox{90}{\scalebox{0.8}{
+%   \AXC{$\Gamma \vdash M:\exists x : \tau . A(x)$ true}
+%   \AXC{$\Gamma, a:\tau, u:A(a) \vdash N:C$ true}
+%   % 
+%   \RL{$\exists$ E$^{w,a}$}
+%   \BIC{$\Gamma \vdash let\ \langle u,a \rangle = M\ in\ N: C$ true}
+%   \DP
+% }}
+
+\scalebox{0.6}{
+  \AXC{$\Gamma \vdash M: A$}
+\RL{$\lor$ I$_l$}
+\UIC{$\Gamma \vdash inl^A\ M : A \lor B$ }
+\DP}
+%
+\scalebox{0.6}{
+\AXC{$\Gamma \vdash M: B$}
+\RL{$\lor$ I$_r$}
+\UIC{$\Gamma \vdash inr^B\ M : A \lor B$ }
+\DP}
+% 
+\scalebox{0.55}{\AXC{$\Gamma \vdash M : A \lor B$ }
+\AXC{$\Gamma, u : A \vdash N_l : C$}
+\AXC{$\Gamma, v : B \vdash N_r : C$}
+\RL{$\lor$ E$^{u,v}$}
+\TIC{$\Gamma \vdash case\ M\ of\ inl^A\ u \to N_l \mid inr^B\ v \to
+  N_r : C$}
+\DP}
+\scalebox{0.8}{
+  \AXC{$x : A \in \Gamma$}
+  \RL{u}
+  \UIC{$\Gamma \vdash x : A$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$\Gamma, a : \tau \vdash M:A(a)$ true}
+  \RL{$\forall $I$^a$}
+  \UIC{$\Gamma \vdash \lambda a : \tau . M : \forall x:\tau. A(x)$ true}
+  \DP
+}
+\scalebox{0.8}{
+  \AXC{$\Gamma \vdash M:\forall x:\tau. A(x)$ true}
+  \AXC{$\Gamma \vdash t:\tau$}
+  \RL{$\forall$ E}
+  \BIC{$\Gamma \vdash M\ t : A(t)$ true}
+  \DP
+}
+\scalebox{0.8}{
+  \AXC{$\Gamma \vdash M:A(t)$ true}
+  \AXC{$\Gamma \vdash t:\tau$}
+  \RL{$\exists$ I}
+  \BIC{$\Gamma \vdash \langle M,t \rangle : \exists x : \tau . A(x)$ true}
+  \DP
+}
+\scalebox{0.55}{
+  \AXC{$\Gamma \vdash M:\exists x : \tau . A(x)$ true}
+  \AXC{$\Gamma, a:\tau, w:A(a) \vdash N:C$ true}
+  % 
+  \RL{$\exists$ E$^{w,a}$}
+  \BIC{$\Gamma \vdash let\ \langle u,a \rangle = M\ in\ N: C$ true}
+  \DP
+}
+\\ Context $\Gamma ::= \cdot \mid \Gamma, u: A$
+\\ Structural props:
+\\ \textbf{Weakening} Extra assumps don't matter. If $\Gamma, \Gamma'
+\vdash A$ then $\Gamma, u : B, \Gamma' \vdash A$
+\\ \textbf{Exchange} Order of hypothetical assumps doesn't matter. If
+$\Gamma, x : B_1, y:B_2, \Gamma' \vdash A$ then $\Gamma, y : B_2,
+x:B_1, \Gamma' \vdash A$
+\\ \textbf{Contraction} Assump can be used as often as we like. If
+$\Gamma, x: B, y:B, \Gamma' \vdash A$ then $\Gamma, x : B, \Gamma'
+\vdash A$
+\\ \textbf{Substitution}: 
+\\$[N/x]M = M', [N/x]x = N$. Replace the ``free'' occurence of $x$ in
+$M$ with $N$.
+\\ \colorbox{yellow}{\textbf{Substitution thm}}: If $\Gamma, x : A, \Gamma' \vdash M:B$ and
+$\Gamma \vdash N:A$ then $\Gamma, \Gamma' \vdash [N/x]M:
+B$. 
+\\ \textbf{Pf}  by structural induction on $\Gamma, x : A, \Gamma'
+\vdash M : B$
+\\ \underline{Case:} \scalebox{0.8}{
+  \AXC{$\mathcal{D}'$}
+  \noLine
+  \UIC{$\Gamma, x:A, \Gamma' \vdash M : C \land D$}
+  \RL{$\land$ E$_l$}
+  \UIC{$\Gamma, x:A,\Gamma' \vdash fst\ M : C$}
+  \DP}
+  \\ $\Gamma, \Gamma ' \vdash [N/x] M : C\land D$ by IH
+  \\ $\Gamma, \Gamma ' \vdash fst\ ([N/x]M) : C$ by $\land$E$_l$
+  \\$\Gamma, \Gamma' \vdash [N/x](fst \ M) : C$ by definition of substitution
+\\ \underline{Case:} \scalebox{0.8}{
+  \AXC{$x: A \in (\Gamma, x : A, \Gamma')$}
+  
+  \UIC{$\Gamma, x : A, \Gamma' \vdash x : A$}
+  \DP}
+  \\ $\Gamma \vdash N:A$ by assumption
+  \\ $\Gamma, \Gamma' \vdash N : A$ by weakening
+  \\ $\Gamma, \Gamma' \vdash [N/x]x : A$ by substitution definition
+  \\ \underline{Case:} \scalebox{0.8}{
+    \AXC{$y: B \in (\Gamma, x : A, \Gamma')$}
+    \AXC{$x \neq y$}
+    
+    \BIC{$\Gamma, x : A, \Gamma' \vdash y : B$}
+    \DP}
+    \\ $y:B \in (\Gamma, \Gamma')$
+    \\ $\Gamma, \Gamma' \vdash y : B$ by variable
+\\ Substitution lemma on terms: Replace any occurrence of x with $N$
+\\ Substitution lemma on judgements: Replace assump $N:A$ with proof
+$\mathcal{E}$ establishing $N:A$
+\color{OliveGreen}
+\section{Reduction Rules}
+$M \implies M'$ means $M$ reduces to $M'$
+\\ Get reduction rules from local soundness
+\scalebox{0.8}{
+\AXC{$\mathcal{D}_1$}
+\noLine
+\UIC{$M : A$}
+\AXC{$\mathcal{D}_2$}
+\noLine
+\UIC{$N : B$}
+\RL{$\land$ I}
+\BIC{$\langle M,N \rangle : A \land B$}
+\RL{$\land$ E$_l$}
+\UIC{$fst\ \langle M,N \rangle : A$}
+\DP
+$\implies$
+\begin{tabular}{c}
+  $\mathcal{D}_1$\\ $M : A$ true
+\end{tabular}}
+% \\ \textbf{Thm} If $M : A$ and $M \implies M'$ then $M' : A$
+% \\ If $M' : A$ and $M \implies M'$ then $M : A$
+\\$fst\ \langle M,N \rangle \implies M$
+\\$snd \langle M,N \rangle \implies
+N$
+\\ $(\lambda x : A . M)N \implies [N/x] M$
+\\ $case\ (inl^A\ M)\ of\ inl^A\ x \to N_l \mid inr^B\ y \to N_r
+\implies [M/x]N_l$
+\\ $case\ (inr^B\ M)\ of\ inl^A\ x \to N_l \mid inr^B\ y \to N_r
+\implies [M/y]N_r$
+\\ $(\lambda a : \tau . M) t \implies [t/a]M$
+\\ $let \langle u, a \rangle = \langle M,t \rangle \ in \ N \implies
+[M/u][t/a]M$
+\\ \textbf{Subject reduction} If $M \implies M'$ and $\Gamma \vdash M
+: C$ then $\Gamma \vdash M' : C$
+\\ \textbf{Pf} by induction on $M \implies M'$ (have to prove for
+\colorbox{red}{congruence rules} too, just generalize)
+\\ \underline{Case:} $fst \langle M,N \rangle \implies M$
+\\
+$\Gamma \vdash fst\ \langle M,N \rangle : A$ by assumption
+\\ $\Gamma \vdash \langle M,N \rangle : A \land B$ \underline{inversion} on
+$\land$ E$_l$
+\\$\Gamma \vdash M : A$ by \underline{inversion} of $\land I$
+\\ \underline{Case:} $(\lambda x : A.M)N \implies [N/x]M$
+$\Gamma \vdash (\lambda x : A . M) N : B$ by assumption
+\\ $\Gamma \vdash \lambda x: A.M : A \supset B,\ \Gamma \vdash N :
+A$ by inversion on $\supset$ E
+\\ $\Gamma, x : A \vdash M : B$ by inversion on $\supset$ I
+\\ $\Gamma \vdash [N/x]M:B$ by substitution lemma (on above line
+and $\Gamma \vdash N:A$)
+\\ \underline{Case:} \scalebox{0.8}{
+  \AXC{$M \implies M'$}
+  \UIC{$\lambda x : A.M \implies \lambda x: A.M'$}
+  \DP
+}
+\\ $\Gamma \vdash \lambda x : A . M : A \supset B$ by assumption
+\\ $\Gamma, x : A \vdash M:B$ by inversion on $\supset$ I
+\\ $\Gamma, x:A \vdash M' : B$ by IH
+\\ $\Gamma \vdash \lambda x : A . M' : A \supset B$ by $\supset$ I
+\\ \textbf{Congruence Rules}
+\\ Get a congruence rule for every subterm of proof terms
+\scalebox{0.7}{
+  \AXC{$M \implies M'$}
+  \UIC{$\langle M,N \rangle \implies \langle M',N \rangle$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$N \implies N'$}
+  \UIC{$\langle M,N \rangle \implies \langle M,N' \rangle$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$M \implies M'$}
+  \UIC{$fst\ M \implies fst\ M'$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$M \implies M'$}
+  \UIC{$snd\ M \implies snd\ M'$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$M \implies M'$}
+  \UIC{$\lambda x : A .M \implies \lambda x : A.M'$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$M \implies M'$}
+  \UIC{$M\ N \implies M'\ N$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$N \implies N'$}
+  \UIC{$M\ N \implies M\ N'$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$M \implies M'$}
+  \UIC{$inl^B\ M \implies inl^B\ M'$}
+  \DP
+}
+\scalebox{0.7}{
+  \AXC{$M \implies M'$}
+  \UIC{$inr^A\ M \implies inr^A\ M'$}
+  \DP
+}
+Case congruence rules omitted
+% \scalebox{0.8}{
+%   \AXC{$M \implies M'$}
+%   \UIC{$case\ M\ of\ inl^B\ u \to N_l \mid inr^A\ v \to N_r \implies
+%     case\ M'\ of\ inl^B\ u \to N_l \mid inr^A\ v \to N_r$}
+%   \DP
+% }
+% \scalebox{0.8}{
+%   \AXC{$N_l \implies N_l'$}
+%   \UIC{$case\ M\ of\ inl^B\ u \to N_l \mid inr^A\ v \to N_r \implies
+%     case\ M\ of\ inl^B\ u \to N_l' \mid inr^A\ v \to N_r$}
+%   \DP
+% }
+% \scalebox{0.8}{
+%   \AXC{$N_r \implies N_r'$}
+%   \UIC{$case\ M\ of\ inl^B\ u \to N_l \mid inr^A\ v \to N_r \implies
+%     case\ M\ of\ inl^B\ u \to N_l \mid inr^A\ v \to N_r'$}
+%   \DP
+%}
+\color{Blue}
+\section{Soundness and Completeness}
+Rules should not allow us to deduce new truths
+(\colorbox{yellow}{soundness}, introduce connective and immediately
+eliminate it, should be able to erase this detour, otherwise elim
+rules too strong) and should
+be strong enough to obtain all information contained in a connective
+(\colorbox{yellow}{completeness}, elim connective s.t. it retains enough
+info to reintroduce, otherwise elim rules too weak).
+\\ Examples
+\\ Conjunction: Soundness
+\scalebox{0.8}{\AXC{$\mathcal{D}$}
+\noLine
+\UIC{$A$ true}
+\AXC{$\mathcal{E}$}
+\noLine
+\UIC{$B$ true}
+\RL{$\land$ I}
+\BIC{$A \land B$ true}
+\RL{$\land$ E$_l$}
+\UIC{$A$ true}
+\DP
+$\implies$
+\begin{tabular}{c}
+  $\mathcal{D}$
+  \\ $A$ true
+\end{tabular}}
+\scalebox{0.8}{
+\AXC{$\mathcal{D}$}
+\noLine
+\UIC{$A$ true}
+\AXC{$\mathcal{E}$}
+\noLine
+\UIC{$B$ true}
+\RL{$\land$ I}
+\BIC{$A \land B$ true}
+\RL{$\land$ E$_r$}
+\UIC{$B$ true}
+\DP
+$\implies$
+\begin{tabular}{c}
+  $\mathcal{E}$\\ $B$ true
+\end{tabular}}
+% \vfill\null
+% \columnbreak
+\\Completeness:
+\\\scalebox{0.65}{\begin{tabular}{c}
+  $\mathcal{D}$ \\ $A \land B$ true 
+\end{tabular}
+$\implies$
+\AXC{$\mathcal{D}$}
+\noLine
+\UIC{$A \land B$ true}
+\RL{$\land$ E$_l$}
+\UIC{$A$ true}
+\AXC{$\mathcal{D}$}
+\noLine
+\UIC{$A \land B$ true}
+\RL{$\land$ E$_r$}
+\UIC{$B$ true}
+\RL{$\land$ I}
+\BIC{$A \land B$ true}
+\DP}
+\\ Implication: Soundness
+\scalebox{0.7}{
+  \AXC{}
+  \RL{u}
+  \UIC{$A$ true}
+  \noLine
+  \UIC{\vdots}
+  \noLine
+  \UIC{$\mathcal{D}^u$}
+  \noLine
+  \UIC{$B$ true}
+  \RL{$\supset$ I$^u$}
+  \UIC{$A \supset B$ true}
+  \AXC{$\mathcal{E}$}
+  \noLine
+  \UIC{$A$ true}
+  \RL{$\supset$ E}
+  \BIC{$B$ true}
+  \DP
+  $\implies$
+  \begin{tabular}{c}
+    $\mathcal{E}$
+    \\$A$ true
+    \\$[\mathcal{E}/u] (\mathcal{D})$
+    \\$B$ true 
+  \end{tabular}
+}
+\\ Completeness
+\\\scalebox{0.75}{
+  \begin{tabular}{c}
+    $\alpha$
+    \\$A \supset B$ true
+  \end{tabular}
+  $\implies$
+  \AXC{$\alpha$}
+  \noLine
+  \UIC{$A \supset B$ true}
+  \AXC{}
+  \RL{u}
+  \UIC{$A$ true}
+  \RL{$\supset$ E}
+  \BIC{$B$ true}
+  \RL{$\supset$ I$^u$}
+  \UIC{$A \supset B$ true}
+  \DP
+}
+\\ Disjunction: Soundness
+\\ \scalebox{0.75}{
+  \AXC{$\mathcal{D}$}
+  \noLine
+  \UIC{$A$}
+  \RL{$\lor$ I$_l$}
+  \UIC{$A \lor B$}
+  %
+  \AXC{}
+  \RL{u}
+  \UIC{$A$}
+  \noLine
+  \UIC{$\mathcal{E}$}
+  \noLine
+  \UIC{$C$}
+  %
+  \AXC{}
+  \RL{v}
+  \UIC{$B$}
+  \noLine
+  \UIC{$\mathcal{F}$}
+  \noLine
+  \UIC{$C$}
+  \RL{$\lor$E$^{u,v}$}
+  \TIC{$C$}
+  \DP
+  $\implies$
+  \begin{tabular}{l}
+    $[\mathcal{D}/u]\mathcal{E}$
+    \\ $C$ true
+  \end{tabular}
+}
+\\ \scalebox{0.75}{
+  \AXC{$\mathcal{D}$}
+  \noLine
+  \UIC{$B$}
+  \RL{$\lor$ I$_r$}
+  \UIC{$A \lor B$}
+  %
+  \AXC{}
+  \RL{u}
+  \UIC{$A$}
+  \noLine
+  \UIC{$\mathcal{E}$}
+  \noLine
+  \UIC{$C$}
+  %
+  \AXC{}
+  \RL{v}
+  \UIC{$B$}
+  \noLine
+  \UIC{$\mathcal{F}$}
+  \noLine
+  \UIC{$C$}
+  \RL{$\lor$E$^{u,v}$}
+  \TIC{$C$}
+  \DP
+  $\implies$
+  \begin{tabular}{l}
+    $[\mathcal{D}/v]\mathcal{F}$
+    \\ $C$ true
+  \end{tabular}
+}
+\\ Completeness
+% \\\vfill\null
+% \columnbreak
+\\\scalebox{0.65}{
+\begin{tabular}{l}
+  $\mathcal{D}$
+  \\ $A \lor B$
+\end{tabular}
+$\implies$
+\AXC{$\mathcal{D}$}
+\noLine
+\UIC{$A \lor B$}
+\AXC{}
+\RL{u}
+\UIC{$A$ true}
+\RL{$\lor$ I$_l$}
+\UIC{$A \lor B$}
+\AXC{}
+\RL{v}
+\UIC{$B$ true}
+\RL{$\lor$ I$_r$}
+\UIC{$A \lor B$}
+\RL{$\lor$ E$^{u,v}$}
+\TIC{$A \lor B$}
+\DP
+}
+\\ Soundness: quantifiers
+\\ \scalebox{0.75}{
+  \AXC{}
+  \RL{a}
+  \UIC{$a : \tau$}
+  \noLine
+  \UIC{$\mathcal{D}$}
+  \noLine
+  \UIC{$A(a)$}
+  \RL{$\forall$ I$^a$}
+  \UIC{$\forall x : \tau . A(x)$}
+  \AXC{$\mathcal{E}$}
+  \noLine
+  \UIC{$t : \tau$}
+  \RL{$\forall$ E}
+  \BIC{$A(t)$}
+  \DP
+  $\implies$
+  \begin{tabular}{l}
+    $[t/a]\mathcal{D}$
+    \\ $A(t)$
+  \end{tabular}
+}
+\scalebox{0.55}{
+  \AXC{$\mathcal{E}_1$}
+  \noLine
+  \UIC{$A(t)$}
+  
+  \AXC{$\mathcal{E}_2$}
+  \noLine
+  \UIC{$t:\tau$}
+  
+  \RL{$\exists$ I}
+  \BIC{$\exists x : \tau . A(x)$}
+  
+  \AXC{}
+  \RL{u}
+  \UIC{$A(a)$}
+
+  \AXC{}
+  \RL{}
+  \UIC{$a:\tau$}
+  
+  \noLine
+  \BIC{$\mathcal{D}^{u,a}$}
+  \noLine
+  \UIC{$C$}
+
+  \RL{$\exists$ E$^{u,a}$}
+  \BIC{$C$}
+  \DP
+  $\implies$
+  \begin{tabular}{c}
+    \\$[\mathcal{E}_1 / u]([t/a]\mathcal{D})$
+    \\ $C$
+  \end{tabular}
+}
+\\ Completeness:
+\\\scalebox{0.75}{
+  \begin{tabular}{l}
+    $\mathcal{D}$
+    \\ $\forall x : \tau . A(x)$
+  \end{tabular}
+  $\implies$
+  \AXC{$\mathcal{D}$}
+  \noLine
+  \UIC{$\forall x : \tau . A(x)$}
+  \AXC{}
+  \RL{}
+  \UIC{$a:\tau$}
+  \RL{$\forall$ E}
+  \BIC{$A(a)$}
+  \RL{$\forall$ I$^a$}
+  \UIC{$\forall x : \tau. A(x)$}
+  \DP
+}
+\\ \scalebox{0.65}{
+  \begin{tabular}{c}
+    $\mathcal{D}$
+    \\ $\exists x : \tau . A(x)$
+  \end{tabular}
+  $\implies$
+  % 
+  \AXC{$\mathcal{D}$}
+  \noLine
+  \UIC{$\exists x : \tau . A(x)$}
+  % 
+  \AXC{}
+  \RL{u}
+  \UIC{$A(a)$}
+  % 
+  \AXC{}
+  \RL{}
+  \UIC{$a:\tau$}
+  % 
+  \RL{$\exists$ I}
+  \BIC{$\exists x: \tau . A(x)$}
+  \RL{$\exists$ E$^{u,a}$}
+  \BIC{$\exists x : \tau . A(x)$}
+  \DP
+}
+\color{Cyan}
+\section{Translating Systems}
+Translate \scalebox{0.8}{
+  \AXC{$N:A$}
+  \AXC{}
+  \RL{u}
+  \UIC{$u:A$}
+  \noLine
+  \UIC{$\vdots$}
+  \noLine
+  \UIC{$M:C$}
+  \RL{let$^u$}
+  \BIC{let $u=N$ in $M:C$}
+  \DP
+} with normal ND.
+\\ For common part of lang, we just recursively translate subterms.
+\\ $x^- = x$
+\\ $\langle E_1, E_2 \rangle^- = \langle E_1^-, E_2^- \rangle$
+\\ $(fst\ E_1)^- = fst\ E_1^-$
+\\ \ldots
+\\ (No need to translate contexts!)
+\\ For let: (let $u = E_1$ in $E_2$)$^-=[u/E_1^-]E_2^-$
+\\ Now we prove that translation preserves provability.
+\\ If $\mathcal{D} :: \Gamma \vdash E : A$ then there exists
+$\mathcal{D}' :: \Gamma \vdash M : A$ where $M = E^-$
+\\ \textbf{Pf} by structural induction on typing deriv $\mathcal{D}$
+\\ \underline{Case:} \scalebox{0.8}{
+  $\mathcal{D}=$
+  \AXC{$x:A \in \Gamma$}
+  \UIC{$\Gamma \vdash x : A$}
+  \DP
+}
+\\ Show $\Gamma \vdash x^- : A$. But by definition of $\cdot^-$, all
+we need is $\Gamma \vdash x :A$. But that is just $\mathcal{D}$. (this
+is why not translating contexts here is good)
+\\ \underline{Case:} \scalebox{0.8}{
+  \AXC{$\mathcal{D}'$}
+  \noLine
+  \UIC{$\Gamma \vdash E : A \land B$}
+  \UIC{$\Gamma \vdash fst\ E: A$}
+  \DP
+}
+\\ IH on $\mathcal{D}'$, get $\mathcal{E}' :: \Gamma \vdash M:A \land
+B$ where $M = E^-$. Then:
+\\ \scalebox{0.8}{
+  \AXC{$\mathcal{E}'$}
+  \noLine
+  \UIC{$\Gamma \vdash M : A \land B$}
+  \UIC{$\Gamma \vdash fst\ M: A$}
+  \DP
+}
+\\\underline{Case:}
+\scalebox{0.8}{
+  \AXC{$\mathcal{D}_1$}
+  \noLine
+  \UIC{$\Gamma \vdash E_1 : C$}
+  \AXC{$\mathcal{D}_2$}
+  \noLine
+  \UIC{$\Gamma, u:C \vdash E_2 : A$}
+  \BIC{$\Gamma \vdash let\ u = E_1 \ in\ E_2 : A$}
+  \DP
+}
+\\ IH on $\mathcal{D}_1$, get $\mathcal{E}_1 :: \Gamma \vdash M_1 : C$
+and IH on $\mathcal{D}_2$, get $\mathcal{E}_2 :: \Gamma, u : C \vdash
+M_2 : A$ where $M_i = E_i^-$. Substitution lemma on $\mathcal{E}_1$
+and $\mathcal{E}_2$, get $\mathcal{E} :: \Gamma \vdash [M_1/u]M_2 : A$.
+\color{Magenta}
+\section{Type Uniqueness}
+If $\mathcal{D} :: \Gamma \vdash M : A$ and $\mathcal{E} :: \Gamma
+\vdash M : B$ then $A = B$.
+\\ \textbf{Pf} by induction on typing derivation $\mathcal{D}$.
+\\ \underline{Case:} \scalebox{0.8}{$\mathcal{D}$ =
+  \AXC{$\mathcal{D}'$}\noLine\UIC{$x : A \in
+    \Gamma$}\RL{u}\UIC{$\Gamma \vdash x : A$}\DP}
+\\ $M = x$ is a variable. $\mathcal{E} :: \Gamma \vdash x : B$ by
+assumption. Inversion on $\mathcal{E}$: \scalebox{0.8}{$\mathcal{E} = $
+  \AXC{$\mathcal{E}'$}\noLine\UIC{$x : B \in
+    \Gamma$}\RL{u}\UIC{$\Gamma \vdash x : B$}\DP}
+\\ Uniqueness of declarations in context $\Gamma$, so $A = B$.
+\\ \underline{Case:} \scalebox{0.8}{
+  $\mathcal{D} =$ \AXC{$\mathcal{D}'$}\noLine\UIC{$\Gamma, x : A'
+    \vdash M' : B_1$}
+  \UIC{$\Gamma \vdash \lambda x : A'.M' : A' \supset B_1$}
+  \DP
+}
+\\ $M = \lambda x : A'.M'$ and $A = A' \supset B_1$. $\mathcal{E} ::
+\Gamma \vdash \lambda x : A'.M' : B$ by assumption. Inversion gives:
+\scalebox{0.8}{
+  $\mathcal{E} =$ \AXC{$\mathcal{E}'$}\noLine\UIC{$\Gamma, x : A'
+    \vdash M' : B_2$}
+  \UIC{$\Gamma \vdash \lambda x : A'.M' : A' \supset B_2$}
+  \DP
+}
+\\ So $B = A' \supset B_2$. IH on $\mathcal{D}'$ and $\mathcal{E}'$,
+get $B_1 = B_2'$. So $A = A' \supset B_1 = A' \supset B_2 = B$
+\\ \underline{Case:}
+\scalebox{0.8}{
+  $\mathcal{D} =$ \AXC{$\mathcal{D}_1$}\noLine\UIC{$\Gamma \vdash M':
+    A_1 \supset B_1$}
+  \AXC{$\mathcal{D}_2$}\noLine\UIC{$\Gamma \vdash N : A_1$}
+  \BIC{$\Gamma \vdash M'\ N : B_1$}
+  \DP
+}
+\\ $M = M'\ N$ and $A = B_1$. Inversion:
+\scalebox{0.8}{
+  $\mathcal{E} =$ \AXC{$\mathcal{E}_1$}\noLine\UIC{$\Gamma \vdash M':
+    A_2 \supset B_2$}
+  \AXC{$\mathcal{E}_2$}\noLine\UIC{$\Gamma \vdash N : A_2$}
+  \BIC{$\Gamma \vdash M'\ N : B_2$}
+  \DP
+}
+\\ $B = B_2$. By IH on $\mathcal{D}_1$ and $\mathcal{E}_1$, get $A_1
+\supset B_1 = A_2 \supset B_2$. By injectivity of $\supset$
+constructor, get $A_1 = A_2$ and $A = B_1 = B_2 = B$.
+\\ \underline{Case:}
+\scalebox{0.8}{
+  $\mathcal{D} =$ \AXC{$\mathcal{D}'$}\noLine\UIC{$\Gamma \vdash M':
+    A_1 $}\UIC{$\Gamma \vdash inl^{B'}M' : A_1 \lor B'$}
+  \DP
+}
+\\ $M = inl^{B'}N'$ and $A = A_1 \lor B'$. Inversion:
+\scalebox{0.8}{
+  $\mathcal{E} =$ \AXC{$\mathcal{E}'$}\noLine\UIC{$\Gamma \vdash M':
+    A_2 $}\UIC{$\Gamma \vdash inl^{B'}M' : A_2 \lor B'$}
+  \DP
+}
+\\ $B = A_2 \lor B'$. By IH on $\mathcal{D}'$ and $\mathcal{E}'$,
+$A_1 = A_2$ so $A = A_1 \lor B' = A_2 \lor B' = B$
+\\ \underline{Case:} for $\lor$ elim, only need to use IH on $N_l$ or
+$N_r$ to get equality of deduced term.
+\color{Black}
+\section{Misc} Defining proof terms for a new type: they should be
+\textit{distinct} from other terms in the language so you can't
+distinguish which rules correspond to which terms.
+\\ When proving with many cases, show representative cases, i.e. all
+cases where something interesting happens and one of each kind of
+``boring'' case.
+\color{Plum}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Midterm"
+%%% End:
+  
