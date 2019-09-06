@@ -1,0 +1,232 @@
+\documentclass[12 pt]{article}
+\usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
+  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
+  marvosym, stmaryrd, collectbox}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{positioning}
+\EnableBpAbbreviations
+\usepackage[margin=1 in]{geometry}
+\allowdisplaybreaks
+% \usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
+\hypersetup{
+  % colorlinks=true, %set true if you want colored links
+  linktoc=all,     %set to all if you want both sections and subsections linked
+  linkcolor=black,  %choose some color if you want links to stand out
+}
+% New environment to scale prooftrees, from https://tex.stackexchange.com/questions/104554/how-to-scale-prooftree-environment-bussproofs-package
+\newenvironment{scprooftree}[1]%
+  {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center}
+}
+%New command \mybox to box something
+\newcommand{\mybox}{%
+\collectbox{%
+	\setlength{\fboxsep}{3pt}%
+	\fbox{\BOXCONTENT}%
+	}%
+}
+
+\usepackage{graphicx}
+\graphicspath{{Images/}}
+\author{Julian Lore}
+\date{Last updated: \today}
+\title{COMP 330: Theory of Computation}
+\pagestyle{fancy}
+\lhead{COMP 330}
+\chead{\leftmark}
+\rhead{Julian Lore}
+\cfoot{Page \thepage \ of \pageref{LastPage}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+\newenvironment{rcases}
+  {\left.\begin{aligned}}
+  {\end{aligned}\right\rbrace}
+\begin{document}
+\onehalfspacing
+\maketitle
+\tableofcontents
+\section{09/03/19}
+\paragraph{Language}
+Let $\Sigma$ be a finite alphabet (set). Let $\Sigma^*$ be all possible
+sequences of elements from alphabet (infinitely many sequences). A
+\textbf{language} $L$ is any subset of $\Sigma^*$. It will tell you for
+every possible string whether it is in $L$ or not. An algorithm $A$
+decides a language $L$ if it can say whether $x\in L$ or $x\notin L$
+(can answer yes or no).
+
+Example: alphabet is $\{0,1\}$. Our language can be all prime numbers
+represented as binary numbers. We can then make an algorithm that
+decides if a binary string $x$ is a prime or not (i.e.\ is it in our language?).
+
+Generally however, we will ask ourselves, if we can define a language,
+can we come up with an algorithm to decide it?
+
+$$\text{All languages} \supset \text{Languages we can describe}
+\supset \text{Languages that are decidable}$$
+\begin{itemize}
+\item $|\text{All languages}| = \mathbb{R}$
+\item $|\text{Languages we can describe}| = \mathbb{N}$
+\item $|\text{Languages we can decide}| = \mathbb{N}$ (however it is
+  much smaller than what we can describe). Clearly things that are
+  decidable are describable, as the algorithm to decide it can also
+  describe it.
+\end{itemize}
+\paragraph{Post Correspondence Problem}You are given a set of tiles
+that have strings.
+\\
+\begin{tabular}{|c| c| c| c| c |c|}
+  \hline aaa&a&bbb&aa&&b
+  \\ bb & bb & a & a & bb &
+  \\ \hline
+\end{tabular}
+\\ Is there a sequence of these tiles that the concatenation of the
+top string is the same as the bottom string?
+% \\ Solution for our example:
+% \\
+% \begin{tabular}{|c| c| c| c| c |c|}
+%   \hline aa&a&bbb&aa&&b
+%   \\ bb & bb & a & a & bb &
+                              %     \\ \hline
+% \end{tabular}
+\\ The general version of the problem is $n$ tiles, $u_1/v_1 \ldots
+u_n/v_n$ where each $u_i$ and $v_i$ are sequences of letters. Is there
+a $k$ and a sequence $\langle i_1, i_2, \ldots, i_k \rangle$ ($1 \leq
+i_j \leq n, \forall j \in \{1,\ldots,n\}$), such that $u_{i_1} \ldots
+u_{i_k} = v_{i_1} \ldots v_{i_k}$.
+\paragraph{Theorem} The Post Correspondence Problem cannot be decided by any
+algorithm/computer program. No algorithm can give a no answer in a
+finite amount of time. We can, however, give yes answers/find a
+solution if one exists.
+\section{09/05/19}
+To prove the theorem, we use a reduction technique. If PCP was
+decidable then another undecidable problem, the halting problem, would
+also be decidable. We will often reduce problems to others in this
+course.
+\paragraph{The Halting Problem}
+Note that an algorithm is just text. An algorithm can receives text as
+input and thus can receive the text of an algorithm as input.
+
+So the Halting Problem is as follows: Given two texts $A$ and $B$, $A$
+being an algorithm, $B$ being an input. Will $A$ halt (instead of loop
+forever) on input $B$?
+
+Back to PCP, any algorithm that can decide PCP can be converted to an
+algorithm to decide the Halting Problem. Thus we conclude that PCP
+cannot be decided.
+
+\paragraph{Computability Theory}
+Consists of the ability to distinguish between all languages,
+describable languages and decidable languages, the difference between
+describable and decidable languages being the most important.
+\paragraph{Complexity Theory} Distinguishing between languages we can
+decide, languages we can check efficiently and languages we can decide
+efficiently (polynomial).
+\paragraph{Example} Map coloring, can we color a map such that all the
+neighbors have different colors? Without a color restriction, we can
+just use different colors for each area. How about with 2 colors? This
+is the 2-coloring problem. This can easily be checked, an area cannot
+have two neighbors that are also neighbors. Or we can just try
+coloring the map with two colors and see if we get a conflict.
+
+How about 3 colors? Try coloring the map. But when trying to color,
+when we reach a neighbor, we have a choice between either of the two
+remaining colors. So naturally we should try both. Then checking this
+becomes exponential.
+
+Note that checking the validity of an $n$-coloring is much simpler
+than finding said $n$-coloring. Finding is exponential, but checking
+just requires verifying the neighbors and is polynomial.
+
+\paragraph{Summary of $K$-coloring of maps}
+\begin{itemize}
+\item $K = 1$, can only color maps with zero or one region.
+\item $K = 2$, impossible when three regions are all neighbors,
+  otherwise valid. Easy to decide.
+\item $K = 3$, no known efficient algorithm to decide, easy to check.
+\item $K \geq 4$, all maps are $K$-colorable (there exists a long
+  proof for $4$, people managed to reduce the infinite cases of maps
+  to about $300,000$ cases that were checked). No easy to find, easy
+  to verify.
+\end{itemize}
+$3$-coloring of maps is a special type of problem (NP-complete
+problems), as solving this efficiently would solve many other problems
+efficiently.
+\paragraph{Examples of NP-Complete Problems}
+\begin{itemize}
+\item SAT:\ given a boolean formula (logic formula), does there exist
+  a truth assignment such that the formula is true?
+\item Traveling Salesman:\ given a set of cities and distances between
+  them, find the shortest path to visit each city once.
+\item Knapsack:\ given items with weights, is there a subset of them
+  of weight $K$?
+\end{itemize}
+Many practical problems are NP-Complete. If we can solve one
+efficiently, they can all be solved efficiently. In practice, some
+special cases of the problems can be solved efficiently.
+\paragraph{Tractable Problems (P)} Problems for which we can
+efficiently (polynomial) decide whether an instance of a problem is a
+yes or no, i.e.\ is this map $2$-colorable?
+\\ Examples:
+\begin{itemize}
+\item $2$-colorability of maps
+\item Primality testing
+\item Solving $N \times N \times N$ Rubik's cubes
+\item Finding a word in a dictionary
+\item Sorting
+\end{itemize}
+$P$ stands for Polynomial-Time computable. Sometimes problems may be
+efficiently solvable but it might not be provable.
+
+Back to complexity theory, $\text{Decidable languages} \supset NP
+\supset P$. NP-Complete problems are a subset of NP problems. If we
+can bring the complete problems to P, then $NP = P$. We tend to
+believe $P \neq NP$ as all attempts to show they're equal so far have
+failed.
+
+PSpace Completeness: problems that require polynomial space to be solved but can
+still take very long. Again, if any of these problems can be done in
+polynomial time, then they can all be solved in polynomial time.
+\\ Example: Geography game. This is a two player game. Given a set of
+country names, the first player chooses a country, then the other
+player must choose a country whose name starts with the last letter of
+the country chosen by the previous player. Someone wins if their
+opponent cannot choose a country.
+\\ Generalized geography game consists of an arbitrary set of names
+$w_1, \ldots, w_n$ instead. Is there a winning strategy for the
+starting player? Intuitively, you can solve this by enumerating all
+possibilities. You won't be able to use more than $n$ names, but you
+may have to enumerate many possibilities. So you can check all
+possibilities without using much space (polynomial).
+
+PSpace is a superset of NP (although we don't know if they're unequal
+or not), which also has a complete subset.
+
+\paragraph{Theoretical Computer Science}
+Want to find efficient solutions to many problems, this is the
+algorithm and data structures part.
+
+We also want to prove that some problems are not computable within a
+certain time or space.
+
+We also consider new models of computation (like quantum
+computers). This won't disrupt our notion of computability (whether
+something can be computed) but it will disrupt our notion of
+complexity, as lots of things will be faster/easier to compute.
+
+\subsection{Deterministic Finite Automata and Regular Expressions}
+DFAs consists of labeled nodes (states corresponding to the memory of
+a device, the device only knows what state it is in) with edges
+between them, allowing the device to move from one state to another
+depending on the input (edges are labeled).
+
+\paragraph{Examples of DFAs}
+\begin{itemize}
+\item Swing doors (before motion detectors) had a front pad and a rear
+  pad.
+
+  It would have a closed state and an open state. In the closed state,
+  if someone is on the front pad and no one is on the rear pad, the
+  door would go to the open state until no one is on either pad. If in
+  the closed state but someone is on the rear pad, it should never
+  open. We can draw a DFA for this.
+\end{itemize}
+\end{document}
