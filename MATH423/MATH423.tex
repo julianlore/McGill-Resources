@@ -26,6 +26,9 @@
 	}%
 }
 
+\DeclareMathOperator*{\argmax}{arg\!\max}
+\DeclareMathOperator*{\argmin}{arg\!\min}
+
 \usepackage{graphicx}
 \graphicspath{{Images/}}
 \author{Julian Lore}
@@ -106,7 +109,8 @@ We need some way to measure how good a prediction $m$ is.
   positive and negative error don't have the same importance, like
   predicting bank expenses, you don't want to predict negative
   expenses as you may go bankrupt. In this case the median may be
-  better. We will see this case later.
+  better. We will see this case later. Also note that $(Y-m)^2$ is
+  called the loss function.
 
   From the definition of variance:
   \begin{align*}
@@ -118,4 +122,79 @@ We need some way to measure how good a prediction $m$ is.
 
   But if we don't have all the data on $Y$, then we can estimate
   $E[Y]$ using the sample mean.
+\section{09/06/19}
+Say you have an infinite amount of data, but it is always fluctuating
+and you cannot get a hold of a value. How should we estimate it? The
+theory tells us to use the expected value. This does not rely on the
+actual distribution. However, in reality, we often don't have the full
+knowledge of the distribution, we often have discrete measurements,
+i.e.\ a histogram. In this case we use the sample mean.
+
+\includegraphics[width=.7\textwidth]{1.pdf}
+
+Looking back at $(E[Y]-m)^2 + Var[Y]$, the first term is the squared
+bias of estimating $Y$ with $m$. So we want to choose an $m$ such that
+this bias is minimized (should be $0$, as we can set $m=Y$).
+
+The second term is the variance of $Y-m$ (or variance of $Y$, since
+$m$ is not random).
+
+This form is called the Bias-Variance decomposition which plays a
+central role in machine learning. This isn't only true for just linear
+model, it's true for any random variable $Y$.
+
+We would like to pick $m$ to make $MSE(m)$ small. Denote $m^*$ as the
+value of $m$ that minimizes $MSE(m)$.
+$$m^* = \argmin_m E[(Y-m)^2]$$
+$Var(Y)$ is irrelevant to making this small, since it's the same no
+matter what $m$ is.
+
+To find the minimum of $MSE(m)$, we denote $\mu = E(Y)$.
+\begin{align*}
+  \frac{dMSE(m)}{dm} & = \frac{d}{dm} \left[Var[Y] + (\mu - m)^2\right] = \frac{dVar(Y)}{dm} + 2(\mu-m) \left(\frac{d\mu}{dm} - \frac{dm}{dm}\right)
+  \\ & = 0 + 2(\mu - m) \left(0 - \frac{dm}{dm}\right) = - 2(\mu - m) = 0
+\end{align*}
+Therefore
+$$m^* = \mu = E(Y)$$
+In other words, the best one number guess for $Y$ is just $E(Y)$.
+
+\subsection{Two Variables/Predicting one random variable from another}
+Now what about the case in which we have $X$ and $Y$, two random
+variables that we can collect data from. Just using the expected value
+of $Y$ (say insurance claim) is not fair for the different $x$ (say
+age), as everyone will pay the same rate even though different age
+groups have different average insurance claims. So we look around a
+certain age group using conditional probability, i.e.\ $E[Y|X =
+40]$. So we can do this for every value of $X$ and then we get a
+\textbf{regression line}.
+
+More formally: we have two random variables, $X$ and $Y$ and their
+joint distribution.
+\\ We use $X$ to predict $Y$. Our prediction is therefore a function
+of $X$, which we'll denote as $m(x)$. What's the best prediction we
+can get?
+$$m^*(x) = E[Y | X = x]$$
+Using the same criterion as the single variable case, we want to
+minimize:
+$$m^*(\cdot) = \argmin_{m(\cdot)} E_{X,Y}[(Y-m(x))^2]$$
+If we denote $\mu(x) = E_{Y|X}[Y|X = x]$ to represent the conditional
+expectation of $Y$ given $X = x$. We will prove that
+$$m^*(x) = \mu(x)$$
+\paragraph{Proof:}
+\begin{align*}
+  E_{X,Y}[(Y-m(x))^2] & = E_{X}[E_{Y|X}[(Y-m(x))^2 | X]]
+\end{align*}
+For the inner expectation, for each possible value of $X = x$, the
+optimal value $m^*(x)$ is just the conditional mean (since $x$ is a
+constant when conditioned on):
+$$m^*(x) = \mu(x) = \underbrace{E_{Y|X}[Y|X = x]}_{\text{regression function}}$$
+
+In terms of estimation, if you want to get the optimal value at $X=4$,
+you need lots of observations at $X=4$ to approximate the expected
+value of $Y$ given $X = 4$. If we don't have lots of observations, we
+use the point's nearest neighborhood, include extra points around $X =
+4$ to estimate the expectation. This performs pretty well in
+general. However in the higher dimension cases, a small neighborhood
+will include less points, so you have less points to average and might
+not be able to use this method.
 \end{document}
