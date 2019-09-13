@@ -229,4 +229,163 @@ depending on the input (edges are labeled).
   the closed state but someone is on the rear pad, it should never
   open. We can draw a DFA for this.
 \end{itemize}
+\section{09/10/19}
+\paragraph{DFA} A finite automaton is a 5-tuple $(Q, \Sigma, \delta,
+q_0, F)$ where:
+\begin{itemize}
+\item $Q$: States
+\item $\Sigma$: Alphabet (fixed string inputs it can take)
+\item $\delta: Q \times \Sigma \to Q$: Transition function (how you should go from a certain state to
+  another if your next symbol is something from the alphabet, read
+  symbols one by one), displayed by arrows from state to state. For
+  the simple module, we assume every state has a transition state for
+  every symbol of the alphabet. We can describe $\delta$ either via a
+  picture of the DFA or with a table.
+\item $q_0 \in Q$: Start state. Indicated by an incoming arrow from nowhere. There
+  is only one start state in a DFA as it is deterministic.
+\item $F \subseteq Q$: Accept states. There can be multiple accept states, identified
+  by an extra circle in the node. If you reach the end of the string
+  and are in an accept state, the automaton will accept the string,
+  otherwise it will reject it.
+
+  If $F = Q$, then all strings will be accepted, i.e.\ the language is $\Sigma^*$.
+\end{itemize}
+Note that the empty string is a valid input. It will only be accepted
+if the start state is an accept state.
+\subsection{Regular Languages} Let $M = (Q, \Sigma, \delta, q_0, F)$
+be a finite state automaton and $w = w_1w_2\ldots w_n, n \geq 0$ be a
+string where each $w_i$ is from the alphabet $\Sigma$. $M$
+\textbf{accepts} $w$ if states $s_0,s_1, \ldots, s_n$ exist such that:
+\begin{itemize}
+\item $s_0=q_0$ (we start at the starting state)
+\item $s_{i+1} = \delta(s_i, w_{i+1}), i = 0, \ldots, n-1$ (every
+  intermediate state and its corresponding symbol fits the transition function)
+\item $s_n \in F$ (the final state is an accept state)
+\end{itemize}
+A finite automaton $M$ \textbf{recognizes language} $A$ if $A =
+\left\{w \mid M \text{ accepts w}\right\}$. The finite automaton has
+to accept every string in the language and reject every string that
+isn't in the language.
+
+A language is \textbf{regular} if some finite automaton recognizes it.
+
+We saw examples of $0,1$ strings that have at least $1$ and end in an
+even amount of $0$s, as well as an example of numbers being multiples
+of $3$. If you sum the digits of a number in base $10$ and get modulo
+$10$ of it and end up with $0,3,6$ or $9$, then the number is a
+multiple of $3$. This is a finite automaton. You can reconstruct this
+as a finite automaton by simulating $\mod 3$, counting the remainder
+by transitioning to states. In general, if we work $\mod n$, we'll
+need $n$ states.
+\section{09/12/19}
+\paragraph{Automata for multiples of $N$ base $B$}
+If a number in base $10$ ends in an even number, then the number is
+even. Similarly, for binary, we just check if it ends with
+$0$. Automata can check just that.
+
+Similarly, there exists automata for other mods, such as $3$. We have $3$ states, one for each possible
+remainder.
+% Appending a $0$ to a binary string will double the
+% number. So if the number was already a multiple of $3$, it'll remain a
+% multiple of $3$. However, appending a $1$ will give you a remainder
+% of $1$.
+\begin{itemize}
+\item $q_0 \stackrel{0}{\to} q_0$: adding a $0$ doubles the number, if
+  it was already a multiple of $3$ it'll remain a multiple of $3$.
+\item $q_0 \stackrel{1}{\to} q_1$: doubles the number and adds $1$, so
+  a multiple of $3$ gets a remainder of $1$
+\item $q_1 \stackrel{0}{\to} q_2$: doubles, remainder of $1$ becomes $2$
+\item $q_1 \stackrel{1}{\to} q_0$: doubles and adds $1$, so the
+  remainder becomes $2 + 1$, i.e.\ no remainder, a multiple of $3$.
+\item $q_2 \stackrel{0}{\to} q_1$: doubles, remainder of $2$ becomes
+  $1$
+\item $q_2 \stackrel{1}{\to} q_2$: doubles, adds one, stays a
+  remainder of $2$
+\end{itemize}
+
+We can use this strategy to generalize automata for different mods and
+bases. Simply look at what happens with the remainder at a certain
+state when you multiply by $2$ (or $10$ or $16$, etc.)
+
+We can also reduce the size of some of these automata. Note that
+making a finite automata for checking if something is $0\mod 3$ in
+base $3$ consists solely of checking the last digit. $q_i$ will
+indicate that the last viewed digit is $i$. So we accomplish this with
+$3$ states. However, we can combine $q_1$ and $q_2$ to make this an
+automaton with only $2$ states, multiple of $3$ or not.
+\subsection{Regular Operations}
+$A$ and $B$ are languages. Then we define:
+\begin{itemize}
+\item \textbf{Union}: $A \cup B = \left\{x \mid x \in A \text{ or } x
+    \in B\right\}$
+\item \textbf{Concatenation}: $A \circ B = \left\{xy \mid x \in A
+    \text{ and } y \in B\right\}$
+\item \textbf{Star}: $A^* = \left\{x_1x_2\ldots x_k \mid k \geq 0
+    \text{ and each }x_i \in A\right\}$ (includes $\varepsilon$)
+\end{itemize}
+If $A$ and $B$ are finite, their union and concatenation are finite,
+however a star is infinite (unless the language consists only of the
+empty string).
+
+\subsection{Kleene's Theorem}
+\paragraph{Union}
+The class of regular languages is closed
+under the union operation. i.e.\ $L_A, L_B$ regular $\implies L_A \cup
+L_B$ regular.
+
+\paragraph{Proof}
+Let $M_A = (Q_A, \Sigma, \delta_A, q_{0A}, F_A),M_B = (Q_B, \Sigma,
+\delta_B, q_{0B}, F_B)$ be DFAs accepting $L_A$ and $L_B$.
+
+Consider:
+\begin{align*}
+M_{\cup} &= (Q_A \times Q_B, \Sigma, \delta_\cup, (q_{0A},
+  q_{0B}), F_{\cup})
+  \\ \delta_\cup((q,q'),s) &= (\delta_A(q,s),
+  \delta_B(q',s)), \forall q,q',s
+  \\ F_\cup & = \left\{(q,q') \mid q\in
+  F_A \text{ or }q' \in F_B\right\} = (F_A \times Q_B) \cup (Q_A
+  \times F_B) \neq F_A \times F_B
+  \\L_\cup & = L_A \cup L_B
+\end{align*}.
+Essentially our states are now
+pairs of both states from the original machines and we simulate the
+transitions of the original machines. We accept if either part of the
+pair is an accept state from $M_A$ or $M_B$. Technically $M_A$ and
+$M_B$ don't need to share the same alphabet, however, this is often
+the case.
+
+If we make the accepting states $F_A \times F_B$, then the language
+would be the \textbf{intersection} of the languages, which proves that
+the class of regular languages is closed under intersection.
+
+\paragraph{Concatenation} Regular languages closed under
+concatenation. $L_A, L_B$ regular $\implies L_A \circ L_B$ regular. We
+will use NFAs rather than DFAs to prove this.
+
+\subsection{Non-Deterministic Finite Automata}
+It is now possible to have more than one transition given one
+symbol. It is even possible to have no transitions at some state given
+a symbol. In this case, the machine will stop/reject. Additionally, we
+will also allow empty $\varepsilon$ transitions, if there's an
+$\varepsilon$ transition from $q_i$ to $q_j$, the machine can move
+from $q_i$ to $q_j$ without consuming any input.
+
+With these relaxations, it will now be possible to be in multiple
+states when reading the same symbol/part of the string. A string is
+accepted if one of the \textbf{possible} final states given the string
+is an accepting state.
+
+Formally we define an NFA as:
+
+$(Q, \Sigma, \delta, q_0, F)$ such that:
+\begin{itemize}
+\item $Q$: States
+\item $\Sigma$: Alphabet
+\item $\delta: Q \times \Sigma_{\varepsilon} \to \mathcal{P}(Q)$:
+  transition function, where $\Sigma_{\varepsilon} = \Sigma \cup \varepsilon,
+  \mathcal{P}(Q) = \left\{S : S \supset Q\right\}$
+\item $q_0 \in Q$: Start state.
+\item $F \subseteq Q$: Accept states.
+\end{itemize}
 \end{document}
