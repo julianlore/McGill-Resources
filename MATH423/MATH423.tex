@@ -86,7 +86,7 @@ of the previous temperatures of the same date of previous years. How
 do we generalize this? Given multiple variables but only wanting to
 predict one, how do we do so? It will still be some sort of average,
 but not simply an average of the output.
-\section{Statistical Prediction and Optimal Linear Regression}
+\section{Statistical Prediction and\\ Optimal Linear Regression}
 \subsection{Predicting a Random Variable from its Distribution}
 Let's first think about what the optimal prediction would look like,
 if we somehow knew all the probability distribution of our
@@ -341,4 +341,87 @@ $$m^*(X) = \beta_0^* + \beta_1^* X$$
   x_0|$$
   So $x \in (x_0 - 2, x_0 + 2)$ at least.
 \end{itemize}
+\includegraphics[width=.9\textwidth]{5.pdf}
+\begin{itemize}
+\item
+Linear regression isn't always the best method of approximation,
+however it is easy to do and is one of the main methods that is
+computationally efficient for high dimension problems or if you want
+to approximate many points, sometimes more than the number of
+observations you have.
+\item We don't assume that $X$ came before $Y$ in time, that $X$
+  causes $Y$ or that $X$ is known precisely but $Y$ only noisily to
+  get the optimal linear prediction.
+\item At no time did we have to specify the marginal distribution of
+  $X$ and $Y$, or about the joint distribution of $X$ and $Y$.
+\item At no time did we have to assume anything about the fluctuation
+  of $Y$ being Gaussian or symmetric.
+\end{itemize}
+\section{Simple Linear Regression Model}
+\subsection{Notation}
+We consider two types of variables.
+\begin{itemize}
+\item ``Output'': $Y$ \hbox{--} measured outcome of interest. Can also be
+  called outcome or response variable.
+\item ``Input'': $X$ \hbox{--} variable(s) that correlated to the variation in
+  the ``Output''. Can also be called features, covariates/factors or
+  predictors.
+\end{itemize}
+Both variables will be measured during the study.
+\subsection{Model Setup}
+The simple linear regression has two variables $X$ and $Y$ where we
+try to predict $Y$ from $X$. The assumptions of the model are as
+follows (this definition is more general than the one in the textbook,
+however we will see a more developed one more comparable to the
+textbook later):
+\begin{enumerate}
+\item The distribution of $Y$ is arbitrary (and perhaps $X$ is
+  non-random)
+\item If $X = x$ (it is given/we observe a value of $x$), then $Y =
+  \beta_0 + \beta_1 x + \varepsilon$ for some constants $\beta_0$ and
+  $\beta_1$ and some random noise.
+  \\ Why not just use $Y = \beta_0 + \beta_1 x$? Often the
+  relationship between two variables is not deterministic, for
+  example, the effects of smoking can vary from person to person,
+  although they may have the same value for $x$ (like age).
+\item $E[\varepsilon \mid X = x] = 0$ and $Var(\varepsilon \mid X = x) =
+  \sigma^2 > 0$ (constant).
+\item $\varepsilon$ is uncorrelated with $X$ (i.e.\ $Cov(\varepsilon,
+  X) = 0$) and is \textbf{uncorrelated across observations}.
+\end{enumerate}
+Note that:
+\begin{enumerate}
+\item The assumption is equivalent to assuming that the
+  \textbf{regression function is linear}.
+  \begin{align*}
+  E[Y \mid X = x] & = E [\beta_0 + \beta_1 X + \varepsilon | X = x] =
+                    \beta_0 + \beta_1x
+    \\ Var[Y \mid X = x] & = Var[\underbrace{\beta_0+\beta_1X}_{\text{constant} \implies Var = 0} + \varepsilon \mid X = x ] = Var[\varepsilon \mid X = x] = \sigma^2
+  \end{align*}
+\item The noise variable $\varepsilon$ may represent
+  \textbf{measurement error or fluctuation} in $Y$ or some combination
+  of both.
+\item The assumption of additive noise ($\varepsilon$ is just added to
+  the function) is non-trivial \hbox{--} it's
+  not absurd to imagine that it could be multiplicative.
+\item \textbf{Linear functional form}, constant variance is not
+  trivial.
+\item But the assumption that noise has mean $0$ is trivial.
+  \begin{align*}
+    E [\varepsilon \mid X = x] & = c,\ \varepsilon' = \varepsilon - c,\ E[\varepsilon' \mid X = x] = 0
+    \\ \implies Y & = (\beta_0 + c) + \beta_1 x + \varepsilon'
+  \end{align*}
+\end{enumerate}
+With multiple data points $(X_1, Y_1), (X_2,Y_2), \ldots, (X_n,Y_n)$
+(capitalized, these could be different random variables/different distributions)
+then the model says that for each $i = 1, \ldots, n$
+$$Y_i = \beta_0 +\beta_1 X_i + \varepsilon_i$$
+where the noise variable $\varepsilon_i$ all have the same expectation
+($0$) and same variance ($\sigma^2$) and $Cov(\varepsilon_i,
+\varepsilon_j) = 0$ for $i \neq j$ (uncorrelated across observations
+as mentioned earlier). $Cov(\varepsilon_i, \varepsilon_i) =
+Var(\varepsilon_i) = \sigma^2$
+\\ Equivalently, the assumption says that $E[Y_i \mid X_i = x_i] =
+\beta_0 +\beta_1 x_i$ for $i = 1, \ldots, n$ and constant variance
+across $i$ $$Var(Y_i \mid X_i = x_i) = \sigma^2$$ for $i = 1, \ldots, n$
 \end{document}
