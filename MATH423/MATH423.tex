@@ -47,8 +47,7 @@
 \onehalfspacing
 \maketitle
 \tableofcontents
-\section{09/04/19}
-\subsection{Introduction}
+\section{Introduction}
 \begin{itemize}
 \item
 \textbf{Regression analysis} is about investigating quantitative predictive
@@ -87,8 +86,8 @@ of the previous temperatures of the same date of previous years. How
 do we generalize this? Given multiple variables but only wanting to
 predict one, how do we do so? It will still be some sort of average,
 but not simply an average of the output.
-\subsection{Statistical Prediction and Optimal Linear Regression}
-\subsubsection{Predicting a Random Variable from its Distribution}
+\section{Statistical Prediction and Optimal Linear Regression}
+\subsection{Predicting a Random Variable from its Distribution}
 Let's first think about what the optimal prediction would look like,
 if we somehow knew all the probability distribution of our
 variable. Suppose we want to predict the value of a random variable
@@ -122,7 +121,7 @@ We need some way to measure how good a prediction $m$ is.
 
   But if we don't have all the data on $Y$, then we can estimate
   $E[Y]$ using the sample mean.
-\section{09/06/19}
+
 Say you have an infinite amount of data, but it is always fluctuating
 and you cannot get a hold of a value. How should we estimate it? The
 theory tells us to use the expected value. This does not rely on the
@@ -201,7 +200,6 @@ use the point's $k$-nearest neighborhood, include extra points around $X =
 general. However in the higher dimension cases, a small neighborhood
 will include less points, so you have less points to average and might
 not be able to use this method.
-\section{09/09/19}
 \paragraph{$k$-nearest neighborhood (KNN)} (side topic, not directly related
 to linear regression, but very important, linear regression is the
 strictest model, whereas the nearest neighborhood model is the least
@@ -268,6 +266,79 @@ linear in $X$?
 To minimize the mean squared error of $m(x) = \beta_0 + \beta_1 x$
 \begin{align*}
   (\beta_0^*, \beta_1^*) & = \argmin_{(\beta_0,, \beta_1)} E_{X, Y}[(Y - \underbrace{(\beta_0 + \beta_1 x)}_{m(x)})^2]
-  \\ E[(Y - (\beta_0 + \beta_1 x))^2] & = E[Y^2] - 2 \beta_0 E[Y]
+  \\ E[(Y - (\beta_0 + \beta_1 x))^2] & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 E[XY] + E [ (\beta_0 + \beta_x)]
+  \\ & = E [Y^2] - \beta_0 E[Y] -  \beta_1 (Cov (X,Y)) + E[X]E[Y] + \beta_0^2 + 2\beta_0\beta_1 E[X] + \beta_1^2 E[X]
+  \\ & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 (Cov(X,Y)) + E[X]E[Y] + \beta_0^2 + 2 \beta_0 \beta_1 E[X]
+  \\ & + \beta_1^2 (Var(X) + E[X]^2)
 \end{align*}
+Now to get the optimal values, we take the derivative:
+\begin{align*}
+  \frac{\partial{E[Y - (\beta_0+\beta_1X)^2]}}{\partial{\beta_0}} & = -2E[Y] + 2 \beta_0 + 2\beta_1 E[X] = 0
+\end{align*}
+This gives us:
+$$\beta_0^* = E[Y] - \beta_1^* E[X] \iff E[Y] = \beta_0^* + \beta_1^*
+E[X]$$
+\includegraphics[width=.9\textwidth]{2.pdf}
+\begin{itemize}
+\item The optimal intercept $\beta_0^*$ ensures that the line goes
+  through $E[Y]$ at the $E[X]$ value.
+\item If the variables were centered with $E[Y] = E[X] = 0$ then
+  $\beta_0^* = 0$.
+\end{itemize}
+\begin{align*}
+  \frac{\partial{E[Y]-(\beta_0+\beta_1X)^2}}{\partial{\beta_1}} & = -2Cov(X,Y) - 2E[X]E[Y] + 2\beta_0E[X] + 2\beta_1 Var(X) + 2\beta_1 (E[X])^2
+                                                                  \intertext{Plug
+                                                                  in
+                                                                  $\beta_0^*
+                                                                  =
+                                                                  E[Y]
+                                                                  -
+                                                                  \beta_1^*
+                                                                  E[X]$}
+  & = -Cov(X,Y) + \beta_1 Var(X) = 0
+  \\ \beta_1^* & = \dfrac{Cov(X,Y)}{Var(X)}
+\end{align*}
+\begin{itemize}
+\item Since the optimal slope $\beta_1^*$ is $\frac{Cov(X,Y)}{Var(X)}$
+  (ratio), the slope increases the more $X$ and $Y$ tend to fluctuate
+  together, and gets smaller/closer to zero the more $X$ fluctuates.
+  \\ \includegraphics[width=.9\textwidth]{3.pdf}
+\item $\beta_1^*$ doesn't change if we use $X' = X-a, Y' = Y - b$
+  instead. Note that $a$ and $b$ must be deterministic/non-random.
+\end{itemize}
+Eventually you will get the \textbf{optimal regression line} (of $Y$
+on $X$):
+$$m^*(X) = \beta_0^* + \beta_1^* X$$
+\begin{itemize}
+\item At no time did we have to assume that the actual relationship
+  between $X$ and $Y$ is linear (that's just our belief, it may not
+  actually be linear). We only have an optimal linear approximation to
+  the \textbf{true relationship}, whatever it might be. Your data
+  might even look like:
+  \includegraphics[width=.9\textwidth]{4.pdf}
+  % \\ However, in this case linear regression will fail and a more
+  % general method is required.
+\item The best linear approximation to the truth can be awful. Imagine
+  $$E[Y | X = x] = e^x \text{ or } \sin(X)$$
+  There is no general reason to think linear approximation ought to be
+  good. But \underline{sometimes} it works. For example, the true
+  regression function of the above would be $E[Y | X = x] = e^x$,
+  which is differentiable and can be approximated using a polynomial
+  of $X$ (Taylor expansion).
+  \begin{align*}
+    e^x & = e^{x_0}+ \frac{de^X}{dx} \vline_{x = x_0}(x - x_0) + \frac{1}{2} \frac{d^2e^x}{dx^2}\vline_{x = x_0} (x-x_0)^2 + \ldots
+    \\ & = e^{x_0} + e^{x_0}(x-x_0) + \frac{1}{2}e^{x_0}(x-x_0)^2 + \ldots
+  \end{align*}
+\item If $x$ is close enough to $x_0$ then $$e^x \approx e^{x_0} +
+  e^{x_0}(x-x_0) = e^{x_0} (1- x_0) + e^{x_0}x$$
+  In this case our linear approximation would just be the first two
+  terms.
+
+  How close is close enough? The first two terms should dominate the
+  remaining terms (quadratic cubic), i.e.
+  $$e^{x_0} |x - x_0| >> \frac{1}{2} e^{x_0} |x - x_0|^2 \iff 2
+  \frac{e^{x_0}}{e^{x_0}} >> \frac{|x-x_0|^2}{|x-x_0|} \iff 2 >> |x -
+  x_0|$$
+  So $x \in (x_0 - 2, x_0 + 2)$ at least.
+\end{itemize}
 \end{document}
