@@ -384,10 +384,13 @@ textbook later):
   relationship between two variables is not deterministic, for
   example, the effects of smoking can vary from person to person,
   although they may have the same value for $x$ (like age).
-\item $E[\varepsilon \mid X = x] = 0$ and $Var(\varepsilon \mid X = x) =
+\item $E[\varepsilon \mid X = x] = 0 = E[\varepsilon]$ and
+  $Var(\varepsilon \mid X = x) = Var(\varepsilon) =
   \sigma^2 > 0$ (constant).
 \item $\varepsilon$ is uncorrelated with $X$ (i.e.\ $Cov(\varepsilon,
   X) = 0$) and is \textbf{uncorrelated across observations}.
+
+  (This will most likely be a final exam question)
 \end{enumerate}
 Note that:
 \begin{enumerate}
@@ -413,7 +416,8 @@ Note that:
   \end{align*}
 \end{enumerate}
 With multiple data points $(X_1, Y_1), (X_2,Y_2), \ldots, (X_n,Y_n)$
-(capitalized, these could be different random variables/different distributions)
+(capitalized, these could be different random variables/different
+distributions, they are random until we actually sample them)
 then the model says that for each $i = 1, \ldots, n$
 $$Y_i = \beta_0 +\beta_1 X_i + \varepsilon_i$$
 where the noise variable $\varepsilon_i$ all have the same expectation
@@ -423,5 +427,82 @@ as mentioned earlier). $Cov(\varepsilon_i, \varepsilon_i) =
 Var(\varepsilon_i) = \sigma^2$
 \\ Equivalently, the assumption says that $E[Y_i \mid X_i = x_i] =
 \beta_0 +\beta_1 x_i$ for $i = 1, \ldots, n$ and constant variance
-across $i$ $$Var(Y_i \mid X_i = x_i) = \sigma^2$$ for $i = 1, \ldots, n$
+across $i$ $$Var(Y_i \mid X_i = x_i) = \sigma^2$$ for $i = 1, \ldots,
+n$ and $Y_i$'s are \textbf{conditionally independent given $X_i$'s} because
+\begin{align*}
+  Cov(Y_i, Y_j \mid X_i = x_i, X_j = x_j) &
+                                            \stackrel{\beta_0+\beta_1X_i
+                                            \text{ constant given }x_i}{=} Cov(\varepsilon_i, \varepsilon_j \mid X_i = x_i, X_j = x_j)
+  \\ & = Cov(\varepsilon_i, \varepsilon_j) = 0
+\end{align*}
+But we find that $Y_i$'s are \textbf{not unconditionally independent}.
+\begin{align*}
+  Cov(Y_i, Y_j) & = Cov(\beta_0 + \beta_1 X_i + \varepsilon_i, \beta_0 + \beta_1X_j + \varepsilon_j)
+  \\ & = \beta_1^2 Cov(X_i,X_j)+\beta_1 Cov(X_i, \varepsilon_j) + \beta_1 Cov(X_j, \varepsilon_i) + Cov(\varepsilon_i, \varepsilon_j)
+  \\ & = \beta_1^2 Cov(X_i, X_j) + 0 + 0 + 0 = \beta_1^2Cov(X_i,X_j)
+\end{align*}
+\subsection{Plugin estimates}
+Remember we saw last time that the optimal linear predictor of $Y$
+from $X$ has slope
+\begin{align*}
+  \beta_1^* & = \dfrac{Cov(X,Y)}{Var(X)}
+              \intertext{and intercept}
+              \beta_0^* & = E[Y] - \beta_1^* E[X]
+\end{align*}
+But both $Cov(X,Y)$ and $Var(X)$ are functions of the true
+distribution of $(X,Y)$. Rather than having that full distribution, we
+merely have data points or \textbf{samples} $(x_{11},y_1),
+(x_{21},y_{2}), \ldots, (x_{n1},y_n)$. The additional subscript is to
+indicate which $x$ we are talking about, although currently we are
+doing simple linear regression with only one predictor, but in the
+future we will have multiple.
+
+How might we estimate $\beta_0^*$ and $\beta_1^*$ from this data? (We
+will see three methods, here's the first)
+
+Use ``plug-in principle'', plug-in \textbf{sample covariance} and
+\textbf{sample variance}. Define:
+\begin{align*}
+  S_{xx} & = \sum_{i=1}^n (x_{i1} - \overline{x}_1)^2 & \overline{x}_1 = \frac{1}{n}\sum_{i=1}^n x_{i1}
+  \\ & = \sum_{i=1}^n(x_{i1} - \overline{x}_1)x_{i1}
+  \\ & = \sum_{i=1}^n x_{i1}^2 - n(\overline{x}_1)^2
+  \\ S_{yy} & = \sum_{i=1}^n (y_i - \overline{y})^2
+  \\ & = \sum_{i=1}^n (y_i - \overline{y}) (y_i - \overline{y}) & \overline{y} = \frac{1}{n}\sum_{i=1}^ny_i
+  \\ & \ldots = \sum_{i=1}^n (y_i - \overline{y})y_i
+  \\ & = \sum_{i=1}^n y_i^2 - n(\overline{y})^2
+  \\ S_{xy} & = \sum_{i=1}^n (y_i - \overline{y})(x_{i1}-\overline{x}_1)
+  \\ & = \sum_{i=1}^n(x_{i1} - \overline{x}_1)y_i
+  \\ & = \left(\sum_{i=1}^nx_{i1}y_i\right) - n \overline{x}_1 \overline{y}
+\end{align*}
+You can show these results and their intermediate steps using
+\begin{align*}
+  \sum_{i=1}^n (x_{i1} - \overline{x}_1) & = 0
+  \\ \sum_{i=1}^n (y_i - \overline{y}) & = 0
+\end{align*}
+(will have to do on assignment).
+
+The plug-in estimate for $\beta_1$ is
+\begin{align*}
+  \hat{\beta}_1 & = \dfrac{\widehat{Cov}(X,Y)}{\widehat{Var}(X)} \textcolor{blue}{\approx \dfrac{Cov(X,Y)}{Var(X)} = \beta_1^*}
+  \\ &                  = \dfrac{\frac{1}{n} \sum_{i=1}^n (y_i - \overline{y})(x_{i1}-\overline{x}_1)}{\frac{1}{n}\sum_{i=1}^n(x_{i1}-\overline{x}_1)^2} = \frac{S_{xy}}{S_{xx}}
+  \\ \hat{\beta}_0 & = \hat{E}[Y] - \hat{\beta}_1 E[X] \textcolor{blue}{\approx E[Y] - \beta_1^* E[X]}
+  \\ & = \overline{y} - \hat{\beta}_1 \overline{x}_1 = \overline{y} - \frac{S_{xy}}{S_{xx}}\overline{x}_1
+\end{align*}
+In a more advanced statistics course, you will see that $n \to \infty
+\implies \hat{\beta}_1 \to \beta_1^*$ and $\hat{\beta}_0 \to
+\beta_0^*$
+\subsection{Least square estimates}
+There is an alternative way of estimating the simple linear regression
+model. Recall that the true optimal slop and intercept are the ones
+which minimize the mean squared error
+\begin{align*}
+  (\beta_0^*, \beta_1^*) & = \argmin_{(\beta_0,\beta_1)} \underbrace{E_{XY} [(Y - \beta_0 - \beta_1 X)^2]}_{\text{unknown}}
+\end{align*}
+This is a function defined on the distribution of $(X,Y)$, so we can't
+get it from the data, but we can approximate it with the data. The
+\textbf{in-sample, empirical} or \textbf{training MSE}
+\begin{align*}
+  S(\beta_0, \beta_1) & = \widehat(\beta_0, \beta_1) = \frac{1}{n} \sum_{i = 1}^n (y_i - \beta_0 - \beta_1 x_{i1})^2
+\end{align*}
+Essentially, we replace the expectation with the sample mean.
 \end{document}
