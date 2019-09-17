@@ -388,4 +388,113 @@ $(Q, \Sigma, \delta, q_0, F)$ such that:
 \item $q_0 \in Q$: Start state.
 \item $F \subseteq Q$: Accept states.
 \end{itemize}
+
+An NFA $N = (Q,\Sigma, \delta, q_0, F)$ with $w = w_1w_2\ldots w_n$
+($n \geq 0$) being a string with each $w_i \in \Sigma$,
+\underline{accepts} $w$ if $\exists m \geq n$(might exceed $n$ steps
+as we allow empty transitions) $, \exists s_0, s_1, \ldots, s_m$ and
+$\exists y_1y_2\ldots y_m=w$ with each $y_i \in \Sigma_{\varepsilon}$
+such that:
+\begin{itemize}
+\item $s_0 = q_0$
+\item $s_{i+1}\in \delta(s_i, y_{i+1})$, for $i = 0, \ldots, m-1$
+\item $s_m \in F$
+\end{itemize}
+\section{09/17/19}
+\subsection{NFA-DFA Equivalence}
+\paragraph{Theorem} Every NFA has an equivalent DFA.
+\paragraph{Corollary} A language is regular iff some NFA recognizes
+it.
+\paragraph{Conversion without empty transitions}
+Let $N = (Q, \Sigma, \delta, q_o, F)$ be an NFA with no empty
+transitions accepting language $A$. The following describes $M = (Q',
+\Sigma, \delta', q_0', F')$, a DFA accepting $A$.
+\begin{itemize}
+\item The states of the DFA should be the set of all possible subset
+  of states in the NFA, i.e.\ if we can be in states $q_1$ and $q_2$
+  in the NFA at the same time, then the DFA should have a state
+  $q_{\{1,2\}}$. Formally, $Q' = \mathcal{P}(Q) = \left\{R \mid R
+    \subseteq Q\right\}$ (this includes all possible subsets, we may
+  not need all of them)
+\item $\delta'(R, a) = \left\{q \in Q \mid \exists r \in R, q \in
+    \delta(r,a)\right\}$ (note this is a set, it defines a transition
+  on a whole set $R$, which essentially is just the union of all the
+  possible transitions from each of these states). This will bring us
+  from a subset of states to another subset of states.
+\item $q'_0 = \{q_0\}$ (same initial state, but as a singleton as it
+  must be a set)
+\item $F' = \left\{R \in Q' \mid R \cap F \neq \emptyset\right\}$ (at
+  least one of the states in $R$ is an accepting state in the NFA)
+\end{itemize}
+A convenient way to represent the possible states we can be in is with
+a binary string, that is:
+$$q_{w_nw_{n-1}\ldots w_1} = q_{R} : (w_i = 1 \iff i \in R)$$
+e.g.\ $q_{0000} = q_{\emptyset}, q_{1001} = q_{\{1,4\}}$
+\paragraph{With empty transitions}~ \\Define $E(R) = \left\{q \mid q
+  \text{ can be reached from }R \text{ by traveling along }0 \text{ or
+    more }\varepsilon \text{ arrows}\right\}$
+\\
+Everything will be the same as above, except for the transition
+function and the starting state:
+$$\delta'(R, a) = \left\{q \in Q \mid \exists r \in R, q \in
+  E(\delta(r,a))\right\}, \forall a \neq \varepsilon$$
+$$q_0' = E(q_0)$$
+\paragraph{Regular Operations: Kleene's theorem for NFAs}
+The class of regular languages is closed under union. Let $N_A = (Q_A,
+\Sigma, \delta_A, q_{0A}, F_A)$ be an NFA accepting $L_A$ and $N_B =
+(Q_B,\Sigma, \delta_B, q_{0B}, F_B)$ be an NFA accepting $L_B$ ($Q_A
+\cap Q_B = \emptyset$, for simplicity). Now consider $N_\cup =
+(\{q_0\}\cup Q_A \cup Q_B, \Sigma, \delta_\cup, q_0, F_{\cup})$ with
+\begin{itemize}
+\item $\delta_{\cup}(q_0, \varepsilon) = \left\{q_{0A},q_{0B}\right\},
+  \delta_\cup (q_0, a) = \emptyset$ for all $a \neq \varepsilon$
+\item $\delta_\cup(q, a) = \delta_X (q,a)$ for all $q\in Q_X$, $X\in
+  \left\{A,B\right\}$ and for all $a$
+\item $F_\cup = F_A \cup F_B$
+\item $L_\cup = L_A \cup L_B$
+\end{itemize}
+Informally, this is equivalent to adding a new starting state with a
+$\varepsilon$ transition to both of the starting states of $N_A$ and
+$N_B$. Because a string in $L_A \cup L_B$ is accepted by at least
+$N_A$ or $N_B$ (possibly both), then $N_\cup$ will accept it as the
+$\varepsilon$ transitions of the starting states will simulate passing
+the input to both machines.
+
+The class of regular languages is closed under concatenation.  \\
+Informally, make $\varepsilon$ transitions from each accepting state
+of the first NFA (these will now no longer be accepting states) to the
+start states of the second NFA.
+
+$N_A$ and $N_B$ and their respective languages the same as defined
+above for union.
+\\ $N_C = (Q_A \cup Q_B, \Sigma, \delta_C, q_{0A}, F_{AB})$ with:
+\begin{itemize}
+\item $\delta_C(q,a) = \delta_B (q,a), \forall q \in Q_B$
+\item $\delta_C(q,a) = \delta_A (q,a), \forall q \in Q_A, a \neq
+  \varepsilon$
+\item $\delta_C(q,\varepsilon) = \delta_A(q, \varepsilon), \forall q
+  \in Q_A \setminus F_A$
+\item $\delta_C(q,\varepsilon) = \delta_A (q,\varepsilon) \cup
+  \{q_{0B}\}, \forall q \in F_A$
+\item $L_C = L_A \circ L_B$
+\end{itemize}
+
+The class of regular languages is closed under the start
+operation. Essentially, you make a new start state (with an
+$\varepsilon$ transition to the original start state) that is an
+accepting state (so that the empty string will be accepted) and loop
+all the accepting states with an $\varepsilon$ transition to said
+start state (to start over and loop).
+\\ $N_A$ is the same as defined above. Consider $N_S = (Q_A \cup
+\{q_0\}, \Sigma, \delta_S, q_0, F_A \sup \{q_0\})$ with:
+\begin{itemize}
+\item $\delta_S(q_0, \varepsilon) = q_{0A}$ and $\delta_S(q_0,a) =
+  \emptyset, a \neq \varepsilon$
+\item $\delta_S(q,a) = \delta_A(q,a), \forall q \in Q_A\setminus F_A$
+\item $\delta_S(q,\varepsilon) = \delta_A(q,\varepsilon) \cup
+  \{q_{0A}\}, \forall q \in F_A$
+\item $\delta_S(q,a) = \delta_A(q,a), \forall q \in F_A, a \neq
+  \varepsilon$
+\item $L_S = (L_A)^*$
+\end{itemize}
 \end{document}
