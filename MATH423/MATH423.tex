@@ -392,6 +392,23 @@ textbook later):
 
   (This will most likely be a final exam question)
 \end{enumerate}
+Visually, this model:\\
+\includegraphics[width=.9\textwidth]{6.pdf}
+\begin{align*}
+  E[\varepsilon \mid X = x] & = E[\varepsilon] = 0
+  \\ Var[\varepsilon \mid X = x] & = Var[\varepsilon] = \sigma^2
+\end{align*}
+$\Sigma$ is independent to $X$.
+\\ Essentially, we have a distribution (any distribution satisfying
+the expectation and variance above) centered at every point
+of the regression line.
+\\ In 3D:
+\\\includegraphics[width=.5\textwidth]{7.pdf}
+\\
+\\ The points are more dense near the center of the distribution. If
+the distribution is bimodal, the data will be dense at the two peaks.
+\\ \includegraphics[width=.9\textwidth]{8.pdf}
+\\
 Note that:
 \begin{enumerate}
 \item The assumption is equivalent to assuming that the
@@ -502,7 +519,51 @@ This is a function defined on the distribution of $(X,Y)$, so we can't
 get it from the data, but we can approximate it with the data. The
 \textbf{in-sample, empirical} or \textbf{training MSE}
 \begin{align*}
-  S(\beta_0, \beta_1) & = \widehat(\beta_0, \beta_1) = \frac{1}{n} \sum_{i = 1}^n (y_i - \beta_0 - \beta_1 x_{i1})^2
+  S(\beta_0, \beta_1) & = \widehat{MSE}(\beta_0, \beta_1) =
+                        \underbrace{\frac{1}{n} \sum_{i = 1}^n (y_i -
+                        \beta_0 - \beta_1 x_{i1})^2}_{\text{computable
+                        from data}}
 \end{align*}
 Essentially, we replace the expectation with the sample mean.
+
+If our sample points $(x_{11}, y_1), (x_{21}, y_2), \ldots,
+(x_{n1},y_n)$ are all independent for any fixed $(\beta_0, \beta_1)$,
+then we find $\hat{\beta}_0, \hat{\beta}_1$ instead of $\beta_0^*$
+and $\beta_1^*$.
+\begin{align*}
+  (\hat{\beta}_0, \hat{\beta}_1) & = \argmin_{\beta_0, \beta_1} \frac{1}{n} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_{1i})^2
+\end{align*}
+These are different from the optimal $\beta_0^*, \beta_1^*$, as we
+only observe some points and make a line from them, not the line
+centered about all points. Theoretically, they'd only be the same if
+we had infinite points, so in general they are never the same. Due to
+random fluctuation, rerunning an experiment can give you different
+data and thus a different regression line.
+
+The law of large numbers tells us that if $n \to \infty$, then
+\begin{align*}
+  \widehat{MSE}(\beta_0, \beta_1) & \to MSE(\beta_0, \beta_1)
+  \\ \implies (\hat{\beta}_0, \hat{\beta}_1) & \stackrel{n \to \infty}{\to} (\beta_0^*, \beta_1^*)
+\end{align*}
+To solve $(\hat{\beta}_0, \hat{\beta}_1)$:
+\begin{align*}
+  \frac{\partial{s}}{\partial{\beta_0}} & = \frac{1}{n}(-2) \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1x_{1i}) = 0
+  \\ \frac{\partial{s}}{\partial{\beta_1}} & = \frac{1}{n}(-2) \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1x_{1i})x_{1i} = 0
+\end{align*}
+We call these equations \textbf{the normal equations} and can be
+rewritten as:
+\begin{align*}
+  \overline{y} - \hat{\beta}_0 - \hat{\beta}_1 \overline{x}_1 & = 0
+  \\ \sum_{i=1}^nx_{1i}y_{i} - \hat{\beta}_0 \overline{x}_1 - \hat{\beta}_1 \sum_{i=1}^n x_{i1}^2 & = 0
+\end{align*}
+The first equation gives us $$\hat{\beta}_0 = \overline{y} -
+\hat{\beta}_1 \overline{x}_1$$ Substituting this into the second equation, we get:
+\begin{align*}
+  &\sum_{i=1}^nx_{1i}y_i - \overline{y}\overline{x}_1 + \hat{\beta}_1 \overline{x}_1 \overline{x}_1 - \hat{\beta}_1 \sum_{i=1}^n x_{1i}^2 = 0
+  \\ &S_{xy} - \hat{\beta}_1 S_{xx} = 0
+  \\ &\hat{\beta}_1 = \frac{S_{xy}}{S_{xx}}
+\end{align*}
+This shows that the least-squares estimates are the same as the plugin
+estimates.
+\\ \includegraphics[width=.9\textwidth]{9.pdf}
 \end{document}
