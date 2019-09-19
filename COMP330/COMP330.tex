@@ -1,7 +1,7 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
   lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
-  marvosym, stmaryrd, collectbox}
+  marvosym, stmaryrd, collectbox, wasysym}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \EnableBpAbbreviations
@@ -497,4 +497,95 @@ start state (to start over and loop).
   \varepsilon$
 \item $L_S = (L_A)^*$
 \end{itemize}
+\section{09/19/19}
+When converting from a DFA to an NFA, often we produce nodes that are
+not reachable (since we enumerate over all possible subsets of
+nodes). In order to reduce the number of states we have, we can check
+for reachable states with graph search algorithms. Furthermore, there
+can be \textbf{redundant states} that do the same thing (i.e.\ $q_2$
+will go to either $q_3$ or $q_4$ depending on input, but $q_3$ and
+$q_4$ are not accepting states and go to the same state given the same
+input, so we can combine $q_3$ and $q_4$).
+\subsection{Myhill-Nerode Theorem}
+Let $x, y$ be strings, $L$ a language. $x$ and $y$ are
+\textbf{distinguishable} by $L$ if $\exists$ suffix $z$ such that $xz
+\in L$ and $yz \notin L$ or $yz \in L$ and $xz \notin L$.
+
+$x \equiv_L y$ (equivalence relation) $\iff$ $x$ and $y$ are
+\textbf{indistinguishable} (not
+distinguishable) by $L$.
+
+Showing that two strings are distinguishable is easy, all you need to
+do is provide an example. However, to show indistinguishable, you must
+show for all possible $z$.
+
+Let $L$ be a language and $X$ a set of strings. $X$ is
+\textbf{pairwise distinguishable} by $L$ if each pair of elements in
+$X$ are pairwise distinguishable by $L$ ($\forall x, x' \in X, x
+\not \equiv_L x'$).
+
+The \textbf{index} of $L$ is the size of a maximum set $X$ that is
+pairwise distinguishable by $L$. Not necessarily finite. This index
+characterizes precisely what regular languages are, as regular
+languages will have a finite index.
+
+\paragraph{Myhill-Nerode Theorem}
+\begin{enumerate}[(a)]
+\item $L$ is recognized by a DFA with $k$ states $\implies$ index of
+  $L \leq k$
+
+  \textbf{Proof}: Let $M$ be a $k$ state DFA recognizing $L$. Assume
+  $L$ has index $> k$. $\exists X$ with $k+1$ elements distinguishable
+  by $L$. $\exists$ strings $x$ and $y$, such that starting in
+  the start state, $x$ and $y$ lead to the same state (by a counting
+  argument), i.e. $\delta(q_0, x) = \delta(q_0, y)$. But then $x$ and
+  $y$ are not distinguishable. \lightning
+\item Index of $L = k$ (finite) $\implies L$ recognized by DFA with
+  $k$ states
+
+  \textbf{Proof}: $X = \left\{s_1, \ldots, s_k\right\}$ be pairwise
+  distinguishable by $L$. $Q = \left\{q_1, \ldots, q_k\right\}$ are
+  states of a DFA recognizing $L$ (note that these indices correspond
+  to the indices of the strings of $X$) and define $\delta(q_i, a) = q_j$
+  s.t.\ $s_j \equiv_L s_ia$ (states are equivalent to the string of
+  the same index, we are using the fact that every string is
+  equivalent to one string in $X$ as its the index (otherwise we would
+  be able to add another string to $X$); think of each
+  string being a representative). Let $q_0$ be the $q_i$ s.t.\ $s_i
+  \equiv_L \varepsilon$(starting state corresponds to empty string). Let $F = \left\{q_i \mid s_i \in
+    L\right\}$ (accept any string corresponding to accepted
+  $s_i$'s). $M = \left\{s \mid \delta(q_0, s = q_i), q_i \in F\right\}
+  = \left\{s \mid s \equiv_L s_i, s_i \text{ recognized by }L\right\}$
+\item $L$ regular $\iff$ index is finite. Index is size of smallest
+  DFA recognizing $L$.
+
+  \textbf{Proof}: $(\implies)$ $L$ regular $\implies \exists$ DFA
+  recognizing $L$. By (a), index of $L \leq k$
+  \\ $(\impliedby)$ Index $L = k$ then (b) $\implies \exists$ DFA with
+  $k$ states (so $L$ is regular)
+
+  For minimality, if index of $L$ is not the size of minimal DFA then
+  $\exists$ DFA with index $- 1$ states recognizing $L$. Impossible by (a).
+\end{enumerate}
+We will explicitly use this theorem to minimize the number of states.
+
+Let $L$ be a regular language. Compute index of $L$ by finding set $X$
+of all strings pairwise distinguishable by $L$. All strings considered
+as $x, y, xz, yz$ may be \textbf{shorter than the number of states}
+of a DFA accepting $L$. Every longer string is equivalent to a shorter
+one obtained by pumping down (strings longer than number of states
+will eventually take me to a state that I've already been in).
+
+\paragraph{Minimizing using the Myhill-Nerode Theorem}
+Let $L$ be a regular language. Compute index of $L$ as
+above. Construct a DFA as in (b) to construct a minimal DFA accepting $L$.
+
+We can also use the Myhill-Nerode theorem in the other direction.
+
+$B = \left\{0^n1^n \mid n \geq 0 \right\}$ is non-regular because its
+index is infinite. $X = \left\{0^n \mid n \geq 0\right\}$ is an
+infinite set that is pairwise distinguishable by $B$.
+\\ \textbf{Proof}: $\forall n, 0^n \not \equiv_B 0^i, 0 \leq i \leq
+n-1$ because $\exists z =1^n$ such that $0^nz \in B$ but $0^iz \notin
+B, 0 \leq i \leq n-1$
 \end{document}
