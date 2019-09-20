@@ -566,4 +566,117 @@ The first equation gives us $$\hat{\beta}_0 = \overline{y} -
 This shows that the least-squares estimates are the same as the plugin
 estimates.
 \\ \includegraphics[width=.9\textwidth]{9.pdf}
+\\ See \href{http://www.math.mcgill.ca/yyang/regression/comp/Comp-02-SLR_simulation.pdf}{\texttt{Comp-02-SLR\_simulation.pdf}} on the course webpage for more
+information, with some example sampling and corresponding regression
+lines.
+\subsection{Least Squares in Matrix Format}
+We have the simple linear regression model
+\begin{align*}
+  Y & = \beta_0 + \beta_1 X + \varepsilon
+\end{align*}
+where $E[\varepsilon \mid X = x] = 0$ and $Var(\varepsilon \mid X = x)
+= \sigma^2$ and $\varepsilon$ is uncorrelated with $X$ and
+uncorrelated across observations.
+
+Say our data consists of $n$ paired observations of $X$ and $Y$,
+sampled from the above model
+$$(X_1, Y_1), \ldots, (X_n, Y_N)$$
+hence
+\begin{align*}
+  Y_i &= \beta_0 + \beta_1 X_i + \varepsilon_i, i = 1, \ldots, n
+\end{align*}
+If we denote
+\begin{align*}
+  Y & =
+      \begin{bmatrix}
+        Y_1 \\ Y_2 \\ \vdots \\ Y_n
+      \end{bmatrix} X =
+  \begin{bmatrix}
+    1 & X_{11}\\ 1& X_{12} \\ \vdots &\vdots \\ 1 & X_{1n}
+  \end{bmatrix}
+                                                    \beta =
+                                                    \begin{bmatrix}
+                                                      \beta_0 \\ \beta_1
+                                                    \end{bmatrix}
+\varepsilon =
+  \begin{bmatrix}
+    \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n
+  \end{bmatrix}
+\end{align*}
+Note that $X$ is called the \textbf{design matrix} and is an $n \times
+2$ matrix with the 1$^{\text{st}}$ column always being $1$.
+\begin{align*}
+  X\beta & =
+           \begin{bmatrix}
+             \beta_0 + \beta_1 X_{11}
+             \\ \beta_0 + \beta_1 X_{12}
+             \\ \vdots
+             \\ \beta_0 + \beta_n X_{1n}
+           \end{bmatrix}
+\end{align*}
+So we can write the set of equations
+\begin{align*}
+  Y_i & = \beta_0 + \beta_iX_{1i} + \varepsilon_i, i=1, \ldots, n
+\end{align*}
+In the simpler form
+$$Y = X\beta + \varepsilon$$
+The training MSE is
+\begin{align*}
+(\beta_0, \beta_1) & = \widehat{MSE}(\beta_0, \beta_1) = \frac{1}{n}\sum_{i=1}^n(y_i - \beta_0 - \beta_1 x_{1i})^2
+\end{align*}
+Now it can be written in a matrix format
+\begin{align*}
+  S(\beta) & = \widehat{MSE}(\beta) = \frac{1}{n} \underbrace{(Y - X
+             \beta)^T (Y - X \beta)}_{\text{inner prod of 2 vectors}}
+  \\ & = \frac{1}{n}(Y^T - \beta^TX^T)(Y - X \beta) = \frac{1}{n}(Y^TY - Y^T X \beta-\beta^TX^TY + \beta^TX^TX\beta)
+  \\ & = \frac{1}{n} (Y^TY - 2\beta^TX^TY + B^TX^TX\beta)
+\end{align*}
+where we used the fact that $$\beta^TX^TY = (Y^TX \beta)^T = Y^TX
+\beta \text{ (since scalar)}$$
+To solve $\hat{\beta}$, we find the gradient of the training $MSE$
+with respect to $\beta$ and set it to zero.
+\begin{align*}
+  \nabla_\beta S(\hat{\beta}) & = \frac{1}{n} (\nabla_\beta Y^TY - 2 \nabla_\beta \hat{\beta}^TX^TY + \nabla_\beta \hat{\beta}^T X^T X \hat{\beta})
+  \\ & = \frac{1}{n} (0 - 2X^T Y + 2X^T X \hat{\beta}) = \frac{2}{n} (X^TX\hat{\beta} - X^TY) \equiv 0
+  \\ \implies X^TX\hat{\beta} & = X^T Y
+\end{align*}
+This equation, for the two dimensional vector $\hat{\beta} =
+(\hat{\beta}_0, \hat{\beta}_1)$ corresponds to our pair of normal
+equations for $\hat{\beta}_0, \hat{\beta}_1$.
+\begin{align*}
+  \begin{bmatrix}
+    n & \sum_{i=1}^n x_{1i}
+    \\ \sum_{i=1}^n x_{1i} & \sum_{i=1}^n x_{1i}^2
+  \end{bmatrix}
+                             \begin{bmatrix}
+                               \beta_0 \\ \beta_1
+                             \end{bmatrix} & =
+                                             \begin{bmatrix}
+                                               \sum_{i=1}^n y_i
+                                               \\ \sum_{i=1}^nx_{1i}y_i
+                                             \end{bmatrix}
+\end{align*}
+If this is correct, the equation we got above should infact reproduce
+the least squares estimates we have already derived.
+\begin{align*}
+  \hat{\beta} & = (X^TX)^{-1}X^TY
+\end{align*}
+or more explicitly
+\begin{align*}
+  \begin{bmatrix}
+    \hat{\beta}_0 \\ \hat{\beta}_1
+  \end{bmatrix} & =
+                  \begin{bmatrix}
+                    n & \sum_{i=1}^n x_{1i}
+                    \\ \sum_{i=1}^n x_{1i} & \sum_{i=1}^n x_{1i}^2
+                  \end{bmatrix}^{-1}
+                                             \begin{bmatrix}
+                                               \sum_{i=1}^n y_i
+                                               \\ \sum_{i=1}^n x_{1i}y_i
+                                             \end{bmatrix}
+\end{align*}
+Then we can show that the above equations give
+\begin{align*}
+  \hat{\beta}_1 & = \frac{S_{xy}}{S_{xx}} & \hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x}_1
+\end{align*}
 \end{document}
