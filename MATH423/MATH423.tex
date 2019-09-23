@@ -265,7 +265,7 @@ linear in $X$?
 
 To minimize the mean squared error of $m(x) = \beta_0 + \beta_1 x$
 \begin{align*}
-  (\beta_0^*, \beta_1^*) & = \argmin_{(\beta_0,, \beta_1)} E_{X, Y}[(Y - \underbrace{(\beta_0 + \beta_1 x)}_{m(x)})^2]
+  (\beta_0^*, \beta_1^*) & = \argmin_{(\beta_0, \beta_1)} E_{X, Y}[(Y - \underbrace{(\beta_0 + \beta_1 x)}_{m(x)})^2]
   \\ E[(Y - (\beta_0 + \beta_1 x))^2] & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 E[XY] + E [ (\beta_0 + \beta_x)]
   \\ & = E [Y^2] - \beta_0 E[Y] -  \beta_1 (Cov (X,Y)) + E[X]E[Y] + \beta_0^2 + 2\beta_0\beta_1 E[X] + \beta_1^2 E[X]
   \\ & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 (Cov(X,Y)) + E[X]E[Y] + \beta_0^2 + 2 \beta_0 \beta_1 E[X]
@@ -569,6 +569,29 @@ estimates.
 \\ See \href{http://www.math.mcgill.ca/yyang/regression/comp/Comp-02-SLR_simulation.pdf}{\texttt{Comp-02-SLR\_simulation.pdf}} on the course webpage for more
 information, with some example sampling and corresponding regression
 lines.
+\\
+\includegraphics[width=.6\textwidth]{10.pdf}
+\\ The red line will go through the population mean, $(E[X], E[Y])$,
+whereas the blue line will go through the sample mean, $(\overline{x}_1,
+\overline{y})$.
+\\If random variables $(X_1, Y)$ are from
+$$Y = \underbrace{\beta_0}_{1} + \underbrace{\beta_1}_5 x_1 +
+\varepsilon$$
+What is the value of $\beta_0^*, \beta_1^*$ such that
+\begin{align*}
+(\beta_0^*, \beta_1^*) & = \argmin_{\beta_0, \beta_1} E_{X,Y} [(Y -
+\beta_0 - \beta_1 X_1)^2]
+ \\ \beta_1^* & = \frac{Cov(Y,X_1)}{Var(X_1)}
+  \\ \beta_0^* & = E[Y] - \beta_1^* E[X]
+\end{align*}
+Now plug-in $Y = \beta_0 + \beta_1 X_1 + \varepsilon$:
+\begin{align*}
+  \beta_1^* & = \frac{Cov(Y, X_1)}{Var(X_1)} = \frac{Cov(\beta_0 + \beta_1 X_1 + \varepsilon, X_1)}{Var(X_1)}
+  \\ & = \frac{\beta_1 Var(X_1)}{Var(X_1)} = \beta_1 = 5
+  \\ \beta_0^* & = E[Y] - \beta_1^* E[X_1] = E[\beta_0 + \beta_1X_1 + \varepsilon] - \beta_1 E[X_1]
+  \\ & = \beta_0 + \beta_1 E[X_1] + 0 - \beta_1 E[X_1]
+  \\ & = \beta_0 = 1
+\end{align*}
 \subsection{Least Squares in Matrix Format}
 We have the simple linear regression model
 \begin{align*}
@@ -679,4 +702,62 @@ Then we can show that the above equations give
 \begin{align*}
   \hat{\beta}_1 & = \frac{S_{xy}}{S_{xx}} & \hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x}_1
 \end{align*}
+Note that
+\begin{align*}
+  \begin{bmatrix}
+    n & \sum_{i=1}^n x_{1i}
+    \\ \sum_{i=1}^n x_{1i} & \sum_{i=1}^n x_{1i}
+  \end{bmatrix}^{-1} & =\dfrac{
+                       \begin{bmatrix}
+                         \sum_{i=1}^n x_{1i} & - \sum_{i=1}^n x_{1i}
+                         \\ - \sum_{i=1}^n x_{1i} & n
+                       \end{bmatrix}}{n \sum_{i=1}^n x_{1i}^2 - \left(\sum_{i=1}^n x_{1i}\right)^2}
+                                                    \intertext{Thus}
+                                                    \hat{\beta}_1 & = \frac{1}{n \sum_{i=1}^n x_{1i}^2 - \left(\sum_{i=1}^n x_{1i}\right)^2}
+                                                                    \begin{bmatrix}
+                                                                      - \sum_{i=1}^n x_{1i} \sum_{i=1}^n y_i + n \sum_{i=1}^n x_{1i}y_i
+                                                                    \end{bmatrix}
+  \\ & = \dfrac{1}{\sum_{i=1}^n x_{1i} - \frac{1}{n} \left(\sum_{i=1}^n x_{1i}\right)^2} \left[- \frac{1}{n} \sum_{i=1}^nx_{1i}\sum_{i=1}^n y_i + \sum_{i=1}^n x_{1i} y_i\right]
+  \\ & \dfrac{\sum_{i=1}^n x_{1i}y_i - n \overline{x}_1 \overline{y}}{\sum_{i=1}^nx_{1i}^2 - n(\overline{x}_1)^2}
+  \\ & = \frac{S_{xy}}{S_{xx}}
+  \\ \hat{\beta}_0 & = \dfrac{1}{n \sum_{i=1}^nx_{1i}^2 - \left(\sum_{i=1}^n x_{1i}\right)^2} \left[\sum_{i=1}^n x_{1i}^2 \sum_{i=1}^n y_i - \sum_{i=1}^n x_{1i} \sum_{i=1}^n x_{1i} y_i\right]
+  \\ & = \dfrac{1}{\underbrace{\sum_{i=1}^nx_{1i}^2 - n \overline{x}_1^2}_{S_{xx}}} \left[\overline{y} \sum_{i=1}^n x_{1i}^2 - \overline{x}_1 \sum_{i=1}^n x_{1i}y_i\right]
+  \\ & = \frac{1}{S_{xx}} \left(\overline{y} \sum_{i=1}^n x_{1i}^2 - \underbrace{\overline{y}n \overline{x}_1^2 + \overline{y}n \overline{x}_1^2}_0 - \overline{x}_1 \sum_{i=1}^n x_{1i}y_i\right)
+  \\ & = \overline{y} + \dfrac{\overline{y} n \overline{x}_1^2 - \overline{x}_1 \sum_{i=1}^n x_{1i} y_i}{S_{xx}}
+  \\ & = \overline{y} - \overline{x}_1 \underbrace{\frac{S_{xy}}{S_{xx}}}_{\hat{\beta}_1}
+  \\ & = \overline{y} - \overline{x}_1 \hat{\beta}_1
+\end{align*}
+Therefore, the least squares in the matrix format gives the same
+estimation results for $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
+Note: The resulting line from least squares is
+\begin{align*}
+  m(x_1) & = \hat{\beta}_0 + \hat{\beta}_1 x_1 = (\overline{y} - \overline{x}_1 \hat{\beta}_1) + \hat{\beta}_1 x_1
+  \\ & = \overline{y} + \hat{\beta}_1 (x_1 - \overline{x}_1)
+\end{align*}
+\includegraphics[width=.5\textwidth]{11.pdf}
+\\ If $x_1 = \overline{x}_1$, we see that
+$$m(\overline{x}_1) = \overline{y}$$
+Thus the line \textbf{passes through} $\mathbf{(\overline{x}_1, \overline{y})}$. In comparison, the optimal line prediction (the
+regression line) goes through $(E[X], E[Y])$.
+\subsection{Bias, Variance and Standard Error of Parameter Estimators}
+\paragraph{Estimator vs Estimates} An estimator is a random variable
+and an estimate is a number (realized value of an estimator). E.g.\ we
+can potentially draw $n$ samples.
+$$X_1, X_2, \ldots, X_n$$
+from a distribution, if $X_i$'s have not been actually observed yet,
+then they can be viewed as random variables from that distribution.
+
+Therefore the sample mean
+\begin{align*}
+  \overline{X} & = \dfrac{X_1 + \ldots + X_n}{n}
+\end{align*}
+is also a random variable, \textbf{called an estimator} of the
+population mean $\mu$. But if the drawing has been conducted and the
+values of $X_i$'s have been realized as $X_i = x_i, i = 1, \ldots, n$,
+then the realized value
+\begin{align*}
+  \overline{x} & = \dfrac{X_1 + \ldots + X_n}{n}
+\end{align*}
+is an estimate of $\mu$
 \end{document}
