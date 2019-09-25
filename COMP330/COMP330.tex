@@ -1,7 +1,7 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
   lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
-  marvosym, stmaryrd, collectbox, wasysym}
+  marvosym, stmaryrd, collectbox, wasysym, algorithm}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \EnableBpAbbreviations
@@ -588,4 +588,139 @@ infinite set that is pairwise distinguishable by $B$.
 \\ \textbf{Proof}: $\forall n, 0^n \not \equiv_B 0^i, 0 \leq i \leq
 n-1$ because $\exists z =1^n$ such that $0^nz \in B$ but $0^iz \notin
 B, 0 \leq i \leq n-1$
+\section{09/24/19}
+\subsection{Regular Expressions}
+$R$ is a \textbf{regular expression} if $R$ is:
+\begin{enumerate}
+\item $a$ for some $a \in \Sigma$. Represents language $\left\{a\right\}$
+\item $\varepsilon$, represents language $\left\{\varepsilon\right\}$
+\item $\emptyset$, represents the empty language
+\item $R_1 \cup R_2$, $R_1$ and $R_2$ are regular expressions
+\item $R_1 \circ R_2, R_1, R_2$ are regular expression
+\item $R_1^*, R_1$ regular
+\item $R_1^+ = R_1 \circ R_1^*$
+\end{enumerate}
+\paragraph{Examples}
+\begin{itemize}
+\item $0^*10^* = \left\{w \mid w \text{ contains a single } 1\right\}$
+\item $\Sigma^* 1 \Sigma^* = \left\{w \mid w \text{ has at least one }
+  1\right\}$
+\item $\Sigma^* 001 \Sigma^* = \left\{w \mid w \text{ contains the
+      string } 001 \text{ as a substring}\right\}$
+\item $1^*(01^+)^* = \left\{w \mid \text{ every } 0 \text{ in } w
+    \text{ is followed by at least one } 1\right\}$
+\item $(\Sigma \Sigma)^* = \left\{w \mid w \text{ is a string of even
+      length}\right\}$
+\item $(\Sigma \Sigma \Sigma)^* = \left\{w \mid \text{the length of }
+    w \text{ is a multiple of three}\right\}$
+\item $01 \cup 10 = \left\{01, 10\right\}$
+\item $0\Sigma^*0 \cup 1 \Sigma^* 1 \cup 0 \cup 1 = \left\{w \mid w
+    \text{ starts and ends with the same symbol}\right\}$
+\item $(0 \cup \varepsilon)1^* = 01^* \cup 1^*$
+\item $(0 \cup \varepsilon)(1 \cup \varepsilon) = \left\{\varepsilon,
+    0, 1, 01\right\}$
+\end{itemize}
+Special cases:
+\begin{itemize}
+\item $1^* \emptyset$, concatenating the empty set to any set gives
+  the empty set.
+\item $\emptyset^* = \left\{\varepsilon\right\}$, $0$ empty sets gives
+  you the empty string.
+\end{itemize}
+\paragraph{Results}
+A language is regular $\iff$ some regular expression describes it.
+\\ Language is described by a regular expression $\implies$ is it
+regular.
+\\ Language is regular $\implies$ it is described by a regular
+expression.
+\paragraph{Proofs}
+\subparagraph{Regular expressions generate regular languages}
+Let $R_A$ be a regular expression generating $L_A$.
+\begin{itemize}
+\item
+If $R_A$ is a symbol ``$a$'', then use a simple automaton that just
+accepts $a$.
+\item
+If $R_A$ is ``$\varepsilon$'', then use the automaton that only accepts
+its initial state.
+\item
+  If $R_A$ is ``$\emptyset$'', don't accept anything.
+\item If $R_A$ is $R_1 \cup R_2$, then recursively use $N_1$ and $N_2$
+  s.t.\ $L(N_1) = L(R_1)$ and $L(N_2) = L(R_2)$.
+\item If $R_A$ is $R_1 \circ R_2$, then recursively use $N_1$ and $N_2$
+  s.t.\ $L(N_1) = L(R_1)$ and $L(N_2) = L(R_2)$.
+\item If $R_A$ is $R^*$, then recursively use $N$
+  s.t.\ $L(N) = L(R)$.
+\end{itemize}
+(The N's are obtained from Kleene's theorem)
+\subparagraph{Generalized NFAs}
+Instead of just having symbols for transitions, allow transitions to
+have regular expressions on them. For convenience, we assume the
+following conditions for a GNFA:
+\begin{itemize}
+\item Start state has transitions going to every other state (except accept), but no arrows
+  coming in.
+\item Only a single accept state with arrows coming in (from all
+  states except start), no arrows going out
+\item Except for start and accept, there is one every going from every
+  state to every other state and a self-loop. If there is no
+  transition between two states, you can just label that arrow with
+  the empty set, disallowing you to use it (often omitted from GNFAs
+  for clarity, but formally it is required).
+\end{itemize}
+Formally, a GNFA is a $(Q, \Sigma, \delta, q_{start}, q_{accept})$
+with:
+\begin{itemize}
+\item $Q$ is finite set of states
+\item $\Sigma$ is input alphabet
+\item $\delta: (Q - \left\{q_{accept}\right\}) \times (Q -
+  \left\{q_{start}\right\}) \to \mathcal{R}$(regular exp) is the transition
+  function
+\item $q_{start}$ is start
+\item $q_{accept}$ is accept state
+\end{itemize}
+Given a GNFA and $w = w_1w_2 \ldots w_n (n \geq 0)$ be a string with
+$w_i \in \Sigma^*$ (sub-strings), then $G$ accepts $w$ if $\exists s_0,s_1, \ldots,
+s_n$ s.t.\
+\begin{itemize}
+\item $s_0 = q_{start}$
+\item $w_i \in L(\delta(s_{i-1}, s_i)), i = 1, \ldots, n$
+\item $s_n = q_{accept}$
+\end{itemize}
+\subparagraph{Converting DFA to Regular Expression}
+Take a DFA, construct a GNFA (increase states by $2$ for start and
+accept), then keep reducing the amount of states until a $2$-state
+GNFA which will be the same as the regular expression. Reducing the
+number of states by $1$ is called \textbf{ripping} a state (only rip
+internal nodes, never start or accept). Label a node $q_{rip}$ and
+then consider every other pair of nodes $q_i$ and $q_j$ and make edges
+go directly from $q_i$ to $q_j$.
+
+Formally:
+\begin{algorithm}[H]
+  $CONVERT(G)$
+  \begin{algorithmic}
+    \State $k =$ number of states of $G$
+    \If {$k = 2$}
+    \State $G$ consists of a start state, accept state
+    and single arrow connecting them labeled with regular expression
+    $R$. Return $R$.
+    \EndIf
+    \If {$k > 2$}
+    \State Select any state $q_{rip} \in Q \neq q_{start}$ and
+    $q_{rip} \neq q_{accept}$ and let $G'$ be the GNFA $(Q', \Sigma,
+    \delta', q_{start},q_{accept})$ with
+    $$Q' = Q - \left\{q_{rip}\right\}$$
+    \State and for any $q_i \in Q' - \left\{q_{accept}\right\}$ and
+    any $q_j \in Q' - \left\{q_{start}\right\}$
+    $$\delta'(q_i,q_j) = (R_1)(R_2)^*(R_3)\cup (R_4)$$
+    \State With $R_1 = \delta(q_i, q_{rip}), R_2 = \delta(q_{rip},
+    q_{rip}), R_3 = \delta(q_{rip},q_j), R_4 = \delta(q_i,q_j)$
+    \EndIf
+    \State Return $CONVERT(G')$
+  \end{algorithmic}
+\end{algorithm}
+
+For any GNFA $G$, $CONVERT(G)$ is equivalent (corresponds to same language) to $G$. We prove this by
+induction on $k$, the number of states of the GNFA.
 \end{document}
