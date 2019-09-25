@@ -759,5 +759,70 @@ then the realized value
 \begin{align*}
   \overline{x} & = \dfrac{X_1 + \ldots + X_n}{n}
 \end{align*}
-is an estimate of $\mu$
+is an estimate of $\mu$.
+
+Looking at the \href{https://yangyi.shinyapps.io/simulation/}{SLR
+  simulation} on the course website, one can get a good idea as to how
+the estimated $\beta$'s fluctuate with each different sample taken.
+\\ \noindent \rule{\textwidth}{0.5pt}
+We are going to prove the following statements:
+\begin{align*}
+  E[\hat{\beta}_1] & = \beta_1 & E[\hat{\beta}_0] & = \beta_0
+  \\ Var(\hat{\beta}_1) & = \frac{\sigma^2}{S_{xx}} & Var(\hat{\beta}_0) & = \sigma^2 \left(\frac{1}{n} + \frac{\overline{x_1}^2}{S_{xx}}\right)
+\end{align*}
+First we find that the estimates
+\begin{align*}
+  \hat{\beta}_1 & = \frac{S_{xy}}{S_{xx}} = \dfrac{\sum_{i=1}^n (x_{1i} - \overline{x}_1)y_i}{S_{xx}} = \sum_{i=1}^n \underbrace{\dfrac{x_{1i} - \overline{x}_1}{S_{xx}}}_{= c_i}y_{i}
+  \\ \sum_{i=1}^n c_i y_i
+\end{align*}
+With $c_i = \frac{(x_{1i} - \overline{x}_1)}{S_{xx}}, \sum_{i=1}^n c_i
+= 0$. Similarly:
+\begin{align*}
+  \hat{\beta}_0 & = \overline{y} - \overline{x}_1 \hat{\beta}_1 = \overline{y} - \overline{x}_1 \sum_{i=1}^n c_i y_i
+  \\ & = \frac{1}{n} \sum_{i=1}^n y_i - \overline{x}_i \sum_{i=1}^nc_iy_i = \sum_{i=1}^{n} \underbrace{\left(\frac{1}{n} - \overline{x}_i c_i\right)}_{b_i} y_i
+\end{align*}
+We find that both \textbf{estimates} are linear combinations of
+$y_i$'s. The corresponding \textbf{estimators} of $\beta_0, \beta_1$
+are formed by replacing the observed $y_i$ by the random variable
+$Y_i$ in the previous formulas i.e.\
+\begin{align*}
+  \hat{\beta}_1 & = \sum_{i=1}^n c_i Y_i
+  \\ \hat{\beta}_0 & = \sum_{i=1}^n \left(\frac{1}{n} - \overline{x}_1 c_i\right) Y_i
+\end{align*}
+In this section, we are going to treat $x_i$'s as \textbf{non-random}
+variables. This is appropriate in designated or controlled
+experiments, where we get to choose their values. But in randomized
+experiments or in observational studies, obviously $x_i$'s are not
+necessarily fixed. We will come back to how we get the
+\textbf{unconditional expectation and variance} with $x_i$'s as random
+variables.
+% Fix stuff here
+\begin{align*}
+  E[\hat{\beta}_1] & = E[\hat{\beta}_1 \mid x_{11}, \ldots, x_{1n}]
+                     = E \left[\sum_{i=1}^n c_i Y_i \mid x_{11},\ldots, x_{1n}\right]
+  \\ & = \sum_{i=1}^n c_i \underbrace{E \left[x_{11}, \ldots,
+       x_{1n}\right]}_{\text{if SLR assumptions true}}
+  \\ & = \sum_{i=1}^n c_i E \left[\beta_0 + \beta_1 x_{1i} + \underbrace{\varepsilon_i}_{=0} \mid x_{11}, \ldots, x_{1n}\right]
+  \\ & = \sum_{i=1}^n c_i (\beta_0 + \beta_1 x_{1l}) = \beta_0 \underbrace{\sum_{i = 1}^{n}c_i}_{= 0} + \beta_1 \underbrace{\sum_{i=1}^nc_i x_{1i}}_{=1} = \beta_1
+\end{align*}
+Since $\sum_{i=1}^n c_i = 0$ and
+\begin{align*}
+  \sum_{i=1}^n c_i x_{1i} & = \dfrac{\sum_{i=1}^n (x_{1i} - \overline{x}_1)x_{1i}}{S_{xx}} = \dfrac{\sum_{i=1}^n x_{1i}^2 - n (\overline{x}_1)^2}{S_{xx}} = 1
+\end{align*}
+Thus if we assume \textbf{the model is correct}; then $\beta_1$ is an
+\textbf{unbiased} estimator of $\beta_1$. Similarly,
+\begin{align*}
+  E[\hat{\beta}_0] & = \beta_0
+  \\ Var(\hat{\beta}_1) & = Var(\hat{\beta}_1 \mid x_{11}, \ldots, x_{1n}) = Var \left(\sum_{i=1}^n c_i Y_i \mid x_{11}, \ldots, x_{1n}\right)
+  \\ & = \sum_{i=1}^n c_i^2 Var \left(Y_i \mid x_{11}, \ldots, x_{1n}\right)
+\end{align*}
+Because $Y_i$'s are uncorrelated and since
+\begin{align*}
+  Var \left(Y_i \mid x_{11}, \ldots, x_{1n}\right) & = Var (\beta_0 + \beta_1 x_{1i} + \varepsilon \mid x_{11}, \ldots, x_{1n})
+  \\ & = \underbrace{Var (\beta_0 + \beta_1 x_{1i} \mid x_{11} , \ldots, x_{1n})}_{=0} + \underbrace{Var(\varepsilon \mid x_{11}, \ldots, x_{1n})}_{\sigma^2} = \sigma^2
+\end{align*}
+Consequently,
+\begin{align*}
+  Var(\hat{\beta}_1) & = \sigma^2 \sum_{i=1}^n c_i^2 = \sigma^2 \dfrac{\sum_{i=1}^n (x_{1i} - \overline{x}_1)^2}{S_{xx}^2} = \frac{\sigma^2}{S_{xx}}
+\end{align*}
 \end{document}
