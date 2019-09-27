@@ -200,6 +200,16 @@ use the point's $k$-nearest neighborhood, include extra points around $X =
 general. However in the higher dimension cases, a small neighborhood
 will include less points, so you have less points to average and might
 not be able to use this method.
+
+There are many possible forms for $E[Y \mid X = x]$, such as:
+\begin{align*}
+  E[Y \mid X = x] & = x^T \beta & \text{linear regression}
+  \\ E[Y \mid X = x] & = T_0(x) & \text{Regression tree}
+  \\ E[Y \mid X = x] & = \sum_{t=1}^{T}T_{0,t}(x) & \text{Random Forest}
+  \\ E[Y \mid X = x] & = \sum_{i=1}^n \alpha_{ik}(x_i, k) &
+                                                            \text{support
+                                                            vector machine}
+\end{align*}
 \paragraph{$k$-nearest neighborhood (KNN)} (side topic, not directly related
 to linear regression, but very important, linear regression is the
 strictest model, whereas the nearest neighborhood model is the least
@@ -824,5 +834,74 @@ Because $Y_i$'s are uncorrelated and since
 Consequently,
 \begin{align*}
   Var(\hat{\beta}_1) & = \sigma^2 \sum_{i=1}^n c_i^2 = \sigma^2 \dfrac{\sum_{i=1}^n (x_{1i} - \overline{x}_1)^2}{S_{xx}^2} = \frac{\sigma^2}{S_{xx}}
+\end{align*}
+The variance of $\hat{\beta}_0$ is
+\begin{align*}
+  Var(\hat{\beta}_0) & = Var(\hat{\beta}_0 \mid x_{11}, \ldots, x_{1n}) = Var(\overline{Y} - \hat{\beta}_1 \overline{X}_1 \mid x_{11}, \ldots, x_{1n})
+  \\ & = Var(\overline{Y} \mid x_{11}, \ldots, x_{1n}) + \underbrace{\overline{x}_1^2 Var(\hat{\beta}_1)}_{\frac{\sigma^2}{S_{xx}}} - 2 \overline{x}_1 Cov(\overline{Y}, \hat{\beta}_1 \mid x_{11}, \ldots, x_{1n})
+  \\ & = \frac{\sigma^2}{n} + \overline{x}_1^2 Var(\hat{\beta}_1) + 0
+       \intertext{
+       Since $Var(Y_i) = \sigma^2, Var \left(\frac{Y_1 + \ldots + Y_n}{n}\right) =
+       \frac{1}{n^2}\sigma^2 + \ldots + \frac{1}{n^2}\sigma^2 = \frac{\sigma^2}{n}$
+       }
+       & = \sigma^2 \left(\frac{1}{n} + \frac{\overline{x}_1}{S_{xx}}\right)
+\end{align*}
+\paragraph{Unconditional-on-$X$ properties} So far we have only computed
+expectation and variance of $\hat{\beta}_1$ and $\hat{\beta}_0$
+conditioned on $x_{11}, \ldots, x_{1n}$ either because the $x$'s are
+not random or we're just interested in conditional inference. If we do
+care about unconditional properties, we need to find
+$E[\hat{\beta}_1]$ and $Var(\hat{\beta}_1)$, not just $E[\hat{\beta}_1
+\mid x_{11}, \ldots, x_{n1}]$ and $Var(\hat{\beta}_1 \mid x_{11},
+\ldots, x_{n1})$.
+
+Use ``the law of total expectation''.
+\begin{align*}
+  E[\hat{\beta}_1] & = E_X [\underbrace{E_{Y \mid X} [\hat{\beta}_1 \mid X_{11}, \ldots, X_{1n}]}_{\beta_1}]
+  \\ & = E_X [\beta_1] = \beta_1
+\end{align*}
+That is the estimator is \textbf{unconditionally unbiased}. To get the
+unconditional variance, use ``the law of total variance''.
+\begin{align*}
+  Var(\hat{\beta}_1) & = E_X[Var(\hat{\beta}_1 \mid X_{11}, \ldots, X_{n1})] + Var_X[E_{Y \mid X} [\hat{\beta}_1 \mid X_{11}, \ldots, X_{1n}]]
+  \\ & = E_X \left[\frac{\sigma^2}{S_{xx}}\right] + \underbrace{Var(\beta_1)}_{=0}
+  \\ & = \sigma^2 E_X \left[\frac{1}{S_{xx}}\right]
+\end{align*}
+\subsection{Bias, variance of parameter estimators in matrix format}
+Recall that if we denote
+\begin{align*}
+  Y & =
+      \begin{bmatrix}
+        Y_1 \\ \vdots \\ Y_n
+      \end{bmatrix}, X =
+  \begin{bmatrix}
+    1 & X_{11}
+    \\ \vdots & \vdots
+    \\ 1 & X_{1n}
+  \end{bmatrix}, \beta =
+           \begin{bmatrix}
+             \beta_0 \\ \beta_1
+           \end{bmatrix}, \varepsilon =
+  \begin{bmatrix}
+    \varepsilon_1
+    \\ \vdots
+    \\ \varepsilon_n
+  \end{bmatrix}
+  \intertext{Thus we can rewrite the SLR model}
+  Y_i & = \beta_0 + \beta_1 X_{1i} + \varepsilon_i, i = 1, \ldots, n
+        \intertext{as}
+        Y & = X\beta + \varepsilon
+            \intertext{where}
+            E[\varepsilon] & = 0 \text{ (vector)} \implies E[\varepsilon_i] = 0, i = 1, \ldots, n
+  \\ Var(\varepsilon) & =
+                        \begin{pmatrix}
+                          Var(\varepsilon_1) & Cov(\varepsilon_1, \varepsilon_2)
+                          \\ Cov(\varepsilon_2, \varepsilon_1) & \ddots
+                          \\ & & Var(\varepsilon_n)
+                        \end{pmatrix}
+                                 = \sigma^2 I
+                                 \intertext{Since $Var(\varepsilon_i)
+                                 =\sigma^2$, $Cov(\varepsilon_j,
+                                 \varepsilon_k) = 0$}
 \end{align*}
 \end{document}
