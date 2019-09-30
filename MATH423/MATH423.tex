@@ -902,6 +902,110 @@ Recall that if we denote
                                  = \sigma^2 I
                                  \intertext{Since $Var(\varepsilon_i)
                                  =\sigma^2$, $Cov(\varepsilon_j,
-                                 \varepsilon_k) = 0$}
+                                 \varepsilon_k) = 0, j \neq k$}
 \end{align*}
+We make the following observations:
+\begin{itemize}
+\item The true regression function is linear
+  \begin{align*}
+    E[Y \mid X] & = X \beta
+                  \intertext{in the regular format, it is just}
+                  E[Y_i \mid X_i = x_i] & = \beta_0 + \beta_1 x_i,\ i=1, \ldots, n
+  \end{align*}
+\item $Y$ has constant variance
+  \begin{align*}
+    Var(Y \mid X) & = \sigma^2 I,\ I = I_{n}
+                    \intertext{Since}
+                    Var(Y \mid X) & =
+                                    \begin{bmatrix}
+                                      Var(Y_1 \mid X) & Cov(Y_1, Y_2 \mid X) & \ldots & Cov(Y_1, Y_n \mid X)
+                                      \\ Cov(Y_2, Y_1 \mid X) & Var(Y_2 \mid X) & & \vdots
+                                      \\ \vdots & \ddots & \ddots
+                                      \\ Cov(Y_n, Y_1 \mid X) & \ldots & \ldots & Var(Y_n \mid X)
+                                    \end{bmatrix} = \sigma^2I
+  \end{align*}
+  This implies
+  \begin{align*}
+    Var(Y_i \mid X_i = x_i) & = \sigma^2,\ i=1, \ldots, n
+    \\ Cov(Y_i, Y_j \mid X_i = x_i, X_j = x_j) & = 0,\ i \neq j
+  \end{align*}
+\end{itemize}
+Now we can work on $\hat{\beta}$. We have that for the estimators
+\begin{align*}
+  \hat{\beta} & = \underbrace{(X^TX)^{-1}X^T}_{A}Y = A Y
+                \intertext{Therefore}
+                E[\hat{\beta} \mid X] & = E[AY \mid X]
+                                        \intertext{Since $A$ consists
+                                        only of terms of $X$, if we
+                                        condition on $X$, then $A$ can
+                                        be viewed as a constant}
+  & = AE[Y \mid X] = (X^TX)^{-1}X^T E[Y \mid X]
+  \\ & = \underbrace{(X^TX)^{-1}X^TX}_{I}\beta = \beta
+\end{align*}
+This is just $E[\hat{\beta}_0 \mid X] = \beta_0, E[\hat{\beta}_1 \mid
+X] = \beta_1$.
+
+For the variance:
+\begin{align*}
+  Var[\hat{\beta} \mid X] & = Var[AY \mid X]
+                            \intertext{For scalars, we have $Var(\alpha
+                            Y) = \alpha^2 Var(Y)$. For matrices, we have:}
+  &= A \underbrace{Var[Y \mid X]}_{\sigma^2 I} A^T
+    = A \sigma^2 I A^T
+    = \sigma^2 A A^T
+  \\ & = \sigma^2 ((X^TX)^{-1}X^T)((X^TX)^{-1}X^T)^{T}
+       = \sigma^2 ((X^TX)^{-1}X^T)(X ((X^TX)^{-1})^{T})
+  \\ & = \sigma^2 (X^TX)^{-1}X^TX ((X^TX)^{-1})^T
+       = ((X^TX)^{-1})^T \stackrel{\text{$X^TX$ symmetric}}{=} (X^TX)^{-1}
+  \\ &
+       = \sigma^2 (X^TX)^{-1}
+  \\ (X^TX)^{-1} & = \dfrac{1}{n \sum_{i=1}^nx_{1i}^2 - \left(\sum_{i=1}^nx_{1i}\right)^2}
+                   \begin{bmatrix}
+                     \sum_{i=1}^n x_{1i}^2 & - \sum_{i=1}^n x_{1i}
+                     \\ -\sum_{i=1}^nx_{1i} & n
+                   \end{bmatrix}
+  \\ & = \dfrac{1}{n S_{xx}}
+                   \begin{bmatrix}
+                     \sum_{i=1}^n x_{1i}^2 & - \sum_{i=1}^n x_{1i}
+                     \\ -\sum_{i=1}^nx_{1i} & n
+                   \end{bmatrix}
+  \\ Var(\hat{\beta} \mid X) & =
+                               \begin{bmatrix}
+                                 Var(\hat{\beta}_0 \mid X) & Cov(\hat{\beta}_0, \hat{\beta}_1 \mid X)
+                                 \\ Cov(\hat{\beta}_1, \hat{\beta}_0 \mid X) & Var(\hat{\beta}_1 \mid X)
+                               \end{bmatrix}
+  \\ & = \sigma^2 (X^TX)^{-1}
+       \intertext{This verifies}
+  \\ Var(\hat{\beta}_0 \mid X) & = \dfrac{\sigma^2}{n} \dfrac{\sum_{i=1}^n x_{1i}^2}{S_{xx}} = \sigma^2 \left( \frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)
+  \\ Var(\hat{\beta}_1 \mid X) & = \dfrac{\sigma^2}{S_{xx}}
+  \\ Cov(\hat{\beta}_0, \hat{\beta}_1 \mid X) & = -\dfrac{\sigma^2 \sum_{i=1}^nx_{1i}}{n S_{xx}}
+\end{align*}
+\subsection{Residuals and additional properties}
+The \textbf{residual} is defined as
+\begin{align*}
+  e_i & = y_i - \hat{y}_i,\ \hat{y}_i = \hat{\beta}_0 - \hat{\beta}_1 x_{1i}
+\end{align*}
+\includegraphics[width=.6\textwidth]{12.pdf}\\
+Different from $\varepsilon$, this is the difference between the
+regression line and point $y_i$, not the difference between the
+regression line and the true regression line (that would be
+$\varepsilon$).
+\\ Recall that we have the normal equations:
+\begin{align*}
+  \frac{\partial{s}}{\partial{\beta_0}} & = \frac{1}{n}(-2) \sum_{i=1}^n (y_i - \underbrace{\hat{\beta}_0 - \hat{\beta}_1x_{1i}}_{\hat{y}_i}) = 0
+  \\ \frac{\partial{s}}{\partial{\beta_1}} & = \frac{1}{n}(-2) \sum_{i=1}^n (y_i - \underbrace{\hat{\beta}_0 - \hat{\beta}_1x_{1i}}_{\hat{y}_i})x_{1i} = 0
+\end{align*}
+which is
+\begin{align*}
+  \sum_{i=1}^n(y_i - \hat{y}_i) & = \sum_{i=1}^ne_i =  0
+  \\ \sum_{i=1}^n e_i x_{1i} & = 0
+\end{align*}
+Note:
+\begin{itemize}
+\item
+  $\sum_{i=1}^n(y_i - \hat{y}_i) = \sum_{i=1}^ne_i =  0$
+\item $\sum_{i=1}^n y_i = \sum_{i=1}^n \hat{y}_i$
+\item $\sum_{i=1}^n x_{1i}e_i = 0$
+\item $\sum_{i=1}^n \hat{y}_i e_i = 0$
+\end{itemize}
 \end{document}
