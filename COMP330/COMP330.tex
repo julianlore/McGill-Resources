@@ -836,14 +836,120 @@ non-regular $\implies A$ non-regular, where $A'$ is of the form:
 If $A$ regular, then $\exists p$ (pumping length) where if $s \in A$
 with length $\geq p$, then $s$ can be divided into three pieces, $s =
 xyz$, satisfying:
-\begin{itemize}
+\begin{enumerate}
 \item $\forall i \geq 0, xy^iz \in A$
 \item $|y| > 0$
 \item $|xy| \leq p$
-\end{itemize}
+\end{enumerate}
 We can pump this $y$ extra times or even remove it.
 
 Any language not satisfying the pumping lemma is non-regular. However,
 the converse \underline{does not hold}, there are some non-regular
 languages that satisfy the pumping lemma.
+\section{10/01/19}
+In order to prove the pumping lemma, we have to check if whenever
+$|xyz| > $ number of states, the three conditions of the pumping lemma
+holds.
+\paragraph{Proof of pumping lemma for all regular languages}
+Let $M$ be an automaton accepting $A$, $n$ is the number of states of
+$M$. Consider $p = n+1$. Since $p>n$, any sequence of states
+$s_0\ldots s_m$ accepting a string $w$ of length $m \geq p$ must
+contain two identical states $s_i = s_j$, $j > i$. Let $j$ be the
+smallest index satisfying such (first repetition of $s_i$).
+
+Define $x$ to be the string digested by $M$ from $s_0$ to $s_i$, $y$,
+the string digested from $s_i$ to $s_j$ and $z$ from $s_j$ to
+$s_m$. $j > i \implies |y| > 0$. Since $y$ makes a closed loop, it is
+clear that any number of repetitions ($n \geq 0$) will make no
+difference to being a member of $A$ or not.
+
+We get $s_0\ x_1s_1\ x_2s_2\ \ldots\ s_{i-1}x_i\ s_iy_1\ s_{i+1}y_2\
+s_{i+2}\ \ldots\ \ s_{j-1}y_{j-1}\ s_jz_1 \ldots$, where all states up to
+$s_{j-1}$ are distinct $\implies |xy| = i + j - i = j \leq p$. i.e.\
+the first repetition must come before $p$. This proves all three
+parts.
+
+\paragraph{Negation of the pumping lemma}
+Succinctly, in predicate form, the pumping lemma is:\\
+$A \in REG \implies \exists p\ \forall s \in A, |s| \geq p, \exists x
+y z = s$, s.t. $1,2,3 = true$. Now we can negate this, getting:
+\\ $\forall p\ \exists s \in A, |s| \geq p, \forall x y z = s$, s.t.\ $ [1
+\text{ or } 2 \text{ or } 3 = false] \implies A \notin REG$
+\\ We will reformulate (as the first property doesn't make much sense
+if the last two are false) and use it as follows:
+\\ $\forall p\ \exists s \in A, |s| \geq p, \forall x y z = s$, s.t.\
+$2,3=true\ [1 = false] \implies A \notin REG$
+\\ $\forall p \ \exists s \in A, |s| \geq p, \forall x y z = s$ s.t.\
+$|y| > 0, |xy| < p \implies \exists i \geq 0$ s.t.\ $s' = xy^iz \notin
+A \implies A \notin REG$
+\paragraph{Example usage}
+\begin{itemize}
+\item
+$B = \left\{0^n1^n \mid n \geq 0\right\}$ is non-regular.
+
+Assume $B$ regular. Then by pumping lemma $\exists p$ with all three
+properties satisfied. Take $n = p$ and $s = 0^p1^p \in B$. By 3, $xy$
+contains only zeros. Therefore if we pump even once to get $s' = xyyz
+= 0^q1^p$, it will contain more zeros than ones $(q > p) \implies s'
+\notin B$. Thus $B$ is non-regular.
+\item $F = \left\{ww \mid w \in \Sigma^*\right\}$ is non-regular.
+
+  Assume $F$ regular. Then by pumping lemma, $\exists p$ satisfying
+  the three properties. Take $s=0^p10^p1 \in F$. By 3, $xy$ contains
+  only zeros. Therefore if we pump even once to obtain $s' = xyyz$ it
+  will be of the form $0^q10^p1$, $(q > p)$ $\implies s' \notin F$. Thus $F$
+  is non-regular.
+\item $E = \left\{0^i11^j \mid i > j \geq 0\right\}$ non-regular.
+
+  Assume $E$ regular. Take $i = p+1, j = p$ and get $s = 0^{p+1}1^p
+  \in E$. By 3, $xy$ contains only zeros. If we pump up to get
+  $s'=xyyz = 0^k1^i, k > i$, but it will still contain more zeros than
+  ones, which is still in $E$. However, if we \underline{pump down} with $s'' = xz
+  = 0^i1^i$, we no longer have that there are more zeros than ones, so
+  $s'' \notin E$. So $E$ is non-regular.
+\item $D = \left\{1^{n^2} \mid n \geq 0\right\}$ is non-regular (unary
+  language, only contains one symbol).
+
+  Assume $D$ is regular. Take $n = p$ and $s = 1^{p^2}$. Let $i = |y|
+  \leq p$. If we pump up we get $s' = xyyz = 1^{p^2 + i}$. It is
+  impossible that both $p^2$ and $p^2 + i$ be perfect squares, as the
+  next square after $p$ is:
+  $$(p + 1)^2 = p^2 + 2p + 1 > p^2 + p + 1 > p^2 + i$$
+  Proving that $s' \notin D$. So $D$ is non-regular.
+\end{itemize}
+Remember that if a language satisfies the pumping lemma, it isn't
+necessarily regular, non-regular languages can satisfy the pumping
+lemma.
+\subsection{Context-Free Grammars}
+Consider the following grammar $G_1$ with the substitution rules:
+\begin{itemize}
+\item $A \to 0A1$
+\item $A \to B$
+\item $B \to \#$
+\end{itemize}
+The following is derivation of the string ``$000\#111$'':
+$$A \implies 0A1 \implies 00A11 \implies 000A111 \implies 000B111
+\implies 000\# 111$$
+\paragraph{Formal definition of a CFG}
+A CFG is a 4-tuple $(V, \Sigma, R, S)$ with:
+\begin{itemize}
+\item $V$, finite set of variables: $A, B, C, \langle TERM \rangle, \langle EXPR
+  \rangle$
+\item $\Sigma$, finite set, alphabet (of terminals), disjoint from $V$: $0, 1, \#$
+\item $R$, finite substitution rules, each rule has a variable, string
+  of variables and terminals: $A \to 0A1, \langle EXPR \rangle \to \langle
+  TERM \rangle$
+\item $S \in V$, start variable: $A$ (left-hand side of first substitution rule)
+\end{itemize}
+% Parse trees
+\paragraph{Definition of a CFL}
+If $u, v, w$ are strings of variables and terminals and $A \to w$ is a
+rule of the grammar, we say $uAv$ \underline{yields} $uwv$, written as
+$uAv \implies uwv$.
+
+We say $u$ \underline{derives} v ($u \stackrel{*}{\implies} v$) if $u
+= v$ or if $u \implies u_1 \implies u_2 \implies \ldots \implies u_k
+\implies v, k \geq 0$.
+
+The language of a grammar, $G$ is $\left\{w \in \Sigma^* \mid S \stackrel{*}{\implies}w\right\}$
 \end{document}
