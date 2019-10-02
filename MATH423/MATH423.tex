@@ -1008,4 +1008,110 @@ Note:
 \item $\sum_{i=1}^n x_{1i}e_i = 0$
 \item $\sum_{i=1}^n \hat{y}_i e_i = 0$
 \end{itemize}
+The last equation is less obvious. To show it, we see that
+\begin{align*}
+  \sum_{i=1}^n \hat{y}_i e_i & = \sum_{i=1}^n (\hat{\beta}_0 + \hat{\beta}_1 x_{1i})e_{i} = \hat{\beta}_0 \underbrace{\sum_{i=1}^n e_i}_{=0} + \hat{\beta}_1 \underbrace{\sum_{i=1}^n x_{1i} e_i}_{=0}
+  = 0
+\end{align*}
+\section{Estimating of $\sigma^2$}
+Recall in the SLR:
+\begin{align*}
+  Y & = \beta_0 + \beta_1 X_1 + \varepsilon & E[\varepsilon] & = 0 & Var(\varepsilon) & = \sigma^2
+\end{align*}
+\begin{enumerate}
+\item $\sigma^2$ captures the additional randomness in $y$.
+\item $\sigma^2$ is in $Var(\hat{\beta}_0 \mid X)$ and
+  $Var(\hat{\beta}_1 \mid X)$.
+\end{enumerate}
+\begin{align*}
+  Var(\hat{\beta}_0 \mid X) & = \dfrac{\sigma^2}{n} \dfrac{\sum_{i=1}^n x_{1i}^2}{S_{xx}} = \sigma^2 \left( \frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)
+  \\ Var(\hat{\beta}_1 \mid X) & = \dfrac{\sigma^2}{S_{xx}}
+  \\ Cov(\hat{\beta}_0, \hat{\beta}_1 \mid X) & = -\dfrac{\sigma^2 \sum_{i=1}^nx_{1i}}{n S_{xx}}
+\end{align*}
+\paragraph{How to estimate $\sigma^2$?} Although $\sigma^2$ is not
+used to compute $\hat{\beta}_0$ and $\hat{\beta}_1$, it is used to
+understand the statistical properties of $\hat{\beta}_0$ and
+$\hat{\beta}_1$.
+
+We know that under SLR, it is easy to show that
+\begin{align*}
+  E[(Y - \beta_0 - \beta_1 X)^2] & = E[\varepsilon^2] = Var(\varepsilon) + (E[\varepsilon])^2
+                                   = \sigma^2 + 0 = \sigma^2
+\end{align*}
+Idea: replace
+\begin{itemize}
+\item $Y$ with $y_i, i =1, \ldots, n$
+\item $X_1$ with $x_{1i}, i = 1, \ldots, n$
+\item $\beta_0$ with $\hat{\beta}_0$
+\item $\beta_1$ with $\hat{\beta}_1$
+\item $E$ with $\frac{1}{n} \sum_{i=1}^n$
+\end{itemize}
+To replace $E[(Y - \beta_0 - \beta_1 X_1)^2]$ with
+$\frac{1}{n-2}\underbrace{\sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{beta}_1
+x_{1i})^2}_{SS_{Res}}$.
+\\ Let
+\begin{align*}
+  SS_{Res} & = \sum_{i=1}^n e_i^2 = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \underbrace{\sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1x_{1i})^2}_{S(\hat{\beta}_0, \hat{\beta}_1)}
+\end{align*}
+\begin{itemize}
+\item ``Residual sum of squares''
+\item Measures aggregate miss-fit of the least square line
+\end{itemize}
+\includegraphics[width=.6\textwidth]{13.pdf}
+\\ In this case, $SS_{Res} = A_1 + A_2 + A_3$. We see that the line
+from least squares would minimize this.
+
+The \textbf{unbiased estimator} for $\sigma^2$ is
+\begin{align*}
+  \hat{\sigma}^2 & = \dfrac{SS_{Res}}{n-2} = MS_{Res}
+\end{align*}
+$MS_{Res}$ is called the residual mean square.
+\\ Note: $MSE$ vs $MS_{Res}$
+\begin{align*}
+  MSE & = \frac{1}{n} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_{1i})^2
+  \\ MS_{Res} & = \frac{1}{n-2} \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{1i})
+\end{align*}
+We notice $n-2$ vs $n$ and also that we must use $\hat{\beta}_0,
+\hat{\beta}_1$ from least squares, whereas for the $MSE$ it can be of
+any form. If $n$ is very small, $MS_{Res}$ can have a large bias.
+
+One can show that
+\begin{align*}
+  E[SS_{Res}] & = (n-2)\sigma^2
+  \\ E[\sigma^2] & = E \left[\frac{SS_{Res}}{n-2}\right] = \sigma^2
+                   \text{ (unbiased)}
+\end{align*}
+\paragraph{Alternative formula for $SS_{Res}$}
+\begin{align*}
+  SS_{Res} & = \underbrace{\sum_{i=1}^n y_i^2 - n(\overline{y}^2)}_{SS_T} - \hat{\beta}_1 S_{xy}
+             \intertext{Let}
+             SS_T & = \sum_{i=1}^n y_i^2 - n (\overline{y})^2 = \sum_{i=1}^n (y_i - \overline{y})^2
+\end{align*}
+$SS_T$ is called the ``\textbf{total sum of squares}''. Then
+\begin{align*}
+  SS_{Res} & = SS_T - \hat{\beta}_1 S_{xy}
+\end{align*}
+So we now know how to estimate $\hat{\beta}_0, \hat{\beta}_1,
+\hat{\sigma}^2$. We now want to compute $E[\sigma^2]$ and
+$Var(\sigma^2)$ like we already know for the other estimators. Note
+that the proofs for these are very long and you do not need to
+memorize the whole thing. Relevant parts (some intermediate steps will
+provide lots of intuition and be useful for other things) will be highlighted in the notes on the
+course website.
+\subsection{Statistical properties of $\hat{\sigma}^2$ in matrix
+  format}
+Note: the quantity $SS_{Res}$ is an observed version of the
+corresponding \textbf{random variable}
+\begin{align*}
+  \underbrace{\sum_{i=1}^n (y_i - \hat{y}_i)^2}_{SS_{Res}} & = (Y -
+                                                             \hat{Y})^T
+                                                             (Y -
+                                                             \hat{Y})
+                                                             = (Y - X
+                                                             \hat{\beta})^T
+                                                             (Y - X
+                                                             \hat{\beta})
+                                                             \text{ in
+                                                             matrix format}
+\end{align*}
 \end{document}
