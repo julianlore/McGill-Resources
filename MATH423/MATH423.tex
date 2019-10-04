@@ -1114,4 +1114,109 @@ corresponding \textbf{random variable}
                                                              \text{ in
                                                              matrix format}
 \end{align*}
+
+We want to show that $\hat{\sigma}^2$ is an unbiased estimator.
+
+Recall
+\begin{align*}
+  X\hat{\beta} & = \underbrace{X(X^TX)^{-1}X^T}_{H}Y = HY
+\end{align*}
+where $H$ is called the \textbf{hat matrix}
+$$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
+\begin{itemize}
+\item $H$ is a \textbf{symmetric} matrix
+  $$H^T = X^T(X^TX)^{-1}X^T = H$$
+\item $H$ is \textbf{idempotent}
+  \begin{align*}
+    H^T H & = HH = [X(X^TX)^{-1}X^T][X(X^TX)^{-1}X^T]
+            = X(X^TX)^{-1}X^TX(X^TX)^{-1}X^T
+    \\ & = X(X^TX)^{-1}X^T = H
+  \end{align*}
+\item $I_n - H$ is \textbf{idempotent}
+  \begin{align*}
+    I_n & =
+          \begin{pmatrix}
+            1 &&0
+            \\ & \ddots
+            \\ 0 & & 1
+          \end{pmatrix}_{n \times n}
+    \\ (I_n - H)^T (I_n-H) & = I_n^TI_n -I_n^T-H^T I_n + H^TH = I_n - H - H + H = I_n - H
+                             \intertext{Therefore}
+                             SS_{Res} & = (Y - X \hat{\beta}^T)(Y - X \hat{\beta})
+                                        = (Y - HY)^T (Y - HY)
+    \\ & = Y^T (I_n - H)^T(I_n - H)Y
+         = Y^T (I_n - H)Y
+  \end{align*}
+\end{itemize}
+  We need some tools to compute $E(SS_{Res})$. If $V$ is a random
+  vector
+  \begin{align*}
+    E[V] & = \mu & Var(V) & = \Sigma
+  \end{align*}
+  Then we have that for a constant matrix $A$ (non-random):
+  \begin{align*}
+    E[V^TAV] & = trace(A \Sigma) + \mu^T A \mu
+  \end{align*}
+  Now we have $E[Y \mid X] = X \beta$ and $Var(Y \mid X) = \sigma^2
+  I_n$.
+  \begin{align*}
+    E[SS_{Res} \mid X] & = E[\underbrace{Y^T}_{V^T} \underbrace{(I_n - H)}_A \underbrace{Y}_V \mid X] = trace((\underbrace{I_n - H}_A)\underbrace{\sigma^2 I_n}_{\Sigma}) + \underbrace{(X \beta)^T}_{\mu^T} \underbrace{(I_n - H)}_A \underbrace{(X \beta)}_\mu
+    \\ & = \sigma^2 trace(I_n - H) + \beta^T X^T (I_n - H) X \beta
+    \\ & = \sigma^2 trace (I_n - H) + \underbrace{\beta^T X^T (I_ - H)
+         X\beta}_{= 0, \text{ see below}}
+    \\ & = \sigma^2 trace (I_n) - \sigma^2 trace(H) + 0
+         = \sigma^2 (n - trace(H))
+         \intertext{Since}
+         X^T(I_n - H)X & = X^T X - X^T H X
+                         = X^T X - X^X(X^TX)^{-1} X^T X
+    \\ & = X^TX - X^TX = 0
+         \intertext{We know $trace (ABC) = trace(CAB) = trace(BCA)$
+         (if dimension permits).}
+         trace(H) & = trace(X(X^TX)^{-1}X^T) = trace(X^TX(X^TX)^{-1})
+    \\ & = trace(I_p) = p
+         \intertext{where $\mathbf{p = 2}$ \textbf{for simple linear
+         regression}. The dimension of the matrix has changed from
+         swapping terms, however because the matrix with
+         multiplication swapped still exists, this is valid (dimension
+         would not permit invalid multiplications, but it does allow
+         changing the final dimension of the matrix)}
+         E(SS_{Res} \mid X) & = E[Y^T (I_n - H)Y \mid X] = \sigma^2 (n-p) = \sigma^2 (n-2)
+                              \intertext{Thus}
+                              E[\hat{\sigma}^2 \mid X] & = E \left[\frac{SS_{Res}}{n-2} \mid X\right] = E \left[\frac{Y^T(I_n - H)Y}{n-2} \mid X\right]
+    \\ & = \frac{\sigma^2 (n-2)}{n-2} = \sigma^2
+  \end{align*}
+  Note this is only true if our assumptions hold.
+
+  \subsection{Use $\hat{\sigma^2}$ to estimate $Var(\hat{\beta}_0)$
+    and $Var(\hat{\beta}_1)$}
+  We can use $\hat{\sigma}^2$ to estimate $Var(\hat{\beta}_0 \mid X)$
+  and $Var(\hat{\beta}_1 \mid X)$. Recall that the variance of
+  $\hat{\beta}$ is
+  \begin{align*}
+    Var(\hat{\beta} \mid X) & =
+                              \begin{pmatrix}
+                                Var(\hat{\beta}_0 & Cov(\hat{\beta}_0, \hat{\beta}_1 \mid X)
+                                \\ Cov(\hat{\beta}_1, \hat{\beta}_0 \mid X) & Var(\hat{\beta}_1 \mid X) = \sigma^ 2(X^TX)^{-1}
+                              \end{pmatrix} = \sigma^2 (X^TX)^{[-1]}
+                                                                              \intertext{The
+                                                                              diagonal
+                                                                              entries
+                                                                              can
+                                                                              be
+                                                                              written
+                                                                              as}
+                                                                              Var(\hat{\beta}_0 \mid X) & = \frac{\sigma^2}{n} \frac{\sum_{i=1}^n x_{1i}^2}{S_{xx}} = \sigma^2 \left(\frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)
+    \\ Var(\hat{\beta}_1 \mid X) & = \frac{\sigma^2}{S_{xx}}
+                                   \intertext{The standard errors (se)
+                                   of the estimators are the square
+                                   root of the variance.}
+                                   SE(\hat{\beta}_0) & = \sqrt{Var(\hat{\beta}_0 \mid X)}
+                                                       = \sqrt{\sigma^2 \left(\frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)}
+    \\ SE(\hat{\beta}_1) & = \sqrt{Var(\hat{\beta}_1 \mid X)} = \sqrt{\frac{\sigma^2}{S_{xx}}}
+                           \intertext{Replace $\sigma^2$ with known
+                           $\hat{\sigma}^2$. Then we get
+                           \textbf{estimated standard error (ese)}}
+                           ese(\hat{\beta}_0) & = \sqrt{\hat{\sigma}^2 \left(\frac{1}{n} + \frac{\overline{x}_1}{S_{xx}}\right)}
+    \\ ese(\hat{\beta}_1) & = \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
+  \end{align*}
 \end{document}
