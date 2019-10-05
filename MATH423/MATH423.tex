@@ -276,9 +276,9 @@ linear in $X$?
 To minimize the mean squared error of $m(x) = \beta_0 + \beta_1 x$
 \begin{align*}
   (\beta_0^*, \beta_1^*) & = \argmin_{(\beta_0, \beta_1)} E_{X, Y}[(Y - \underbrace{(\beta_0 + \beta_1 x)}_{m(x)})^2]
-  \\ E[(Y - (\beta_0 + \beta_1 x))^2] & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 E[XY] + E [ (\beta_0 + \beta_x)]
-  \\ & = E [Y^2] - \beta_0 E[Y] -  \beta_1 (Cov (X,Y)) + E[X]E[Y] + \beta_0^2 + 2\beta_0\beta_1 E[X] + \beta_1^2 E[X]
-  \\ & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 (Cov(X,Y)) + E[X]E[Y] + \beta_0^2 + 2 \beta_0 \beta_1 E[X]
+  \\ E[(Y - (\beta_0 + \beta_1 x))^2] & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 E[XY] + E [ (\beta_0 + \beta_1 x)^2]
+  \\ & = E [Y^2] - 2\beta_0 E[Y] -  2\beta_1 (Cov (X,Y) + E[X]E[Y]) + \beta_0^2 + 2\beta_0\beta_1 E[X] + \beta_1^2 E[X]
+  \\ & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 (Cov(X,Y) + E[X]E[Y]) + \beta_0^2 + 2 \beta_0 \beta_1 E[X]
   \\ & + \beta_1^2 (Var(X) + E[X]^2)
 \end{align*}
 Now to get the optimal values, we take the derivative:
