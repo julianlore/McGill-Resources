@@ -277,7 +277,7 @@ To minimize the mean squared error of $m(x) = \beta_0 + \beta_1 x$
 \begin{align*}
   (\beta_0^*, \beta_1^*) & = \argmin_{(\beta_0, \beta_1)} E_{X, Y}[(Y - \underbrace{(\beta_0 + \beta_1 x)}_{m(x)})^2]
   \\ E[(Y - (\beta_0 + \beta_1 x))^2] & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 E[XY] + E [ (\beta_0 + \beta_1 x)^2]
-  \\ & = E [Y^2] - 2\beta_0 E[Y] -  2\beta_1 (Cov (X,Y) + E[X]E[Y]) + \beta_0^2 + 2\beta_0\beta_1 E[X] + \beta_1^2 E[X]
+  \\ & = E [Y^2] - 2\beta_0 E[Y] -  2\beta_1 (Cov (X,Y) + E[X]E[Y]) + \beta_0^2 + 2\beta_0\beta_1 E[X] + \beta_1^2 E[X^2]
   \\ & = E[Y^2] - 2 \beta_0 E[Y] - 2 \beta_1 (Cov(X,Y) + E[X]E[Y]) + \beta_0^2 + 2 \beta_0 \beta_1 E[X]
   \\ & + \beta_1^2 (Var(X) + E[X]^2)
 \end{align*}
@@ -783,7 +783,7 @@ We are going to prove the following statements:
 First we find that the estimates
 \begin{align*}
   \hat{\beta}_1 & = \frac{S_{xy}}{S_{xx}} = \dfrac{\sum_{i=1}^n (x_{1i} - \overline{x}_1)y_i}{S_{xx}} = \sum_{i=1}^n \underbrace{\dfrac{x_{1i} - \overline{x}_1}{S_{xx}}}_{= c_i}y_{i}
-  \\ \sum_{i=1}^n c_i y_i
+  = \sum_{i=1}^n c_i y_i
 \end{align*}
 With $c_i = \frac{(x_{1i} - \overline{x}_1)}{S_{xx}}, \sum_{i=1}^n c_i
 = 0$. Similarly:
@@ -810,10 +810,10 @@ variables.
 \begin{align*}
   E[\hat{\beta}_1] & = E[\hat{\beta}_1 \mid x_{11}, \ldots, x_{1n}]
                      = E \left[\sum_{i=1}^n c_i Y_i \mid x_{11},\ldots, x_{1n}\right]
-  \\ & = \sum_{i=1}^n c_i \underbrace{E \left[x_{11}, \ldots,
+  \\ & = \sum_{i=1}^n c_i \underbrace{E \left[Y_i \mid x_{11}, \ldots,
        x_{1n}\right]}_{\text{if SLR assumptions true}}
   \\ & = \sum_{i=1}^n c_i E \left[\beta_0 + \beta_1 x_{1i} + \underbrace{\varepsilon_i}_{=0} \mid x_{11}, \ldots, x_{1n}\right]
-  \\ & = \sum_{i=1}^n c_i (\beta_0 + \beta_1 x_{1l}) = \beta_0 \underbrace{\sum_{i = 1}^{n}c_i}_{= 0} + \beta_1 \underbrace{\sum_{i=1}^nc_i x_{1i}}_{=1} = \beta_1
+  \\ & = \sum_{i=1}^n c_i (\beta_0 + \beta_1 x_{1i}) = \beta_0 \underbrace{\sum_{i = 1}^{n}c_i}_{= 0} + \beta_1 \underbrace{\sum_{i=1}^nc_i x_{1i}}_{=1} = \beta_1
 \end{align*}
 Since $\sum_{i=1}^n c_i = 0$ and
 \begin{align*}
@@ -1219,4 +1219,87 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
                            ese(\hat{\beta}_0) & = \sqrt{\hat{\sigma}^2 \left(\frac{1}{n} + \frac{\overline{x}_1}{S_{xx}}\right)}
     \\ ese(\hat{\beta}_1) & = \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
   \end{align*}
+  \section{Inference}
+  Sampling distribution of $\hat{\beta}_0, \hat{\beta}_1$ and
+    $\hat{\sigma}^2$.
+
+    Recall that we derived
+    \begin{align*}
+      E[\hat{\beta}_1] & = \beta_1, & Var(\hat{\beta}_1) & = \frac{\sigma^2}{S_{xx}}, & E[\hat{\beta}_0] & = \beta_0, & Var(\hat{\beta}_0) & = \sigma^2 \left(\frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right), & E[\hat{\sigma}^2] & = \sigma^2
+    \end{align*}
+    These results rely on the simple linear regression assumptions
+    $E[\varepsilon \mid X_1 = x_1] =0$ and $Var(\varepsilon \mid X_1 =
+    x_1) = \sigma^2$. But we still do not know the distribution of the
+    estimator.
+
+    But if we make some additional assumptions about the SLR models,
+    i.e.\ Gaussian-Noise simple linear regression model in which we
+    further assume an exact distribution for $\varepsilon$. This in
+    turn can give us a conditional Gaussian distributed $Y$, which can
+    then give us the sampling distribution of $\hat{\beta}_1,
+    \hat{\beta}_0, \hat{\sigma}^2$. If $\varepsilon \sim N(0,
+    \sigma^2)$, then
+    \begin{align*}
+      \hat{\beta}_1 & \sim N\left(\beta_1, \frac{\sigma^2}{S_{xx}}\right) & \hat{\beta_0} & \sim N \left(\beta_0, \sigma^2 \left(\frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)\right)
+      \\ \frac{(n-2)\hat{\sigma}^2}{\sigma^2} & \sim \chi^2_{n-p}
+                                                       \text{ ($p = 2$
+                                                       for SLR)}
+    \end{align*}
+    \subsection{Gaussian-Noise simple linear regression model}
+    (will be a question on exam)
+    \\ Define \textbf{Gaussian-noise SLR} as
+    \begin{enumerate}
+    \item The distribution of $X$ is arbitrary (and perhaps $X$ is
+      even non-random).
+    \item $Y = \beta_0 + \beta_1 X_1 + \varepsilon$. If $X_1 = x_1$,
+      then $Y = \beta_0 + \beta_1 x_1 + \varepsilon$, for some
+      coefficients $\beta_0, \beta_1$ and some random noise
+      $\varepsilon$.
+    \item $\varepsilon \sim N(0, \sigma^2)$. Note that the original
+      SLR assumptions were $E[\varepsilon] =0, Var(\varepsilon) =
+      \sigma^2$. These still hold, however we have the additional
+      assumption that it is Gaussian distributed.
+    \item $\varepsilon$ is independent of $X_1$ and independent across observations.
+    \end{enumerate}
+    \begin{itemize}
+    \item These assumptions are strictly stronger than the simple linear
+      regression model. This means everything we have done so far
+      directly applies to GN-SLR.
+    \item First two assumptions are the same. The other assumptions
+      have been made stricter:
+      \\ $E[\varepsilon] = 0, Var(\varepsilon) = \sigma^2 \to
+      \varepsilon \sim N(0, \sigma^2)$.
+      \\ $\varepsilon$ is uncorrelated with $X_1 \to \varepsilon$ is
+      independent to $X_1$ (independence implies uncorrelated, but not
+      the other way around)
+    \end{itemize}
+    \subsection{Sampling distribution of $\frac{(\hat{\beta} -
+        \beta)}{se(\hat{\beta})}$ and $\frac{(\hat{\beta} -
+        \beta)}{ese(\hat{\beta})}$}
+    Since
+    \begin{align*}
+      \hat{\beta}_1 & \sim N \left(\beta_1, \underbrace{\frac{\sigma^2}{S_{xx}}}_{Var(\hat{\beta}_1)}\right) & \hat{\beta}_0 & \sim N \left(\beta_0, \underbrace{\sigma^2 \left(\frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)}_{Var(\hat{\beta}_0)}\right)
+    \end{align*}
+    We are now going to standardize the random variables into standard
+    normal distributions. We know
+    that for a random variable $Z$, if $Z \sim N(\mu, \sigma^2)$ then
+    \begin{align*}
+      \frac{Z - \mu}{\sigma} & \sim N(0,1)
+    \end{align*}
+    Using the same idea,
+    \begin{align*}
+      \frac{\hat{\beta}_1 - \beta_1}{se(\hat{\beta}_1)} & \sim N(0,1) & \frac{\hat{\beta}_0 - \beta_0}{se(\hat{\beta}_0)} & \sim N(0,1)
+      \\ se(\hat{\beta}_1) & = \sqrt{Var(\hat{\beta}_1)} = \sqrt{\frac{\sigma^2}{S_{xx}}} & se(\hat{\beta}_0) & = \sqrt{Var(\hat{\beta}_0)} = \sqrt{\sigma^2 \left(\frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)}
+    \end{align*}
+    The above two random variables follow $N(0,1)$, we could not
+    directly use these to infer the unknown parameters $\beta_0,
+    \beta_1$ since $se(\hat{\beta}_1), se(\hat{\beta}_0)$ are also
+    unknown (because $\sigma^2$ is unknown). To solve this issue, we
+    replace them with the \textbf{estimated standard error
+      $\mathbf{ese(\hat{\beta}_1)}$ and $\mathbf{ese(\hat{\beta}_0)}$}
+
+    We can show that $T_1 = \frac{\hat{\beta}_1 -
+      \beta_1}{ese(\hat{\beta}_1)} \sim t_{n-p}, T_0 =
+    \frac{\hat{\beta}_0 - \beta}{ese(\hat{\beta}_0)} \sim t_{n-p}$,
+    where $p = 2$ for GN-SLR.
 \end{document}
