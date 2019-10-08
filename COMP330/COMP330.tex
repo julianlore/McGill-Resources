@@ -1048,5 +1048,62 @@ form.
 
 % Later, we will see:
 % $A_{CFG} = \left\{\langle G,w \rangle \mid G \text{ is a CFG that
-%     generates string } w\right\}$ is a decidable language.
+%   generates string } w\right\}$ is a decidable language.
+\section{10/08/19}
+Proof of the theorem from last class.
+
+\begin{itemize}
+\item First, add a start variable $S_0$ and the rule $S_0 \to S$, $S$ being
+the original start variable.
+\item Second, take care of all $\varepsilon$-rules. Remove
+  $\varepsilon$-rules $A \to \varepsilon$ if $A$ is not the start
+  variable. For each occurrence of $A$ on the RHS of a rule, add a new
+  rule with that occurrence delete (i.e.\ add a new rule deleting $A$,
+  e.g.\ if $B \to bA$, then $B \to b$). Additionally, replace each $R
+  \to A$ by $R \to \varepsilon$ (unless already removed).
+\item Handle all unit rules by removing $A \to B$. Whenever we have $B
+  \to u$, add $A \to u$ (unless previously removed)
+\item Convert all remaining rules: $A \to u_1u_2 \ldots u_k, k > 2$
+  with each $u_i$ being a variable or a terminal with a series of
+  rules $A \to u_1A_1, A_1 \to u_2 A_2, \ldots, A_{k-2} \to
+  u_{k-1}u_k$, where each $A_i$ is a new variable (we can reuse
+  variables if they serve the same purpose, as there
+  will most likely be duplicates). If $k=2$ and $A \to
+  u_1 u_2$, replace either terminal $u_i$ by a variable $U_i \to u_i$.
+\end{itemize}
+\subsection{Pushdown Automata}
+NFA $+$ stack. We must formalize the stack operations.
+
+A PDA is a $6$-tuple $(Q, \Sigma, \Gamma, \delta, q_0, F)$, with $Q_,
+\Sigma, \Gamma, F$ being finite sets.
+\begin{itemize}
+\item States, $Q$
+\item Alphabet\textbf{s}: $\Sigma$, input alphabet ($a, b, c, d$).
+
+  $\Gamma$, STACK alphabet ($A, B, C, D$, things we can remove from stack)
+\item Transition function: input symbol, stack input symbol to stack
+  output symbol, $\delta: Q \times \Sigma_{\varepsilon} \times
+  \Gamma_{\varepsilon} \to \mathcal{P}(Q \times \Gamma_{\varepsilon})$
+\item Start state $q_0 \in Q$
+\item Accept states $F \subseteq Q$
+\end{itemize}
+
+In terms of acceptance, let $M = (Q, \Sigma, \Gamma, \delta, q_0, F)$
+be a PDA, $w = w_1\ldots w_n, n \geq 0$ is a string, $w_i \in \Sigma$.
+
+M \underline{accepts} $w$ if $\exists m \geq n, \exists r_0, \ldots,
+r_m \in Q, \exists s_0, \ldots, s_m \in \Gamma^*$ and $\exists
+y_1\ldots y_m = w$, $y_i \in \Sigma_\varepsilon$ such that
+\begin{enumerate}
+\item $r_0 = q_0, s_0 = \varepsilon$ (you can think of the stack as a
+  string, top of stack is the leftmost symbol of the string. Start off
+  empty)
+\item $r_{i+1}, b \in \delta(r_i, y_{i+1}, a)$, for $i = 0, \ldots,
+  m-1, s_i = at, s_{i+1}=bt$, for some $t \in \Gamma^*, a,b \in
+  \Gamma_{\varepsilon}$. Top of the stack is currently at $a$, we
+  digest $y_{i + 1}$ and $a$ to get to a new state $r_{i + 1}$ and stack state, $b$. $s_i = at$
+  means $a$ is on the top, $s_{i+1} = bt$ means we remove $a$ and put $b$.
+\item $r_m \in F$
+\end{enumerate}
+We will often denote the bottom of the stack by \$.
 \end{document}
