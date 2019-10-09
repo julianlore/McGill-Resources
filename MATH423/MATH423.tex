@@ -1302,4 +1302,74 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       \beta_1}{ese(\hat{\beta}_1)} \sim t_{n-p}, T_0 =
     \frac{\hat{\beta}_0 - \beta}{ese(\hat{\beta}_0)} \sim t_{n-p}$,
     where $p = 2$ for GN-SLR.
+    \\ \noindent \rule{\textwidth}{0.5pt}
+    You will not have to write R code for the midterm, however, you
+    might have to interpret code output (look at
+    \href{http://www.math.mcgill.ca/yyang/regression/comp/Comp-05-estimation_sigma.pdf}{\texttt{Comp-05-estimation\_sigma.pdf}}
+    and interpret the results of \texttt{lm} and more), like what the sample mean
+    means and whatnot. Focus on assignment and notes, midterm covers
+    everything up to midterm's class.
+    \\ \noindent \rule{\textwidth}{0.5pt}
+    Notice that we can compute $ese(\hat{\beta}_1) =
+    \sqrt{\frac{MS_{Res}}{S_{xx}}}$ and $ese(\hat{\beta}_0) =
+    \sqrt{MS_{Res} \left(\frac{1}{n} +
+        \frac{\overline{x}_1^2}{S_{xx}}\right)}$ from the data without
+    knowing the true parameter $\sigma^2$.
+    \subsection{Confidence Intervals}
+    First we construct the CI for $\beta_1$. Suppose that $f_T$ is the
+    density of a $T \sim t_{n-2}$ distribution, defined
+    $$k \equiv t_{\frac{\alpha}{2}, n-2} > 0$$
+    such that
+    \begin{align*}
+      P(-k \leq T \leq k) & = \underbrace{1 - \alpha}_{=0.95 \text{ if
+                            } \alpha = 0.05}, \alpha \in (0,1), \alpha
+                            \text{ is user specified}
+    \end{align*}
+    \includegraphics[width=.6\textwidth]{14.pdf}
+    \\ A $1 - \alpha$ level confidence interval \underline{for
+      $\beta_1$} (not $\hat{\beta}_1$) is defined as
+    \begin{align*}
+      CI(\beta_1) & = [\hat{\beta}_1 - k \cdot ese(\hat{\beta}_1), \hat{\beta}_1 + k \cdot ese(\hat{\beta}_1)]
+                    \intertext{To verify this, note that}
+                    P(\beta_1 \in CI(\beta_1)) & = P(\hat{\beta}_1 - k \cdot ese(\hat{\beta}_1) \leq \beta_1 \leq \hat{\beta}_1 + k \cdot ese(\hat{\beta}_1))
+      \\ & = P \left(-k \leq \underbrace{\frac{\hat{\beta}_1 - \beta_1}{ese(\beta_1)}}_{T_1} \leq k\right)
+           = 1 - \alpha
+    \end{align*}
+    Note:
+    \begin{itemize}
+    \item The upper and lower bound of $CI(\beta_1)$ are
+      \textbf{random}, since their formula involves the estimator
+      $\hat{\beta}_1$ which could potentially be random if
+      $\hat{\beta}_1$ is computed using a different set of samples
+    \item Interpretation: The interval $CI(\beta_1)$ traps $\beta_1$
+      with probability $1 - \alpha$.
+    \item $\beta_1$ is \textbf{non-random}
+    \item Notice that the width of the confidence interval is $2 \cdot
+      k \cdot ese(\hat{\beta}_1)$.
+      \begin{itemize}
+      \item
+        As $\alpha$ shrinks, the interval
+        widens (to be more certain about including $\beta_1$, you must
+        make the interval larger).
+      \item As $n$ grows, the interval shrinks.
+      \item As $\sigma^2$ increases, the interval widens.
+      \item As $S_{xx}$ grows, the interval shrinks.
+        \begin{align*}
+          ese(\hat{\beta}_1) & = \sqrt{\frac{MS_{Res}}{S_{xx}}} & S_{xx} & = \sum_{i=1}^n (x_i - \overline{x})^2
+        \end{align*}
+        If the data is well spread, the interval shrinks (you have
+        more points from everywhere). Intuitively, when the points are
+        more clustered together, changing the data of one point/adding
+        one point will greatly modify the regression line, but if
+        they're further apart it won't change as much.\\
+        \includegraphics[width=.6\textwidth]{15.pdf}
+      \end{itemize}
+    \end{itemize}
+    What about $CI(\beta_0)$? By parallel reasoning, a $1- \alpha\
+    CI(\beta_0)$ is
+    \begin{align*}
+      CI(\beta_0) & = [\hat{\beta}_0 - k \cdot ese(\hat{\beta}_0), \hat{\beta}_0 + k \cdot ese(\hat{\beta}_0)]
+    \end{align*}
+    If you have already calculated $k$ from $CI(\beta_1)$, you won't
+    need to recalculate it here.
 \end{document}
