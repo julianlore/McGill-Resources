@@ -1106,4 +1106,99 @@ y_1\ldots y_m = w$, $y_i \in \Sigma_\varepsilon$ such that
 \item $r_m \in F$
 \end{enumerate}
 We will often denote the bottom of the stack by \$.
+\section{10/10/19}
+\paragraph{Theorem} A language is context free $\iff$ some pushdown
+automaton recognizes it.
+\paragraph{Proof} If a language is context free, then some PDA
+recognizes it.
+
+Informally, the PDA $P$ must:
+\begin{itemize}
+\item Place $\$$ and start variable on stack.
+\item Repeat the following forever:
+  \begin{itemize}
+  \item If the top of stack is a variable symbol $A$,
+    nondeterministically select a rule for $A$ and substitute $A$ by
+    the RHS of the rule.
+  \item If the top of the stack is a terminal symbol $a$, read the
+    next symbol from \underline{input}. If it is also $a$, repeat
+    (move onto the next item of the stack and repeat the loop), otherwise
+    reject.
+  \item If the top of the stack is $\$$, accept.
+  \end{itemize}
+  Running this for some input that is in the language gives us a left
+  most derivation. If it is not in the language, there is no sequence
+  that will accept this.
+\end{itemize}
+CFG to PDA:\
+
+Given a CFG $G = (V, \Sigma, R, S)$, we construct a PDA $P = (Q,
+\Sigma, \Gamma, \delta, q_0, F)$. We define special notation to write
+an entire string on the stack in one step. This is equivalent to the
+normal actions by adding extra states to write the string one symbol
+at a time.
+
+Let $q, r \in Q$, $a \in \Sigma_\varepsilon, s \in
+\Gamma_{\varepsilon}$. Starting in $q$, we want to read $a$ from
+input, pop $s$ from the stack, push $u = u_1 \ldots u_\ell$ and end up
+in $r$.
+
+We can implement $a,s \to u_1 \ldots u_\ell$ by introducing new states
+$q_1, \ldots, q_{\ell - 1}$ with:
+\begin{align*}
+  \delta(q,a,s) & \ni (q_1, u_\ell)
+  \\ \delta(q_1, \varepsilon, \varepsilon) & = \left\{q_2, u_{\ell - 1}\right\}
+  \\ \delta(q_2, \varepsilon, \varepsilon) & = \left\{q_3, u_{\ell - 2}\right\}
+  \\ \ldots
+  \\ \delta(q_\ell, \varepsilon, \varepsilon) & = \left\{r, u_{1}\right\}
+\end{align*}
+Formally, $P$ is thus: $Q = \left\{q_{\text{start}}, q_{\text{loop}},
+  q_{\text{accept}}\right\} \cup E$, with $E$ being the set of states
+needed for implementing digestion of strings. The start state is
+$q_{\text{start}}$ and the only accept state is $q_{\text{accept}}$.
+
+For the transition function, we begin by initializing the stack to
+contain $\$$ and $S$, i.e.\ $\delta(q_{\text{start}}, \varepsilon,
+\varepsilon) = \left\{q_{\text{loop}}, S\$\right\}$. Then we add rules
+for each of the three cases:
+\begin{itemize}
+\item Top of the stack is a variable. $\delta(q_{\text{loop}},
+  \varepsilon, A) = \left\{(q_{\text{loop}}, w) \mid A \to w \text{ is
+    a rule in } R\right\}$.
+\item Top of stack contains a terminal. $\delta(q_{\text{loop}},
+  a, a) = \left\{q_{\text{loop}}, \varepsilon\right\}$
+\item Empty marker on stack. $\delta(q_{\text{loop}}, \varepsilon, \$)
+  = \left\{q_{\text{accept}}, \varepsilon\right\}$
+\end{itemize}
+PDA to CFG:\
+
+We simplify our task by modifying $P$ with:
+\begin{itemize}
+\item It only has a single accept state $q_{\text{accept}}$.
+\item It empties its stack before accepting.
+\item Each transition either \textbf{pushes} a symbol onto the stack
+  or \textbf{pops} a symbol off the stack, but cannot do both at the
+  same time.
+\end{itemize}
+Adding the first two is trival. For the last feature, replace each
+transition that pops and pushes at the same time with a two-transition
+sequence going through some new state. Similarly, for those that don't push or
+pop, replace them with a two-transition sequence that pushes then pops
+some arbitrary symbol.
+
+So we say $P = (Q, \Sigma, \Gamma, \delta, q_0,
+\left\{q_{\text{accept}}\right\})$ and construct $G$ with variables
+$\left\{A_{pq} \mid p, q \in Q\right\}$. Start variable is $A_{q_0,
+  q_{\text{accept}}}$. $G$'s rules are as follows:
+\begin{itemize}
+\item For each $p,q,r,s \in Q, t \in \Gamma, a,b \in
+  \Sigma_{\varepsilon}$, $(r,t) \in \delta(p, a, \varepsilon)$ and
+  $(q,\varepsilon) \in \delta(s,b,t) \implies $ we put the rule
+  $A_{pq} \to aA_{rs}b$. It is possible to get a string that $P$ would
+  digest from state $p$ to $q$, by digesting an $a$ and $b$ and
+  recursively getting a string from $r$ to $s$ (as if the stack was
+  empty again).
+\item For each $\forall p,q,r \in Q$, $A_{pq} \to A_{pr}A_{rq}$.
+\item $\forall p \in Q, A_{pp} \to \varepsilon$.
+\end{itemize}
 \end{document}
