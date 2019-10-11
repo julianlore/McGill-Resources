@@ -1326,7 +1326,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
                             \text{ is user specified}
     \end{align*}
     \includegraphics[width=.6\textwidth]{14.pdf}
-    \\ A $1 - \alpha$ level confidence interval \underline{for
+    \\ A $100(1 - \alpha)\%$ level confidence interval \underline{for
       $\beta_1$} (not $\hat{\beta}_1$) is defined as
     \begin{align*}
       CI(\beta_1) & = [\hat{\beta}_1 - k \cdot ese(\hat{\beta}_1), \hat{\beta}_1 + k \cdot ese(\hat{\beta}_1)]
@@ -1342,7 +1342,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       $\hat{\beta}_1$ which could potentially be random if
       $\hat{\beta}_1$ is computed using a different set of samples
     \item Interpretation: The interval $CI(\beta_1)$ traps $\beta_1$
-      with probability $1 - \alpha$.
+      with probability $1 - \alpha$ (this will be on the midterm).
     \item $\beta_1$ is \textbf{non-random}
     \item Notice that the width of the confidence interval is $2 \cdot
       k \cdot ese(\hat{\beta}_1)$.
@@ -1372,4 +1372,64 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     \end{align*}
     If you have already calculated $k$ from $CI(\beta_1)$, you won't
     need to recalculate it here.
+    \subsection{Hypothesis Testing}
+    Suppose we want to test (two sided test)
+    \begin{align*}
+      H_0: & \beta_1 = c
+      \\ H_1: & \beta_1 \neq c
+    \end{align*}
+    where $c$ is a specific value, e.g.\ $c$ can be $0$.
+
+    Rule: we reject $H_0$ in a hypothesis test with significance level
+    $\alpha$, if the $100(1- \alpha)\%$ confidence interval
+    $CI(\beta_1)$ \textbf{does not} cover $c$.
+
+    Why: As an example, let's set $\alpha = 0.01$. If $H_0$ is true,
+    then its highly likely (with probability $1 - \alpha = 0.99$)
+    $CI(\beta_1)$ should trap $\beta_1 = c$. So if we observe that
+    $CI(\beta_1)$ does not trap $c$, it could be either
+    \begin{itemize}
+    \item $\beta_1 = c$ ($H_0$ is true) and therefore we just (by
+      chance) observed a very rare event that $CI(\beta_1)$ does not
+      trap $\beta_1 = c$ (with probability $\alpha$)
+    \item or $\beta_1 \neq c$ and $H_0$ should be rejected
+    \end{itemize}
+    If we reject $H_0$ when $CI(\beta_1)$ does not cover $c$, it is
+    equivalent to
+    \begin{align*}
+      c \notin CI(\beta_1) & \iff c \geq \hat{\beta}_1 + k \cdot
+                          ese(\hat{\beta}_1) \text{ or } c \leq \hat{\beta}_1 - k \cdot ese (\hat{\beta}_1)
+      \\ & \iff \frac{\hat{\beta}_1 - c}{ese(\hat{\beta}_1)} \text{ or
+           } \frac{\hat{\beta}_1 - c }{ese(\hat{\beta}_1)} \geq k
+      \\ & \iff |T_1| \geq k \equiv t_{\frac{\alpha}{2}, n-2}, \underbrace{T_1 = \frac{\hat{\beta}_1 - c }{ese(\hat{\beta}_1)}}_{\text{t-statistic}} \stepcounter{equation}\tag{*}\label{eq:1}
+    \end{align*}
+    This is called Wald test or t-test and $T_1$ is called \textbf{t
+      test statistics}.
+    \\
+    \includegraphics[width=.6\textwidth]{16.pdf}
+    \begin{align*}
+      (\ref{eq:1}) & \iff \text{Orange Area} \leq \text{Yellow Area}
+      \\ & \iff \underbrace{Pr(|T| > |T_1|)}_{\text{Orange Area,
+           $p$-value}} < \underbrace{\alpha}_{\text{Yellow Area}}
+    \end{align*}
+
+    What about a test for $\beta_0$?
+    \begin{align*}
+      H_0: & \beta_0 = c
+      \\ H_1: & \beta_0 \neq c
+    \end{align*}
+    By the same reasoning, we reject $H_0$ if
+    \begin{align*}
+      |T_0| & \geq k \equiv t_{\frac{\alpha}{2}, n-2} & T_0 & = \frac{\hat{\beta}_0- c}{ese(\hat{\beta}_0)}
+    \end{align*}
+    \subsubsection{Testing significance of regression}
+    \includegraphics[width=.6\textwidth]{17.pdf}
+    \begin{align*}
+      H_0: & \beta_1 = 0
+      \\ H_1: & \beta_1 \neq 0
+    \end{align*}
+    This hypothesis test is related to the significance of regression.
+
+    Failing to reject $H_0: \beta_1 = 0$ implies that there is
+    \textbf{no linear relationship} between $X_1$ and $Y$.
 \end{document}
