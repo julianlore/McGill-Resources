@@ -1,10 +1,9 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
-  lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
+  lastpage, amssymb, algpseudocode, tikz, listings,
   marvosym, stmaryrd, collectbox, wasysym, algorithm}
 \usetikzlibrary{shapes.geometric}
-\usetikzlibrary{positioning}
-\EnableBpAbbreviations
+\usetikzlibrary{positioning,chains,fit,shapes,calc,arrows.meta,matrix,automata}
 \usepackage[margin=1 in]{geometry}
 \allowdisplaybreaks
 % \usepackage[dvipsnames]{xcolor}   %May be necessary if you want to color links
@@ -141,10 +140,10 @@ just requires verifying the neighbors and is polynomial.
 \item $K = 1$, can only color maps with zero or one region.
 \item $K = 2$, impossible when three regions are all neighbors,
   otherwise valid. Easy to decide.
-\item $K = 3$, no known efficient algorithm to decide, easy to check.
+\item $K = 3$, no known efficient algorithm to decide, easy to check. $NP$-complete.
 \item $K \geq 4$, all maps are $K$-colorable (there exists a long
   proof for $4$, people managed to reduce the infinite cases of maps
-  to about $300,000$ cases that were checked). No easy to find, easy
+  to about $300,000$ cases that were checked). Not easy to find, easy
   to verify.
 \end{itemize}
 $3$-coloring of maps is a special type of problem (NP-complete
@@ -182,7 +181,7 @@ can bring the complete problems to P, then $NP = P$. We tend to
 believe $P \neq NP$ as all attempts to show they're equal so far have
 failed.
 
-PSpace Completeness: problems that require polynomial space to be solved but can
+\paragraph{PSpace Completeness} problems that require polynomial space to be solved but can
 still take very long. Again, if any of these problems can be done in
 polynomial time, then they can all be solved in polynomial time.
 \\ Example: Geography game. This is a two player game. Given a set of
@@ -252,6 +251,32 @@ q_0, F)$ where:
 \end{itemize}
 Note that the empty string is a valid input. It will only be accepted
 if the start state is an accept state.
+\paragraph{Ex}~\\
+\begin{tikzpicture}[shorten >=1pt,node distance=2 cm,on grid,auto]
+  \node[state,initial] (q_1)   {$q_1$};
+  \node[state,accepting](q_2) [right=of q_1] {$q_2$};
+  \node[state](q_3) [right=of q_2] {$q_3$};
+  \path[->]
+  (q_1) edge [loop above] node {$0$} ()
+  (q_1) edge node {$1$} (q_2)
+  (q_2) edge [loop above] node {$1$} ()
+  (q_2) edge [bend left] node {$0$} (q_3)
+  (q_3) edge [bend left] node {$0,1$} (q_2)
+  ;
+\end{tikzpicture}
+\begin{itemize}
+\item $Q = \left\{q_1, q_2, q_3\right\}$
+\item $\Sigma = \left\{0,1\right\}$
+\item $\delta = $
+  \begin{tabular}{c | c c}
+    &$0$&$1$
+    \\ \hline $q_1$ & $q_1$ & $q_2$
+    \\ $q_2$ & $q_3$ & $q_2$
+    \\ $q_3$ & $q_2$ & $q_2$
+  \end{tabular}
+\item $q_1$ is start state
+\item $F = \left\{q_2\right\}$
+\end{itemize}
 \subsection{Regular Languages} Let $M = (Q, \Sigma, \delta, q_0, F)$
 be a finite state automaton and $w = w_1w_2\ldots w_n, n \geq 0$ be a
 string where each $w_i$ is from the alphabet $\Sigma$. $M$
