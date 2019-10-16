@@ -318,7 +318,7 @@ E[X]$$
 \end{itemize}
 Eventually you will get the \textbf{optimal regression line} (of $Y$
 on $X$):
-$$m^*(X) = \beta_0^* + \beta_1^* X$$
+$$m^*(x) = \beta_0^* + \beta_1^* x$$
 \begin{itemize}
 \item At no time did we have to assume that the actual relationship
   between $X$ and $Y$ is linear (that's just our belief, it may not
@@ -408,7 +408,7 @@ Visually, this model:\\
   E[\varepsilon \mid X = x] & = E[\varepsilon] = 0
   \\ Var[\varepsilon \mid X = x] & = Var[\varepsilon] = \sigma^2
 \end{align*}
-$\Sigma$ is independent to $X$.
+$\varepsilon$ is independent to $X$.
 \\ Essentially, we have a distribution (any distribution satisfying
 the expectation and variance above) centered at every point
 of the regression line.
@@ -520,7 +520,7 @@ In a more advanced statistics course, you will see that $n \to \infty
 \beta_0^*$
 \subsection{Least square estimates}
 There is an alternative way of estimating the simple linear regression
-model. Recall that the true optimal slop and intercept are the ones
+model. Recall that the true optimal slope and intercept are the ones
 which minimize the mean squared error
 \begin{align*}
   (\beta_0^*, \beta_1^*) & = \argmin_{(\beta_0,\beta_1)} \underbrace{E_{XY} [(Y - \beta_0 - \beta_1 X)^2]}_{\text{unknown}}
@@ -649,7 +649,7 @@ Note that $X$ is called the \textbf{design matrix} and is an $n \times
 \end{align*}
 So we can write the set of equations
 \begin{align*}
-  Y_i & = \beta_0 + \beta_iX_{1i} + \varepsilon_i, i=1, \ldots, n
+  Y_i & = \beta_0 + \beta_1X_{1i} + \varepsilon_i, i=1, \ldots, n
 \end{align*}
 In the simpler form
 $$Y = X\beta + \varepsilon$$
@@ -789,7 +789,7 @@ With $c_i = \frac{(x_{1i} - \overline{x}_1)}{S_{xx}}, \sum_{i=1}^n c_i
 = 0$. Similarly:
 \begin{align*}
   \hat{\beta}_0 & = \overline{y} - \overline{x}_1 \hat{\beta}_1 = \overline{y} - \overline{x}_1 \sum_{i=1}^n c_i y_i
-  \\ & = \frac{1}{n} \sum_{i=1}^n y_i - \overline{x}_i \sum_{i=1}^nc_iy_i = \sum_{i=1}^{n} \underbrace{\left(\frac{1}{n} - \overline{x}_i c_i\right)}_{b_i} y_i
+  \\ & = \frac{1}{n} \sum_{i=1}^n y_i - \overline{x}_1 \sum_{i=1}^nc_iy_i = \sum_{i=1}^{n} \underbrace{\left(\frac{1}{n} - \overline{x}_1 c_i\right)}_{b_i} y_i
 \end{align*}
 We find that both \textbf{estimates} are linear combinations of
 $y_i$'s. The corresponding \textbf{estimators} of $\beta_0, \beta_1$
@@ -806,7 +806,6 @@ experiments or in observational studies, obviously $x_i$'s are not
 necessarily fixed. We will come back to how we get the
 \textbf{unconditional expectation and variance} with $x_i$'s as random
 variables.
-% Fix stuff here
 \begin{align*}
   E[\hat{\beta}_1] & = E[\hat{\beta}_1 \mid x_{11}, \ldots, x_{1n}]
                      = E \left[\sum_{i=1}^n c_i Y_i \mid x_{11},\ldots, x_{1n}\right]
@@ -1078,12 +1077,12 @@ any form. If $n$ is very small, $MS_{Res}$ can have a large bias.
 One can show that
 \begin{align*}
   E[SS_{Res}] & = (n-2)\sigma^2
-  \\ E[\sigma^2] & = E \left[\frac{SS_{Res}}{n-2}\right] = \sigma^2
+  \\ E[\hat{\sigma}^2] & = E \left[\frac{SS_{Res}}{n-2}\right] = \sigma^2
                    \text{ (unbiased)}
 \end{align*}
 \paragraph{Alternative formula for $SS_{Res}$}
 \begin{align*}
-  SS_{Res} & = \underbrace{\sum_{i=1}^n y_i^2 - n(\overline{y}^2)}_{SS_T} - \hat{\beta}_1 S_{xy}
+  SS_{Res} & = \underbrace{\sum_{i=1}^n y_i^2 - n(\overline{y})^2}_{SS_T} - \hat{\beta}_1 S_{xy}
              \intertext{Let}
              SS_T & = \sum_{i=1}^n y_i^2 - n (\overline{y})^2 = \sum_{i=1}^n (y_i - \overline{y})^2
 \end{align*}
@@ -1195,9 +1194,9 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   \begin{align*}
     Var(\hat{\beta} \mid X) & =
                               \begin{pmatrix}
-                                Var(\hat{\beta}_0 & Cov(\hat{\beta}_0, \hat{\beta}_1 \mid X)
-                                \\ Cov(\hat{\beta}_1, \hat{\beta}_0 \mid X) & Var(\hat{\beta}_1 \mid X) = \sigma^ 2(X^TX)^{-1}
-                              \end{pmatrix} = \sigma^2 (X^TX)^{[-1]}
+                                Var(\hat{\beta}_0 \mid X) & Cov(\hat{\beta}_0, \hat{\beta}_1 \mid X)
+                                \\ Cov(\hat{\beta}_1, \hat{\beta}_0 \mid X) & Var(\hat{\beta}_1 \mid X)
+                              \end{pmatrix} = \sigma^2 (X^TX)^{-1}
                                                                               \intertext{The
                                                                               diagonal
                                                                               entries
@@ -1398,7 +1397,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     equivalent to
     \begin{align*}
       c \notin CI(\beta_1) & \iff c \geq \hat{\beta}_1 + k \cdot
-                          ese(\hat{\beta}_1) \text{ or } c \leq \hat{\beta}_1 - k \cdot ese (\hat{\beta}_1)
+                          ese(\hat{\beta}_1) < k \text{ or } c \leq \hat{\beta}_1 - k \cdot ese (\hat{\beta}_1)
       \\ & \iff \frac{\hat{\beta}_1 - c}{ese(\hat{\beta}_1)} \text{ or
            } \frac{\hat{\beta}_1 - c }{ese(\hat{\beta}_1)} \geq k
       \\ & \iff |T_1| \geq k \equiv t_{\frac{\alpha}{2}, n-2}, \underbrace{T_1 = \frac{\hat{\beta}_1 - c }{ese(\hat{\beta}_1)}}_{\text{t-statistic}} \stepcounter{equation}\tag{*}\label{eq:1}
