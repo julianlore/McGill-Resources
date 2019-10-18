@@ -1314,7 +1314,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     \sqrt{MS_{Res} \left(\frac{1}{n} +
         \frac{\overline{x}_1^2}{S_{xx}}\right)}$ from the data without
     knowing the true parameter $\sigma^2$.
-    \subsection{Confidence Intervals}
+    \section{Confidence Intervals}
     First we construct the CI for $\beta_1$. Suppose that $f_T$ is the
     density of a $T \sim t_{n-2}$ distribution, defined
     $$k \equiv t_{\frac{\alpha}{2}, n-2} > 0$$
@@ -1390,7 +1390,8 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     \begin{itemize}
     \item $\beta_1 = c$ ($H_0$ is true) and therefore we just (by
       chance) observed a very rare event that $CI(\beta_1)$ does not
-      trap $\beta_1 = c$ (with probability $\alpha$)
+      trap $\beta_1 = c$ (with probability $\alpha$), this is a type
+      $1$ error (false rejection)
     \item or $\beta_1 \neq c$ and $H_0$ should be rejected
     \end{itemize}
     If we reject $H_0$ when $CI(\beta_1)$ does not cover $c$, it is
@@ -1431,4 +1432,55 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
 
     Failing to reject $H_0: \beta_1 = 0$ implies that there is
     \textbf{no linear relationship} between $X_1$ and $Y$.
+    \begin{itemize}
+    \item Either $X_1$ is of little value in explaining the variation
+      in $Y$
+    \item Or the true relationship between $X_1$ and $Y$ is not linear
+    \end{itemize}
+    We reject $H_0$ with significance level $\alpha$ if the
+    $100(1-\alpha)$ percent confidence interval $CI(\beta_1)$ does
+    not cover $0$.
+
+    The corresponding test statistic is:
+    \begin{align*}
+      T_1 & = \frac{\hat{\beta}_1 - c}{ese(\hat{\beta}_1)} =
+            \frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\ (c = 0, \text{
+            special case})
+    \end{align*}
+    We reject $H_0:\beta_1 = 0$ if $|T_1| > k \equiv
+    t_{\frac{\alpha}{2}, n - 2}$
+    \\ \noindent \rule{\textwidth}{0.5pt}
+    \paragraph{Some review of midterm questions}
+    ~\\
+    \begin{tabular}{l | l | l}
+      & SLR & GN-SLR
+      \\\hline Estimation $\hat{\beta}_1, ese(\hat{\beta}_1), \hat{\sigma}^2$ & \checkmark & \checkmark (not necessary)
+      \\ Unbiasness. $E(\hat{\beta}_1)$ and Var $Var(\hat{\beta}_1)$ & \checkmark & \checkmark (not necessary)
+      \\ Confidence Intervals & & \checkmark
+      \\ Hypothesis testing $t$-test & & \checkmark
+      \\ F-test & & \checkmark
+      \\ Prediction interval & & \checkmark
+    \end{tabular}
+    \\ \noindent \rule{\textwidth}{0.5pt}
+    \subsection{Statistical Significance}
+    \begin{itemize}
+    \item What $\alpha$ should we use? Conventionally, set $\alpha =
+      0.05$. If you are very conservative and can't afford false
+      rejection, you should use a smaller $\alpha$.
+    \item Statistical significance: if we test the hypothesis that
+      \begin{align*}
+        H_0: \beta_1 = 0
+      \end{align*}
+      and reject it, we say the difference between $\beta_1$ and $0$ is
+      \textbf{statistically significant}.
+    \item Statistical significance $\neq$ importance of magnitude
+
+      When $H_0$ is attained, it should be interpreted as
+      ``\textbf{the effect of $\mathbf{\beta_1}$ is statistically
+        undetectable}''
+      $$\left|\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right| > k$$
+      The effect might be huge or small, can't detect it. Failing to
+      reject is very conservative, can't say much. However if you fail
+      to reject, it is a very strong claim.
+    \end{itemize}
 \end{document}
