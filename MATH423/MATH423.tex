@@ -1477,10 +1477,84 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
 
       When $H_0$ is attained, it should be interpreted as
       ``\textbf{the effect of $\mathbf{\beta_1}$ is statistically
-        undetectable}''
+        undetectable}'' or ``\textbf{$\mathbf{\beta_1}$ is
+        statistically undistinguishable from $\mathbf{0}$}''
       $$\left|\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right| > k$$
       The effect might be huge or small, can't detect it. Failing to
       reject is very conservative, can't say much. However if you fail
       to reject, it is a very strong claim.
+    \item e.g.\ a common fallacy is ``I tested whether $H_0 = \beta_1
+      = 0$ or not, and I retain $H_0$, therefore $\beta_1$ is
+      insignificant, and it is unimportant and you can ignore
+      it''. Because we retain $H_0: \beta_1 = 0$ when $\left|
+        \frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right| < k$, there
+      are two cases that might result in a rejection of $H_0$.
+      \begin{enumerate}[(1)]
+      \item $\hat{\beta}_1$ is very close to zero, which implies
+        $\beta_1$ may as well be zero, thus unimportant.
+      \item $ese(\hat{\beta}_1)$ is so large that we can't tell
+        anything about $\beta_1$ with any confidence ($\beta_1$ may be
+        either large or small).
+      \end{enumerate}
+      This is a \underline{false/bad} claim (fallacy) because you don't have
+      enough evidence to say it is unimportant or make any claim. It
+      might potentially be important.
     \end{itemize}
+    \section{Analysis of Variance (ANOVA)}
+    We can use the ``\textbf{analysis of variance}'' approach to test
+    the significance of regression.
+
+    The distance from any point $y_i$ in a collection of data to
+    $\overline{y}$ is the deviation, written as $y_i - \overline{y}$.
+    The ANOVA is based on a partition of total variability in $y$.
+    $$y_i - \overline{y} = (y_i - \hat{y}_i) + (\hat{y}_i -
+    \overline{y})$$
+    where $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_{1i}$. One can
+    show that
+    \begin{align*}
+      \underbrace{\sum_{i=1}^n (y_i - \overline{y})^2}_{SS_T} & = \underbrace{\sum_{i=1}^n (y_i - \hat{y}_i)^2}_{SS_{Res}} + \underbrace{\sum_{i=1}^n (\hat{y}_i - \overline{y})^2}_{SS_R}
+    \end{align*}
+    \begin{itemize}
+    \item $SS_T$ --- total sum of squares. It measures ``total
+      variation'' in $Y$.
+    \item $SS_{Res}$ --- Residual sum of squares. It measures the
+      amount of ``residual variation'' in $Y$. It is an aggregate
+      measure of mis-fit of the fitted regression line.
+    \item $SS_R$ --- regression sum of squares. It measures amount of
+      ``systematic variation'' in $Y$ due to the $y \sim x$ linear relationship.
+    \end{itemize}
+    \begin{minipage}{.5\linewidth}
+    \includegraphics[width=\textwidth]{18.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\linewidth}
+    \begin{align*}
+      y_1 \ldots y_n& & \overline{y} & = \frac{\sum_{i=1}^n y_i}{n}
+      \\ y_i - \overline{y} & = (y_i - \hat{y}_i) + (\hat{y}_i - \overline{y})
+    \end{align*}
+  \end{minipage}
+  \begin{itemize}
+  \item $SS_T = \sum_{i=1}^n (y_i - \overline{y})^2$
+    \\ \includegraphics[width=.5\textwidth]{19.pdf}
+  \item $SS_{Res} = \sum_{i=1}^n (y_i - \hat{y}_i)^2$
+    \\ \includegraphics[width=.5\textwidth]{20.pdf}
+  \item $SS_R = \sum_{i=1}^n (\hat{y}_i - \overline{y})^2$
+    \\ \includegraphics[width=.5\textwidth]{21.pdf}
+  \end{itemize}
+  \paragraph{Proof}
+  \begin{align*}
+    \underbrace{\sum_{i=1}^n (y_i - \overline{y})^2}_{SS_T} & = \sum_{i=1}^n (y_i - \hat{y}_i + \hat{y}_i - \overline{y})^2
+    = \sum_{i=1}^n (\underbrace{(y_i - \hat{y}_i)}_{e_i} + (\hat{y}_i - \overline{y}))^2 \\
+                                        & = \sum_{i=1}^n ((\hat{y}_i - \overline{y})^2 + 2e_i (\hat{y}_i - \overline{y}) + e_i^2)
+                                          = \underbrace{\sum_{i=1}^n (\hat{y}_i - \overline{y})^2}_{SS_R} + \underbrace{\sum_{i=1}^n e_i^2}_{SS_{Res}} + \underbrace{2 \sum_{i=1}^n e_i (\hat{y}_i - \overline{y})}_{=0} \\
+                                                            & = \sum_{i=1}^n (\hat{y}_i - \overline{y})^2 + \sum_{i=1}^n e_i^2 + 2 \sum_{i=1}^n e_i (\hat{\beta}_0 + \hat{\beta}_1x_{1i} - \overline{y})
+ \\
+                                                              & = SS_R + SS_{Res} + 2(\hat{\beta}_0 - \overline{y}) \underbrace{\sum_{i=1}^n e_i}_{=0} + 2 \hat{\beta}_1 \underbrace{\sum_{i=1}^n e_i x_{1i}}_{=0}
+  \end{align*}
+  \section{F-test}
+  The idea is to compare two models
+  $$H_0: Y = \beta_0 + \varepsilon \text{ versus } H_1: Y = \beta_0 +
+  \beta_1 X_1 + \varepsilon$$
+  or equivalently,
+  $$H_0: \beta_1 = 0 \text{ versus } H_1: \beta_1 \neq 0$$
+  If we fit the first model, the least
 \end{document}
