@@ -1556,5 +1556,74 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   \beta_1 X_1 + \varepsilon$$
   or equivalently,
   $$H_0: \beta_1 = 0 \text{ versus } H_1: \beta_1 \neq 0$$
-  If we fit the first model, the least
+  If we fit the first model, the least squares estimator is
+  $\hat{\beta}_0 = \overline{y}$.
+
+  The idea is to create a statistic that measures how much better the
+  second model is than the first model.
+
+  Under GN-SLR, and under $H_0: \beta_1 = 0$, we show that
+  \begin{align*}
+    \frac{SS_T}{\sigma^2} & \sim \chi^2_{n-1} & df_T& = n-1 \\
+    \frac{SS_{Res}}{\sigma^2} & \sim \chi^2_{n-p} & df_{Res} & = n - p = n-2 \\
+    \frac{SS_R}{\sigma^2} & \sim \chi_{p-1}^2 & df_R & = p-1 = 2 - 1 = 1
+  \end{align*}
+  for GN-SLR, $p = 2$.
+
+  The degree of freedom has an additive property
+  \begin{align*}
+    df_T & = df_R + df_{Res} & n - 1 & = 1 + (n-2)
+  \end{align*}
+  Consider now the F-test statistic
+  \begin{align*}
+    F_0 & = \frac{SS_R/df_R}{SS_{Res}/df_{Res}} = \frac{SS_R/(p-1)}{SS_{Res}/(n-p)} = \frac{MS_R}{MS_{Res}}
+  \end{align*}
+  The numerator can be explained by the model, whereas the denominator
+  can't. So a larger value of $F_0$ means the numerator is bigger and
+  the model explains well.
+
+  Under $H_0: \beta_1 = 0$, the statistic $F_0$ follows an $F$
+  distribution, with degrees of freedom $p - 1$ and $n - p$.
+  \begin{align*}
+    F_0 & \sim F_{p-1, n - p} = F_{1,n - 2}
+  \end{align*}
+  We reject $H_0$ if $F_0$ is ``large enough''. To quantify this, we
+  set significance level $\alpha$ ($0.01, 0.05$) and reject $H_0$ if
+  \begin{align*}
+    F_0 > F_{\alpha, p-1, n-p} & = F_{\alpha, 1, n-2}\ (p = 2)
+  \end{align*}
+  \includegraphics[width=.6\textwidth]{22.pdf}
+  \\ Where $F_{\alpha, p-1, n-p}$ is the $1-\alpha$ quantile of the
+  $F$ distribution with $df\ 1$ and $(n-2)$.
+
+  Equivalently, we can conduct the test using the $p$-value.
+  \begin{align*}
+    p \text{-value} & = \underbrace{\Pr(F > F_0)}_{\text{red area}}
+  \end{align*}
+  where $F \sim F_{1, n-2}$ distribution. We reject $H_0$ if the
+  $p$-value is less than $\alpha$.
+  \begin{align*}
+    \underbrace{\Pr(F > F_0)}_{\text{red area}} & <
+                                             \underbrace{\alpha}_{\text{yellow
+                                                  area}}
+                                                  = \Pr(F > F_{\alpha, 1, n-2})
+  \end{align*}
+  \paragraph{ANOVA Table}~\\
+  \begin{tabular}{l l l l l}
+    \hline Source& $SS$ & $df$ & $MS$ & $F$
+    \\ \hline Regression & $SS_R$ & $p - 1$ & $MS_R = \frac{SS_R}{p-1}$ \\
+    Residual& $SS_{Res}$ & $n- p$& $MS_{Res} = \frac{SS_{Res}}{n-p}$ \\
+    \hline Total& $SS_T$ & $n-1$ &&
+    \\\hline
+  \end{tabular}
+  \subsection{Equivalence of F-test and t-test for SLR}
+  \textbf{Only true for SLR ($p = 2$)}
+  \paragraph{Proof}
+  We will show:
+  \begin{align*}
+    (T_1)^2 & = \left\{\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right\}^2 = F_0
+              \intertext{The $p$-value for F-test is \textbf{exactly
+              the same} as the $p$-value for t-test.}
+    F & > F_0 \iff T^2 > (T_1)^2 \iff T < - |T_1| \text{ or } T > |T_1| \iff |T| > |T_1|
+  \end{align*}
 \end{document}
