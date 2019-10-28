@@ -1046,7 +1046,7 @@ Idea: replace
 \item $E$ with $\frac{1}{n} \sum_{i=1}^n$
 \end{itemize}
 To replace $E[(Y - \beta_0 - \beta_1 X_1)^2]$ with
-$\frac{1}{n-2}\underbrace{\sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{beta}_1
+$\frac{1}{n-2}\underbrace{\sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1
 x_{1i})^2}_{SS_{Res}}$.
 \\ Let
 \begin{align*}
@@ -1068,7 +1068,7 @@ $MS_{Res}$ is called the residual mean square.
 \\ Note: $MSE$ vs $MS_{Res}$
 \begin{align*}
   MSE & = \frac{1}{n} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_{1i})^2
-  \\ MS_{Res} & = \frac{1}{n-2} \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{1i})
+  \\ MS_{Res} & = \frac{1}{n-2} \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{1i})^2
 \end{align*}
 We notice $n-2$ vs $n$ and also that we must use $\hat{\beta}_0,
 \hat{\beta}_1$ from least squares, whereas for the $MSE$ it can be of
@@ -1215,7 +1215,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
                            \intertext{Replace $\sigma^2$ with known
                            $\hat{\sigma}^2$. Then we get
                            \textbf{estimated standard error (ese)}}
-                           ese(\hat{\beta}_0) & = \sqrt{\hat{\sigma}^2 \left(\frac{1}{n} + \frac{\overline{x}_1}{S_{xx}}\right)}
+                           ese(\hat{\beta}_0) & = \sqrt{\hat{\sigma}^2 \left(\frac{1}{n} + \frac{\overline{x}_1^2}{S_{xx}}\right)}
     \\ ese(\hat{\beta}_1) & = \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
   \end{align*}
   \section{Inference}
@@ -1488,7 +1488,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       insignificant, and it is unimportant and you can ignore
       it''. Because we retain $H_0: \beta_1 = 0$ when $\left|
         \frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right| < k$, there
-      are two cases that might result in a rejection of $H_0$.
+      are two cases that might result in retaining $H_0$.
       \begin{enumerate}[(1)]
       \item $\hat{\beta}_1$ is very close to zero, which implies
         $\beta_1$ may as well be zero, thus unimportant.
@@ -1624,6 +1624,155 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     (T_1)^2 & = \left\{\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right\}^2 = F_0
               \intertext{The $p$-value for F-test is \textbf{exactly
               the same} as the $p$-value for t-test.}
-    F & > F_0 \iff T^2 > (T_1)^2 \iff T < - |T_1| \text{ or } T > |T_1| \iff |T| > |T_1|
+              F & > F_0 \iff T^2 > (T_1)^2 \iff T < - |T_1| \text{ or } T > |T_1| \iff |T| > |T_1|
+                  \intertext{Thus}
+                  \Pr(F > F_0) & = P(|T| > |T_1|)
   \end{align*}
+  Therefore, the test result based on $F$ and $t$ statistics are the
+  same.
+
+  Now we show $(T_1)^2 = F_0$, since by
+  \begin{align*}
+    SS_R & = \sum_{i=1}^n (\hat{y}_i - \overline{y}) = \sum_{i=1}^n ((\hat{\beta}_0 + \hat{\beta}_1x_{1i}) - (\hat{\beta}_0 + \hat{\beta}_1 \overline{x}_1))^2
+           = \hat{\beta}_1^2 \sum_{i=1}^n (x_{1i} - \overline{x}_1)^2 = \hat{\beta}_1^2 S_{xx}
+           \intertext{and $ese(\hat{\beta}_1) = \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}$}
+           F & = \frac{SS_R/(p-1)}{SS_{Res}/(n-p)} = \frac{SS_R/1}{SS_{Res}/(n-2)} = \frac{SS_R}{\hat{\sigma}^2}
+               = \frac{\hat{\beta}_1^2 S_{xx}}{\hat{\sigma}^2} = \left(\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right)^2 = T_1^2
+  \end{align*}
+  \subsection{What the F-Test Really Tests}
+  \begin{enumerate}
+  \item If we retain $H_0: \beta_1 = 0$ --- do not find any
+    significant share of variance associated with the regression. This
+    can be due to multiple reasons:
+    \begin{enumerate}
+    \item The intercept-only model is right.
+    \item $\beta_1 \neq 0$ but the test doesn't have enough power to
+      detect it. $\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}$ is small.
+    \item The real relationship is nonlinear, but the best linear
+      approximation has zero slope.
+    \end{enumerate}
+  \item If we reject $H_0$ --- does not mean the SLR model is right,
+    only that the non-zero slope linear model predicts better than the
+    intercept-only model.
+  \end{enumerate}
+  \section{Prediction and Predictive Inference}
+  \subsection{Prediction}
+  The conditional mean of $Y$ is
+  \begin{align*}
+    \mu & = m(x_1) = E[Y \mid X_1 = x_1] = \beta_0 + \beta_1 x_1
+          \intertext{while our estimate for the conditional mean is}
+          \hat{\mu} & = \hat{m}(x_1) = \hat{\beta}_0 + \hat{\beta}_1 x_1
+                      \text{ (fitted value)}
+  \end{align*}
+    $m(x_1)$ --- deterministic, unknown \\
+    $\hat{m}(x_1)$ --- a function of data, random, known, it
+    inherits the randomness from $\hat{\beta}_0$ and $\hat{\beta}_1$,
+    which in turn inherits from $Y$.
+
+    We can show that
+    \begin{align*}
+      E(\hat{m}(x_1)) & = \beta_0 + \beta_1 x_1 = m(x_1)
+      \\ Var(\hat{m}(x_1)) & = \sigma^2 \left(\frac{1}{n} + \frac{(x_1 - \overline{x}_1)^2}{S_{xx}}\right)
+    \end{align*}
+    Under the GN-SLR assumption, $\hat{m}(x_1)$ is Gaussian.
+    \begin{align*}
+      \hat{m}(x_1) & \sim N \left(m(x_1), \sigma^2 \left(\frac{1}{n} + \frac{(x_1 + \overline{x}_1)^2}{S_{xx}}\right)\right)
+    \end{align*}
+    A $100(1- \alpha)$ percent CI on the
+    $\underbrace{\text{\textbf{mean}
+        response}}_{\text{\textbf{conditional mean of }} Y}$, at the
+    point $x_1 = x_{10}$ is ($k = t_{\frac{\alpha}{2}, n-2}$)
+    \begin{align*}
+      CI(m(x_1)) & = \left(\hat{m}(x_{10}) - k \sqrt{MS_{Res} \left(\frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)},
+\hat{m}(x_{10}) + k \sqrt{MS_{Res} \left(\frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)}
+                   \right)
+      \\ & = \hat{m}(x_{10}) \pm k \cdot \underbrace{ese(\hat{m}(x_{10}))}_{ \approx \sqrt{Var(\hat{m}(x_{10}))}}
+           \intertext{Where we replace $\sigma^2$ by $\hat{\sigma}^2$
+           to get an approximation of the variance}
+    \end{align*}
+    $K : T \sim t_{n-2}$
+    \includegraphics[width=.6\textwidth]{23.pdf}
+
+    A $100(1-\alpha)$ percent CI on the future observation is
+    $$CI(y)= \left(\hat{m}(x_{10}) - k\sqrt{MS_{Res} \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)},
+      \hat{m}(x_{10}) + k \sqrt{MS_{Res} \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)}
+      \right)$$
+
+    We should distinguish $\underbrace{CI(m(x_{10}))}_{\text{mean
+        response}}$ and $\underbrace{CI(y)}_{\text{new observation}}$.
+    \begin{itemize}
+    \item A $100 (1- \alpha)\%$ CI on the mean response is an interval
+      $[l, u]$ where
+      \begin{align*}
+        P(l \leq m(x_1) \leq u \mid X_{1} = x_{10}) & = 1 - \alpha
+                                                      \intertext{Recall:}
+                                                      Y & =
+                                                      \underbrace{\beta_0
+                                                      + \beta_1
+                                                      x_1}_{m(x_1)} +
+                                                      \varepsilon\\ E[Y
+                                                      \mid X_1 = x_1]
+                                                      & = m(x_1)
+      \end{align*}
+      Note that this will be more stable since $m(x_1)$ does not
+      include the additional noise $\varepsilon$.
+    \item A $100 (1-\alpha)\%$ CI on the new observation $Y$ is an
+      interval $[l', u']$ where
+      \begin{align*}
+        P(l' \leq Y_{x_{10}} \leq u' \mid X_1 = x_{10}) & = 1 - \alpha
+        \\ Y_{x_{10}} & = m(x_{10}) + \varepsilon
+      \end{align*}
+      This CI should be much wider than the mean response one, as it
+      has to try to trap all points (all $\varepsilon$), whereas the
+      mean response just needs to trap the line.
+    \end{itemize}
+    \paragraph{Proof (sketch)} We predict on $X_1 = x_{10}$
+    \begin{align*}
+      \hat{m}(x_{10}) & = \hat{\beta}_0 + \hat{\beta}_1 x_{10} = \overline{y} - \hat{\beta}_1 \overline{x}_1 + \hat{\beta}_1 x_{10} = \overline{y} + (x_{10} - \overline{x}_1)\hat{\beta}_1
+    \end{align*}
+    Using
+    \begin{align*}
+      \hat{\beta}_1 & = \sum_{i=1}^n c_i Y_i & c_i & = \frac{x_{1i} - \overline{x}_1}{S_{xx}} & \sum_{i=1}^n c_i & = 0
+    \end{align*}
+    Now plugin $\hat{\beta}_1$.
+    \begin{align*}
+      \hat{m}(x_{10}) & = \frac{1}{n} \sum_{i=1}^n y_i + (x_{10}-\overline{x}_1) \left(\sum_{i=1}^n c_i Y_i\right)
+      \\ E[\hat{m}(x_{10})] & = E \left[\frac{1}{n} \sum_{i=1}^n y_i + (x_{10}-\overline{x}_1) \left(\underbrace{\sum_{i=1}^n c_i Y_i}_{\hat{\beta}_1}\right)\right]
+      \\ \textcolor{blue}{E \left[\frac{1}{n} \sum_{i=1}^n Y_i\right]} & = \textcolor{blue}{E \left[\frac{1}{n} \sum_{i=1}^n (\beta_0 + \beta_1 x_{1i} + \varepsilon_i)\right] = \beta_0 + \beta_1 \overline{x}_1}
+      \\ E[\hat{m}(x_{10})] & = \beta_0 + \beta_1 \overline{x}_1 + (x_{10} - \overline{x}_1)\beta_1 = \beta_0 + \beta_1 x_{10}
+      \\ Var(\hat{m}(x_{10})) & = Var \left[\frac{1}{n} \sum_{i=1}^n Y_i + (x_{10} - \overline{x}_1) \left(\sum_{i=1}^n c_i Y_i\right)\right]
+      \\ & = Var \left[\frac{1}{n} \sum_{i=1}^n (1 + n (x_{10} - \overline{x}_1)c_i)Y_i\right]
+      \\ & = \frac{1}{n^2} \sum_{i=1}^n (1 + n (x_{10} - \overline{x}_1)c_i)^2 \underbrace{Var(Y_i)}_{\sigma^2}
+           \intertext{Since $Y_i, Y_j \mid X_1 = x_{10}$ are independent}
+           & = \frac{\sigma^2}{n^2} \sum_{i=1}^n (1 + 2n (x_{10} - \overline{x}_1)c_i + n^2 (x_{10} - \overline{x}_1)c_i^2) \\
+      & = \frac{\sigma^2}{n^2} \left(n + 0 + n^2(x_{10} - \overline{x}_1)^2 \frac{\sum_{i=1}^n(x_{1i} - \overline{x}_1)^2}{\underbrace{S_{xx}^2}_{\sum_{i=1}^n c_i^2}}\right) \\
+      & = \sigma^2 \left(\frac{1}{n} + \frac{(x_{10}-\overline{x}_1)^2}{S_{xx}}\right)
+    \end{align*}
+    \begin{itemize}
+    \item The variance of $\hat{m}(x_{10})$ grows as $\sigma^2$ grows.
+    \item The larger the $n$ is, the smaller the variance (but even
+      with $n \to \infty$, you'll still be left with
+      $\frac{(x_{10}-\overline{x}_1)}{S_{xx}}$).
+    \item The further our prediction $x_{10}$ is from the center of
+      data, the bigger the variance.
+    \end{itemize}
+    Thus under the GN-SLr assumption, $\hat{m}(x_{10})$ is
+    \textbf{Gaussian}.
+    \begin{align*}
+      \hat{m}(x_{10}) & \sim \left(N(\underbrace{m(x_{10})}_{\beta_0 + \beta_1 x_{10}}, \sigma^2 \left(\frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)\right)
+                        \intertext{Standardizing gives us:}
+                        \frac{\hat{m}(x_{10}) - E[\hat{m}(x_{10})]}{\sqrt{Var[\hat{m}(x_{10})]}} & = \frac{\hat{m}(x_{10} - m(x_{10}))}{\sqrt{\sigma^2 \left(\frac{1}{n} + \frac{(x_{10} - \overline{x})^2}{S_{xx}}\right)}} \sim N(0,1)
+                        \\\frac{\hat{m}(x_{10}) - E[\hat{m}(x_{10})]}{\sqrt{ese(\hat{m}(x_{10}))}} & = \frac{\hat{m}(x_{10} - m(x_{10}))}{\sqrt{\hat{\sigma}^2 \left(\frac{1}{n} + \frac{(x_{10} - \overline{x})^2}{S_{xx}}\right)}} \sim t_{n-2}
+    \end{align*}
+    Thus a $100 (1- \alpha)\%$ CI on \textbf{the mean response} at
+    point $X_1 = x_{10}$ is
+    \begin{align*}
+      CI(\hat{m}(x_{10})) &
+                            =\left(\hat{m}(x_{10}) - k \cdot ese(\hat{m}(x_{10})),
+      \hat{m}(x_{10}) + k \cdot ese(\hat{m}(x_{10}))\right)
+                            \\
+                            & =\left(\hat{m}(x_{10}) - k\sqrt{\hat{\sigma}^2 \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)},
+      \hat{m}(x_{10}) + k \sqrt{\hat{\sigma}^2 \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)}
+      \right)
+    \end{align*}
 \end{document}
