@@ -1634,7 +1634,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   Now we show $(T_1)^2 = F_0$, since by
   \begin{align*}
     SS_R & = \sum_{i=1}^n (\hat{y}_i - \overline{y}) = \sum_{i=1}^n ((\hat{\beta}_0 + \hat{\beta}_1x_{1i}) - (\hat{\beta}_0 + \hat{\beta}_1 \overline{x}_1))^2
-           = \hat{\beta}_1^2 \sum_{i=1}^n (x_{1i} - \overline{x}_1)^2 = \hat{\beta}_1^2 S_{xx}
+           = \hat{\beta}_1^2 \sum_{i=1}^n (x_{1i} - \overline{x}_1)^2 = \hat{\beta}_1^2 S_{xx} = \hat{\beta}_1 S_{xy}
            \intertext{and $ese(\hat{\beta}_1) = \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}$}
            F & = \frac{SS_R/(p-1)}{SS_{Res}/(n-p)} = \frac{SS_R/1}{SS_{Res}/(n-2)} = \frac{SS_R}{\hat{\sigma}^2}
                = \frac{\hat{\beta}_1^2 S_{xx}}{\hat{\sigma}^2} = \left(\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right)^2 = T_1^2
@@ -1701,7 +1701,8 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     We should distinguish $\underbrace{CI(m(x_{10}))}_{\text{mean
         response}}$ and $\underbrace{CI(y)}_{\text{new observation}}$.
     \begin{itemize}
-    \item A $100 (1- \alpha)\%$ CI on the mean response is an interval
+    \item A $100 (1- \alpha)\%$ CI on the mean response (tries to
+      cover true regression line) is an interval
       $[l, u]$ where
       \begin{align*}
         P(l \leq m(x_1) \leq u \mid X_{1} = x_{10}) & = 1 - \alpha
@@ -1716,7 +1717,9 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       \end{align*}
       Note that this will be more stable since $m(x_1)$ does not
       include the additional noise $\varepsilon$.
-    \item A $100 (1-\alpha)\%$ CI on the new observation $Y$ is an
+    \item A $100 (1-\alpha)\%$ CI on the new observation $Y$ (also
+      called \textbf{prediction interval}, tries to cover possible
+      values of $Y$, has to include spread/noise) is an
       interval $[l', u']$ where
       \begin{align*}
         P(l' \leq Y_{x_{10}} \leq u' \mid X_1 = x_{10}) & = 1 - \alpha
@@ -1775,4 +1778,74 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       \hat{m}(x_{10}) + k \sqrt{\hat{\sigma}^2 \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)}
       \right)
     \end{align*}
+    \paragraph{Prediction intervals for future observation}
+    Using the GN-SLR model, we know that at $X_1 = x_{10}$ the future
+    observation of $Y_0$ is
+    $$y_0 = m(x_{10}) + \varepsilon = \beta_0 + \beta_1 x_{10} +
+    \varepsilon$$
+    Now we can construct a confidence interval (or prediction
+    interval) for $Y_0$, we call it \textbf{the prediction interval
+      for the future observation $\mathbf{Y_0}$} (which is predicted
+    at the point $X_1 = x_{10}$)
+    \begin{align*}
+      PI(Y_0) & = [\hat{Y}_0 - k \cdot ese(Y_0), \hat{Y}_0 + k \cdot ese(Y_0)]
+      \\ & = \left[\hat{m}(x_{10}) - k \sqrt{\hat{\sigma}^2 \left(1 + \frac{1}{n} + \frac{(x_{10}-\overline{x}_1)^2}{S_{xx}}\right)},
+\hat{m}(x_{10}) + k \sqrt{\hat{\sigma}^2 \left(1 + \frac{1}{n} + \frac{(x_{10}-\overline{x}_1)^2}{S_{xx}}\right)}
+                \right]
+    \end{align*}
+    \paragraph{Proof}
+    Since
+    \begin{align*}
+      Y_0 \mid (X_1 = x_{10}) & = m(x_{10}) + \varepsilon \sim N(m(x_{10}), \sigma^2)
+    \end{align*}
+    The variance of $Y_0$ is
+    \begin{align*}
+      Var(Y_0) & = Var(m(x_{10}) + \varepsilon) = Var (m(x_{10})) + Var(\varepsilon) = Var(\beta_0 + \beta_1 x_{10}) + \sigma^2 = 0 + \sigma^2
+    \end{align*}
+    In the formula, $\beta_0, \beta_1$ and $\sigma^2$ are unknown,
+    replace them with $\hat{\beta}_0, \hat{\beta}_1$ and
+    $\hat{\sigma}^2$.
+    \begin{align*}
+      \widehat{Var}(Y_0) & = \widehat{Var}(\hat{m}(x_{10}) + \varepsilon) = \widehat{Var}(\underbrace{\hat{\beta}_0 + \hat{\beta_1}x_{10}}_{\hat{m}(x_{10}}) + \widehat{Var}(\varepsilon)
+      \\ & = \hat{\sigma}^2 \left(\frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right) + \hat{\sigma}^2
+           = \hat{\sigma}^2 \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)
+           \intertext{Therefore the estimated standard error of $Y_0$ is}
+           ese(Y_0) & = \sqrt{\widehat{Var}(Y_0)}
+           = \sqrt{\hat{\sigma}^2 \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)}
+    \end{align*}
+    We see that the estimated standard error introduces a multiple of
+    $\hat{\sigma}^2$ (the $+1$ in the equation).
+    \section{$R^2$ (rubbish)}
+    If we want to get a global measure of how well $X_1$ ``predicts''
+    $Y$, you may consider the proportion of variation explained by the
+    regression model.
+    $$R^2 = \frac{SS_R}{SS_T} = \frac{SS_T - SS_{Res}}{SS_T} = 1 -
+    \frac{SS_{Res}}{SS_T}$$
+
+    The definition is pretty intuitive, as it is the variation due to
+    regression divided by the total variation, i.e.\ what is the
+    proportion of variation due to regression.
+
+    Because $SS_R = \hat{\beta}_1 S_{xy}$,
+    \begin{itemize}
+    \item $R^2$ will be $0$ if $\hat{\beta}_1 = 0$ (worst case).
+    \item $R^2$ will be $1$ if all the residuals are zero, $SS_{Res} =
+      0$ (best case).
+    \end{itemize}
+    \includegraphics[width=.5\textwidth]{24.pdf}
+    \paragraph{Interpretation of $R^2$}
+    Distinguish $R^2$ from t-test (p-value). Four scenarios:
+    \begin{enumerate}
+    \item Low $R^2$ and low p-value (p-value $< \alpha$). \textbf{The
+        model does not explain much of the variation of the data but the
+        model is significant (Including $\mathbf{X_1}$ into the model is
+        necessary but not sufficient)}
+    \item Low $R^2$ and high p-value. \textbf{The model does not
+        explain much of the variation and $\mathbf{X_1}$ is not useful
+      (worst case)}
+  \item High $R^2$ and low p-value. \textbf{Model
+      sufficient. $\mathbf{X_1}$ is useful (best case)}
+  \item High $R^2$ and high p-value.
+  \end{enumerate}
+  \paragraph{Adjust $R^2$}
 \end{document}
