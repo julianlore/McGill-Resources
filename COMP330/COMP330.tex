@@ -990,8 +990,10 @@ Formally, the grammar $G_1$ we saw last class:
 \item $L(G_1) = \left\{0^n \# 1^n \mid n \geq 0\right\}$
 \end{itemize}
 \subsection{Regular Operations: Kleene's theorem for CFL}
+\begin{itemize}
+\item
 The class of CFLs is closed under union.
-\paragraph{Proof}
+\\
 $G_A = (V_A, \Sigma, R_A, S_A)$ be a CFG generating $L_A$ and
 $G_B = (V_B, \Sigma, R_B, S_B)$ be a CFG generating $L_B$ and $(V_A
 \cap V_B = \emptyset)$ (for convenience, otherwise rename).
@@ -1002,17 +1004,18 @@ $L_\cup = L_A \cup L_B$.
 
 Note that in the first rule, we can go to either $S_A$ or $S_B$, there
 is some non-determinism here.
-
+\item
 The class of CFLs is closed under concatenation.
-\paragraph{Proof}
+\\
 Consider $G_C = ( \left\{S_C\right\}\cup V_A \cup V_B, \Sigma,
 \left\{S_C \to S_AS_B\right\}\cup R_A \cup R_B, S_C)$. $L_C = L_A
 \circ L_B$
-
+\item
 The class of CFLs is closed under star.
-\paragraph{Proof}
+\\
 $G_S = ( \left\{S_S\right\}\cup V_A, \Sigma, \left\{S_S \to
   \varepsilon \mid S_A S_S\right\} \cup R_A, S_S)$. $L_S = (L_A)^*$
+\end{itemize}
 \subsection{Construction tools (and Reductions)}
 CFLs are closed under the above operations, but \underline{not under
   complement or intersection}.
