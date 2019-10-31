@@ -69,7 +69,7 @@ $$\text{All languages} \supset \text{Languages we can describe}
   decidable are describable, as the algorithm to decide it can also
   describe it.
 \end{itemize}
-\paragraph{Post Correspondence Problem}You are given a set of tiles
+\paragraph{Post Correspondence Problem} \label{pcp}You are given a set of tiles
 that have strings.
 \\
 \begin{tabular}{|c| c| c| c| c |c|}
@@ -1854,5 +1854,152 @@ We have $H$ exists $\implies D$ exists.
 \end{cases}
 \end{align*}
 However, this does not make sense and we arrive at a contradiction. So
-$D$ cannot exist, meaning $H$ cannot exist, so $A_{TM}$ is undecidable.
+$D$ cannot exist, meaning $H$ cannot exist, so $A_{TM}$ is
+undecidable.
+\section{10/31/19}
+Recap and different perspective from last time:
+\begin{itemize}
+\item $H$ accepts $\langle M,w \rangle$ when $M$ accepts $w$
+\item $D$ rejects $\langle M \rangle$ when $M$ accepts $\langle M
+  \rangle$
+\item $D$ rejects $\langle D \rangle$ when $D$ accepts $\langle D
+  \rangle$. Contradiction
+\end{itemize}
+Note that when defining $H$ and $D$, we say does not accept rather
+than reject, because it may not actually reject it and can just loop
+forever.
+
+This is Turing-recognizable, we can enumerate a table of machines and
+run them with $D$ and see if we accept. We however cannot give an
+answer for $\langle D \rangle$ as input for $D$.
+
+We can also prove undecidability of $A_{TM}$ with a diagonalization
+argument, however it would be much more complicated.
+\paragraph{Thm}
+A language is decidable $\iff$ it is Turing-recognizable and
+co-Turing-recognizable (complement is Turing-recognizable).
+
+Let $M_1$ and $M_2$ be TMs recognizing $L$ and $\overline{L}$.
+
+$M = $ On input $w$
+\begin{enumerate}
+\item Run $M_1$ and $M_2$ on input $w$ in parallel
+\item If $M_1$ accepts, \textit{accept}, if $M_2$ accepts, \textit{reject}
+\end{enumerate}
+\subsection{Undecidability by reductions}
+The set of languages we can show that are undecidability by reductions
+is larger than the set of languages we can show are undecidable by
+diagonalization.
+
+All the undecidable languages we saw in the table earlier can be
+proved using reductions.
+
+\textbf{Reducibility} always involves two problems, $A$ and $B$. If
+$A$ reduces to $B$, we can use a solution to $B$ to solve $A$.
+\paragraph{Ex} $HALT_{TM} = \left\{\langle M,w \rangle \mid M \text{
+    is a TM and } M \text{ halts on input }w\right\}$ (i.e.\ does the
+machine stop). This language is undecidable.
+\paragraph{Proof} Assume that the TM $R$ decides
+$HALT_{TM}$. Construct TM $S$ to decide $A_{TM}$ as follows:
+\\ $S = $ On input $\langle M,w \rangle$ an encoding of a TM $M$ and a
+string $w$
+\begin{enumerate}
+\item Run $R$ on $\langle M,w \rangle$
+\item If $R$ rejects, \textit{reject}
+\item If $R$ accepts, simulate $M$ on $w$ until it halts
+\item If $M$ has accepted, \textit{accept}, if $M$ has rejected, \textit{reject}
+\end{enumerate}
+$R$ decides $HALT_{TM} \implies S$ decides $A_{TM}$. But $A_{TM}$ is
+undecidable $\implies HALT_{TM}$ is undecidable.
+\paragraph{Empty Language TMs}
+$E_{TM} = \left\{\langle M \rangle \mid M \text{ is a TM and } L(M) =
+  \emptyset\right\}$ is undecidable
+
+We are going to describe a machine based on a certain input. We want
+to construct a machine whose sole purpose is to find out if a specific
+$M$ accepts a specific $w$. Call it $M_1$.
+\paragraph{Proof}
+$M_1 = $ On input $x$
+\begin{enumerate}
+\item If $x \neq w$, \textit{reject}
+\item If $x=w$, run $M$ on $w$ and \textit{accept} if $M$ does
+\end{enumerate}
+This machine has $w$ and $M$ as part of its description. It is either the
+language with only $w$ in it or the empty language.
+
+Now assuming $R$ decides $E_{TM}$ and construct an $S$ deciding
+$A_{TM}$.
+\\ $S = $ On input $\langle M,w \rangle$, an encoding of a TM $M$ and
+string $w$
+\begin{enumerate}
+\item Use the description of $M$ and $w$ to construct $M_1$
+\item Run $R$ on $\langle M_1 \rangle$
+\item If $R$ accepts, \textit{reject}, if $R$ rejects, \textit{accept}
+\end{enumerate}
+$S$ must be able to compute a description of $M_1$ from $M$ and $w$,
+however it can do so because it just needs to add extra states to $M$
+that check $x=w$.
+
+$R$ decides $E_{TM} \implies S$ decides $A_{TM}$. A decider for
+$A_{TM}$ cannot exist, so $E_{TM}$ must be undecidable.
+\paragraph{TM to check Regularity}
+$REGULAR_{TM} = \left\{\langle M \rangle \mid M \text{ is a TM and
+  }L(M) \text{ is a regular language}\right\}$
+\paragraph{Proof} Let $R$ be a TM deciding $REGULAR_{TM}$ and
+construct $S$ to decide $A_{TM}$.
+\\ $S = $ On input $\langle M,w \rangle$, where $M$ is a TM and $w$ is
+a string
+\begin{enumerate}
+\item Construct $M_2 =$ On input $x$
+  \begin{enumerate}
+  \item If $x$ has form $0^n1^n$, \textit{accept}
+  \item If $x$ does not have this form, run $M$ on $w$ and
+    \textit{accept} if $M$ accepts $w$
+  \end{enumerate}
+\item Run $R$ on $\langle M_2 \rangle$
+\item If $R$ accepts, \textit{accept}, if $R$ rejects, \textit{reject}
+\end{enumerate}
+In otherwords, $\displaystyle L(M_2) =
+\begin{cases}
+  \left\{0^n1^n \mid n \geq 0\right\} & \text{if }M \text{ rejects }w
+  \\ \Sigma^* & \text{if }M \text{ accepts }w
+\end{cases}
+$ \\We make $L(M_2)$ different depending solely on if $M$ accepts or
+rejects $w$. However, it will always accept $0^n1^n$. If $R$ accepts
+$\langle M_2 \rangle$, that means the language is $\Sigma^*$, if it
+rejects, it should be $\left\{0^n1^n \mid n \geq 0\right\}$, meaning
+that $S$ can decide $A_{TM}$.
+\paragraph{Equality of TMs}
+$EQ_{TM} = \left\{\langle M_1,M_2 \rangle \mid M_1 \text{ and }M_2
+  \text{ are TMs} and L(M_1) = L(M_2)\right\}$ is undecidable.
+\paragraph{Proof} $R$ decides $EQ_{TM}$ and construct $S$ to decide
+$E_{TM}$
+\\ $S = $ On input $\langle M \rangle$, a $TM$
+\begin{enumerate}
+\item Run $R$ on $\langle M, M_1 \rangle$ where $M_1$ rejects all the
+  inputs (empty language).
+\item If $R$ accepts, \textit{accept}, if $R$ rejects, \textit{reject}
+\end{enumerate}
+$R$ decides $EQ_{TM} \implies S$ decides $E_{TM}$. But $E_{TM}$ is
+undecidable $\implies EQ_{TM}$ must also be undecidable.
+\\ \noindent \rule{\textwidth}{0.5pt}
+Additionally, $EQ_{CFG}$ can be reduced to $A_{TM}$ and $PCP$ can be
+reduced to $A_{TM}$, which we'll see next class as it is a very
+involved proof.
+\paragraph{Rice's theorem} Let $P$ be any nontrivial property of the
+language of a TM. The problem of determining whether a given TM's
+language has $P$ is undecidable, unless all TM's have $P$ or none of
+them have $P$.
+
+Formally, let $P$ be a language consisting of a TM description where
+$P$ fulfills two conditions. $P$ is nontrivial, it contains some, but
+not all TM descriptions and $P$ is a property of the TM's language,
+i.e.\ $L(M_1) = L(M_2) \implies \langle M_1 \rangle \in P \iff \langle
+M_2 \rangle \in P$. $P$ is undecidable.
+
+This is an extremely general meta theorem that encompasses the
+reducibility that we have been using this class to show that some
+languages are undecidable.
+\\ \noindent \rule{\textwidth}{0.5pt}
+Recap of \hyperref[pcp]{Post Correspondence Problem}
 \end{document}
