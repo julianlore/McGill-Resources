@@ -2002,4 +2002,134 @@ reducibility that we have been using this class to show that some
 languages are undecidable.
 \\ \noindent \rule{\textwidth}{0.5pt}
 Recap of \hyperref[pcp]{Post Correspondence Problem}
+\section{11/05/19}
+\paragraph{Theorem} PCP cannot be \textbf{decided} by any algorithm or
+computer program. No algorithm can identify in a finite amount of time
+some instances that have a no outcome. Although if a solution exists,
+we can find it (Turing-recognizable).
+
+\paragraph{Def} Let $M$ be a TM with input string $w$. An
+\textbf{accepting computation history} for $M$ on $w$ is a sequence of
+configurations $C_1, C_2, \ldots, C_\ell,$ where $C_1$ is start
+configuration of $M$ on $w$ and $C_\ell$ is an accepting configuration
+of $M$ and each $C_i$ legally follows from $C_{i-1}$ according to
+$M$. A \textbf{rejecting computation history} for $M$ on $w$ is
+defined analogously but with $C_\ell$ being a rejecting configuration.
+
+\paragraph{Proof} We want to reduce $A_{TM}$ to MPCP. For every
+$R$-move, $L$-move, copy move, blank and clean, we will add a specific
+tile. We also add one for accepting. Essentially, we add tiles that
+enforce that the head operates just like the rules of the Turing
+machine (the other tiles are just copies).
+
+Let TM $R$ decide the PCP and construct $S$ deciding $A_{TM}$. Let $M
+= (Q, \Sigma, \Gamma, \delta, q_0 q_{accept}, q_{reject})$.
+\\ $MPCP =  \left\{\langle P \rangle \mid P \text{ is an instance of
+    PCP with a match that starts with the first domino}\right\}$
+\\ We want $S$ to construct an instance of PCP $P$ that has a match
+$iff M$ accepts $w$. In order to do that, $S$ will first construct an
+instance $P'$ of MPCP.
+\begin{enumerate}
+\item Put $\left[\dfrac{\#}{\# q_0 w_1 w_2 \ldots w_n \#}\right]$ into
+  $P'$ as the first domino. We enforce that our TM starts with $C_1 =
+  q_0 w_1w_2 \ldots w_n$, i.e.\ we specify $M$ and $w$.
+\item ($R$-moves) $\forall a,b \in \Gamma$ and $\forall q,r \in Q$
+  where $q \neq q_{reject}$, $\delta(q,a) = (r,b,R) \implies$ put
+  $\left[\dfrac{qa}{br}\right]$ into $P'$
+\item ($L$-moves) $\forall a,b \in \Gamma$ and $\forall q,r \in Q$
+  where $q \neq q_{reject}$, $\delta(q,a) = (r,b,L) \implies$ put
+  $\left[\dfrac{cqa}{rcb}\right]$ into $P'$
+\item (Copy) $\forall a \in \Gamma$, put $\left[\dfrac{a}{a}\right]$
+  in $P'$
+\item (Blanks) put $\left[\dfrac{\#}{\#}\right]$ (to separate
+  configurations) and $\left[\dfrac{\#}{\textvisiblespace\#}\right]$
+  (if the TM needs a larger tape/to simulate the infinitely many
+  blanks to the right) into $P'$
+\item (Extra symbols) $\forall a \in \Gamma$, put $\left[\dfrac{a\
+      q_{accept}}{q_{accept}}\right]$ and $\left[\dfrac{q_{accept}\
+      a}{q_{aacept}}\right]$ into $P'$. This adds ``pseudo-steps'' of
+  the TM after it has halted, the head will get rid of adjacent
+  symbols until none are left, so that the leftover tiles can't be
+  used elsewhere in a way that won't simulate the TM.
+\item (Acceptance) Add $\left[\dfrac{q_{accept}\#\#}{\#}\right]$ to $P'$.
+\end{enumerate}
+\paragraph{Reducing MPCP to PCP} Note that the $P'$ constructed above
+always has a solution for PCP, so we must convert $P'$ to $P$, an
+instance of PCP. We build the requirement of starting with the first
+domino into the problem.
+
+Let $u = u_1 u_2 \ldots u_n$ be any string of length $n$. Define:
+\begin{align*}
+  \star u & = *u_1 * u_2 * \ldots * u_n \text{ (add * before every character)}
+  \\ u \star & = u_1 * u_2 * \ldots * u_n * \text{ (add * after every character)}
+  \\ \star u \star & = *u_1 * u_2 * \ldots * u_n * \text{ (add *
+                     before and after every character)}
+\end{align*}
+If $P'$ consists of:
+\begin{align*}
+  \left\{\left[\dfrac{t_1}{b_1}\right],\left[\dfrac{t_2}{b_2}\right], \ldots, \left[\dfrac{t_k}{b_k}\right]\right\}
+\end{align*}
+Then $P$ will be:
+\begin{align*}
+  \left\{\left[\dfrac{\star t_1}{\star b_1\star}\right], \left[\dfrac{\star t_1}{b_1 \star}\right],\left[\dfrac{\star t_2}{b_2\star}\right], \ldots, \left[\dfrac{t_k}{b_k}\right], \left[\dfrac{* \diamond}{\diamond}\right]\right\}
+\end{align*}
+Since the first tile is the only one that starts with a * on the top
+and bottom, we can only start with the first tile. We add an additional
+terminating tile to add an extra * on top.
+\paragraph{$\Sigma^*$ CFGs are undecidable}
+$ALL_{CFG} = \left\{\langle G \rangle \mid G \text{ is a CFG and }L(G)
+  = \Sigma^*\right\}$ is undecidable.
+\\ $EQ_{CFG}$ decidable $\implies ALL_{CFG}$ decidable.
+\\ $EQ_{CFG} = \left\{\langle G_1,G_2 \rangle \mid G_1, G_2 \text{ are
+  CFGs and }L(G_1)=L(G_2)\right\}$. Let $\langle G_2 \rangle$ be such
+that $L(G_2) = \Sigma^*$. ($G_2: R \to \varepsilon \mid 0R \mid 1R$).
+\\ $\langle G \rangle \in ALL_{CFG} \iff \langle G,G_2 \rangle \in
+EQ_{CFG}$
+\paragraph{Proof} $ALL_{CFG}$ decidable $\implies A_{TM}$ decidable.
+\\ For a TM $M$ and input $w$, construct a CFG $G$ that generates all
+strings $\iff M$ does not accept $w$. If $M$ does accept $w$, $G$ does
+not generate a particular string, this tring being the accepting
+computation history for $M$ on $w$. So $G$ generates all strings that
+are not accepting computation histories for $M$ on $w$.
+
+An accepting computation history for $M$ on $w$ appears as $\# C_1 \#
+C_2 \# \ldots \# C_\ell \#$. $G$ generates all strings such that
+\begin{itemize}
+\item They do not start with $C_1$
+\item They do not end with an accepting configuration
+\item Some $C_i$ does not properly yield $C_{i+1}$ under $M$
+\end{itemize}
+If $M$ does not accept $w$, there is no accepting computation history
+and all strings fail in one of the above ways, so $G$ would generate
+all strings.
+
+We can make a PDA $D$ for $G$. Because we are limited by the stack, we
+need our configuration history to be written as: $\# C_1 \#
+C_2^{\mathcal{R}} \# C_3 \# C_4^{\mathcal{R}}\# \ldots \# C_\ell \#$,
+i.e. we reverse every second configuration so that we can compare
+$C_i$ and $C_{i+1}$. We now want to check which of the three possible
+failures we encounter.
+\begin{itemize}
+\item One branch checks if the beginning is $C_1$, accepts if it
+  isn't.
+\item Another path checks if input ends with a configuration that has
+  $q_{accept}$, accepts if it doesn't. We can do this by stacking the
+  whole string and then checking the last configuration.
+\item The third option accepts if some $C_i$ does not properly yield
+  $C_{i+1}$. The PDA must non-deterministically decide which pair will
+  fail. Store $C_i$ on the stack and compare it to $C_{i+1}$ by
+  popping it out symbol by symbol. They should be identical except
+  potentially around the state/head. The difference should be dictated
+  by the transition function of $M$. $D$ will accept if it
+  discovers a mismatch or bad update.
+  $$L(D) =
+  \begin{cases}
+    \Sigma^* \setminus \left\{\text{accepting computation
+        history}\right\} & \text{if }M \text{ accepts }w
+    \\ \Sigma^* & \text{if }M \text{ rejects }w
+  \end{cases}
+  $$
+  So we have $L(G) = \Sigma^* \iff M$ rejects $w$. $ALL_{CFG}$
+  decidable $\implies A_{TM}$ decidable.
+\end{itemize}
 \end{document}
