@@ -385,7 +385,7 @@ follows (this definition is more general than the one in the textbook,
 however we will see a more developed one more comparable to the
 textbook later):
 \begin{enumerate}
-\item The distribution of $Y$ is arbitrary (and perhaps $X$ is
+\item The distribution of $X$ is arbitrary (and perhaps $X$ is
   non-random)
 \item If $X = x$ (it is given/we observe a value of $x$), then $Y =
   \beta_0 + \beta_1 x + \varepsilon$ for some constants $\beta_0$ and
@@ -1848,4 +1848,274 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   \item High $R^2$ and high p-value.
   \end{enumerate}
   \paragraph{Adjust $R^2$}
+  We have
+  \begin{align*}
+    E[SS_{RES}] & = \sigma^2 (n-p)
+  \end{align*}
+  If we increase the model complexity $p \to n$, then $SS_{RES} \to 0,
+  R^2 = 1 - \frac{SS_{RES}}{SS_T} \to 1$.
+  \\ $R^2$ does not account for model ``complexity''. So \textbf{adjusted
+    $\mathbf{R^2}$} can be used.
+  \begin{align*}
+    R_{adj}^2 & = 1 - \dfrac{SS_{RES}/(n-p)}{SS_T/(n-1)}
+  \end{align*}
+  $p \uparrow, SS_{RES} \downarrow, (n-p) \downarrow$, so they cancel
+  each other.
+
+  Note:
+  \begin{itemize}
+  \item When $p = 1, R^2_{adj} = R^2$
+  \item Adjusted $R^2$ is better than $R^2$ in terms of model selection.
+  \end{itemize}
+  \paragraph{Limitation of $R^2(R^2_{adj})$}
+  \begin{align*}
+    R^2 & = \frac{SS_{R}}{SS_T} = \frac{SS_R}{SS_R + SS_{RES}} = \frac{\hat{\beta}_1^2 S_{xx}}{\hat{\beta}_1^2S_{xx}+ SS_{RES}}
+    \\ & = \frac{\hat{\beta}_1^2 \frac{S_{xx}}{n}}{\hat{\beta}_1^2 \frac{S_{xx}}{n} + \frac{SS_{Res}}{n}} \stackrel{n \to \infty}{\to} \frac{\beta_1^2 Var(X)}{\beta_1^2 Var(X) + \sigma^2}
+  \end{align*}
+  Since $\hat{\sigma}^2 = \frac{SS_{RES}}{n-2}$.
+  \\ \includegraphics[width=.9\textwidth]{25.pdf}\\
+  Note:
+  \begin{itemize}
+  \item We can manipulate the data such that $R^2=0$ but the model is
+    correct, $R^2 = 1$ but the model is wrong.
+  \item $R^2$ can be compared when different models are fit to
+    \textbf{the same data set with the same, untransformed} response
+    variable. $R^2$ cannot be compared across different data sets.
+  \end{itemize}
+  \section{Multiple Linear Regression}
+  \subsection{Examples}
+  \begin{itemize}
+  \item Polynomial regression
+    \begin{align*}
+      E[Y \mid X] &= \beta_0 + \beta_1 X_1 + \beta_2X_1^2 + \ldots + \beta_k X_1^k = X \beta
+      \\ X & =
+             \begin{bmatrix}
+               1 & X_1 & X_1^2 & \ldots & X_1^k
+             \end{bmatrix}
+                                        & \beta & =
+                                                  \begin{bmatrix}
+                                                    \beta_0 \\ \beta_1 \\ \vdots \\ \beta_k
+                                                  \end{bmatrix}
+    \end{align*}
+  \item Multiple regression
+    \begin{align*}
+      E[Y \mid X] & = \beta_0 + \beta_1 X_1 + \ldots + \beta_k X_k = X \beta
+      \\ X & =
+             \begin{bmatrix}
+               1 & X_1 & X_2 & \ldots & X_k
+             \end{bmatrix}
+                                        & \beta & =
+                                                  \begin{bmatrix}
+                                                    \beta_0 \\ \beta_1 \\ \vdots \\ \beta_k
+                                                  \end{bmatrix}
+    \end{align*}
+  \item Model with interactions
+    \begin{align*}
+      E[Y \mid X] & = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_{12}X_1X_2 = X\beta
+      \\ X & =
+             \begin{bmatrix}
+               1 & X_1 & X_2 & X_1X_2
+             \end{bmatrix} & \beta & =
+                                     \begin{bmatrix}
+                                       \beta_0\\\beta_1\\\beta_2\\\beta_{12}
+                                     \end{bmatrix}
+    \end{align*}
+  \item Model with transformation
+    \begin{align*}
+      E[Y \mid X] & = \beta_0 + \beta_1 \log(X_1) + \beta_2 \sin (X_{2})
+      \\ X & =
+             \begin{bmatrix}
+               1 & \log(X_1) & \sin(X_2)
+             \end{bmatrix}
+                               & \beta & =
+                                         \begin{bmatrix}
+                                           \beta_0 \\ \beta_1 \\ \beta_2
+                                         \end{bmatrix}
+    \end{align*}
+  \end{itemize}
+  \paragraph{Model Setup}
+  In all cases, we use a linear model $E[Y \mid X] = X \beta$ where $X
+  =
+  \begin{bmatrix}
+    1 & X_1 & X_2 & \ldots & X_k
+  \end{bmatrix} \in \mathbb{R}^p, p = 1 + k$ ($+1$ because of
+  intercept, $p = 2$ for SLR).
+  \\ $\beta =
+  \begin{bmatrix}
+    \beta_0\\\beta_1 \\ \vdots \\ \beta_k
+  \end{bmatrix}
+  $ is a $p \times 1$ column vector ($p = k + 1$)
+  \paragraph{Multiple linear regression assumptions (Regular)}
+  \begin{enumerate}
+  \item There are $k$ predictors $X_1, X_2, \ldots, X_k$. We make
+    \underline{no assumptions} about their distributions. They may or
+    may not be dependent. $X$ without subscript refers to $X =
+    \begin{bmatrix}
+      1 & X_1 & X_2 & \ldots & X_k
+    \end{bmatrix}
+    $
+  \item There is a single response $Y$ (multivariate refers to
+    multiple responses, multiple refers to multiple predictors, which
+    is what we're doing).
+  \item Linear model
+    \begin{align*}
+      Y & = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_k X_k + \varepsilon = X\beta + \varepsilon
+    \end{align*}
+    for some constants $\beta_0, \beta_1, \ldots,
+    \beta_k$. Essentially a plane with random noise.
+  \item The noise $\varepsilon$ has $E[\varepsilon] = E [\varepsilon
+    \mid X] = 0$ (zero mean) and $Var(\varepsilon) = Var(\varepsilon
+    \mid X) = \sigma^2$ (constant variance).
+  \end{enumerate}
+  If we have $n$ observations $(y_i, 1, x_{1i}, \ldots, x_{ki}), i =
+  1, \ldots, n, 1$ is for the intercept.
+  \begin{align*}
+    y_i &= \beta_0 + \beta_1 x_{1i} + \beta_2x_{2i} + \ldots + \beta_k x_{ki} + \varepsilon_i
+    \\ & = x_i\beta + \varepsilon_i,\ \beta = (\beta_0,\beta_1, \ldots, \beta_k)
+    \\
+    \begin{bmatrix}
+      y_1\\y_2\\\vdots\\y_n
+    \end{bmatrix}
+    & =
+      \begin{bmatrix}
+        1 & x_{11} & \ldots & x_{1k}
+        \\ 1 & x_{12} & \ldots & x_{k2}
+        \\ \vdots & \vdots &\ddots & \vdots
+        \\ 1 & x_{1n} & \ldots & x_{kn}
+      \end{bmatrix}
+                                 \begin{bmatrix}
+                                   \beta_0\\\beta_1\\\vdots\\\beta_k
+                                 \end{bmatrix}
+    +
+    \begin{bmatrix}
+      \varepsilon_1\\\varepsilon_2\\ \vdots \\ \varepsilon_n
+    \end{bmatrix}
+    \\ Y_{n \times 1} & = X_{n \times (k + 1)} \beta_{(k+1) \times 1} + \mathcal{E}_{n \times 1}
+                        \intertext{Written in matrix form}
+                        Y & = X \beta + \mathcal{E}
+                        \intertext{Where}
+                        E[\mathcal{E} \mid X] & = 0_{n \times 1}
+    \\ Var(\mathcal{E} \mid X) & =
+                                 \begin{bmatrix}
+                                   Var(\varepsilon_1) & Cov (\varepsilon_1, \varepsilon_2) & \ldots & Cov(\varepsilon_1, \varepsilon_n)
+                                   \\ Cov(\varepsilon_2, \varepsilon_1) & Var(\varepsilon_2) & \ddots & \vdots
+                                   \\ \vdots & \ldots & \ddots & \vdots
+                                   \\ Cov(\varepsilon_n, \varepsilon_1) & \ldots & \ldots & Var(\varepsilon_n)
+                                 \end{bmatrix}
+                                                                                            =\sigma^2 I_n
+                                                                                            \intertext{From
+                                                                                            these
+                                                                                            we
+                                                                                            can
+                                                                                            see}
+                                                                                            E[Y \mid X] & = X \beta
+    \\  Var(Y \mid X) & = \sigma^2 I_n
+  \end{align*}
+  \subsection{Parameter Interpretation}
+  \begin{itemize}
+  \item $\sigma^2$: the variance of the noise around the true
+    regression line.
+  \item $\beta_0$: the expected value of $Y$ when $X_1 =0, X_2 = 0,
+    \ldots, X_k = 0$.
+    \begin{align*}
+      E[Y \mid X_1 = 0, \ldots, X_k = 0] & = X\beta = \beta_0 + 0 \cdot \beta_1 + 0\cdot \beta_2 + \ldots + 0 \cdot \beta_k = \beta_0
+    \end{align*}
+  \item $\beta_j$ for $j = 1, \ldots, k$. For example, $\beta_1$:
+    \begin{align*}
+      E&[Y \mid X_1 = x_1 + 1, X_2 = x_2, \ldots, X_k = x_k] - E[Y \mid X_1 = x_1, X_2 = x_2, \ldots, X_k = x_k]
+                                                              \\&= \left[\beta_0 + \beta_1 (x_1 + 1) + \beta_2 x_2 + \ldots + \beta_k x_k\right] - \left[\beta_0 + \beta_1 x_1 + \ldots + \beta_k x_k\right] = \beta_1
+    \end{align*}
+    If we select two sets of cases from the distribution of the data,
+    where $x_1$ differs by $1$ (increase or decrease), we expect $Y$
+    to differ by $\beta_1$ \underline{on average}.
+    \begin{align*}
+    \beta_1 &\neq Y \mid (X_1 = x_1 + 1, \ldots, X_k = x_k) - Y \mid (X_1 = x_1, \ldots, X_k = x_k)
+    \\\beta_1 &= E \left[Y \mid (X_1 = x_1 + 1, \ldots, X_k = x_k)\right] - E\left[Y \mid (X_1 = x_1, \ldots, X_k = x_k)\right]
+    \end{align*}
+    This is analogous to the single variable case, $\hat{y} =
+    x\hat{\beta} = \beta_0 + \beta_1 x_1$, $\hat{y}$ is the average
+    value of $y$, the center/average of the data.\\
+    \includegraphics[width=.6\textwidth]{26.pdf}
+  \end{itemize}
+  \subsection{Least Squares Estimation}
+  \underline{Estimates} Provided with observed data $\left\{(y_1,
+    x_1), \ldots, (y_n, x_n)\right\}$, we estimate $\beta$ using
+  LS. We minimize
+  \begin{align*}
+    S(\beta) & = \sum_{i=1}^n (y_i - x_i \beta)^2 = (Y - X \beta)^T (Y - X \beta) = \left\lVert Y - X \beta \right\rVert^2
+               \intertext{Where}
+               x_i & = (1, x_{1i}, \ldots, x_{ki})
+                     \intertext{Consider minimizing $S(\beta)$. We differentiate
+  $S(\beta)$ with respect to $\beta_0, \beta_1, \ldots, \beta_k$:}
+                     \frac{\partial{S}}{\partial{\beta_j}} & = - 2 \sum_{i=1}^n x_{ji} (y_i - x_i \beta) = 0
+    \\ j & = 0, 1, \ldots, k
+  \end{align*}
+  We have $p = k+1$ least-squares normal equations, which can also be
+  written in matrix format
+  \begin{align*}
+    \nabla_\beta S(\beta) & = -2X^T (Y - X\beta) = 0_p
+    \\ \implies X^TX \beta & = X^TY
+  \end{align*}
+This gives the solution for the least squares estimator
+\begin{align*}
+  \hat{\beta} & = (X^TX)^{-1}X^T Y
+\end{align*}
+Note: $(X^TX)^{-1}$ exists if:
+\begin{itemize}
+\item $n \geq p = k + 1$
+\\\includegraphics[width=.5\textwidth]{27.pdf}
+\\ For example, for $2$ variables, we need at least $2$ points to
+uniquely fit a line. Note that having the exact same number of points
+as variables will usually over-fit the data (unless there is no noise), it is much better to have
+a lot more points than variables. We extend this idea to say for $p$
+variables, we need at least $p$ points.
+\item The predictors must be \textbf{linearly independent}, that is no
+  columns of $X$ are a linear combination of the other columns. To
+  check this, make sure column rank of $X = k + 1$.
+\end{itemize}
+\paragraph{Fitted values}
+The fitted value of the regression model corresponding to $x_i = (1,
+x_{1i}, x_{2i}, \ldots, x_{ki})$ is $\hat{y}_i = \hat{\beta}_0 +
+\hat{\beta}_1 x_{1i} + \ldots + \hat{\beta}_k x_{ki}, i = 1, \ldots,
+n$. Note that fitted means the line we fit through our data points, we
+fit the existing $x_i$. If we plug in a new $x_i$, this becomes a
+prediction.
+\\ In the matrix format, it is
+\begin{align*}
+  \hat{Y} & = X \hat{\beta} = X (X^TX)^{-1}X^TY
+            \intertext{If we want to make a prediction for a new observation:}
+            & = X_{new} \hat{\beta} = X_{new} (X^TX)^{-1}X^TY
+\end{align*}
+\paragraph{Statistical properties of least-squares estimator}
+For estimator $\hat{\beta}$, if $X$ is non-random, then
+\begin{align*}
+  E[\hat{\beta}] & = E[\hat{\beta} \mid X] = \beta & Var(\hat{\beta} \mid X) & = \sigma^2 \underbrace{(X^TX)^{-1}}_{C} = \sigma^2 C
+\end{align*}
+The $Var$ is similar to a variance-covariance matrix.
+\paragraph{Estimation of $\sigma^2$}
+The residual sum of squares for MLR is
+\begin{align*}
+  SS_{RES} & = (Y - \hat{Y})^T (Y-\hat{Y}) = (Y - X \hat{\beta})(Y - X \hat{\beta}) = \left\lVert Y - X \hat{\beta} \right\rVert_2^2
+             \intertext{For the estimator of $\sigma^2$, we have}
+             \hat{\sigma^2} & = MS_{RES} = \frac{SS_{RES}}{n-p} = \frac{1}{n-p} \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \frac{\left\lVert Y - X \hat{\beta} \right\rVert_2^2}{n-p}
+\end{align*}
+We can show that $\hat{\sigma}^2$ is unbiased.
+\begin{align*}
+  E[\hat{\sigma}^2 \mid X] & = \sigma^2
+\end{align*}
+\paragraph{Student's t-test}
+Require the additional GN-MLR assumptions. We further assume:
+\begin{itemize}
+\item $\mathcal{E}\sim N(0_n, \sigma^2 I_n)$
+\item $\mathcal{E}$ is independent of $X$.
+\end{itemize}
+From these assumptions, conditional on $X$, $Y$ has a multivariate
+Guassian distribution.
+\begin{align*}
+  Y \mid X & \sim N(X \beta, \sigma^2 I_n)
+\end{align*}
+We can show that $\hat{\beta}$ has a sample distribution
+\begin{align*}
+  \hat{\beta} & \sim N(\beta, \sigma^2 (X^TX)^{-1})
+\end{align*}
 \end{document}
