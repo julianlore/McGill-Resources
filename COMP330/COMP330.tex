@@ -1367,7 +1367,8 @@ length at most $b^{|V| + 1} = p$.
 
   Assume $B$ is a CFL. Let $p$ be the pumping length for $B$. $s =
   a^pb^pc^p \in B$ and clearly $|s| \geq p$. Condition $2$ tells us
-  either $v$ or $y$ is nonempty. Consider both cases:
+  either $v$ or $y$ is nonempty. Consider the cases where $v$ and $y$
+  contain only one type of alphabet symbol or more than one type:
   \begin{itemize}
   \item Both $v$ and $y$ contain only one type of alphabet symbol, $v$
     does not contain both $a$'s and $b$'s or both $b$'s and $c$'s, the
@@ -2132,4 +2133,145 @@ failures we encounter.
   So we have $L(G) = \Sigma^* \iff M$ rejects $w$. $ALL_{CFG}$
   decidable $\implies A_{TM}$ decidable.
 \end{itemize}
+\section{11/07/19}
+\subsection{Mapping Reducibility}
+\paragraph{Computable Functions}
+A Turing machine computes a function by starting with the input to the
+function on the tape and halting with the output on the tape.
+\\ A function $f: \Sigma^* \to \Sigma^*$ is a \textbf{computable
+  function} if some TM $M$ on every input $w$ halts with just $f(w)$
+on its tape.
+\\ There are two requirements here, the TM must always halt and
+produce just $f(w)$.
+
+All usual arithmetic operations on integers are computable functions.
+\paragraph{Mapping Reducibility}
+Language $A$ is \textbf{mapping reducible} to language $B$, written $A
+\leq_m B$, if there is a computable function $f:\Sigma^* \to \Sigma^*$
+where $\forall w$:
+$$w \in A \iff f(w) \in B$$
+$f$ is called the \textbf{reduction} of $A$ to $B$.
+\paragraph{Thm}
+$A \leq_m B$ and $B$ is decidable $\implies$ then $A$ is decidable.
+\paragraph{Proof} Let $M$ be the decider for $B$ and $f$ be the
+reduction from $A$ to $B$. A decider $N$ for $A$ is as follows:
+
+$N = $ On input $w$
+\begin{enumerate}
+\item Compute $f(w)$
+\item Run $M$ on input $f(w)$ and output whatever $M$ outputs
+\end{enumerate}
+Clearly $w \in A \implies f(w) \in B$ because $f$ is a reduction from
+$A$ to $B$. Therefore $M$ accepts $f(w)$ whenever $w \in A$.
+\\ \textbf{Corollary}: $A \leq_m B$ and $A$ is undecidable $\implies B$
+undecidable.
+\paragraph{Ex}
+Earlier we used an reduction from $A_{TM}$ to prove $HALT_{TM}$ is
+undecidable. This reduction showed how a decider for $HALT_{TM}$ could
+be used to give a decider for $A_{TM}$. We demonstrated a mapping
+reducibility from $A_{TM}$ to $HALT_{TM}$:
+
+We need a computable function $f$ that takes $\langle M,w \rangle$ as
+input and returns output $\langle M',w' \rangle$ where
+$$\langle M,w \rangle \in A_{TM} \iff \langle M',w' \rangle \in
+HALT_{TM}$$
+$F = $ On input $\langle M,w \rangle$
+\begin{enumerate}
+\item Construct $M' =$ On input $x$:
+  \begin{enumerate}
+  \item Run $M$ on $x$
+  \item If $M$ accepts, \textit{accept}
+  \item If $M$ rejects, enter a loop.
+  \end{enumerate}
+\item Output $\langle M',w \rangle$
+\end{enumerate}
+$F$ computes $f$.
+\\ \noindent \rule{\textwidth}{0.5pt}
+The proof of the undecidability of PCP contains two mapping
+reductions, $A_{TM} \leq_m MPCP$ and $MPCP \leq_m PCP$. Mapping
+reducibility is \underline{transitive} so both reductions together
+imply $A_{TM} \leq_m PCP$.
+\paragraph{Thm}
+$A \leq_m B$ and $B$ is Turing-recognizable $\implies A$ is
+Turing-recognizable. Use the same proof for deciders but use
+recognizers instead.
+\paragraph{Corollary}
+$A \leq_m B$ and $A$ is not Turing-recognizable $\implies B$ is not
+Turing-recognizable.
+
+We usually use this corollary by letting $A = \overline{A_{TM}}$,
+which we know is not Turing-recognizable. $A \leq_m B \implies
+\overline{A}\leq_m \overline{B}$. To prove $B$ isn't recognizable,
+show $A_{TM} \leq_m \overline{B}$. We can also use mapping
+reducibility to show problems are neither Turing-recognizable nor
+co-Turing-recognizable.
+\paragraph{Thm}
+$EQ_{TM}$ is neither Turing-recognizable nor co-Turing-recognizable.
+\paragraph{Proof}
+$F$ = On input $\langle M,w \rangle$ where $M$ is a TM and $w$ a
+string:
+\begin{enumerate}
+\item Construct $M_1 = $ On any input: \textit{Reject} and $M_2 =$ On
+  any input: Run $M$ on $w$. If it accepts, \textit{accept}
+\item Output $\langle M_1,M_2 \rangle$
+\end{enumerate}
+$M_1$ accepts nothing. If $M$ accepts $w$, $M_2$ accepts
+everything. However is $M$ doesn't accept $w$, $M_2$ accepts nothing
+and $M_1$ and $M_2$ are equivalent. Thus this reduces $A_{TM}$ to
+$\overline{EQ}_{TM}$, so $EQ_{TM}$ is not Turing recognizable.
+\\ Note that $F$ \underline{does not} run $M$ on $w$ in $M_2$
+(otherwise it wouldn't be computable if $M$ loops forever on $w$) so
+$F$ will not loop forever.
+
+$G =$ The input is $\langle M,w \rangle$ where $M$ is a TM and $w$ a string:
+\begin{enumerate}
+\item Construct $M_1 = $ On any input: \textit{Accept} and $M_2 =$ On
+  any input: Run $M$ on $w$. If it accepts, \textit{accept}
+\item Output $\langle M_1,M_2 \rangle$
+\end{enumerate}
+This is the same as $F$ except machine $M_1$ always accepts. Here $M$
+accepts $w \iff M_1$ and $M_2$ are equivalent. So $g$ (the reducing
+function computed by $G$) is a reduction from $A_{TM}$ to $EQ_{TM}$
+and thus $\overline{EQ_{TM}}$ is not Turing recognizable, i.e.\
+$EQ_{TM}$ is not co-Turing recognizable.
+\paragraph{Oracle} An \textbf{oracle} for a language $B$ is an
+external device capable of reporting whether any string $w$ is a
+member of $B$. An \textbf{oracle Turing machine} is a modified TM that
+has the additional capability of querying an oracle. We write $M^B$ to
+describe an oracle TM that has an oracle for language $B$.
+\paragraph{Turing Reducibility}
+Consider an oracle for $A_{TM}$. An oracle for $A_{TM}$ can decide
+more languages than an ordinary TM. Such a machine can decide $A_{TM}$
+itself by querying the oracle about the input. It can also decide
+$E_{TM}$ with the following procedure:
+
+$T^{A_{TM}} =  $ On input $\langle M \rangle$, where $M$ is a TM:
+\begin{enumerate}
+\item Construct $N =$ On any input
+  \begin{enumerate}
+  \item Run $M$ in parallel on all strings in $\Sigma^*$
+  \item If $M$ accepts any of these strings, \textit{accept}
+  \end{enumerate}
+\item Query the oracle to determine if $\langle N, 0 \rangle \in
+  A_{TM}$
+\item If the oracle answers NO, \textit{accept}, if YES, \textit{reject}
+\end{enumerate}
+This is much more powerful than mapping reducibility, as mapping
+reducibility is more restricted in the fact that it must produce the
+same kind of output. With Turing Reducibility we can ask many
+different questions to the Oracle, we just need to be able to
+construct a conclusion in the end.
+
+\\ Language $A$ is \textbf{Turing reducible} to language $B$ written
+$A \leq_T B$, if $A$ is decidable relative to $B$
+\paragraph{Thm} $A \leq_T B$ and $B$ is decidable $\implies A$ is
+decidable.
+\paragraph{Proof} If $B$ is decidable then we replace the oracle for
+$B$ by an actual procedure deciding $B$ and we replace the oracle TM
+deciding $A$ by an ordinary TM deciding $A$.
+\subsection{Complexity}
+An extra layer to computability. Knowing something is computable isn't
+enough if that computation takes very long, it might as well be
+uncomputable.
+% \paragraph{Tractable Problems (P)}
 \end{document}
