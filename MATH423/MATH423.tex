@@ -2095,9 +2095,9 @@ The $Var$ is similar to a variance-covariance matrix.
 \paragraph{Estimation of $\sigma^2$}
 The residual sum of squares for MLR is
 \begin{align*}
-  SS_{RES} & = (Y - \hat{Y})^T (Y-\hat{Y}) = (Y - X \hat{\beta})(Y - X \hat{\beta}) = \left\lVert Y - X \hat{\beta} \right\rVert_2^2
+  SS_{Res} & = (Y - \hat{Y})^T (Y-\hat{Y}) = (Y - X \hat{\beta})(Y - X \hat{\beta}) = \left\lVert Y - X \hat{\beta} \right\rVert_2^2
              \intertext{For the estimator of $\sigma^2$, we have}
-             \hat{\sigma^2} & = MS_{RES} = \frac{SS_{RES}}{n-p} = \frac{1}{n-p} \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \frac{\left\lVert Y - X \hat{\beta} \right\rVert_2^2}{n-p}
+             \hat{\sigma^2} & = MS_{Res} = \frac{SS_{Res}}{n-p} = \frac{1}{n-p} \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \frac{\left\lVert Y - X \hat{\beta} \right\rVert_2^2}{n-p}
 \end{align*}
 We can show that $\hat{\sigma}^2$ is unbiased.
 \begin{align*}
@@ -2106,7 +2106,8 @@ We can show that $\hat{\sigma}^2$ is unbiased.
 \paragraph{Student's t-test}
 Require the additional GN-MLR assumptions. We further assume:
 \begin{itemize}
-\item $\mathcal{E}\sim N(0_n, \sigma^2 I_n)$
+\item $\mathcal{E}\sim N(\underbrace{0_n, \sigma^2 I_n}_{n \times 1, n
+  \times n})$
 \item $\mathcal{E}$ is independent of $X$.
 \end{itemize}
 From these assumptions, conditional on $X$, $Y$ has a multivariate
@@ -2116,6 +2117,83 @@ Guassian distribution.
 \end{align*}
 We can show that $\hat{\beta}$ has a sample distribution
 \begin{align*}
-  \hat{\beta} & \sim N(\beta, \sigma^2 (X^TX)^{-1})
+  \hat{\beta} & \sim N(\underbrace{\beta}_{p \times 1}, \sigma^2 \overbrace{\underbrace{(X^TX)^{-1}}_{p \times p}}^{C})
+  \\ \hat{\beta}_j & \sim N(\beta_j, \left[\sigma^2 (X^TX)^{-1}\right]_{jj}), j = 0,1, \ldots, k = p - 1
+  \\ ese(\hat{\beta}_j) & = \sqrt{\hat{\sigma}^2 [\sigma^2 (X^TX)^{-1}]_{jj}}
 \end{align*}
+To test:
+\begin{align*}
+  H_0 : \ & \beta_j = 0
+  \\ H_1: \ & \beta_j \neq 0
+\end{align*}
+Where $j = 0,1, \ldots, k$.
+\\ Essentially you're testing whether the additional predictor $X_j$
+is useful or not. Equivalently,
+\begin{align*}
+  H_0:\ & Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_{j-1}X_{j-1} + \beta_{j+1}X_{j+1} + \ldots + \beta_k X_k + \mathcal{E}
+  \\H_1:\ & Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_k X_k + \mathcal{E}
+\end{align*}
+If $H_0$ is rejected, it indicates that the predictor $X_j$ is likely
+to be a meaningful addition to the model. We use the statistic
+\begin{align*}
+  T_j & = \dfrac{\hat{\beta}_j - 0}{ese(\hat{\beta}_j)} = \dfrac{\hat{\beta}_j}{ese(\hat{\beta}_j)}
+        \intertext{Where}
+        ese(\hat{\beta}_j) & = \sqrt{C_{jj}} = \sqrt{\hat{\sigma}^2 [(X^TX)^{-1}]_{jj}} = \sqrt{MS_{Res} [(X^TX)^{-1}]_{jj}}
+  \\ MS_{Res} & = \frac{SS_{Res}}{n - p}
+\end{align*}
+If under the GN-MLR $\mathcal{E} \sim N(0_{n}, \sigma^2 I_{n})$ and
+under the $H_0: \beta_j = 0$
+\begin{align*}
+  T_j & \sim t_{n-p}
+\end{align*}
+We reject $H_0$ if
+\begin{align*}
+  |T_j| & > k \equiv t_{\frac{\alpha}{2}, n-p}
+\end{align*}
+or use the $p$-value
+\begin{align*}
+  \Pr(|T| > |T_j|) & \equiv p \text{-value} < \alpha
+\end{align*}
+\paragraph{F-test}
+Consider the regression model
+\begin{align*}
+Y & = X \beta + \mathcal{E} =
+    \underbrace{\begin{bmatrix}
+      X_{(1)} & X_{(2)}
+    \end{bmatrix}}_{X}
+                \begin{bmatrix}
+                  \beta_{(1)}
+                  \\ \beta_{(2)}
+                \end{bmatrix} + \mathcal{E}
+  = X_{(1)}\beta_{(1)} + X_{(2)} \beta_{(2)} + \mathcal{E}
+\end{align*}
+Say:
+\begin{align*}
+  X_{(1)} && n \times (p-r) && \beta_{(1)} && (p-r) \times 1
+  \\ X_{(2)} && n \times r && \beta_{(2)} && r \times 1
+\end{align*}
+We are essentially testing if adding the $r$ predictors in $X_{(2)}$
+is useful or not. We assume the $p-r$ predictors in $X_{(1)}$ are
+already in our model. We would like to test
+\begin{align*}
+  H_0:\ & \beta_{(2)} = 0_{(r \times 1)}
+  \\H_1:\ & \beta_{(2)} \neq 0_{(r \times 1)}
+            \intertext{Equivalently,}
+  H_0:\ & Y = X_{(1)}\beta_{(1)} + \mathcal{E} \ \text{(reduced model)}
+  \\H_1:\ & Y = X_{(1)}\beta_{(1)} + X_{(2)}\beta_{(2)} + \mathcal{E}
+            \ \text{(full model)}
+\end{align*}
+Then the null hypothesis $\beta_{(2)} = 0$ can be tested by the
+statistic
+\begin{align*}
+  F_0 & = \dfrac{\overline{SS}_R(\beta_{(2)}\mid \beta_{(1)})/r}{\overline{SS}_{Res}/(n-p)}
+        = \dfrac{\overline{SS}_R(\beta_{(2)}\mid \beta_{(1)})/r}{MS_{Res}}
+  \\ \overline{SS}_R(\beta_{(2)} \mid \beta_{(1)}) & = \overline{SS}_R (\beta) - \overline{SS}_R (\beta_{(1)})
+  \\ \overline{SS}_{R}(\beta) & = \hat{\beta}X^T Y & \overline{SS}_R (\beta_{(1)}) & = \hat{\beta}_{(1)}X_{(1)}^T Y
+  \\ \hat{\beta} & = (X^TX)^{-1}X^TY & \hat{\beta}_{(1)} & = (X_{(1)}^TX_{(1)})^{-1}X_{(1)}^TY
+  \\ MS_{Res} & = \dfrac{SS_{Res}}{n-p} = \dfrac{Y^TY - \hat{\beta}X^T Y}{n-p}
+\end{align*}
+$r$ --- degree of freedom for $\overline{SS}_R(\beta_{(2)} \mid
+\beta_{(1)})$
+\\ $p - (p-r) = r$
 \end{document}
