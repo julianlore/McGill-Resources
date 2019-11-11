@@ -2187,13 +2187,45 @@ Then the null hypothesis $\beta_{(2)} = 0$ can be tested by the
 statistic
 \begin{align*}
   F_0 & = \dfrac{\overline{SS}_R(\beta_{(2)}\mid \beta_{(1)})/r}{\overline{SS}_{Res}/(n-p)}
-        = \dfrac{\overline{SS}_R(\beta_{(2)}\mid \beta_{(1)})/r}{MS_{Res}}
-  \\ \overline{SS}_R(\beta_{(2)} \mid \beta_{(1)}) & = \overline{SS}_R (\beta) - \overline{SS}_R (\beta_{(1)})
-  \\ \overline{SS}_{R}(\beta) & = \hat{\beta}X^T Y & \overline{SS}_R (\beta_{(1)}) & = \hat{\beta}_{(1)}X_{(1)}^T Y
-  \\ \hat{\beta} & = (X^TX)^{-1}X^TY & \hat{\beta}_{(1)} & = (X_{(1)}^TX_{(1)})^{-1}X_{(1)}^TY
-  \\ MS_{Res} & = \dfrac{SS_{Res}}{n-p} = \dfrac{Y^TY - \hat{\beta}X^T Y}{n-p}
+        = \dfrac{\textcolor{blue}{\overline{SS}_R(\beta_{(2)}\mid \beta_{(1)})}/\textcolor{green}{r}}{MS_{Res}}
+  \\ \textcolor{blue}{\overbrace{\overline{SS}_R(\beta_{(2)} \mid \beta_{(1)})}^{\textcolor{green}{df=r}}} & = \textcolor{purple}{\overbrace{\overline{SS}_R (\beta)}^{\textcolor{green}{df=p}} - \overbrace{\overline{SS}_R (\beta_{(1)})}^{\textcolor{green}{df = p - r}}}
+  \\ \textcolor{purple}{\overline{SS}_{R}(\beta)} & = \textcolor{red}{\hat{\beta}X^T Y} & \textcolor{purple}{\overline{SS}_R (\beta_{(1)})} & = \textcolor{red}{\hat{\beta}_{(1)}X_{(1)}^T Y}
+  \\ \textcolor{red}{\hat{\beta}} & = \textcolor{red}{(X^TX)^{-1}X^TY} & \textcolor{red}{\hat{\beta}_{(1)}} & = \textcolor{red}{(X_{(1)}^TX_{(1)})^{-1}X_{(1)}^TY}
+  \\ \textcolor{orange}{MS_{Res}} & = \textcolor{orange}{\dfrac{SS_{Res}}{n-p} = \dfrac{Y^TY - \hat{\beta}X^T Y}{n-p}}
 \end{align*}
-$r$ --- degree of freedom for $\overline{SS}_R(\beta_{(2)} \mid
+$\textcolor{green}{r}$ --- degree of freedom for $\overline{SS}_R(\beta_{(2)} \mid
 \beta_{(1)})$
-\\ $p - (p-r) = r$
+\\ $\textcolor{green}{p - (p-r) = r}$
+\begin{itemize}
+\item $\overline{SS}_{R}(\beta_{(2)} \mid \beta_{(1)}):$ extra
+  sums-of-squares due to $\beta_{(2)}$ when $\beta_{(1)}$ is already
+  in the model, i.e.\ extra contribution in $\overline{SS}_R$ due to
+  the predictors in $X_{(2)}$
+\item Under $H_0: \beta_{(2)} = 0$,, under GN-MLR then $F_0$ follows
+  $F$ distribution with $df\ 1 = r$, $df\ 2 = p - r$. We reject $H_0$
+  if
+  $$F_0 > F_{\alpha, r, p -r}$$
+  \includegraphics[width=.4\textwidth]{28.pdf}
+\end{itemize}
+\paragraph{Sequential F-test}
+\begin{itemize}
+\item Test 1:
+  \begin{align*}
+    H_0: \ & Y = \beta_0 + \varepsilon
+    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \varepsilon
+  \end{align*}
+\item Test 2:
+  \begin{align*}
+    H_0: \ & Y = \beta_0 + \beta_1 X_1 + \varepsilon
+    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon
+  \end{align*}
+\item Test 3:
+  \begin{align*}
+    H_0: \ & Y = \beta_0+ \beta_1 X_1 + \beta_2 X_2 + \varepsilon
+    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \varepsilon
+  \end{align*}
+\end{itemize}
+Is there a way to do these all at once? How do I choose the order in
+which I add the variables? Because gradually adding variables depends
+on the order you add them in, this test isn't used so much anymore.
 \end{document}
