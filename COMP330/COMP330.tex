@@ -2262,7 +2262,7 @@ same kind of output. With Turing Reducibility we can ask many
 different questions to the Oracle, we just need to be able to
 construct a conclusion in the end.
 
-\\ Language $A$ is \textbf{Turing reducible} to language $B$ written
+Language $A$ is \textbf{Turing reducible} to language $B$ written
 $A \leq_T B$, if $A$ is decidable relative to $B$
 \paragraph{Thm} $A \leq_T B$ and $B$ is decidable $\implies A$ is
 decidable.
@@ -2273,5 +2273,181 @@ deciding $A$ by an ordinary TM deciding $A$.
 An extra layer to computability. Knowing something is computable isn't
 enough if that computation takes very long, it might as well be
 uncomputable.
-% \paragraph{Tractable Problems (P)}
+\section{11/12/19}
+\subsection{Tractable Problems (P)}
+$P$ stands for Polynomial-Time computable. Formally, there exists a TM
+to compute solutions to the problem and there exists a polynomial $Q$
+s.t.\ the number of steps on each input $x$ before halting is no more
+than $Q(|x|)$.
+\begin{itemize}
+\item 2-colorability of maps
+\item Primality testing (but probably not factoring)
+\item Solving $N \times N \times N$ Rubik's cube
+\item Finding a word in a dictionary
+\item Sorting
+\end{itemize}
+Computer Science studies mostly techniques to approach and find
+efficient solutions to tractable problems.
+
+Some problems may have efficient algorithms to solve them, but we
+might not be able to prove that.
+
+So usually we say a problem is in $P$ if we have an algorithm that
+runs in polynomial time and we can prove that.
+
+We choose polynomial level of granularity instead of something like
+linear-time because $P$ is the same for all types of TMs and any
+reasonable model. For example, a multitape TM may be linear, but a
+single-tape probably won't be.
+
+\paragraph{Theorem} Let $t(n)$ be a function, $t(n) \geq n$. Every
+$t(n)$ time multitape TM has an equivalent $O(t^2(n))$ time
+single-tape TM.
+\paragraph{Summary of $K$-coloring of maps}
+\begin{itemize}
+\item $K = 1$, can only color maps with zero or one region (or
+  disconnected/non-adjacent regions).
+\item $K = 2$, impossible when three regions are all neighbors,
+  otherwise valid. Easy to decide.
+\item $K = 3$, no known efficient algorithm to decide, easy to
+  check. Is in $NP$, guess a solution and verify it. Is a special type
+  of problem ($NP$-complete because an efficient solution to it would
+  yield efficient solutions to all problems in $NP$)
+\item $K \geq 4$, all maps are $K$-colorable (there exists a long
+  proof for $4$, people managed to reduce the infinite cases of maps
+  to about $300,000$ cases that were checked). Not easy to find, easy
+  to verify.
+\end{itemize}
+\subsection{NP}
+Nondeterministic Polynomial-Time. In some instances, can answer yes to
+the problem in polynomial time.
+\paragraph{Examples of NP-Complete Problems}
+\begin{itemize}
+\item SAT: given a boolean formula, is there an assignment of the
+  variables such that the formula evaluates to true?
+\item Traveling Salesman: given a set of cities and distances between
+  them, what is the shortest route to visit each city once?
+\item Knapsack: given items with various weights, is there a subset of
+  them of total weight $K$?
+\end{itemize}
+\subsection{P vs NP}
+Let $t: \mathbb{N} \to \mathbb{R}^+$ be a function. Define the
+\textbf{time complexity class}, $\mathbf{TIME}(t(n))$ to be the
+collection of all languages decidable by an $O(t(n))$ time TM.
+
+$P$ is the class of languages decidable in polynomial time on a
+deterministic single-tape TM, i.e.\
+$$P = \bigcup_k TIME(n^k)$$
+
+Let $N$ be a nondeterministic decider TM. The \textbf{running time} of
+$N$ is $f: \mathbb{N} \to \mathbb{N}$ where $f(n)$ is the maximum
+number of steps that $N$ uses on any branch of its computation on any
+input of length $n$. Note that we don't care about the rejecting
+branches, $N$ accepts if there exists at least one accepting
+branch. If our algorithm sometimes accepts within $f(n)$ steps, we can
+count how many steps we have gone through so far and stop executing
+after $f(n)$ steps.
+
+$$\mathbf{NTIME(t(n))} = \left\{L \mid L \text{ is a language decided
+    by a } O(t(n)) \text{ time nondeterministic TM}\right\}$$
+\paragraph{Corollary} $NP = \bigcup_k NTIME(n^k)$
+\paragraph{Theorem} Let $t(n)$ be a function, where $t(n) \geq
+n$. Then every $t(n)$ time nondeterministic single-tape TM has an
+equivalent $2^{O(t(n))}$ time deterministic single-tape TM.
+
+\paragraph{Clique} A \textbf{clique} is a subgraph of an undirected
+graph s.t.\ every two nodes are connected by an edge. A
+\textbf{k-clique} is a clique that contains $k$ nodes.
+
+The clique problem is to determine whether an input graph contains a
+$k$-clique.
+$$CLIQUE = \left\{\langle G,k \rangle \mid G \text{ is an undirected
+    graph with a }k \text{-clique}\right\}$$
+\paragraph{Prover-Verifiers}
+$v$ is our verifier and $w$ is our witness.
+
+Want completeness:
+$\exists v, \forall x \in L, \exists w, [v(x,w) \text{ accepts}]$
+\\ And soundness:
+$\forall x \notin L, \forall w, [v(x,w) \text{ rejects}]$
+\paragraph{Proof that CLIQUE is in NP}
+Define the verifier $V$ for $CLIQUE$:
+\\ $V = $ on input $\langle \langle G,k \rangle,c \rangle$
+\begin{enumerate}
+\item Test whether $c$ is a set of $k$ nodes in $G$
+\item Test whetehr $G$ contains all edges connecting nodes in $c$
+\item If both pass, \textit{accept}, otherwise, \textit{reject}
+\end{enumerate}
+Alternatively, we can us a nondeterministic TM.
+\\ $N =$ On input $\langle G,k \rangle$ where $G$ is a graph:
+\begin{enumerate}
+\item Nondeterministically select a subset $c$ of $k$ nodes of $G$
+\item Test whether $G$ contains all edges connecting nodes in $c$
+\item If yes, \textit{accept}, otherwise, \textit{reject}
+\end{enumerate}
+\paragraph{SAT} A \textbf{boolean formula} is an expression involving
+Boolean variables and operations, e.x.\ $\phi = (\overline{x} \land
+y) \lor (x \land \overline{z})$.
+\\ A Boolean formula is \textbf{satisfiable} if some assignment of
+$0$s and $1$s to the  variables makes the formula evaluate to $1$. The
+example is satisfiable because the assignment $x=0, y=1, z=0 \implies
+\phi = 1$. We say the assignment \textit{satisfies} $\phi$. The
+\textbf{satisfiability problem} is to test whether a Boolean formula
+is satisfiable.
+$$ SAT = \left\{\langle \phi \rangle \mid \phi \text{ is a satisfiable
+    Boolean formula}\right\}$$
+\paragraph{Def}
+A function $f:\Sigma^* \to \Sigma^*$ is a \textbf{polynomial time
+  computable function} if some polynomial time TM $M$ exists that
+halts with just $f(w)$ on its tape when started with input $w$.
+\\ Language $A$ is \textbf{polynomial time mapping reducible} or
+\textbf{polynomial time reducible} to language $B$, written $A \leq_P
+B$ if a polynomial time computable function $f$ exists and $\forall w, w
+\in A \iff f(w) \in B$. We call $f$ the \textbf{polynomial time
+  reduction} of $A$ to $B$.
+\paragraph{Theorem} $A \leq_P B$ and $B \in P \implies A \in P$
+\paragraph{Proof} Let $M$ be a polynomial time algorithm deciding $B$
+and $f$ be the polynomial time reduction from $A$ to $B$. We construct
+a polynomial time algorithm $N$ deciding $A$:
+\\ $N =$ On input $w$
+\begin{enumerate}
+\item Compute $f(w)$
+\item Run $M$ on input $f(w)$ and output whatever $M$ outputs
+\end{enumerate}
+We then have $w \in A$ whenever $f(w) \in B$ because $f$ is a
+reduction from $A$ to $B$. So $w \in A \implies M$ accepts $f(w)$. $N$
+runs in polynomial time because each of its steps are polynomial. Step
+2 runs polynomially because the composition of two polynomials is a
+polynomial. In otherwords, $f(w)$ is at most polynomially bigger than
+$w$ (since $f$ is a polynomial time reduction). Then running $M$ on
+something that is at most polynomially bigger than $w$ will still be
+polynomial.
+
+A language $B$ is $\mathbf{NP}$\textbf{-complete} is
+\begin{enumerate}
+\item $B \in NP$
+\item $\forall A \in NP, A \leq_{P} B$, i.e.\ every language in $NP$
+  is polynomial time reducible to $B$
+\end{enumerate}
+\paragraph{Theorem} $B$ is $NP$-complete and $B \in P \implies P =
+NP$. Follows from the definitions.
+\paragraph{Theorem} $B$ is $NP$-complete and $B \leq_P C$ for $C \in
+NP \implies C$ is $NP$-complete.
+\paragraph{Proof} Since $B$ is $NP$-complete, every language in $NP$
+is polynomial time reducible to $B$ and we also have that $B$ is
+polynomial time reducible to $C$. We can compose (transitive) polynomial time
+reductions, i.e.\ $A \leq_P B$ and $B \leq C \implies A \leq_P
+C$. Thus, since $C$ is in $NP$ and all languages in $NP$ are polytime
+reducible to $C$, $C$ is $NP$-complete.
+\paragraph{Cook-Levin theorem} $SAT \in P \iff P = NP$
+\paragraph{Proof} First we show $SAT \in NP$. A nondeterministic
+polynomial time machine can guess an assignment to $\phi$ and accept
+if the assignment satisfies $\phi$.
+
+Then we take any language $A \in NP$ (provably in $NP$, as we need the
+decider for $A$). Let $N$ be a
+nondeterministic TM that decides $A$ in $n^k$ time.
+\\ A \textbf{tableau} for $N$ on $w$ is an $n^k \times n^k$ table
+whose rows are the configurations of a branch of the computation of
+$N$ on input $w$.
 \end{document}
