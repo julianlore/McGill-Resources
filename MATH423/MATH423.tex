@@ -1933,7 +1933,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
                                          \end{bmatrix}
     \end{align*}
   \end{itemize}
-  \paragraph{Model Setup}
+  \subsection{Model Setup}
   In all cases, we use a linear model $E[Y \mid X] = X \beta$ where $X
   =
   \begin{bmatrix}
@@ -2086,7 +2086,7 @@ prediction.
             \intertext{If we want to make a prediction for a new observation:}
             & = X_{new} \hat{\beta} = X_{new} (X^TX)^{-1}X^TY
 \end{align*}
-\paragraph{Statistical properties of least-squares estimator}
+\subsection{Statistical properties of least-squares estimator}
 For estimator $\hat{\beta}$, if $X$ is non-random, then
 \begin{align*}
   E[\hat{\beta}] & = E[\hat{\beta} \mid X] = \beta & Var(\hat{\beta} \mid X) & = \sigma^2 \underbrace{(X^TX)^{-1}}_{C} = \sigma^2 C
@@ -2103,7 +2103,7 @@ We can show that $\hat{\sigma}^2$ is unbiased.
 \begin{align*}
   E[\hat{\sigma}^2 \mid X] & = \sigma^2
 \end{align*}
-\paragraph{Student's t-test}
+\subsection{Student's t-test}
 Require the additional GN-MLR assumptions. We further assume:
 \begin{itemize}
 \item $\mathcal{E}\sim N(\underbrace{0_n, \sigma^2 I_n}_{n \times 1, n
@@ -2154,7 +2154,7 @@ or use the $p$-value
 \begin{align*}
   \Pr(|T| > |T_j|) & \equiv p \text{-value} < \alpha
 \end{align*}
-\paragraph{F-test}
+\subsection{F-test}
 Consider the regression model
 \begin{align*}
 Y & = X \beta + \mathcal{E} =
@@ -2201,31 +2201,95 @@ $\textcolor{green}{r}$ --- degree of freedom for $\overline{SS}_R(\beta_{(2)} \m
   sums-of-squares due to $\beta_{(2)}$ when $\beta_{(1)}$ is already
   in the model, i.e.\ extra contribution in $\overline{SS}_R$ due to
   the predictors in $X_{(2)}$
-\item Under $H_0: \beta_{(2)} = 0$,, under GN-MLR then $F_0$ follows
+\item Under $H_0: \beta_{(2)} = 0$, under GN-MLR then $F_0$ follows
   $F$ distribution with $df\ 1 = r$, $df\ 2 = p - r$. We reject $H_0$
   if
   $$F_0 > F_{\alpha, r, p -r}$$
   \includegraphics[width=.4\textwidth]{28.pdf}
 \end{itemize}
-\paragraph{Sequential F-test}
+\subsection{Sequential F-test}
 \begin{itemize}
 \item Test 1:
   \begin{align*}
-    H_0: \ & Y = \beta_0 + \varepsilon
-    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \varepsilon
+    H_0: \ & Y = \beta_0 + \mathcal{E}
+    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \mathcal{E}
   \end{align*}
 \item Test 2:
   \begin{align*}
-    H_0: \ & Y = \beta_0 + \beta_1 X_1 + \varepsilon
-    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon
+    H_0: \ & Y = \beta_0 + \beta_1 X_1 + \mathcal{E}
+    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \mathcal{E}
   \end{align*}
 \item Test 3:
   \begin{align*}
-    H_0: \ & Y = \beta_0+ \beta_1 X_1 + \beta_2 X_2 + \varepsilon
-    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \varepsilon
+    H_0: \ & Y = \beta_0+ \beta_1 X_1 + \beta_2 X_2 + \mathcal{E}
+    \\ H_1: \ & Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \mathcal{E}
   \end{align*}
 \end{itemize}
 Is there a way to do these all at once? How do I choose the order in
 which I add the variables? Because gradually adding variables depends
 on the order you add them in, this test isn't used so much anymore.
+
+To compute the F-statistic, we need to compute
+$\overline{SS}_R(\beta_1 \mid \beta_0)$ for Test 1,
+$\overline{SS}_R(\beta_2, \beta_1, \beta_0)$ for Test 2 and
+$\overline{SS}_R(\beta_3 \mid \beta_2, \beta_1, \beta_0)$ for Test 3.
+\begin{align*}
+  F_1 & = \dfrac{\overline{SS}_R(\beta_1 \mid \beta_0)/1}{SS_{Res}(\beta_3, \beta_2, \beta_1, \beta_0)/(n-4)}
+\end{align*}
+Why isn't the denominator $SS_{Res}(\beta_1, \beta_0)/(n-2)$? Since we
+are doing a sequential F-test, eventually we will consider the
+scenario where all the variables are in the model, so the denominator
+should be for the final model. If $n$ goes to infinity, then either
+denominator is equivalent. For finite data they are very similar,
+however you should know that they are slightly different.
+\begin{align*}
+  F_2 & =\dfrac{\overline{SS}_R(\beta_2 \mid \beta_1, \beta_0)/1}{SS_{Res}(\beta_3, \beta_2, \beta_1, \beta_0)/(n-4)}
+  \\F_3 & =\dfrac{\overline{SS}_R(\beta_3 \mid \beta_2, \beta_1, \beta_0)/1}{SS_{Res}(\beta_3, \beta_2, \beta_1, \beta_0)/(n-4)}
+\end{align*}
+Note that the denominator is always the same. We also have a
+decomposition for the numerator.
+\begin{align*}
+  \overline{SS}_R(\beta_3, \beta_2, \beta_1 \mid \beta_0) & = \underbrace{\overline{SS}_R (\beta_1, \beta_0) - \overline{SS}_{R}(\beta_0)}_{\overline{SS}_R (\beta_1 \mid \beta_0)}
+  \\ &+ \underbrace{\overline{SS}_R (\beta_2, \beta_1, \beta_0) - \overline{SS}_R (\beta_1, \beta_0)}_{\overline{SS}_R (\beta_2 \mid \beta_1, \beta_0)}
+  \\ &+ \underbrace{\overline{SS}_R (\beta_3, \beta_2, \beta_1, \beta_0) - \overline{SS}_R (\beta_2, \beta_1, \beta_0)}_{\overline{SS}_R(\beta_3 \mid \beta_2, \beta_1, \beta_0)}
+  \\ & = \overline{SS}_R(\beta_3, \beta_2, \beta_1, \beta_0) - \overline{SS}_R (\beta_0)
+  \\ & = \underbrace{\overline{SS}_R(\beta_1 \mid \beta_0) + \overline{SS}_R (\beta_2 \mid \beta_1, \beta_0)}_{\overline{SS}_R(\beta_2, \beta_1 \mid \beta_0)} + \overline{SS}_R (\beta_3 \mid \beta_2, \beta_1, \beta_0)
+\end{align*}
+\subsection{Some technical details}
+Originally we had the sum of squares decomposition.
+\begin{align*}
+  SS_T & = SS_{Res} + SS_R
+  \\ \sum_{i=1}^n (y_i - \overline{y})^2 & = \sum_{i=1}^n (y_i - \hat{y}_i)^2 + \sum_{i=1}^n (\hat{y}_i - \overline{y})^2
+                                           \intertext{Now we consider
+                                           a different sum of squares}
+                                           \overline{SS}_T & = SS_{Res} + \overline{SS}_R
+  \\ \sum_{i=1}^n y_i^2 & = \sum_{i=1}^n (y_i - \hat{y}_i)^2 + \sum_{i=1}^n \hat{y}_i^2
+                          \intertext{Since}
+                          \sum_{i=1}^n y_i^2 & = \sum_{i=1}^n (y_i -
+                                               \hat{y}_i +
+                                               \hat{y}_i)^2 =
+                                               \sum_{i=1}^n (y_i -
+                                               \hat{y}_i)^2 +
+                                               \sum_{i=1}^n
+                                               \hat{y}_i^2 +
+                                               \overbrace{2
+                                               \sum_{i=1}^n (y_i -
+                                               \hat{y}_i)\hat{y}_i}^{\substack{\sum_{i=1}^n
+                                               (y_i - x_i
+                                               \hat{\beta})x_i
+                                               \hat{\beta} = 0\\ \text{
+  by normal eqns}}}
+  \intertext{Why use this different sum of squares? It is easier
+  computationally:}
+  \overline{SS}_R & = \sum_{i=1}^n \hat{y}_i^2 = (X \hat{\beta})^T(X \hat{\beta}) = (\hat{\beta}^TX^T)\underbrace{X(X^TX)^{-1}X^TY}_{\hat{\beta}} = \hat{\beta}^TX^TY
+                    \intertext{Where $\hat{\beta}^TX^TY$ is a
+                    $(1\times p) \times (p \times 1)$
+                    matrix. $\overline{SS}_R$ has $p$ degrees of freedom.}
+\end{align*}
+\subsection{Confidence Intervals for $\beta_j$}
+The confidence interval for the estimates
+\begin{align*}
+  \hat{\beta}_j &\pm k \underbrace{\sqrt{\hat{\sigma}^2 C_{jj}}}_{ese(\hat{\beta}_j)} & k & = t_{\frac{\alpha}{2}, n-p} & C & = (X^TX)^{-1}
+\end{align*}
+For $j=0, 1, \ldots, k$ and $p = k + 1$
 \end{document}
