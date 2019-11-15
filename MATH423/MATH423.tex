@@ -1,7 +1,7 @@
 \documentclass[12 pt]{article}
 \usepackage{hyperref, fancyhdr, setspace, enumerate, amsmath,
   lastpage, amssymb, algpseudocode, bussproofs, tikz, listings,
-  marvosym, stmaryrd, collectbox}
+  marvosym, stmaryrd, collectbox, float}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{positioning}
 \EnableBpAbbreviations
@@ -2292,4 +2292,118 @@ The confidence interval for the estimates
   \hat{\beta}_j &\pm k \underbrace{\sqrt{\hat{\sigma}^2 C_{jj}}}_{ese(\hat{\beta}_j)} & k & = t_{\frac{\alpha}{2}, n-p} & C & = (X^TX)^{-1}
 \end{align*}
 For $j=0, 1, \ldots, k$ and $p = k + 1$
+
+A $100(1 - \alpha)\%$ confidence interval for the regression
+coefficient $\beta_j, j = 0, 1, 2, \ldots, k$.
+\paragraph{Confidence interval for the mean response}
+We construct a CI on the mean response at a particular point.
+\\ \includegraphics[width=.5\textwidth]{29.pdf}
+\begin{align*}
+  x_0 & =
+        \begin{bmatrix}
+          1, x_{10}, x_{20}, \ldots, x_{k0}
+        \end{bmatrix}
+\end{align*}
+The fitted value at this point is
+\begin{align*}
+  \hat{m}(x_0) & = x_0 \beta =
+                 \begin{bmatrix}
+                   1,x_{10}, \ldots, x_{k0}
+                 \end{bmatrix}
+                 \begin{bmatrix}
+                   \beta_0 \\ \beta_1 \\ \vdots \\ \beta_k
+                 \end{bmatrix}
+\end{align*}
+This is an unbiased estimator of $E[Y \mid X = x_0]$, since
+\begin{align*}
+  E[\hat{m}(x_0)] & = x_0 E[\hat{\beta}] = x_0 \beta
+                    \intertext{and variance is}
+                    Var[\hat{m}(x_0)] & = \sigma^2 x_0 (X^TX)^{-1}x_0^T
+\end{align*}
+Therefore a $100(1-\alpha)\%$ confidence interval for the mean
+response at the point $X=x_0=
+\begin{bmatrix}
+  1,x_{10},x_{20}, \ldots, x_{k0}
+\end{bmatrix}
+$ is
+\begin{align*}
+  CI(m(x_0)) & = \left[\hat{m}(x_0) \pm k \sqrt{\hat{\sigma}^2 x_0 (X^TX)^{-1}x_0^T}\right]
+\end{align*}
+\paragraph{Prediction interval of new observation}
+A $100(1-\alpha)\%$ prediction interval for the future observation
+predicted at $x_0 =
+\begin{bmatrix}
+  1, x_{10}, x_{20}, \ldots, x_{k0}
+\end{bmatrix}
+$ is
+\begin{align*}
+  PI(Y_0) & = \left[\hat{m}(x_0) \pm k \sqrt{\hat{\sigma}^2 (\colorbox{yellow}{1} + x_0 (X^TX)^{-1}x_0^T)}\right]
+\end{align*}
+\noindent \rule{\textwidth}{0.5pt}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l | l l}
+    &MLR& GN-MLR
+    \\ \hline Estimator $\hat{\beta}, \hat{\sigma}^2$ & \checkmark & \checkmark
+    \\ Unbiasness, variance: $E$ and $Var$ of $\hat{\beta}, \hat{\sigma}^2$ & \checkmark & \checkmark
+    \\ $t$-test & & \checkmark
+    \\ $F$-test & & \checkmark
+    \\ $CI(\beta_j)$ & & \checkmark
+    \\ $CI(m(x_0))$ & & \checkmark
+    \\ $PI(Y_0)$ & & \checkmark
+  \end{tabular}
+  \caption{Comparison of MLR and GN-MLR}
+\end{table}
+It is very important to check the GN-MLR assumptions if you want to do
+inference and make conclusions of the model, with MLR we can only do
+prediction.
+\section{Model Adequacy Checking}
+The residual are
+\begin{align*}
+  e_i & = y_i - \hat{y}_i = y_i - x_i \hat{\beta}, i = 1, \ldots, n
+        \intertext{Written in the matrix format $e = (e_1, e_2,
+        \ldots, e_n)^T$}
+        e & = Y - \hat{Y}
+            = Y - X \hat{\beta} = Y - \underbrace{X(X^TX)^{-1}X^T}_{H} Y = (I_n - H)Y
+\end{align*}
+We have the following properties of $e$ (if we don't have these
+properties, it implies that the data has violated the model
+assumptions).
+\begin{enumerate}
+\item The distribution of $e$ should have center around zero (MLR).
+  \begin{align*}
+    E[e \mid X] & = 0_n
+                  \intertext{Since}
+                  E[e \mid X] & = E[Y - \hat{Y} \mid X] = E[Y\mid X] - E[\hat{Y} \mid X] = X \beta - E[X \hat{\beta} \mid X] = X\beta - X \beta = 0_n
+  \end{align*}
+  If you condition against any residual, the center should be around
+  $0$.
+
+  Plot $e$ against any predictor or the linear combination of any
+  predictor. This plot should have a constant mean equal to zero.
+  \\ \includegraphics[width=.5\textwidth]{30.pdf}
+\item The covariance between $\hat{Y}$ and $e$ is zero (MLR).
+  \begin{align*}
+    Cov(e, \hat{Y}) & = 0_{n \times n}
+    \\ Cov(e, \hat{Y}) & = Cov((I_n - H)Y, HY) = \sigma^2 H (I_n - H) = \sigma^2 (H - HH) = \sigma^2 (H - H) = 0_{n \times n}
+  \end{align*}
+  Plot $e$ against $\hat{Y}$, the plot should be patternless.
+\item The variance of residual $e$ is
+  \begin{align*}
+    Var(e \mid X) & = \sigma^2 (I_n - H)
+                    \intertext{Since}
+                    Var(e \mid X) & = Var((I_n - H)Y \mid X) = (I_n - H)^T(I_n - H)Var(Y) = \sigma^2 (I_n - H)
+  \end{align*}
+  This implies $e_1, \ldots, e_n$ are correlated, not like
+  $\varepsilon_1, \ldots, \varepsilon_n$ which are uncorrelated. In
+  the scalar form
+  \begin{align*}
+    Var(e_i \mid X) & = \sigma^2 (1- h_{ii}), i = 1, \ldots, n
+  \end{align*}
+  Usually when there is no outlier in the data, the $h_{ii}$ will be
+  small, therefore the variance of $e$ should be roughly constant.
+
+  Plot $e$ against $x_j$. The plot should have constant variance.
+  \\\includegraphics[width=.6\textwidth]{31.pdf}
+\end{enumerate}
 \end{document}
