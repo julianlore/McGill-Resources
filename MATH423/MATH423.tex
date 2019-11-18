@@ -2405,5 +2405,65 @@ assumptions).
 
   Plot $e$ against $x_j$. The plot should have constant variance.
   \\\includegraphics[width=.6\textwidth]{31.pdf}
+\item (Only for GN-MLR). If $Y \mid X$ is Gaussian, then $e =
+  \begin{bmatrix}
+    e_1 \\ \vdots \\ e_n
+  \end{bmatrix}
+$ is also Gaussian with mean zero and variance $\sigma^2I_n$. So each
+term $e_i \sim N(0,\sigma^2)$ for $i=1,\ldots, n$
+\begin{itemize}
+\item You can make a histogram of the distribution of the residuals
+  and compare that to a Gaussian.
+\item An alternative is ``quantile-quantile'' plot. Plot sample
+  quantiles vs the theoretical quantiles of the standard normal
+  distribution. If the residuals are normal, their sample quantiles
+  should line up with the theoretical quantiles.
+
+  For a continuous distribution, its CDF
+$$F(z) = P(Z \leq z)$$
+has an inverse function (quantile)
+$$F^{-1}(p) = z\ s.t.\ p = P(Z \leq z)$$
+\includegraphics[width=.6\textwidth]{32.pdf}
+\\ If the distribution is $N(\mu, \sigma^2)$
+$$F^{-1}(p) = \sigma \Phi^{-1} (p) + \mu$$
+$\Phi^{-1}$ is the inverse of the CDF function for $N(0,1)$. Note that
+$F^{-1}(p)$ is linear here, so we should get a straight line.
+
+If we plot $F^{-1}(p)$ against $\Phi^{-1}(p)$ we'll get a straight
+line. But in practice, $F$ or $F^{-1}$ is unknown, but we can estimate
+the quantiles using data.
+
+We have $n$ residuals, $e_1, e_2, \ldots, e_n$.
+\\ Put them in an increasing order $e_{(1)}, e_{(2)}, \ldots, e_{(n)}$
+where $e_{(i)}$ is greater to a fraction $\frac{i}{n}$ or the
+residuals, e.g.\ $e_{(2)} \geq e_{(2)}$ and $e_{(1)},
+\left(\frac{2}{n} \text{ of the obs}\right)$
+$$\hat{F}^{-1}(i/n) = e_{(o)}$$
+Now make  plot $\hat{F}(i/n) = e_{(i)} \sim \Phi^{-1}(i/n)$ to
+approximate $F^{-1}(i/n) \sim \Phi^{-1}(i/n)}$ and hope for a straight
+line if the distribution of $e_i$'s is indeed Guassian.
+\end{itemize}
 \end{enumerate}
+\section{Transformations}
+\subsection{Variance --- stabilizing transformations}
+(Easiest to do, should do first) We should consider the use of transformation when the constant
+variance assumption is violated. For example, $Y \sim Poi(\lambda)$,
+then $E[Y] = Var(Y) = \lambda$. Then if we model
+$$E[Y \mid X = x] = X \beta = Var(Y \mid X = x)$$ where the mean of
+$Y$ is related ot $X$. To fix this, we can regress $Y'=\sqrt{Y}$
+against $X$ since the variance off $\sqrt{Y}$ is independent of the
+mean.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l l}
+    Var-mean relationship & transformation
+    \\ \hline$\sigma^2 \propto const$& $Y'=Y$
+    \\ $\sigma^2 \propto E[Y]$ & $Y'=\sqrt{Y} (Poisson)$
+    \\ $\sigma^2 \propto E[Y](1-E[Y])$ & $Y' = \sin^{-1}(\sqrt{Y})$ (binomial proportions)
+    \\ $\sigma^2 \propto E[Y]^2$ & $Y'=\ln (Y)$
+  \end{tabular}
+  \caption{Transformations}
+\end{table}
+\paragraph{Transformations to linearize the model}
+If you detect non-linearity
 \end{document}
