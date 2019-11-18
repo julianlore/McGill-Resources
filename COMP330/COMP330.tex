@@ -2448,6 +2448,156 @@ Then we take any language $A \in NP$ (provably in $NP$, as we need the
 decider for $A$). Let $N$ be a
 nondeterministic TM that decides $A$ in $n^k$ time.
 \\ A \textbf{tableau} for $N$ on $w$ is an $n^k \times n^k$ table
-whose rows are the configurations of a branch of the computation of
+whose rows are the configurations (surrounded by a \# on each side) of a branch of the computation of
 $N$ on input $w$.
+\section{11/14/19}
+We want to use the tableau to see if the TM will accept in at most $n^k$
+steps.
+
+Every accepting tableau for $N$ on $w$ corresponds to an accepting
+computation branch of $N$ on $w$. So determining whether $N$ accepts
+$w$ is the same as checking if there exists an accepting tableau for
+$N$ on $w$.
+
+We now want to do a polynomial time reduction from $A$ to $SAT$ that
+makes a formula $\phi$ on input $w$ that isn't more than polynomially
+bigger.
+$$ \phi = \phi_{cell} \cup \phi_{start} \cup \phi_{accept} \cup
+\phi_{move}$$
+Let variable $x_{i,j,s}$ correspond to placing symbol $s$ in
+$cell[i,j]$ (boolean variable). To make a valid tableau we must make
+sure the assignment turns only one variable on for each cell.
+$$\phi_{cell} = \bigwedge_{1 \leq i, j \leq n^k}
+\left[\left(\bigvee_{s \in C} x_{i,j,s}\right) \land \left(\bigwedge_{\substack{s,t \in C \\ s \neq t}}
+    (\overline{x_{i,j,s}} \lor \overline{x_{i,j,t}})\right)\right]$$
+where $C = Q \cup \Gamma \cup \left\{\#\right\}$
+
+$\phi_{start}$ ensures that the first row of the table is the starting
+configuration of $N$ on $w$.
+$$\phi_{start} = x_{1,1,\#} \land x_{1,2,q_0} \land x_{1,3,w_1} \land
+\ldots \land x_{1,n+2,w_n} \land
+x_{1,n+3,\text{\textvisiblespace}}\land \ldots \land x_{1,n^k-1,
+  \text{\textvisiblespace}} \land x_{1,n^k,\#}$$
+
+$\phi_{accept}$ guarantees that an accepting configuration occurs in
+the tableau.
+$$\phi_{accept} = \bigvee_{1 \leq i, j \leq n^k}x_{i,j,q_{accept}}$$
+$\phi_{move}$ checks that every window (of $6$ cells, $3$ on top and $3$ on
+the bottom) corresponds to valid moves of the TM.
+
+\paragraph{Claim} If the top row of the table is the start
+configuration and every window is legal, then each row is a
+configuration legally following from the preceding one.
+\begin{align*}
+\phi_{move} & = \bigwedge_{1 < i \leq n^k, 1 < j < n^k} (\text{the }
+              (i,j) \text{ window is legal})
+  \\ & = \bigwedge_{1 < i \leq n^k, 1 < j < n^k}
+       \left(\bigvee_{\substack{a_1, \ldots, a_6\\ \text{is a legal window}}} (x_{i,j-1,a_1} \lor x_{i,j,a_2} \lor x_{i,j+1,a_3}\lor x_{i+1,j-1,a_4}\lor x_{i+1,j,a_5}\lor x_{i+1,j+1,a_6})\right)
+\end{align*}
+
+As for the polytime reduction $f$ from $A$ to SAT, on input $w$, the
+reduction produces a formula $\phi$. $\langle \phi \rangle \in SAT
+\iff N$ accepts $w$ within $n^k$ steps.
+\subsection{NP-Complete Problems}
+\paragraph{3SAT is NP-Complete} A \textbf{literal} is a Boolean
+variable or negated Boolean variable, i.e.\ $x$ or $\overline{x}$. A
+\textbf{clause} is several literals connected with $\lor$s, i.e.\
+$(x_1 \lor \overline{x_2} \lor \overline{x_3} \lor x_4)$. A boolean
+formula is in \textbf{conjunctive normal form}, a \textbf{cnf-formula}
+if it consists of clauses connected with $\land$s, i.e. $(x_1 \lor
+\overline{x_2} \lor \overline{x_3} \lor x_4) \land (x_3 \lor
+\overline{x_5} \lor x_6) \land (x_3 \lor \overline{x}_6)$.
+
+It is a \textbf{3cnf-formula} if all clauses have three literals.
+
+Note that the CNF form is important, a SAT formula in CNF may be
+exponentially bigger if it consists of many alternating $\lor$ and
+$\land$.
+
+$3SAT = \left\{\langle \phi \rangle \mid \phi \text{ is a satisfiable
+    3cnf-formula}\right\}$.
+\paragraph{3SAT is NP-complete}
+Clearly $3SAT$ is in $NP$. We show that $SAT$ polytime reduces to
+$3SAT$.
+
+We can make slight adjustments to the construction we used to prove
+the Cook-Levin theorem.
+\begin{itemize}
+\item $\phi_{cell}$ is a big $\land$ of subformulas, each containing a
+big $\lor$ abd a big $\land$ of $\lor$. So $\phi_{cell}$ is an $\land$
+of clauses and is already in cnf.
+\item $\phi_{start}$ is a big $\land$ of variables. Take each variable as
+a clause of size $1$ to see that $\phi_{start}$ is in cnf.
+\item $\phi_{accept}$ is a big $\lor$ of variables, thus consisting of
+one clause.
+\item $\phi_{move}$ isn't already in cnf. It's a big $\land$ of
+  subformulas, each of which is an $\lor$ of $\land$s. We can use the
+  distributive laws, i.e.\ $P \lor (Q \land R) \equiv (P \lor Q) \land
+  (P \lor R)$. This will increase the size of each subformula, but
+  only by a constant factor (size of each subformula depends only on
+  $N$). Thus we get $\phi_{move}$ in cnf.
+\end{itemize}
+To convert all these formulas in cnf to 3cnf, for each clause with
+one or two literals, replicate one of the literals until we have
+three literals. For each clause with more than three literals, split
+it into several clauses and add additional variables to preserve
+satisfiability/nonsatisfiability of the original clause.
+
+For example, $$(a_1 \lor a_2 \lor \ldots \lor a_\ell) \equiv (a_1 \lor
+a_2 \lor z_1) \land (\overline{z_1} \lor a_3 \lor z_2) \land
+(\overline{z_2} \lor a_4) \lor z_3 \land \ldots \land
+(\overline{z_{\ell - 3} \lor a_{\ell - 1} \lor a_1})$$
+where $a_i$ are literals and $z_i$ are new literals. If for example we
+set $a_4 = 1$ and every other $a_i = 0$, then we can get this all to evaluate to $1$ by setting
+$\overline{z_2} = 0, z_3 = 0$ such that the neighboring clauses become
+true from $z_2 = 1, \overline{z_3} = 1$ and so on. Once again, the
+formula will get bigger, but only at most $3$ times bigger.
+
+The new formula is satisfiable $\iff$ the original formula was. Thus
+we conclude our proof.
+
+\paragraph{$3SAT$ is polytime reducible to $CLIQUE$} We make a $3SAT$
+instance into a $CLIQUE$ problem and if we had an efficient solver for
+$CLIQUE$, then we'd have one for $3SAT$.
+
+Let $\phi$ be a formula with $k$ clauses such that:
+$$\phi = (a_1 \lor b_1 \lor c_1) \land (a_2 \lor b_2 \lor c_2) \land
+\ldots \land (a_k \lor b_k \lor c_k)$$
+The reduction $f$ generates $\langle G,k \rangle$, $G$ an undirected
+graph.
+
+The nodes in $G$ are organized into $K$ groups of three nodes each
+called \textbf{triples}, $t_1,\ldots, t_k$, each corresponding to one
+of the clauses in $\phi$ and each node in a triple corresponding to a
+literal in its respective clause. Label each node of $G$ by its
+respective literal in $\phi$.
+
+The edges of $G$ connect all pairs of nodes in $G$ except between
+nodes in the same triple and two nodes with contradictory labels,
+i.e.\ $x_2$ and $\overline{x_2}$.
+
+$\langle \phi \rangle \in 3SAT \implies \langle G,k \rangle \in
+CLIQUE$:
+\\ Suppose $\phi$ has a satisfying assignment. Then at least one
+literal is true in every clause. In each triple of $G$, select one
+node corresponding to a true literal in the satisfying assignment. If
+more than one literal is true, choose one arbitrarily. The nodes
+selected form a $k$-clique, as we've selected $k$ nodes ($k$ triples)
+and each pair of selected nodes is joined by an edge (no pair can fit
+the no edge exceptions). They can't be from the same triple as we only
+select one node per triple and cannot have contradictory labels
+because the actual literals were both true in the satisfying
+assignment. Therefore $G$ contains a $k$-clique.
+
+$\langle G,k \rangle \in CLIQUE \implies \langle \phi \rangle \in
+3SAT$:
+\\ Suppose $G$ has a $k$-clique. No two of the clique's nodes occur in
+the same triple because nodes in the same triple aren't connected. So
+each of the $k$ triples contain exactly one of the $k$ clique
+nodes. Assign truth values to the variables of $\phi$ so each literal
+labeling a clique node is true. This is always possible as two nodes
+labeled in a contradictory way aren't connected. The assignment
+satisfies $\phi$ because each triple contains a clique node and
+therefore each clause contains a literal assigned to true and $\phi$
+is satisfiable.
 \end{document}
