@@ -2440,7 +2440,7 @@ residuals, e.g.\ $e_{(2)} \geq e_{(2)}$ and $e_{(1)},
 \left(\frac{2}{n} \text{ of the obs}\right)$
 $$\hat{F}^{-1}(i/n) = e_{(o)}$$
 Now make  plot $\hat{F}(i/n) = e_{(i)} \sim \Phi^{-1}(i/n)$ to
-approximate $F^{-1}(i/n) \sim \Phi^{-1}(i/n)}$ and hope for a straight
+approximate $F^{-1}(i/n) \sim \Phi^{-1}(i/n)$ and hope for a straight
 line if the distribution of $e_i$'s is indeed Guassian.
 \end{itemize}
 \end{enumerate}
@@ -2465,5 +2465,86 @@ mean.
   \caption{Transformations}
 \end{table}
 \paragraph{Transformations to linearize the model}
-If you detect non-linearity
+If you detect non-linearity using a scatter plot or a residual plot,
+in some case a nonlinear function can be linearized using a suitable
+transformation.
+
+For example, the Cobb-Douglas production function for observed
+economic data $i = 1, \ldots, n$
+\begin{align*}
+  O_i & = e^{\beta_0}L_i^{\beta_1}C_i^{\beta_2}u_i
+\end{align*}
+where $O_i$ is the total production output
+\\ $L_i$ is labor input
+\\ $C_i$ is capital input
+\\ $u_i$ is a random error term
+
+Taking the natural log, we have:
+\begin{align*}
+  Y_i & = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \varepsilon_i
+  \\ Y_i & = \ln(O_i) \text{ is $\log$ output}
+  \\ x_{1i} & = \ln(L_i) \text{ is $\log$ labor input}
+  \\ x_{2i} & = \ln(C_i) \text{ is $\log$ capital input}
+  \\ \varepsilon_i & = \ln(u_i) \text{ is a random error term}
+\end{align*}
+The transformation requires
+$$\varepsilon = \ln(u) \sim N(0, \sigma^2)$$
+The model
+\begin{align*}
+  Y & = \beta_0 + \beta_1 \left(\frac{1}{X}\right) + \varepsilon
+      \intertext{can be linearized}
+      X' & = \frac{1}{X}
+  \\ Y & = \beta_0 + \beta_1 X' + \varepsilon
+\end{align*}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l | l | l}
+    Original function & Transformation & Linear form
+    \\ \hline $y = \beta_0 x ^{\beta_1}$ & $Y' = \log Y, X' = \log X$ & $Y' = \log \beta_0 + \beta_1X'$
+    \\ $y = \beta_0e^{\beta_1 x}$ & $Y' = \log Y$ & $Y' = \log \beta_0 + \beta_1 X$
+    \\ $y = \beta_0 + \beta_1 \log x$ & $X' = \log X$ & $Y' = \beta_0 + \beta_1 X'$
+    \\ $y = \frac{X}{\beta_0 X - \beta_1}$ & $Y'=\frac{1}{Y}, X' = \frac{1}{X}$ & $Y'=\beta_0 - \beta_1 X'$
+  \end{tabular}
+  \caption{More linearization examples}
+\end{table}
+Box-cox is an outdated method that we won't learn, it involves
+complicated linearization but usually linearizes things that shouldn't
+be linearized, i.e.\ if you are trying to hard to linearize you
+probably shouldn't.
+\paragraph{Leverage}
+~\\\includegraphics[width=.5\textwidth]{33.pdf}
+\\ In the first case, we have a leverage point which we could remove
+and not affect the regression line. However it could still affect
+things such as $R^2$, the prediction interval, etc. On the other hand,
+the second situation contains a leverage point which is influential,
+because including it in our model greatly affects the regression line.
+
+Recall that
+\begin{align*}
+  \hat{Y} & = HY & H & = X(X^TX)^{-1}X^T
+  \\ Var[\hat{Y} \mid X] & = \sigma^2 H & Var[Y - \hat{Y} \mid X] & = Var[e \mid X] = \sigma^2 (I_n - H)
+\end{align*}
+The elements of $H$ dictate how much each data point $Y_1, \ldots,
+Y_n$ affect the prediction $\hat{Y}_1, \ldots, \hat{Y}_n$, since
+$\hat{Y}_i = \sum_{j=1}^n h_{ij}Y_j$.
+\\ $h_{ij}$ can be interpreted as the amount of \textbf{leverage}
+exerted by the $j^{th}$ observation $Y_j$ on the $i^{th}$ fitted value
+$\hat{Y}_i$.
+
+We focus on the diagonal element $h_{ii}$ of $H$.
+\begin{align*}
+  h_{ii} & = x_i (X^TX)^{-1}x_i^T
+\end{align*}
+where $x_i$ is the $i^{th}$ row of the matrix $X$. If $h_{ii}$ is
+large, then the $i^{th}$ observation has high leverage.
+\\\includegraphics[width=.5\textwidth]{34.pdf}
+\paragraph{Influence (using Cook's distance)}
+Each data point may have a different ``influence'' on the estimation
+of $\beta$.
+\begin{align*}
+  D_i & = \dfrac{(\hat{\beta}_{(i)}-\hat{B})M(\hat{\beta}_{(i)} - \hat{\beta})}{c}
+  \\ M & = X^TX & c & = pMS_{Res}
+\end{align*}
+  $\hat{\beta}_{(i)}$ is the fitted estimate with $i^{th}$
+  observation removed
 \end{document}
