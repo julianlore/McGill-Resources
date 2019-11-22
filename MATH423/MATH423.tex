@@ -2202,9 +2202,9 @@ $\textcolor{green}{r}$ --- degree of freedom for $\overline{SS}_R(\beta_{(2)} \m
   in the model, i.e.\ extra contribution in $\overline{SS}_R$ due to
   the predictors in $X_{(2)}$
 \item Under $H_0: \beta_{(2)} = 0$, under GN-MLR then $F_0$ follows
-  $F$ distribution with $df\ 1 = r$, $df\ 2 = p - r$. We reject $H_0$
+  $F$ distribution with $df\ 1 = r$, $df\ 2 = n - p$. We reject $H_0$
   if
-  $$F_0 > F_{\alpha, r, p -r}$$
+  $$F_0 > F_{\alpha, r, n-p}$$
   \includegraphics[width=.4\textwidth]{28.pdf}
 \end{itemize}
 \subsection{Sequential F-test}
@@ -2538,13 +2538,67 @@ We focus on the diagonal element $h_{ii}$ of $H$.
 where $x_i$ is the $i^{th}$ row of the matrix $X$. If $h_{ii}$ is
 large, then the $i^{th}$ observation has high leverage.
 \\\includegraphics[width=.5\textwidth]{34.pdf}
+\\ You can view high leverage as the point having a lot of potential
+to change the regression line if you perturb it away from the
+line. High leverage alone doesn't tell you about outliers, they must
+also have high residual (to say the model really doesn't explain the
+point well). Cook's distance combines high leverage and residual checks.
 \paragraph{Influence (using Cook's distance)}
 Each data point may have a different ``influence'' on the estimation
 of $\beta$.
 \begin{align*}
-  D_i & = \dfrac{(\hat{\beta}_{(i)}-\hat{B})M(\hat{\beta}_{(i)} - \hat{\beta})}{c}
+  D_i & = \dfrac{(\hat{\beta}_{(i)}-\hat{\beta})^TM(\hat{\beta}_{(i)} - \hat{\beta})}{c}
   \\ M & = X^TX & c & = pMS_{Res}
 \end{align*}
   $\hat{\beta}_{(i)}$ is the fitted estimate with $i^{th}$
-  observation removed
+  observation removed.
+
+  We can also rewrite $D_i$ as
+  \begin{align*}
+    D_i & =
+          \underbrace{\frac{e_i^2}{\hat{\sigma}^2}}_{\begin{pmatrix}\text{\tiny
+                standardized}\\\text{ \tiny residual}\end{pmatrix}^2}
+    \frac{\overbrace{h_{ii}}^{\text{leverage}}}{(1-h_{ii})^2}\frac{1}{p}
+        & p & = k+1 (\text{\# predictors with intercept})
+  \end{align*}
+  $D_i$ is affected by
+  \begin{itemize}
+  \item Residual $e_i \uparrow, D_i \uparrow$
+  \item Leverage $h_{ii} \uparrow, D_i \uparrow$
+  \end{itemize}
+  $D_i$ combines the residual for the $i^{th}$ observation and the
+  location of that point to measure the influence of this point. A
+  point with very high $D_i$ potentially could be an \textbf{outlier}
+  (you should look at the plot and rank points according to Cook's
+  distance, don't just blindly remove all points past a certain distance).
+
+  There is another formula for $D_i$.
+
+  Because $X \hat{\beta}_{(i)} - X \hat{\beta} = \hat{Y}_{(i)} -
+  \hat{Y}$
+  \begin{align*}
+    D_i & = \frac{(\hat{Y}_{(i)} - \hat{Y})^T(\hat{Y}_{(i)} - \hat{Y})}{pMS_{Res}}
+  \end{align*}
+  You can interpret is as the squared distance that the fitted value
+  moves when the $i^{th}$ is removed.
+  \subsection{Special Types of predictors in MLR}
+  \paragraph{Polynomial Terms} Suppose the model is
+  \begin{align*}
+    E[Y \mid X_1] & = \beta_0 + \beta_1 X_1 + \beta_2 X_1^2 + \ldots + \beta_k X_1^k
+                    \intertext{Can still be made linear}
+                    & = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_k X_k
+  \end{align*}
+  $k = 2$ quadratic function
+  \\ $k = 3$ cubic function
+  \\ \includegraphics[width=.5\textwidth]{35.pdf}
+  \\ $n = 2$, perfect fit by $E[Y \mid X_1] = \beta_0 + \beta_1 X_1$
+  \\ $n = 3$, perfect fit by $E[Y \mid X_1] = \beta_0 + \beta_1 X_1 +
+  \beta_2 X_1^2$
+  \\ $n = 4$, perfect fit by $E[Y \mid X_1] = \beta_0 + \beta_1 X_1 +
+  \beta_2 X_1^2 + \beta_3 X_1^3$
+  \\ \includegraphics[width=.7\textwidth]{36.pdf}
+  \\ Data: $Y = \sin(X_1) + \varepsilon$
+  \\ $k = 5$ could be a good fit. We don't want to increase $k$ too
+  much, as we will overfit and have not prediction power. How to
+  choose the right $k$? We will see this soon.
 \end{document}
