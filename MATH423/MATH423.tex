@@ -2600,5 +2600,88 @@ of $\beta$.
   \\ Data: $Y = \sin(X_1) + \varepsilon$
   \\ $k = 5$ could be a good fit. We don't want to increase $k$ too
   much, as we will overfit and have not prediction power. How to
-  choose the right $k$? We will see this soon.
+  choose the right $k$?
+
+  We can use another data set, to test the performance (prediction) of models with
+  different $k$'s. If two $k$'s perform equally well, we prefer the
+  one with the smaller $k$.
+  \paragraph{Penalization}
+  If we fit a polynomial regression with order $k$
+  \begin{align*}
+    Y & = \beta_0 + \beta_1 x_1 + \ldots + \beta_k x_1^k + \varepsilon
+        \intertext{Or}
+        E[Y \mid X_1] & = \beta_0 + \beta_1 + \ldots + \beta_kx_1^k
+  \end{align*}
+  Given $n$ observations of data $\left\{y_i, x_{1i}\right\}_{i=1}^n$,
+  you can estimate the value of $\beta_0, \beta_1, \ldots, \beta_k$ by
+  least-squares. Denote $\beta = (\beta_0,\beta_1, \ldots,
+  \beta_k)^T$.
+  \begin{align*}
+    \min_{\beta} \sum_{i=1}^n (\underbrace{y_i - (\beta_0 + \beta_1
+    x_{1i} + \ldots + \beta_k x_{ki})}_{\text{residual}})
+  \end{align*}
+  If $k$ is large, then the model becomes too complicated or
+  ``over-fitted'', the corresponding fitted curve becomes too wiggled
+  (fluctuates a lot and gives a very bad estimation when the value is large).
+ To fix this issue, we restrict the size of the estimated coefficient
+ $\beta$ by using penalization, i.e.\
+  \begin{align*}
+    &\min_{\beta} \sum_{i=1}^n (\underbrace{y_i - (\beta_0 + \beta_1
+    x_{1i} + \ldots + \beta_k x_{ki})}_{\text{residual}})
+    \\&\text{such that } \left\lVert \beta' \right\rVert_2^2 \leq t
+    \\&\text{where } \left\lVert \beta' \right\rVert_2^2 =
+    \sqrt{\beta_1^2 + \beta_2^2 + \ldots + \beta_k^2}
+  \end{align*}
+  Consider the model with only $\beta_0, \beta_1, \beta_2$
+  \begin{align*}
+    & \min_{\beta_0, \beta_1, \beta_2} \overbrace{\sum_{i=1}^n (y_i - \beta_0 -
+      \beta_1 x_{1i} + \beta_2 x_{1i}^2)^2}^{f(\beta_1, \beta_2)}
+    \\ & \text{such that } \left\lVert \beta' \right\rVert_2 \leq t,
+         \beta'=(\beta_1, \beta_2)^T
+  \end{align*}
+  \includegraphics[width=.4\textwidth]{37.pdf}
+  \\ Note that this constrained solution is now
+  biased. Mathematically, this form is difficult to solve. Instead, we
+  can consider an alternative form that is much easier to solve.
+  \begin{align*}
+    &\min_{\beta} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_{1i} - \ldots
+    - \beta_k x_{ki})^2 + \mathbf{\lambda \left\lVert \beta'
+    \right\rVert_2^2}
+    \\ & \text{where } \lambda \geq 0
+  \end{align*}
+  For demonstration purposes, we just consider the model without
+  intercept and show the solution of the problem.
+  \begin{align*}
+    &\min_{\beta} \sum_{i=1}^n (y_i - (\beta_1 x_{1i} + \beta_2
+    x_{1i}^2 + \ldots + \beta_k x_{1i}^k))^2 + \lambda \left\lVert
+    \beta \right\rVert_2^2 = \min_{\beta}
+    \left\lVert Y - X \beta \right\rVert_2^2  + \lambda \left\lVert
+      \beta \right\rVert_2^2
+    \\ & \text{where } Y =
+         \begin{pmatrix}
+           y_1 \\ y_2 \\ \vdots \\ y_n
+         \end{pmatrix}, X =
+    \begin{pmatrix}
+      x_{11} & x_{11}^2 & \ldots x_{11}^k
+      \\ x_{12} & x_{12}^2 & \ldots & x_{12}^k
+      \\ \vdots & \vdots & \ddots & \vdots
+      \\ x_{1n} & x_{1n}^2 & \ldots & x_{1n}^k
+    \end{pmatrix}
+    \\ & \nabla_\beta f(\beta) = -2(Y - X\beta)^T X + 2\lambda \beta =
+         0
+    \\ & \text{we solve } \beta
+    \\ & \implies Y^TX - X^TX \beta = \lambda \beta
+    \\ & \implies (X^TX + \lambda I_p) \beta = X^TY
+    \\ & \implies \hat{\beta}^{pen} = (X^TX + \lambda I_p)^{-1}X^TY
+         \intertext{Compare this with the original least-squares
+         estimator}
+       & \hat{\beta} = (X^TX)^{-1}X^TY
+    \\ & \text{where }\lambda I_p =
+         \begin{pmatrix}
+           \lambda
+           \\ & \lambda
+           \\ & & \ddots
+           \\ & & & \lambda
+         \end{pmatrix}_{p \times p}
+  \end{align*}
 \end{document}
