@@ -2464,7 +2464,7 @@ mean.
   \end{tabular}
   \caption{Transformations}
 \end{table}
-\paragraph{Transformations to linearize the model}
+\subsection{Transformations to linearize the model}
 If you detect non-linearity using a scatter plot or a residual plot,
 in some case a nonlinear function can be linearized using a suitable
 transformation.
@@ -2511,6 +2511,7 @@ Box-cox is an outdated method that we won't learn, it involves
 complicated linearization but usually linearizes things that shouldn't
 be linearized, i.e.\ if you are trying to hard to linearize you
 probably shouldn't.
+\subsection{Leverage \& Influence}
 \paragraph{Leverage}
 ~\\\includegraphics[width=.5\textwidth]{33.pdf}
 \\ In the first case, we have a leverage point which we could remove
@@ -2639,7 +2640,7 @@ of $\beta$.
     \\ & \text{such that } \left\lVert \beta' \right\rVert_2 \leq t,
          \beta'=(\beta_1, \beta_2)^T
   \end{align*}
-  \includegraphics[width=.4\textwidth]{37.pdf}
+  \includegraphics[width=.6\textwidth]{37.pdf}
   \\ Note that this constrained solution is now
   biased. Mathematically, this form is difficult to solve. Instead, we
   can consider an alternative form that is much easier to solve.
@@ -2650,13 +2651,14 @@ of $\beta$.
     \\ & \text{where } \lambda \geq 0
   \end{align*}
   For demonstration purposes, we just consider the model without
-  intercept and show the solution of the problem.
+  intercept and show the solution of the problem. \textbf{Ridge regression} solves:
   \begin{align*}
     &\min_{\beta} \sum_{i=1}^n (y_i - (\beta_1 x_{1i} + \beta_2
     x_{1i}^2 + \ldots + \beta_k x_{1i}^k))^2 + \lambda \left\lVert
-    \beta \right\rVert_2^2 = \min_{\beta}
-    \left\lVert Y - X \beta \right\rVert_2^2  + \lambda \left\lVert
       \beta \right\rVert_2^2
+    \\ & = \min_{\beta}
+    \overbrace{\left\lVert Y - X \beta \right\rVert_2^2}^{f(\beta)}  + \lambda \left\lVert
+      \beta \right\rVert_2^2 \text{ (ridge regression)}
     \\ & \text{where } Y =
          \begin{pmatrix}
            y_1 \\ y_2 \\ \vdots \\ y_n
@@ -2683,5 +2685,130 @@ of $\beta$.
            \\ & & \ddots
            \\ & & & \lambda
          \end{pmatrix}_{p \times p}
+  \end{align*}
+  Usages of Ridge Regression
+  \begin{enumerate}
+  \item Want to control the model complexity
+  \item Deal with high collinearity between predictors
+    \\
+    \begin{tabular}{c c c c}
+      &$X_1$&$X_2$&$X_3$
+      \\ $Y$ & $1$ & $2$
+      \\ $Y$ & $2$ & $4$
+      \\ $Y$ & $3$ & $6$
+      \\ $Y$ & $4$ & $8$
+    \end{tabular}
+    \\ Remember, we want to calculate $\hat{\beta} =
+    (X^TX)^{-1}X^TY$. If two columns are very correlated, possibly
+    linearly dependent, $X^TX$ won't have full rank and trying to
+    invert it will give you very big numbers numerically (because it
+    is singular when two columns of $X_j$, $X_k$ are perfectly
+    correlated and so it is not actually invertible).
+  \item When $n << p$ ($n$ is the number of observations, $p$ is the
+    number of predictors)
+    \begin{align*}
+      \begin{pmatrix}
+        Y_1 \\ \vdots \\ Y_n
+      \end{pmatrix}
+      \begin{pmatrix}
+        1 & X_{11} & \ldots & X_{1k}
+        \\ \vdots & \vdots & \ddots & \vdots
+        \\ 1 & X_{n1} & \ldots & X_{nk}
+      \end{pmatrix}
+    \end{align*}
+    MLR would fail in this case
+  \item SVM (support vector machine, relevant to machine learning)
+    with overlapped case (linear kernel) $\approx$ logistic regression
+    with ridge penalization
+    \begin{align*}
+      SVM: & \sum_{i=1}^n \underbrace{(1-y_i (\beta_0 + \beta^T x_i))_+}_{(\cdot)_+} + \lambda
+             \left\lVert \beta \right\rVert_2
+      \\ logistic: & \sum_{i=1}^n \log (1 + e^{-y_i(\beta_0 + \beta^T
+                     x_i)}) + \lambda \left\lVert \beta \right\rVert_2
+      \\ (t)_{+} & =
+                   \begin{cases}
+                     t & t \geq 0
+                     \\ 0 & t < 0
+                   \end{cases}
+    \end{align*}
+    Comparison of the loss of $SVM$ and logistic regression:\\
+    \includegraphics[width=.4\textwidth]{38.pdf}
+  \end{enumerate}
+  \paragraph{Factor Predictors}
+  A factor predictor is a predictor that takes a discrete set of
+  values on a ``nominal'' scale (non numerical)
+  \\ e.g.\ Drug $A$, $B$, $C$
+  \\ e.g.\ Female, Male
+  \\ e.g.\ Sudan, SUV, Pickup
+  \\ Say we assign numbers to the drugs, $1,2,3$, this doesn't make
+  sense because we are now introducing ordering and things like $2 - 1
+  = 1$, which doesn't make sense in the case of drugs. So what should
+  we do instead?
+
+  Consider the case where the predictor takes $M$ possible values
+  \begin{align*}
+    X & =
+        \begin{cases}
+          1 & (\text{drug A})\\2 & \vdots\\\vdots & \vdots\\M &
+          (\text{drug M})
+        \end{cases}
+  \end{align*}
+  We define $M$ ``dummy'' or indicator variables:
+  \begin{align*}
+    x^{(m)} & =
+          \begin{cases}
+            1 & x = m
+            \\0 & \text{otherwise}
+          \end{cases}
+  \end{align*}
+  This will be like introducing linearly independent vectors for each
+  variable.
+
+  For example, Drug $A,B,C$:
+  $$
+  \begin{array}{c c c c}
+    &x^{(1)}&x^{(2)}& x^{(3)}
+    \\ \text{Drug } A & 1 & 0 & 0
+    \\ B & 0 & 1 & 0
+    \\ C & 0 & 0 & 1
+  \end{array}
+  $$ which we call a coding chart. Say we have the following data:
+  $$
+  \begin{array}{c c c c c}
+    \text{ID}&\text{Drug Type}&x^{(1)}&x^{(2)}&x^{(3)}
+    \\ 1 & A & 1 & 0 & 0
+    \\ 2 & A & 1 & 0 & 0
+    \\ \vdots & B & 0 & 1 & 0
+    \\ \vdots & C & 0 & 0 & 1
+    \\ n & A & 1 & 0 & 0
+  \end{array}
+  $$
+  Note that, in our coding chart, $x^{(3)}$ is redundant (if $x^{(1)}$
+  and $x^{(2)}$ are $0$, we must be Drug $C$). We can then remove it
+  and represent it using only $M-1$ dummy variables.
+
+  Relabel the level of the predictor $x$:
+  \begin{align*}
+    x^{(\ell)} & =
+              \begin{cases}
+                1 & x = \ell
+                \\ 0 & \text{otherwise}
+              \end{cases}
+  \end{align*}
+  for $\ell = 0, 1, \ldots, M-1$.
+  \\ When $L=M \iff$ ``baseline level''
+  \\ We may write $X_1$ --- categorical with $M$ levels
+  \begin{align*}
+    E[Y \mid X_1] & = \sum_{\ell = 1}^{M-1}B_{\ell}X_1^{(\ell)}
+  \end{align*}
+  Furthermore, we may represent
+  \begin{align*}
+    \beta_\ell^c & =
+                   \begin{cases}
+                     \beta_0 & \ell = 0
+                     \\ \beta_\ell - \beta_0 & \ell = 1, \ldots, M-1
+                   \end{cases}
+    \\ E[Y \mid X_1] & = \sum_{\ell=1}^{M-1}\beta_\ell X_1^{(\ell)} =
+                       \underbrace{\beta_0^c}_{= \beta_0} + \sum_{\ell = 1}^{M-1}\beta_\ell^c X_{1}^{\ell}
   \end{align*}
 \end{document}
