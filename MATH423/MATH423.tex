@@ -29,6 +29,10 @@
 \DeclareMathOperator*{\argmax}{arg\!\max}
 \DeclareMathOperator*{\argmin}{arg\!\min}
 
+% Independent symbol
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
 \usepackage{graphicx}
 \graphicspath{{Images/}}
 \author{Julian Lore}
@@ -2789,26 +2793,100 @@ of $\beta$.
 
   Relabel the level of the predictor $x$:
   \begin{align*}
-    x^{(\ell)} & =
+    x^{(m)} & =
               \begin{cases}
-                1 & x = \ell
+                1 & x = m
                 \\ 0 & \text{otherwise}
               \end{cases}
   \end{align*}
-  for $\ell = 0, 1, \ldots, M-1$.
-  \\ When $L=M \iff$ ``baseline level''
-  \\ We may write $X_1$ --- categorical with $M$ levels
+  for $m = 0, 1, \ldots, M-1$.
+  \\ When $m=M \iff$ ``baseline level''
+  \\ We may write $X$ --- categorical with $M$ levels
+  \\ The corresponding model can be defined as
   \begin{align*}
-    E[Y \mid X_1] & = \sum_{\ell = 1}^{M-1}B_{\ell}X_1^{(\ell)}
+    E[Y \mid X] & = \beta_0 + \sum_{m = 1}^{M-1}B_{m}X^{(m)}
+    \\(1)\ X = 1 \implies & (x^{(1)}, \ldots, x^{(M-1)}) = (1,0,\ldots,0)
+    \\ E[Y \mid X = 1] & = \beta_0 + \beta_1
+    \\(2)\ X = 2 \implies & (x^{(1)}, \ldots, x^{(M-1)}) =
+                            (0,1,0,\ldots,0)
+    \\ E[Y \mid X = 2] & = \beta_0 + \beta_2
+    \\ &\vdots
+    \\ (M-1)\ X = M-1 \implies& (x^{(1)}, x^{(2)}, \ldots, x^{(M-1)}) =
+    (0,0, \ldots, 0, 1)
+    \\ E[Y \mid X = M-1] & = \beta_0 + \beta_{M-1}
+    \\ (M)\ X = M \implies &(x^{(1)}, x^{(2)}, \ldots, x^{(M-1)}) =
+    (0,0, \ldots, 0, 0)
+    \\ E[Y \mid X = M] & = \beta_0
   \end{align*}
+  Therefore,
+  \begin{align*}
+    \beta_1 & = E[Y \mid X = 1] - E[Y \mid X = M]
+    \\ \beta_2 & = E[Y \mid X = 2] - E[Y \mid X = M]
+    \\ &\vdots
+    \\ \beta_{M-1} & = E[Y \mid X = M-1] - E[Y \mid X = M]
+    \\ \beta_0 & = E[Y \mid X = M]
+  \end{align*}
+  For example, if these were drugs, we could see $\beta_1, \ldots,
+  \beta_{M-1}$ as the effect contrasts between level $1,\ldots, M-1$
+  and $M$, comparing all the other drugs to drug
+  $M$, whereas drug $M$ is the effect of our baseline level.
+
   Furthermore, we may represent
   \begin{align*}
-    \beta_\ell^c & =
+    \beta_m' & =
                    \begin{cases}
-                     \beta_0 & \ell = 0
-                     \\ \beta_\ell - \beta_0 & \ell = 1, \ldots, M-1
+                     \beta_0 & m = M
+                     \\ \beta_0 + \beta_m & m = 1, \ldots, M-1
                    \end{cases}
-    \\ E[Y \mid X_1] & = \sum_{\ell=1}^{M-1}\beta_\ell X_1^{(\ell)} =
-                       \underbrace{\beta_0^c}_{= \beta_0} + \sum_{\ell = 1}^{M-1}\beta_\ell^c X_{1}^{\ell}
+                                            \intertext{Then we can
+                                            rewrite the model as}
+    E[Y \mid X] & = \sum_{m=1}^{M-1}\beta_m' X^{(m)}
   \end{align*}
+  For example, when $X = M, (x^{(1)},\ldots, x^{(M)}) = (0, \ldots, 0,
+  1)$
+  \begin{align*}
+    E[Y \mid X = M] & = \beta_M' = \beta_0
+  \end{align*}
+  When $X = 1, (x^{(1)},\ldots, x^{(M)}) = (1,0, \ldots, 0,
+  0)$
+  \begin{align*}
+    E[Y \mid X = 1] & = \beta_1' = \beta_0 + \beta_1
+  \end{align*}
+  Why is this the case? Remember that the first column of $X$ is just
+  $1$'s and we can include this intercept by adding $\beta'_M$, but it
+  is not required, as we've seen in the previous model.
+
+  In this model, $\beta'_m$ can be interpreted directly as the effect
+  of level $m$, for $m = 1, \ldots, M$.
+  \paragraph{Interaction}
+  For two different predictors, we may consider the joint effect of
+  the predictors simultaneously.
+  \subparagraph{Continuous predictors}
+  We just include product terms, e.g.\ $x_1, x_2$. Then
+  \begin{align*}
+    E[Y \mid X] & = \beta_0 + \beta_1 x_1 + \beta_2 x_2 +
+                  \beta_{12}\underbrace{x_1 x_2}_{\text{interaction}}
+  \end{align*}
+  $\beta_{12}$ measures the modification of the effect of the outcome
+  of $x_1$ on the presence of $x_2$ (or vice versa) i.e.\
+  \begin{align*}
+    E[Y \mid X] & = \beta_0 + \beta_1 x_1 + \beta_2 x_2 +
+                  \beta_{12}x_1x_2
+    \\ & = \beta_0 + (\beta_1 +
+                  \beta_{12}x_2)x_1 + \beta_2x_2
+    \\ &          = \beta_0 + \beta_1x_1 + (\beta_2 + \beta_{12}x_1)x_2
+  \end{align*}
+  For example, say smoking is $X_1$ and its effect on cancer $Y$ is
+  represented by $\beta_1$. However, smoking may also affect an extra
+  trait/gene $X_2$ which we represent by $\beta_{12}$, which will in
+  turn affect $Y$ by $\beta_2$.
+  \paragraph{Interaction and Correlation}
+  ~\\Correlation: $x_1 \independent x_2$, $Cov(x_1, x_2)$. Here we
+  study the joint distribution of $X_1$ and $X_2$, $D(X_1,X_2)$
+  \\ Interaction: $D(Y,X_1) \mid X_2$, we study the joint distribution
+  of $Y$ and $X_1$ conditioned on $X_2$.
+  \paragraph{Factor Predictors}
+  For the factor predictors with $M_1$ and $M_2$ levels, an
+  interaction term considers all possible combinations of the level of
+  each factor. i.e.\ there are $M_1 \times M_2$ possible combinations.
 \end{document}
