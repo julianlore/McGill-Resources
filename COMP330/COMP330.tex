@@ -181,7 +181,7 @@ can bring the complete problems to P, then $NP = P$. We tend to
 believe $P \neq NP$ as all attempts to show they're equal so far have
 failed.
 
-\paragraph{PSpace Completeness} problems that require polynomial space to be solved but can
+\paragraph{PSpace Completeness}\label{psp1} problems that require polynomial space to be solved but can
 still take very long. Again, if any of these problems can be done in
 polynomial time, then they can all be solved in polynomial time.
 \\ Example: Geography game. This is a two player game. Given a set of
@@ -1406,7 +1406,7 @@ machines.
 \item Tape is infinite.
 \item Special states for rejecting and accepting take effect immediately.
 \end{itemize}
-Formally, a Turing machine is a $7$-tuple, $(Q, Sigma, \Gamma, \delta,
+Formally, a Turing machine is a $7$-tuple, $(Q, \Sigma, \Gamma, \delta,
 q_0, q_{accept}, q_{reject})$ with $Q, \Sigma, \Gamma$ being finite
 sets, such that:
 \begin{itemize}
@@ -1687,7 +1687,7 @@ exist, which is why this is undecidable.
 \end{itemize}
 \paragraph{Ex} Let $A$ be the language consisting of all strings
 representing connected (every node can be reached from
-every other node by traveling laone edges) undirected graphs.
+every other node by traveling along edges) undirected graphs.
 $$A = \left\{\langle G \rangle \mid G \text{ is a connected undirected
     graph}\right\}$$
 A high-level description of a TM $M$ that decides $A$ is as follows:
@@ -1751,7 +1751,7 @@ Construct a new DFA $C$ from $A$ and $B$ that only accepts strings
 accepted by only one of the languages, i.e.\ their symmetric
 difference. If $A$ and $B$ recognizes the same language, $C$ will
 accept nothing. $$L(C) = (L(A) \cap \overline{L(B)}) \cup
-(\overline{L(A) \cap L(B)})$$
+(\overline{L(A)} \cap L(B))$$
 
 $F = $ On input $\langle A,B \rangle$ where $A$ and $B$ are DFAs:
 \begin{enumerate}
@@ -1972,7 +1972,7 @@ rejects, it should be $\left\{0^n1^n \mid n \geq 0\right\}$, meaning
 that $S$ can decide $A_{TM}$.
 \paragraph{Equality of TMs}
 $EQ_{TM} = \left\{\langle M_1,M_2 \rangle \mid M_1 \text{ and }M_2
-  \text{ are TMs} and L(M_1) = L(M_2)\right\}$ is undecidable.
+  \text{ are TMs and } L(M_1) = L(M_2)\right\}$ is undecidable.
 \paragraph{Proof} $R$ decides $EQ_{TM}$ and construct $S$ to decide
 $E_{TM}$
 \\ $S = $ On input $\langle M \rangle$, a $TM$
@@ -2166,7 +2166,7 @@ $A$ to $B$. Therefore $M$ accepts $f(w)$ whenever $w \in A$.
 \\ \textbf{Corollary}: $A \leq_m B$ and $A$ is undecidable $\implies B$
 undecidable.
 \paragraph{Ex}
-Earlier we used an reduction from $A_{TM}$ to prove $HALT_{TM}$ is
+Earlier we used a reduction from $A_{TM}$ to prove $HALT_{TM}$ is
 undecidable. This reduction showed how a decider for $HALT_{TM}$ could
 be used to give a decider for $A_{TM}$. We demonstrated a mapping
 reducibility from $A_{TM}$ to $HALT_{TM}$:
@@ -2600,4 +2600,415 @@ labeled in a contradictory way aren't connected. The assignment
 satisfies $\phi$ because each triple contains a clique node and
 therefore each clause contains a literal assigned to true and $\phi$
 is satisfiable.
+\section{11/19/19}
+\paragraph{Vertex-Cover} If $G$ is a undirected graph, a
+\textbf{vertex cover} of $G$ is a subset of the nodes where every edge
+of $G$ touches one of those nodes. The vertex cover problem asks if a
+graph has a vertex cover of a certain size.
+$$VERTEX-COVER = \left\{\langle G,k \rangle \mid G \text{ is an
+    undirected graph that has a $k$-node vertex cover}\right\}$$
+\paragraph{Thm} $VERTEX-COVER$ is NP-complete.
+\paragraph{Proof} We make a reduction from $3SAT$ to $VERTEX-COVER$
+operating in polytime, mapping a $\phi$ to a $G$ and a $k$.
+\begin{itemize}
+\item For each variable $x$ in $\phi$, produce an edge connecting two nodes, labeled
+$x$ and $\overline{x}$. We select the node corresponding to which is
+$TRUE$.
+\item For each clause, we make a triple of three nodes with the three
+  literals of the clause. These three are all connected to each other
+  and to the nodes in the variable nodes having the same label.
+\end{itemize}
+The total number of nodes appearing in $G$ is $2m + 3 l$, where
+$\phi$ has $m$ variables and $l$ clauses. Let $k = m + 2 l$
+
+$\langle \phi \rangle \in 3SAT \implies \langle G,k \rangle \in VC$:
+\\ Start with a satisfying assignment. Put the nodes of the variables
+that correspond to the true literals in the assignment into the vertex
+cover. Then select one true literal in every clause and put the
+remaining two nodes from every clause group into the vertex cover. We
+then have a total of $k$ nodes that cover all edges (every variable
+edge is covered and all three edges within every clause are covered
+and all edges between variable and clauses). Therefore $G$ has a
+vertex cover with $k$ nodes.
+
+$\langle G,k \rangle \in VC \implies \langle \phi \rangle \in 3SAT$:
+\\ If $G$ has a vertex cover with $k$ nodes, the vertex cover must
+contain one node in each set of variable nodes and two in every set of
+clause nodes in order to cover the edges. This accounts for all
+nodes. Take the nodes of the variable nodes that are in the vertex
+cover and assign the corresponding literals to $TRUE$. This assignment
+satisfies $\phi$ because each of the three edges connecting the
+variables with each clause set is cover and only two nodes of the
+clause sets are in the vertex cover. Therefore one of the edges must
+be covered by a variable node and thus the assignment satisfies this
+clause.
+\subsection{Beyond NP-Completeness}
+\paragraph{PSpace Completeness} Problems that require a reasonable
+(Poly) amount of space to be solved. No constraint on the run time,
+they may take a very long time to run. This is a superset of
+NP-Completeness, we can use polynomial space to check every
+configuration of a problem.
+
+Note that we know the space that you use is bounded by the time that
+you use, but not the other way around. We can run in exponential size
+of the input.
+
+If any of the problems in PSpace can be solved in a reasonable (poly)
+amount of time, then all of them can be.
+
+\paragraph{Def} Let $M$ be a deterministic TM that halts on all
+inputs. The \textbf{space complexity} of $M$ is the function $f:
+\mathbb{N} \to \mathbb{N}$ s.t.\ $f(n)$ is the maximum number of tape
+cells that $M$ scans on any input of length $n$. If the space
+complexity of $M$ is $f(n)$, we also say that $M$ runs in space
+$f(n)$.
+
+If $M$ is nondeterministic (but all branches still halt on all
+inputs), we defined space complexity $f(n)$ to be the maximum number
+of tape cells that $M$ scans on any branch of its computation for any
+input of length $n$.
+
+\paragraph{Def} Let $f: \mathbb{N} \to \mathbb{R}^+$ be a
+function. Define the following
+\textbf{space complexity classes}:
+\begin{align*}
+  SPACE(f(n)) & = \left\{L \mid L \text{ is a language decided by an
+                $O(f(n))$ space deterministic TM}\right\}
+  \\ NSPACE(f(n)) & = \left\{L \mid L \text{ is a language decided by an
+                $O(f(n))$ space nondeterministic TM}\right\}
+\end{align*}
+\paragraph{Savitch's theorem} For any function $f: \mathbb{N} \to
+\mathbb{R}^+$ where $f(n) \geq n$
+$$NSPACE(f(n)) \subseteq SPACE(f^2(n))$$
+\paragraph{Def} \textbf{PSPACE} is the class of languages that are
+decidable in polynomial space on a deterministic TM, i.e.
+$$PSPACE = \bigcup_k SPACE(n^k)$$
+Define NPSPACE as the nondeterministic counterpart to PSPACE. However,
+$PSPACE = NPSPACE$ by Savitch's theorem, because the square of a
+polynomial is still polynomial.
+$$P \subseteq NP \subseteq PSPACE = NPSPACE \subseteq EXPTIME =
+\bigcup_k TIME(2^{n^k})$$
+The only certainty we have here is that $P \neq EXPTIME$.
+\paragraph{Def} A language $B$ is \textbf{PSPACE-complete} if
+\begin{enumerate}
+\item $B \in PSPACE$
+\item $\forall A \in PSPACE, A \leq_P B$
+\end{enumerate}
+If $B$ only satisfies condition 2, we call it \textbf{PSPACE-hard}.
+
+An example of a PSpace-complete problem is the
+\hyperref[psp1]{generalized geography game}.
+\subsection{Cryptography}
+The purpose of cryptography is to allow people to exchange private
+information over a public channel, i.e.\ make it so that their
+information is not publicly available.
+\paragraph{Information Theoretical Cryptography}
+Perfect cryptography, no matter what you cannot decrypt the
+information. One way of distributing secret messages is with a key. A
+\textbf{key} is just a piece of random information used to decrypt
+messages. The randomness is vital to its security, the more random,
+the more secure.
+\paragraph{Key distribution} Allows people to establish
+keys they want to use in the future. The people must exchange the keys
+in high secrecy.
+\paragraph{Encryption} Allows us to transform \textbf{clear text
+  messages} to a \textbf{cipher text} using the encryption function,
+which takes a key and message as parameters.
+\\ This comes along with the \textbf{decryption} function, the inverse
+of the encryption function that returns you the message when given the
+key and the cipher text.
+
+Typically, encryption will be practical if it's possible to exchange
+keys and then keep using them for a while. In most systems we use
+nowadays, we use the same key for multiple messages. Either the
+messages will be impossible to decrypt without the key or at least
+very difficult to do so. These conform exactly to impossibility in
+terms of computation (uncomputable) and complexity (in terms of time
+and space).
+\paragraph{Symmetric Encryption} Consists of having a shared key which
+works for both encryption and decryption.
+
+A simple and old example of this is Caesar's Cipher, where the sender
+would just shift the alphabet by $x$ amount of letters and the
+receiver would unshift it by the same amount.
+
+\paragraph{MILLER-VERNAM Cipher} A perfect system. For simplicity, we
+illustrate it in binary. Say we have a message $m$ in binary. We also
+have a key $k$ in binary that should be perfectly random and the same
+length as $m$. To encrypt
+the data, we use a position wise exclusive or between $m$ and $k$,
+i.e.\ $m \oplus k$. The receiving operation is also an XOR, which will
+give you the original message.
+\\ We cannot hide the size of the message, since the cipher text is
+the exact same size as the message. For the cipher text, there is
+exactly one key that perfectly explains the original message. The
+cipher text is distributed exactly like the key, so if the key is
+uniformly random, the cipher text will also be so, which is why we
+call this system perfect.
+\\ However, the problem with this system is that if you send two
+messages with the exact same key and you apply the operation to the
+two messages, you'll get a combination of both of the two messages.
+\\ So without knowledge of the key, seeing one cipher text will give
+you no information, but seeing two with the same key will give you
+information about both messages. This is because:
+\begin{align*}
+  m_1 \oplus k &= c_1 & c_1 \oplus k & = m_1
+  \\m_2 \oplus k &= c_2 & c_2 \oplus k & = m_2
+  \\ \implies c_1 \oplus c_2 & = m_1 \oplus m_2
+\end{align*}
+Since this only works well for one
+message per key, we call this system the \textbf{one-time pad}. This
+system is great but you must send an equivalent amount of keys for the
+message you want to send, i.e.\ to send a message, you must have
+already exchanged that amount of keys in the past, meaning this system
+is not very practical.
+\section{11/26/19}
+There are perfect cryptographic tools, however, the drawback is that
+you need to exchange keys that are the same size of the messages you
+will be sending. So if you send messages regularly, you will have to
+exchange keys regularly, but then that implies you have a secret
+channel, in which case you can just use that to communicate.
+
+In most cases, we aim for something practical with \textbf{complexity
+  theoretical cryptography}. It won't be perfectly secure, but unless
+your opponents have much more computing power than you, they won't be
+able to figure out your messages.
+
+\subsection{Probabilistic Complexity Theory}
+Sometimes adding randomness to computations can be favorable.
+
+Non-deterministic poly-time: $\forall x \in L, \Pr(M(x) =
+\text{accept}) >0, \forall x \notin L, \Pr(M(x)=\text{accept}) = 0$
+
+Bounded-probability poly-time: $\forall x \in L, \Pr(M(x) =
+\text{accept}) \approx 1 (> 2/3), \forall x \notin L, \Pr(M(x) =
+\text{accept}) \approx 0 (< 1/3)$
+
+Factoring a number into primes and graph isomorphism (checking if two
+graphs are the same up to renaming of nodes) are in NP, whereas
+deciding if a number is prime is in P (although the BPP algorithm is
+usually much faster). These problems have applications in
+cryptography.
+
+Polynomial identity testing consists of testing if two circuits (AND,
+OR gates) represent the same polynomial. The difference of the two
+polynomials should be the $0$ polynomial. The algorithm in BPP will
+randomly test points and check if the difference is $0$. If all of our
+checks pass, then we have a good guess that they are the same (since
+the probability is very low that they aren't). However, we don't have
+an algorithm in P nor NP for this.
+
+\paragraph{Fermat's Little Theorem}
+$L_{PRIME} \in NP$.
+\\ $N$ is prime $\iff \exists g \in \mathbb{N}, g < N, s.t.$
+\begin{align*}
+  g^{N-1}\mod N & = 1
+  \\ g^{(N-1)/p} \mod N & \neq 1\ \forall \text{prime } p \mid N
+\end{align*}
+``$g$ is called a generator $\mod N$''
+\\ \noindent \rule{\textwidth}{0.5pt}
+$L_{PRIME} = \left\{\langle N \rangle \mid N \text{ is a prime
+    number}\right\} \in NP$
+\\ Proof: Guess $g$, check that $g^{N-1} \mod N = 1$
+\\ Guess $p_1, p_2, \ldots, p_k$, check that $N = p_1 p_2 \ldots p_k$
+are $g^{(N-1)/p_i}\mod N \neq 1$ for $1 \leq i \leq k$
+\\ For each $p_i$ where $1 \leq i \leq k$, prove $p_i$ is prime
+recursively.
+\\ $L_{FACT} = \left\{\langle N,k \rangle \mid (\exists \text{ a prime
+  } p \in \left\{1, \ldots, K\right\}) p \mid N\right\}$
+\begin{enumerate}
+\item $L_{FACT} \in NP$: Guess $p$, check $1 \leq p \leq k$, prove $p
+  \in L_{PRIME}$
+\item If $L_{FACT} \in P$ then $FACTORING \in P$ as well.
+\end{enumerate}
+Proof: Let $M$ be a TM deciding $L_{FACT}$ in poly-time. Let $K =
+N$. Using $M$, do a binary search for the smallest value of $K$ such
+that $\langle N,K \rangle \in L_{FACT}$.
+\\ The resulting $K$ is the smallest prime factor $p$ of $N$.
+\\ Set $N := N/p$. Repeat the process until $N = 1$.
+\\ The $p$'s generated constitute of the prime factorization.
+
+Note that prime factorization isn't a decision problem, but we say
+that it is in $NP$ because we can use $L_{FACT}$ to determine prime
+factorization in polytime.
+\subsection{Public-Key Distribution}
+We have functions that we can compute efficiently if we have certain
+information (the keys), but publicly, it is hard to redo the work.
+
+In this system, we have a parameter $p$ that is public. Each sender
+will choose a local private key, say $a$ and $b$. These operations
+must be commutative. The resulting functions can be disclosed
+publicly.
+$$
+\begin{array}{l l l}
+  x:=f(p,a)& \stackrel{x}{\to} & y:=f(p,b)
+  \\ k:=f(y,a) & \stackrel{y}{\gets} & k:=f(x,b)
+\end{array}
+$$ such that $f(f(p,a),b) = k = f(f(p,b),a)$. This allows people who
+have not met/exchanged keys securely to send messages relatively
+securely. If you have infinite computing power, you can determine $a$
+from $x$, but we cannot do so efficiently.
+\subsection{Public-Key Encryption}
+Encryption and decryption should not use the same key. A person's
+public key $K_e$ will be available publicly, which you will use to
+encrypt a message you want to deliver to them. That person will use
+their corresponding private key $K_p$ to decrypt the received
+messages. This way has been implemented in the RSA method.
+\begin{algorithm}
+  Public-Key RSA Encryption Scheme
+  \begin{algorithmic}
+    \State Gen: on input $1^n$ run \texttt{GenRSA}($1^n$) to obtain
+    $N, e$ and $d$. The public key is $\langle N,e \rangle$ and the
+    private key is $\langle N,d \rangle$
+    \State Enc: on input a public key $pk = \langle N,e  \rangle$ and
+    a message $m \in \mathbb{Z}^*_{N}$ compute the ciphertext $c :=
+    [m^e \mod N]$
+  \State Dec: on input a private key $sk = \langle N,d \rangle$ and a
+  ciphertext $c \in \mathbb{Z}^*_{N}$, compute the message $m := [c^d
+  \mod N]$
+  \end{algorithmic}
+\end{algorithm}
+\begin{itemize}
+\item
+Given a modulus $N$, an exponent $e > 0$ that is relatively prime to
+$\varphi (N)$ and an element $y \in \mathbb{Z}^*_{N}$, compute
+$\sqrt[e]{y} \mod N$
+\item Given $N,e,y$ finding $x$ such that $x^e = y \mod N$ is hard
+\item However, finding $x$ is easy given $p$ and $q$ such that $N =
+  pq$. Can compute $d$ so that $x = \sqrt[e]{y} \mod N = y^d \mod N$
+\end{itemize}
+\subsection{Quantum Computers}
+To model quantum physics, why not have computers that act like quantum
+physics? The first idea was quantum Turing Machines, which, instead of
+the standard transition function, the transition function would act
+like quantum physics. However this idea was abandoned as it became
+very complicated.
+
+The next idea was circuits, which are much nicer since they are finite
+and can be shown to be equivalent to classical Turing Machines.
+\paragraph{Quantum Cryptanalysis}
+If we had a quantum computer, factoring RSA would be very easy, it
+would no longer be secure. But can we make such a computer?
+\paragraph{Photons} Every photon has a specific color, but it contains
+multiple wavelengths of different colors, which combine and look like
+one specific color to your eyes. Additional, these wavelengths have
+orientations.
+
+Light polarization consists of splitting the light source, for
+example, a 3D movie looks like two different videos, but when you wear
+3D glasses, you'll have one image per eye and then your 3D perception
+will kick in.
+\\ Polarization has been known for a long time, vikings used certain
+crystals to determine the position of the sun even if it was cloudy
+outside. But it has only recently been better understood.
+
+\textbf{Polarization} is a quantum property. There exists a natural
+crystal that will polarize a light orthogonally.
+
+A $\theta$ polarized light can be described by $\cos \theta + \sin
+\theta$, i.e.\ a composition of a horizontal and vertical light. We
+can additionally do this with complex numbers. For any particle, we
+can take two orthogonal polarizations and two complex numbers to fully
+describe the particle's polarization. This is true when we consider a
+particle in isolation. However, when we have multiple particles, they
+have a joint state, they affect each other and we cannot extrapolate
+the exact two states/two particles leading to this. This leads to \textbf{quantum
+  entanglement}. Very far quantum events will seem
+correlated. Consequentially, in a very small space and using a small
+amount of computations, we'll be able to transform a system such that
+several states will have nonzero coefficients and will all contribute
+to the final result in the end. The point is that you can start from a
+memory of finite size and in a small amount of time you can end up
+with an exponential amount of possibilities coexisting. However, you
+cannot get the specific coefficient of one of the states. So what can
+we get out of this? Turns out that factorization is one of the
+possible results.
+\section{11/28/19}
+Basis vectors: $|0>$ and $|1>$
+\\ Arbitrary states: $| \psi > = \alpha | 0 > + \beta | 1 >$ such
+that $| \alpha |^2 + |\beta|^2 = 1$. Note that the $+$ here isn't
+really addition, as these are complex numbers. We just want $\alpha$
+amount of $|0>$ and $\beta$ amount of $|1>$. The constraint on
+$\alpha$ and $\beta$ is just a constraint on probability, the sum of
+possible answers.
+\\ Arbitrary multi-states: $|\psi > = \alpha |00> + \beta |01> +
+\delta|10> + \gamma |11>$ such that $|\alpha|^2 + |\beta|^2 +
+|\delta|^2 + |\gamma|^2 = 1$.
+\\ This will give us the power of being in multiple states at once.
+
+$2$ particles $\to 4$ possible positions
+\\$10$ particles $\to 1024$ possible positions
+\\ In $100$ bits, we can have $2^{100}$ possible positions. Each
+single operation will impact each possibility.
+\\ \noindent \rule{\textwidth}{0.5pt}
+However, quantum mechanics also tells us how we're limited.
+\\ Polarizing filters only allow a specific light orientation to come
+out. However, this isn't exactly true. The light coming out is
+polarized in a specific way (which you can see by using another filter
+over it). But the light that is being filtered out is only $100\%$
+filtered out if its orthogonal to the light we are emitting. If it's
+not fully orthogonal, it seems like $\cos \theta$ of it comes out and
+$\sin \theta$ of it is blocked.
+
+Quantum mechanics tells us that we can only measure these things in
+very specific ways, i.e.\ only in this way. It's physically impossible
+to determine the exact $\theta$ from a single sample. We can find it
+from repeated experiments with a fixed $\theta$. So quantum mechanics
+tells us that certain properties exist, but we have no way of
+measuring it/no way of accessing it.
+
+A calcite crystal will split a light into two paths according to the
+projection of the angle of the light.
+
+Note that we cannot clone light sources, as we said earlier, we cannot
+determine the angle from one photon, so we cannot emit two copies of
+it. This brings limitations to quantum computing.\\
+\begin{tabular}{c c c}
+  &Classical&Quantum
+  \\ Copying & Yes & No
+  \\ Measuring & Yes & partial
+  \\ Broadcasting & Yes & No
+  \\ Superposing & No & Yes
+  \\ Interfering & No & Yes
+\end{tabular}
+\\ Interference occurs because the coefficients can also be negative,
+we can add a positive and negative coefficient and end up with $0$,
+unlike adding probabilities together.
+
+Can we still get more from this restricted system? Similar to BPP, we
+can define Bounded-Quantum Poly-time, $\forall x \in L,
+P[M(x)=\text{accept}] \approx 1\ (> 2/3), \forall x \notin L, P[M(x)
+\neq \text{accept}] \approx 0\ (< 1/3)$. This is a superset of BPP.
+
+\paragraph{Quantum Superposition}
+In one step, you can superpose your state configuration while keeping the
+original, i.e.\ going from $1$ state to $2$, $2$ to $4$, etc. So in
+$n$ timesteps, you can get all the $2^n$ configurations in linear
+time. Then you can execute a function for all these configurations in
+linear.
+\paragraph{Quantum Factoring}
+Given $n=pq$ and $\phi(n)=(p-1)(q-1)$, where $p$ and $q$ are
+primes. It is easy to find $p$ and $q$ because
+\begin{align*}
+  \phi(n) &=
+            (p-1)(q-1)=pq-p-q+1 = n-p-(n/p)+1
+  \\ \implies & p +(n/p) +n - \phi(n) + 1 = 0
+  \\ \implies & p^2 + (n-\phi(n) + 1)p+n = 0
+  \\ \implies & p = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}, (a=1, b =n
+                -\phi(n)+1, c=n)
+\end{align*}
+\paragraph{Euler's theorem}
+$a^{\phi(n)}\mod n = 1$
+\\ \noindent \rule{\textwidth}{0.5pt}
+$F(a,r,n) = (a^r\ mod n,r,n)$
+\\ The things that aren't multiples of $\phi(n)$ will be pointing in
+all sorts of directions, whereas the multiples will be pointing
+forward. Using a Quantum Fourrier Transform, the highest coefficient
+should be an $r$ that is a multiple of $\phi(n)$
+\\ Construct the superposition $\forall r, a$ of $a^r\mod n, r,n$. Use
+Quantum Fourrier Transform. Measure $r$. With igh probability obtain
+$r = k \phi(n)$ for some integer $k$. Repeat to obtain $r'=k' \phi(n)$
+and $\phi(n) = \gcd(r,r')$. Note that a Quantum Fourrier Transform is
+only efficient on a Quantum computer. So far this has succeeded with
+the number $15$, we just need to be able to scale it for larger numbers.
 \end{document}
