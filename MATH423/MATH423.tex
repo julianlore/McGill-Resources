@@ -25,7 +25,8 @@
 	\fbox{\BOXCONTENT}%
 	}%
 }
-
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
 \DeclareMathOperator*{\argmax}{arg\!\max}
 \DeclareMathOperator*{\argmin}{arg\!\min}
 
@@ -2889,4 +2890,111 @@ of $\beta$.
   For the factor predictors with $M_1$ and $M_2$ levels, an
   interaction term considers all possible combinations of the level of
   each factor. i.e.\ there are $M_1 \times M_2$ possible combinations.
+  \begin{align*}
+    E[Y \mid X] & = \underbrace{\sum_{m=1}^{M_1}\beta_m x^{(m)}}_{x_1}
+                  +
+                  \underbrace{\sum_{m'=1}^{M^2}\beta_{m'}x^{(m')}}_{x_2}
+                  + \sum_m^{M_1} \sum_{m'}^{M_2}
+                  \beta_{mm'}x^{(m)}x^{(m')}
+                  \intertext{If the intercept is used, then we could
+                  just use $(M_1 - 1) \times (M_2 - 1)$ terms to
+                  represent the interaction.}
+                  E[Y \mid X] & = \beta_0 + \sum_{m=1}^{M_1-1}\beta_m
+                                x^{(m)} +
+                                \sum_{m'=1}^{M_2-1}\beta_{m'}x^{(m')}
+                                + \sum_{m}^{M_1-1}\sum_{m'}^{M_2-1}
+                                \beta_{mm'} x^{(m)}x^{(m')}
+  \end{align*}
+  \paragraph{Example}~
+  \\$X_1$ --- Categorical: $A,B,C$
+  \\$X_2$ --- Categorical: $Female, Male$
+  \\$
+  \begin{array}{c c c c}
+    \hline X_1&X_1^{(1)}&X_1^{(2)}&X_{1}^{(3)}
+    \\\hline A & 1 & 0 & 0
+    \\ B & 0 & 1 & 0
+    \\ C & 0 & 0 & 1
+    \\\hline
+  \end{array}
+  $
+  \\\\$
+  \begin{array}{c c c}
+    \hline X_2&X_2^{(1)}&X_2^{(2)}
+    \\\hline Female & 1 & 0
+    \\ Male & 0 & 1
+    \\\hline
+  \end{array}
+  $
+  \\ Model 1 (with main effect only):
+  \begin{align*}
+    E[Y \mid X] & = \underbrace{\beta_1 X_1^{(1)} + \beta_2 X_1^{(2)}
+                  + \beta_3 X_1^{(3)}}_{X_1} + \underbrace{\beta_4
+                  X_2^{(1)} + \beta_5X_2^{(2)}}_{X_2}
+  \end{align*}
+  \\ Model 2 (with main effect only, removing redundant dummy variables):
+  \begin{align*}
+    E[Y \mid X] & = \beta_0' + \beta_1'X_1^{(1)} + \beta_2'X_1^{(2)} + \beta_4'X_2^{(1)}
+  \end{align*}
+  $
+  \begin{array}{c c c c c c}
+    \hline X_1&X_2&X_1^{(1)}&X_1^{(2)}&X_{2}^{(1)} & \text{Model}
+    \\\hline A & Female & 1 & 0 & 1 & \beta_0' + \beta_1' + \beta_4'
+    \\ B & Female & 0 & 1 & 1 & \beta_0' + \beta_2' + \beta_4'
+    \\ C & Female & 0 & 0 & 1 & \beta_0' + \beta_4'
+    \\ \hline A & Male & 1 & 0 & 0 & \beta_0' + \beta_1'
+    \\ B & Male & 0 & 1 & 0 & \beta_0' + \beta_2'
+    \\ C & Male & 0 & 0 & 0 & \beta_0'
+  \end{array}
+  $
+  \begin{align*}
+    E[Y \mid X_1 = B, X_2 = Male] & = \beta_0' + \beta_2'
+    & E[Y \mid X_1 = C, X_2 = Male] & \beta_0'
+  \end{align*}
+  \begin{align*}
+    \beta_2' & = \overbrace{E[Y \mid X_1 = B, X_2 = Male]}^{\circled{1}} = \overbrace{E[Y\mid X_1 = C,
+                  X_2 = Male]}^{\circled{2}}
+  \end{align*}
+  $\beta_2'$ can be interpreted as the effect contrast between
+  \circled{1} and \circled{2}.
+  \\ Model 2 (with interaction terms):
+  \begin{align*}
+    E[Y \mid X] & = \beta_0' + \underbrace{\beta_1'X_1^{(1)} + \beta_2'X_{1}^{(2)}}_{X_1}
+                  + \underbrace{\beta_4'X_2^{(1)}}_{X_2} +
+                  \underbrace{\beta_{14}' X_1^{(1)}X_2^{(1)}}_{A} + \underbrace{\beta_{24}'X_1^{(2)}X_2^{(1)}}_{B}
+  \end{align*}
+  When there is $\beta_0$ total number of interactions between $X_1$
+  ($M_1$ levels) and $X_2$ ($M_2$ levels) is $$(M_1 - 1) \times (M_2 -
+  1) = (3-1) \times (2  - 1) =2$$
+  $
+  \begin{array}{c c c c c c}
+    \hline X_1&X_2&X_1^{(1)}&X_1^{(2)}&X_{2}^{(1)} & E[Y \mid X_1, X_2]
+    \\\hline A & Female & 1 & 0 & 1 & \beta_0' + \beta_1' + \beta_4' +
+                                      \beta_{14}'
+    \\ B & Female & 0 & 1 & 1 & \beta_0' + \beta_2' + \beta_4' + \beta_{24}'
+    \\ C & Female & 0 & 0 & 1 & \beta_0' + \beta_4'
+    \\ \hline A & Male & 1 & 0 & 0 & \beta_0' + \beta_1'
+    \\ B & Male & 0 & 1 & 0 & \beta_0' + \beta_2'
+    \\ C & Male & 0 & 0 & 0 & \beta_0'
+  \end{array}
+  $
+  \\ Next two R computations posted on website will be \textbf{VERY}
+  important for the exam.
+  \paragraph{Model Selection}
+  Criterion: Generalization Error
+  \\ We estimate the model by minimizing least-squares.
+  \begin{align*}
+    \hat{\beta} & = \argmin_{\beta} \frac{1}{n}(Y - X\beta)^T (Y - X
+                  \beta)
+                  \intertext{Let}
+                  \hat{m}(x) & = X \hat{\beta}
+  \end{align*}
+  How well can $\hat{m}(x)$ predict? We define \textbf{Generalization
+    Error} to measure this.
+  \\ Imagine there are new data points $(Y^{\circ},X^{\circ})$ where
+  $X^{\circ} = (1,X_1^{\circ}, X_2^{\circ}, \ldots, X_k^{\circ})$, new
+  random variable encompassing multiple new points.
+  \\ Generalization Error:
+  \begin{align*}
+    G & = E[(Y^{\circ}-\hat{m}(X^{\circ}))^2]
+  \end{align*}
 \end{document}
