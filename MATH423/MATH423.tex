@@ -2993,8 +2993,142 @@ of $\beta$.
   \\ Imagine there are new data points $(Y^{\circ},X^{\circ})$ where
   $X^{\circ} = (1,X_1^{\circ}, X_2^{\circ}, \ldots, X_k^{\circ})$, new
   random variable encompassing multiple new points.
-  \\ Generalization Error:
+  \\ \textbf{Generalization Error}:
   \begin{align*}
-    G & = E[(Y^{\circ}-\hat{m}(X^{\circ}))^2]
+    G & = E[(Y^{\circ}-\hat{m}(X^{\circ}))^2], Y^{\circ}\in
+        \mathbb{R}, X^{\circ}\in \mathbb{R}^p
   \end{align*}
+  You should use this if it's computable, but in many cases it is
+  not. $\hat{m}(x)$ is some model we predicted. To measure its
+  performance, we need new data that had nothing to do with the
+  construction of $\hat{m}(x)$, has to be some new data (otherwise the
+  error will always be very small by construction).
+  \\ \textbf{Training Error}:
+  \begin{align*}
+    T & = \frac{1}{n}\sum_{i=1}^n (Y_i - \hat{m}(X_i))^2
+  \end{align*}
+  This is cheating, the error should be small as we are trying to
+  minimize this error by construction of $\hat{m}(x)$.
+
+  $T$ is a poor estimate of $G$. Usually $T < G$.
+  \subparagraph{Why $T < G$?}
+  The training data is obtained from the model.
+  \begin{align*}
+    Y & = X \beta + \varepsilon
+  \end{align*}
+  From this data we obtain $\hat{\beta}$. Our fitted model is
+  \begin{align*}
+    \hat{m}(x) & = X \hat{\beta}
+  \end{align*}
+  The training error (in-sample error):
+  \begin{align*}
+    MSE & = \frac{SS_{Res}}{n} = \frac{1}{n}\sum_{i=1}^n(Y_i - \hat{Y}_i)^2 = \frac{1}{n}
+                                                 \sum_{i=1}^n (Y_i - X_i\hat{\beta})^2
+  \end{align*}
+  Now imagine we get new data at the same $X_i'$, i.e.\
+  $X_i^{\circ}=X_i$.
+  \begin{align*}
+    Y^{\circ}_{n \times 1} & = X^{\circ}_{n \times p}\beta_{p \times 1} + \varepsilon^{\circ}_{n
+                             \times 1} = X \beta + \varepsilon^{\circ}
+  \end{align*}
+  Define \textbf{testing error, out-of-sample prediction error}.
+  \begin{align*}
+    \frac{1}{n}\sum_{i=1}^n(Y_i^{\circ}-\hat{Y}_i) & =
+                                                     \frac{1}{n}(Y_i^{\circ}
+                                                     -
+                                                     X_i^{\circ}\hat{\beta})^2
+                                                     =
+                                                     \frac{1}{n}\sum_{i=1}^n
+                                                     (Y_i^{\circ} -
+                                                     X_i
+                                                     \hat{\beta})^2
+                                                     \intertext{We can
+                                                     see that}
+                                                     E
+                                                     \left[\underbrace{\frac{1}{n}
+                                                     \sum_{i=1}^n(Y_i^{\circ}-\hat{Y}_i)^2}_{\text{testing
+                                                     error}}\right]
+    & = \frac{1}{n} \sum_{i=1}^n E [(Y_i^{\circ}-\hat{Y}_i)^2] =
+      \frac{1}{n}n \underbrace{E[(Y-\hat{m}(x))^2]}_{G} = G
+  \end{align*}
+  So the testing error is an unbiased estimator for the generalization
+  error. However, we will prove that
+  \begin{align*}
+    E \left[\underbrace{\frac{1}{n} \sum_{i=1}^n (Y_i^{\circ} -
+    \hat{Y}_i)^2}_{\text{testing error}}\right] & = E \left[\underbrace{\frac{1}{n} \sum_{i=1}^n (Y_i -
+                          \hat{Y}_i)^2}_{\text{training error}}\right] + \frac{2}{n}\sigma^2 p
+                          = G
+  \end{align*}
+  As the number of predictors $p$ gets closer to $n$,
+  $\frac{2}{n}\sigma^2 p$ will go up and the training error will go
+  down. The fact that the training error is going down does not tell
+  us if the model is good as the generalization error could still be
+  high. Instead we should use the testing error.
+
+  Now:
+  \begin{align*}
+    E[(Y_i - \hat{Y}_i)^2] & = Var[Y_i] + Var[\hat{Y}_i] -
+                             2Cov[Y_i,\hat{Y}_i] +
+                             (E[Y_i]-E[\hat{Y}_i])^2
+    \\ E[(Y_i^{\circ}-\hat{Y}_i)^2] & = Var[Y_i^{\circ}] +
+                                      Var[\hat{Y}_i]-\underbrace{2Cov[Y_i^{\circ},
+                                      \hat{Y}_i]}_{0} + (E[Y_i^{\circ}]
+                                      - E[\hat{Y}_i])^2
+  \end{align*}
+  $Y_i^{\circ}$ is independent to $Y_i$, but has the same
+  distribution.
+  \begin{align*}
+    E[Y_i^{\circ}] & = E[Y_i] & Var[Y_i^{\circ}] & = Var[Y_i] &
+                                                                Cov(Y_i^{\circ},
+                                                                Y_i) &
+                                                                       =
+                                                                       0
+  \end{align*}
+  \vspace{-3 em}
+  \begin{align*}
+    E[(Y_i^{\circ} - \hat{Y}_i)^2] & = Var[Y_i] + Var[\hat{Y}_i] +
+                                     (E[Y_i]-E[\hat{Y}_i])^2
+    \\ & = E[(Y_i - \hat{Y}_i)^2] + 2Cov[Y_i,\hat{Y}_i]
+         \intertext{Average over data points for new observations}
+         E \left[\frac{1}{n}\sum_{i=1}^n
+         (Y_i^{\circ}-\hat{Y}_i)^2\right] & = E \left[\frac{1}{n}
+                                            \sum_{i=1}^n (Y_i -
+                                            \hat{Y}_i)^2\right] +
+                                            \frac{2}{n} \sum_{i=1}^n
+                                            Cov[Y_i, \hat{Y}_i]
+                                            \intertext{For a linear model, $Cov[Y_i, \hat{Y}_i] = \sigma^2h_{ii}$ so}
+                                            \underbrace{E \left[\underbrace{\frac{1}{n} \sum_{i=1}^n (Y_i^{\circ} - \hat{Y}_i}_{\text{testing error}})\right]}_{G} & =
+                                                                                                                                                                     E \left[\underbrace{\frac{1}{n} \sum_{i=1}^n (Y_i - \hat{Y}_i)}_{\text{training error}=T, MSE}\right] + \frac{2}{n} \sigma^2 \underbrace{tr\ H}_{\sum_{i=1}^n h_{ii} = p}
+    \\ G & = MSE + penalty
+  \end{align*}
+  \paragraph{Mellow's Cp} Just replace $\sigma$ with $\hat{\sigma}$ so we can compute it.
+  \begin{align*}
+    C_p & = \frac{1}{n} \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 + \frac{2}{n} \hat{\sigma}^2 p
+  \end{align*}
+  Smaller value of $C_p$ are desirable.
+  \paragraph{$R^2$ \& adj.\ $R^2$}
+  \begin{align*}
+    R^2 & = 1 - \frac{SS_{Res}}{SS_T} = 1 - \frac{MSE}{\frac{SST}{n}}
+  \end{align*}
+  Maximizing $R^2$ is equivalent to minimizing the training error, you are ignoring the model complexity, another reason why we can see $R^2$ is bad.
+
+  So instead we use $adj\ R^2$, which will minimize $MSE \frac{n}{n-p}$
+  \begin{align*}
+    adj\ R^2 & = 1 - \frac{MSE \frac{n}{n-p}}{\frac{SS_T}{n}}
+    \\ MSE \frac{n}{n-p} & = MSE \frac{n}{1 - \frac{p}{n}} \approx MSE \left(1 + \frac{p}{n}\right) = MSE + MSE \frac{p}{n}
+                           \\ & \to^{n \to \infty} \underbrace{MSE + \sigma^2 \frac{p}{n}}_{G}
+  \end{align*}
+  Larger $R^2$ and $adj\ R^2$ are desirable, however we shouldn't rely on $R^2$.
+  \paragraph{AIC \& BIC}
+  \begin{align*}
+    AIC & = n \ln MSE + 2 p = \underbrace{n \ln \frac{SS_{Res}}{n}}_{MSE} + \underbrace{2p}_{penalty}
+    \\ BIC & = \underbrace{n \ln MSE}_{MSE} + \underbrace{\ln n p}_{penalty}
+  \end{align*}
+  Smaller $AIC$ and $BIC$ are desirable.  \\ \noindent
+  \rule{\textwidth}{0.5pt}
+  For the exam, focus on the
+  assignments. There will be a 4th assignment that you do not need to
+  submit, but you should very much study it. There will also be a
+  highlighted version of the course notes. The computation documents
+  (\textbf{especially} the recent ones) are very important.
 \end{document}
