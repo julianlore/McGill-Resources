@@ -1624,7 +1624,7 @@ reject any strings).
 
 In the other direction, we have a TM $M$ describing $A$. We construct
 an enumerator $E$ for $A$ as follows. $s_1, s_2, \ldots$ is a list of
-all possible strings in $\varepsilon^*$.
+all possible strings in $\Sigma^*$.
 
 $E = $ Ignore the input.
 \begin{algorithmic}
@@ -2028,7 +2028,7 @@ Let TM $R$ decide the PCP and construct $S$ deciding $A_{TM}$. Let $M
 \\ $MPCP =  \left\{\langle P \rangle \mid P \text{ is an instance of
     PCP with a match that starts with the first domino}\right\}$
 \\ We want $S$ to construct an instance of PCP $P$ that has a match
-$iff M$ accepts $w$. In order to do that, $S$ will first construct an
+$\iff M$ accepts $w$. In order to do that, $S$ will first construct an
 instance $P'$ of MPCP.
 \begin{enumerate}
 \item Put $\left[\dfrac{\#}{\# q_0 w_1 w_2 \ldots w_n \#}\right]$ into
