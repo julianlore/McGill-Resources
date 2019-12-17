@@ -1537,13 +1537,13 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       \\ y_i - \overline{y} & = (y_i - \hat{y}_i) + (\hat{y}_i - \overline{y})
     \end{align*}
   \end{minipage}
+      \includegraphics[width=.5\textwidth]{19.pdf}
   \begin{itemize}
-  \item $SS_T = \sum_{i=1}^n (y_i - \overline{y})^2$
-    \\ \includegraphics[width=.5\textwidth]{19.pdf}
-  \item $SS_{Res} = \sum_{i=1}^n (y_i - \hat{y}_i)^2$
-    \\ \includegraphics[width=.5\textwidth]{20.pdf}
-  \item $SS_R = \sum_{i=1}^n (\hat{y}_i - \overline{y})^2$
-    \\ \includegraphics[width=.5\textwidth]{21.pdf}
+    \item $SS_T = \sum_{i=1}^n (y_i - \overline{y})^2$
+      \\ \includegraphics[width=.5\textwidth]{20.pdf}
+    \item $SS_{Res} = \sum_{i=1}^n (y_i - \hat{y}_i)^2$
+      \\ \includegraphics[width=.5\textwidth]{21.pdf}
+    \item $SS_R = \sum_{i=1}^n (\hat{y}_i - \overline{y})^2$
   \end{itemize}
   \paragraph{Proof}
   \begin{align*}
@@ -1616,7 +1616,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   \paragraph{ANOVA Table}~\\
   \begin{tabular}{l l l l l}
     \hline Source& $SS$ & $df$ & $MS$ & $F$
-    \\ \hline Regression & $SS_R$ & $p - 1$ & $MS_R = \frac{SS_R}{p-1}$ \\
+    \\ \hline Regression & $SS_R$ & $p - 1$ & $MS_R = \frac{SS_R}{p-1}$ & $\frac{SS_{R}/(p-1)}{SS_{Res}/(n-p)}$\\
     Residual& $SS_{Res}$ & $n- p$& $MS_{Res} = \frac{SS_{Res}}{n-p}$ \\
     \hline Total& $SS_T$ & $n-1$ &&
     \\\hline
@@ -1631,7 +1631,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
               the same} as the $p$-value for t-test.}
               F & > F_0 \iff T^2 > (T_1)^2 \iff T < - |T_1| \text{ or } T > |T_1| \iff |T| > |T_1|
                   \intertext{Thus}
-                  \Pr(F > F_0) & = P(|T| > |T_1|)
+                  \Pr(F > F_0) & = \Pr(|T| > |T_1|)
   \end{align*}
   Therefore, the test result based on $F$ and $t$ statistics are the
   same.
@@ -1640,7 +1640,9 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   \begin{align*}
     SS_R & = \sum_{i=1}^n (\hat{y}_i - \overline{y}) = \sum_{i=1}^n ((\hat{\beta}_0 + \hat{\beta}_1x_{1i}) - (\hat{\beta}_0 + \hat{\beta}_1 \overline{x}_1))^2
            = \hat{\beta}_1^2 \sum_{i=1}^n (x_{1i} - \overline{x}_1)^2 = \hat{\beta}_1^2 S_{xx} = \hat{\beta}_1 S_{xy}
-           \intertext{and $ese(\hat{\beta}_1) = \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}$}
+           \intertext{and $ese(\hat{\beta}_1) =
+           \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}} \implies \hat{\sigma}^2 =
+           ese(\hat{\beta}_1)^2S_{xx}$}
            F & = \frac{SS_R/(p-1)}{SS_{Res}/(n-p)} = \frac{SS_R/1}{SS_{Res}/(n-2)} = \frac{SS_R}{\hat{\sigma}^2}
                = \frac{\hat{\beta}_1^2 S_{xx}}{\hat{\sigma}^2} = \left(\frac{\hat{\beta}_1}{ese(\hat{\beta}_1)}\right)^2 = T_1^2
   \end{align*}
@@ -1664,20 +1666,20 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   \subsection{Prediction}
   The conditional mean of $Y$ is
   \begin{align*}
-    \mu & = m(x_1) = E[Y \mid X_1 = x_1] = \beta_0 + \beta_1 x_1
+    \mu & = m(x_{10}) = E[Y \mid X_1 = x_1] = \beta_0 + \beta_1 x_{10}
           \intertext{while our estimate for the conditional mean is}
-          \hat{\mu} & = \hat{m}(x_1) = \hat{\beta}_0 + \hat{\beta}_1 x_1
+          \hat{\mu} & = \hat{m}(x_{10}) = \hat{\beta}_0 + \hat{\beta}_1 x_{10}
                       \text{ (fitted value)}
   \end{align*}
-    $m(x_1)$ --- deterministic, unknown \\
-    $\hat{m}(x_1)$ --- a function of data, random, known, it
+    $m(x_{10})$ --- deterministic, unknown \\
+    $\hat{m}(x_{10})$ --- a function of data, random, known, it
     inherits the randomness from $\hat{\beta}_0$ and $\hat{\beta}_1$,
     which in turn inherits from $Y$.
 
     We can show that
     \begin{align*}
-      E(\hat{m}(x_1)) & = \beta_0 + \beta_1 x_1 = m(x_1)
-      \\ Var(\hat{m}(x_1)) & = \sigma^2 \left(\frac{1}{n} + \frac{(x_1 - \overline{x}_1)^2}{S_{xx}}\right)
+      E(\hat{m}(x_{10})) & = \beta_0 + \beta_1 x_{10}= m(x_{10})
+      \\ Var(\hat{m}(x_{10})) & = \sigma^2 \left(\frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)
     \end{align*}
     Under the GN-SLR assumption, $\hat{m}(x_1)$ is Gaussian.
     \begin{align*}
@@ -1696,15 +1698,17 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
            to get an approximation of the variance}
     \end{align*}
     $K : T \sim t_{n-2}$
-    \includegraphics[width=.6\textwidth]{23.pdf}
+    \\\includegraphics[width=.6\textwidth]{23.pdf}
 
-    A $100(1-\alpha)$ percent CI on the future observation is
-    $$CI(y)= \left(\hat{m}(x_{10}) - k\sqrt{MS_{Res} \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)},
+    For the future observation $y_0$,
+    $$Y_0 = \beta_0 + \beta_1x_{10} + \varepsilon$$
+    A $100(1-\alpha)\%$ \textbf{prediction interval} on the future observation $y_0$ is
+    $$PI(y_0)= \left(\hat{m}(x_{10}) - k\sqrt{MS_{Res} \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)},
       \hat{m}(x_{10}) + k \sqrt{MS_{Res} \left(1 + \frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)}
       \right)$$
 
     We should distinguish $\underbrace{CI(m(x_{10}))}_{\text{mean
-        response}}$ and $\underbrace{CI(y)}_{\text{new observation}}$.
+        response}}$ and $\underbrace{PI(y_0)}_{\text{new observation}}$.
     \begin{itemize}
     \item A $100 (1- \alpha)\%$ CI on the mean response (tries to
       cover true regression line) is an interval
@@ -1727,8 +1731,8 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       values of $Y$, has to include spread/noise) is an
       interval $[l', u']$ where
       \begin{align*}
-        P(l' \leq Y_{x_{10}} \leq u' \mid X_1 = x_{10}) & = 1 - \alpha
-        \\ Y_{x_{10}} & = m(x_{10}) + \varepsilon
+        P(l' \leq Y_{x_0} \leq u' \mid X_1 = x_{10}) & = 1 - \alpha
+        \\ Y_{0} & = m(x_{10}) + \varepsilon
       \end{align*}
       This CI should be much wider than the mean response one, as it
       has to try to trap all points (all $\varepsilon$), whereas the
@@ -1744,8 +1748,8 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     \end{align*}
     Now plugin $\hat{\beta}_1$.
     \begin{align*}
-      \hat{m}(x_{10}) & = \frac{1}{n} \sum_{i=1}^n y_i + (x_{10}-\overline{x}_1) \left(\sum_{i=1}^n c_i Y_i\right)
-      \\ E[\hat{m}(x_{10})] & = E \left[\frac{1}{n} \sum_{i=1}^n y_i + (x_{10}-\overline{x}_1) \left(\underbrace{\sum_{i=1}^n c_i Y_i}_{\hat{\beta}_1}\right)\right]
+      \hat{m}(x_{10}) & = \frac{1}{n} \sum_{i=1}^n Y_i + (x_{10}-\overline{x}_1) \left(\sum_{i=1}^n c_i Y_i\right)
+      \\ E[\hat{m}(x_{10})] & = E \left[\frac{1}{n} \sum_{i=1}^n Y_i + (x_{10}-\overline{x}_1) \left(\underbrace{\sum_{i=1}^n c_i Y_i}_{\hat{\beta}_1}\right)\right]
       \\ \textcolor{blue}{E \left[\frac{1}{n} \sum_{i=1}^n Y_i\right]} & = \textcolor{blue}{E \left[\frac{1}{n} \sum_{i=1}^n (\beta_0 + \beta_1 x_{1i} + \varepsilon_i)\right] = \beta_0 + \beta_1 \overline{x}_1}
       \\ E[\hat{m}(x_{10})] & = \beta_0 + \beta_1 \overline{x}_1 + (x_{10} - \overline{x}_1)\beta_1 = \beta_0 + \beta_1 x_{10}
       \\ Var(\hat{m}(x_{10})) & = Var \left[\frac{1}{n} \sum_{i=1}^n Y_i + (x_{10} - \overline{x}_1) \left(\sum_{i=1}^n c_i Y_i\right)\right]
@@ -1764,7 +1768,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     \item The further our prediction $x_{10}$ is from the center of
       data, the bigger the variance.
     \end{itemize}
-    Thus under the GN-SLr assumption, $\hat{m}(x_{10})$ is
+    Thus under the GN-SLR assumption, $\hat{m}(x_{10})$ is
     \textbf{Gaussian}.
     \begin{align*}
       \hat{m}(x_{10}) & \sim \left(N(\underbrace{m(x_{10})}_{\beta_0 + \beta_1 x_{10}}, \sigma^2 \left(\frac{1}{n} + \frac{(x_{10} - \overline{x}_1)^2}{S_{xx}}\right)\right)
@@ -1838,7 +1842,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       0$ (best case).
     \end{itemize}
     \includegraphics[width=.5\textwidth]{24.pdf}
-    \paragraph{Interpretation of $R^2$}
+    \subsection{Interpretation of $R^2$}
     Distinguish $R^2$ from t-test (p-value). Four scenarios:
     \begin{enumerate}
     \item Low $R^2$ and low p-value (p-value $< \alpha$). \textbf{The
@@ -1852,7 +1856,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
       sufficient. $\mathbf{X_1}$ is useful (best case)}
   \item High $R^2$ and high p-value.
   \end{enumerate}
-  \paragraph{Adjust $R^2$}
+  \subsection{Adjust $R^2$}
   We have
   \begin{align*}
     E[SS_{RES}] & = \sigma^2 (n-p)
@@ -1884,7 +1888,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
   \item We can manipulate the data such that $R^2=0$ but the model is
     correct, $R^2 = 1$ but the model is wrong.
   \item $R^2$ can be compared when different models are fit to
-    \textbf{the same data set with the same, untransformed} response
+    \textbf{the same dataset with the same, untransformed} response
     variable. $R^2$ cannot be compared across different data sets.
   \end{itemize}
   \section{Multiple Linear Regression}
@@ -1983,7 +1987,7 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     \end{bmatrix}
     & =
       \begin{bmatrix}
-        1 & x_{11} & \ldots & x_{1k}
+        1 & x_{11} & \ldots & x_{k1}
         \\ 1 & x_{12} & \ldots & x_{k2}
         \\ \vdots & \vdots &\ddots & \vdots
         \\ 1 & x_{1n} & \ldots & x_{kn}
@@ -2124,7 +2128,7 @@ We can show that $\hat{\beta}$ has a sample distribution
 \begin{align*}
   \hat{\beta} & \sim N(\underbrace{\beta}_{p \times 1}, \sigma^2 \overbrace{\underbrace{(X^TX)^{-1}}_{p \times p}}^{C})
   \\ \hat{\beta}_j & \sim N(\beta_j, \left[\sigma^2 (X^TX)^{-1}\right]_{jj}), j = 0,1, \ldots, k = p - 1
-  \\ ese(\hat{\beta}_j) & = \sqrt{\hat{\sigma}^2 [\sigma^2 (X^TX)^{-1}]_{jj}}
+  \\ ese(\hat{\beta}_j) & = \sqrt{\hat{\sigma}^2 [(X^TX)^{-1}]_{jj}}
 \end{align*}
 To test:
 \begin{align*}
@@ -2440,7 +2444,7 @@ the quantiles using data.
 
 We have $n$ residuals, $e_1, e_2, \ldots, e_n$.
 \\ Put them in an increasing order $e_{(1)}, e_{(2)}, \ldots, e_{(n)}$
-where $e_{(i)}$ is greater to a fraction $\frac{i}{n}$ or the
+where $e_{(i)}$ is greater to a fraction $\frac{i}{n}$ of the
 residuals, e.g.\ $e_{(2)} \geq e_{(2)}$ and $e_{(1)},
 \left(\frac{2}{n} \text{ of the obs}\right)$
 $$\hat{F}^{-1}(i/n) = e_{(o)}$$
@@ -2455,8 +2459,8 @@ line if the distribution of $e_i$'s is indeed Guassian.
 variance assumption is violated. For example, $Y \sim Poi(\lambda)$,
 then $E[Y] = Var(Y) = \lambda$. Then if we model
 $$E[Y \mid X = x] = X \beta = Var(Y \mid X = x)$$ where the mean of
-$Y$ is related ot $X$. To fix this, we can regress $Y'=\sqrt{Y}$
-against $X$ since the variance off $\sqrt{Y}$ is independent of the
+$Y$ is related to $X$. To fix this, we can regress $Y'=\sqrt{Y}$
+against $X$ since the variance of $\sqrt{Y}$ is independent of the
 mean.
 \begin{table}[H]
   \centering
@@ -2516,7 +2520,7 @@ Box-cox is an outdated method that we won't learn, it involves
 complicated linearization but usually linearizes things that shouldn't
 be linearized, i.e.\ if you are trying to hard to linearize you
 probably shouldn't.
-\subsection{Leverage \& Influence}
+\section{Leverage \& Influence}
 \paragraph{Leverage}
 ~\\\includegraphics[width=.5\textwidth]{33.pdf}
 \\ In the first case, we have a leverage point which we could remove
@@ -2587,8 +2591,8 @@ of $\beta$.
   \end{align*}
   You can interpret is as the squared distance that the fitted value
   moves when the $i^{th}$ is removed.
-  \subsection{Special Types of predictors in MLR}
-  \paragraph{Polynomial Terms} Suppose the model is
+  \section{Special Types of predictors in MLR}
+  \subsection{Polynomial Terms} Suppose the model is
   \begin{align*}
     E[Y \mid X_1] & = \beta_0 + \beta_1 X_1 + \beta_2 X_1^2 + \ldots + \beta_k X_1^k
                     \intertext{Can still be made linear}
@@ -2611,7 +2615,7 @@ of $\beta$.
   We can use another data set, to test the performance (prediction) of models with
   different $k$'s. If two $k$'s perform equally well, we prefer the
   one with the smaller $k$.
-  \paragraph{Penalization}
+  \subsection{Penalization (Ridge regression)}
   If we fit a polynomial regression with order $k$
   \begin{align*}
     Y & = \beta_0 + \beta_1 x_1 + \ldots + \beta_k x_1^k + \varepsilon
@@ -2739,7 +2743,7 @@ of $\beta$.
     Comparison of the loss of $SVM$ and logistic regression:\\
     \includegraphics[width=.4\textwidth]{38.pdf}
   \end{enumerate}
-  \paragraph{Factor Predictors}
+  \section{Factor Predictors}
   A factor predictor is a predictor that takes a discrete set of
   values on a ``nominal'' scale (non numerical)
   \\ e.g.\ Drug $A$, $B$, $C$
@@ -2859,10 +2863,10 @@ of $\beta$.
 
   In this model, $\beta'_m$ can be interpreted directly as the effect
   of level $m$, for $m = 1, \ldots, M$.
-  \paragraph{Interaction}
+  \subsection{Interaction}
   For two different predictors, we may consider the joint effect of
   the predictors simultaneously.
-  \subparagraph{Continuous predictors}
+  \paragraph{Continuous predictors}
   We just include product terms, e.g.\ $x_1, x_2$. Then
   \begin{align*}
     E[Y \mid X] & = \beta_0 + \beta_1 x_1 + \beta_2 x_2 +
@@ -2886,14 +2890,14 @@ of $\beta$.
   study the joint distribution of $X_1$ and $X_2$, $D(X_1,X_2)$
   \\ Interaction: $D(Y,X_1) \mid X_2$, we study the joint distribution
   of $Y$ and $X_1$ conditioned on $X_2$.
-  \paragraph{Factor Predictors}
+  \subsection{Factor Predictors}
   For the factor predictors with $M_1$ and $M_2$ levels, an
   interaction term considers all possible combinations of the level of
   each factor. i.e.\ there are $M_1 \times M_2$ possible combinations.
   \begin{align*}
     E[Y \mid X] & = \underbrace{\sum_{m=1}^{M_1}\beta_m x^{(m)}}_{x_1}
                   +
-                  \underbrace{\sum_{m'=1}^{M^2}\beta_{m'}x^{(m')}}_{x_2}
+                  \underbrace{\sum_{m'=1}^{M_2}\beta_{m'}x^{(m')}}_{x_2}
                   + \sum_m^{M_1} \sum_{m'}^{M_2}
                   \beta_{mm'}x^{(m)}x^{(m')}
                   \intertext{If the intercept is used, then we could
@@ -2948,7 +2952,7 @@ of $\beta$.
   $
   \begin{align*}
     E[Y \mid X_1 = B, X_2 = Male] & = \beta_0' + \beta_2'
-    & E[Y \mid X_1 = C, X_2 = Male] & \beta_0'
+    & E[Y \mid X_1 = C, X_2 = Male] & = \beta_0'
   \end{align*}
   \begin{align*}
     \beta_2' & = \overbrace{E[Y \mid X_1 = B, X_2 = Male]}^{\circled{1}} = \overbrace{E[Y\mid X_1 = C,
@@ -2979,7 +2983,7 @@ of $\beta$.
   $
   \\ Next two R computations posted on website will be \textbf{VERY}
   important for the exam.
-  \paragraph{Model Selection}
+  \section{Model Selection}
   Criterion: Generalization Error
   \\ We estimate the model by minimizing least-squares.
   \begin{align*}
@@ -3099,7 +3103,7 @@ of $\beta$.
                                             \intertext{For a linear model, $Cov[Y_i, \hat{Y}_i] = \sigma^2h_{ii}$ so}
                                             \underbrace{E \left[\underbrace{\frac{1}{n} \sum_{i=1}^n (Y_i^{\circ} - \hat{Y}_i}_{\text{testing error}})\right]}_{G} & =
                                                                                                                                                                      E \left[\underbrace{\frac{1}{n} \sum_{i=1}^n (Y_i - \hat{Y}_i)}_{\text{training error}=T, MSE}\right] + \frac{2}{n} \sigma^2 \underbrace{tr\ H}_{\sum_{i=1}^n h_{ii} = p}
-    \\ G & = MSE + penalty
+    \\ G & = E[MSE] + penalty
   \end{align*}
   \paragraph{Mellow's Cp} Just replace $\sigma$ with $\hat{\sigma}$ so we can compute it.
   \begin{align*}
