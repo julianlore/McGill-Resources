@@ -1404,8 +1404,8 @@ $$H = X(X^TX)^{-1}X^T \text{ ($n \times n$ matrix)}$$
     \begin{align*}
       c \notin CI(\beta_1) & \iff c \geq \hat{\beta}_1 + k \cdot
                           ese(\hat{\beta}_1) < k \text{ or } c \leq \hat{\beta}_1 - k \cdot ese (\hat{\beta}_1)
-      \\ & \iff \frac{\hat{\beta}_1 - c}{ese(\hat{\beta}_1)} \text{ or
-           } \frac{\hat{\beta}_1 - c }{ese(\hat{\beta}_1)} \geq k
+      \\ & \iff \frac{\hat{\beta}_1 - c}{ese(\hat{\beta}_1)} < -k \text{ or
+           } \frac{\hat{\beta}_1 - c }{ese(\hat{\beta}_1)} > k
       \\ & \iff |T_1| \geq k \equiv t_{\frac{\alpha}{2}, n-2}, \underbrace{T_1 = \frac{\hat{\beta}_1 - c }{ese(\hat{\beta}_1)}}_{\text{t-statistic}} \stepcounter{equation}\tag{*}\label{eq:1}
     \end{align*}
     This is called Wald test or t-test and $T_1$ is called \textbf{t
